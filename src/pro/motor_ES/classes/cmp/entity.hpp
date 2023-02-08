@@ -1,5 +1,7 @@
 #pragma once
 #include "RenderComponent.hpp"
+#include "PhysicsComponent.hpp"
+
 #include <optional>
 
 namespace game
@@ -7,5 +9,7 @@ namespace game
     struct Entity
     {
       RenderComponent* render{};
+      PhysicsComponent* physics{};
+
     };
 } // namespace game

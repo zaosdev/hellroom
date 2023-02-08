@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../cmp/entity.hpp"
+
 
 namespace FVeng
 {
@@ -10,10 +12,11 @@ namespace FVeng
         
         sf::RenderWindow& getWindow() {};
 
-
+        game::Entity* ent;
         private:
 
         sf::RenderWindow window_{};
+
 
 
     };

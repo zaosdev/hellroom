@@ -6,22 +6,19 @@
 
 
 
-
 namespace game
 {
-    struct RenderSys
+    struct PhysicsSys
     {
-        RenderSys(FVeng::GameManager& Gman);
-        ~RenderSys();
+        PhysicsSys(FVeng::GameManager& gameMan);
+        ~PhysicsSys();
 
-        void iniRenderSys();
-        void drawSprite(sf::Sprite& Sprite);
-        void iniSprite();
+        void iniPhysicsSys();
         void update();
 
 
         private:
             FVeng::GameManager& gMan_;
-            sf::RenderWindow& window_;
+            Entity ent;
     };
 }

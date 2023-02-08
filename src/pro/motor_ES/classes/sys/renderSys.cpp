@@ -6,8 +6,8 @@
 
 namespace game
 {
-        RenderSys::RenderSys(FVeng::GameManager& gMan)
-        : gMan_(gMan), window_(gMan_.getWindow())
+        RenderSys::RenderSys(FVeng::GameManager& Gman)
+        : gMan_(Gman), window_(gMan_.getWindow())
         {
         }
         RenderSys::~RenderSys()
@@ -19,12 +19,10 @@ namespace game
         {
             
         }
-        void RenderSys::drawSprite()
+        void RenderSys::drawSprite(sf::Sprite& Sprite)
         {
-            if(ent.render)
-            {
-                window_.draw(ent.render->Sprite);
-            }
+
+            window_.draw(Sprite);
 
         }
         void RenderSys::iniSprite()
@@ -35,7 +33,7 @@ namespace game
         void RenderSys::update()
         {
             window_.clear();
-            drawSprite();
+            drawSprite(gMan_.ent->render->Sprite);
             window_.display();    
 
         }
