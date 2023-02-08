@@ -2,16 +2,18 @@
 #include <iostream>
 
 #include "include/config.h"
-#include "ej_modulos/mimodulo.h"
+#include "classes/sys/renderSys.hpp"
 
 #define kVel 5
 
 int main() {
 
-  MiModulo *mod = new MiModulo();
+
+  //Create render system
+  game::RenderSys renSys{640, 480,"P0. Fundamentos de los Videojuegos. DCCIA"};
 
   //Creamos una ventana
-  sf::RenderWindow window(sf::VideoMode(640, 480), "P0. Fundamentos de los Videojuegos. DCCIA");
+ 
 
   //Cargo la imagen donde reside la textura del sprite
   sf::Texture tex;
