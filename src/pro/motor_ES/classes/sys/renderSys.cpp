@@ -21,7 +21,7 @@ namespace game
         }
         void RenderSys::drawSprite(sf::Sprite& Sprite)
         {
-
+            
             window_.draw(Sprite);
 
         }
@@ -32,6 +32,10 @@ namespace game
 
         void RenderSys::update()
         {
+            gMan_.ent->render->Sprite.setPosition(
+                gMan_.ent->physics->pos.x,
+                gMan_.ent->physics->pos.y
+            );
             window_.clear();
             drawSprite(gMan_.ent->render->Sprite);
             window_.display();    

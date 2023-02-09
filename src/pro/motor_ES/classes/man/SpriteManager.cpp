@@ -4,6 +4,7 @@
 namespace SFMLeng
 {
 
+    SpriteManager::SpriteManager() = default;
 
 
     void SpriteManager::assignTexture(sf::Sprite& sp, sf::Texture&  Tex)
@@ -24,7 +25,7 @@ namespace SFMLeng
 
     void SpriteManager::loadTexture(sf::Texture& tex, std::string texStr)
     {
-        if (!tex.loadFromFile("resources/sprites.png")) {
+        if (!tex.loadFromFile(texStr)) {
         std::cerr << "Error cargando la imagen sprites.png";
         exit(0);
     }
