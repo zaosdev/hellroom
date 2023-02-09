@@ -21,21 +21,19 @@ namespace game
         }
         void RenderSys::drawSprite(sf::Sprite& Sprite)
         {
-            
             window_.draw(Sprite);
-
         }
         void RenderSys::iniSprite()
-        {
-
-        }
-
-        void RenderSys::update()
         {
             gMan_.ent->render->Sprite.setPosition(
                 gMan_.ent->physics->pos.x,
                 gMan_.ent->physics->pos.y
             );
+        }
+
+        void RenderSys::update()
+        {
+            iniSprite();
             window_.clear();
             drawSprite(gMan_.ent->render->Sprite);
             window_.display();    
