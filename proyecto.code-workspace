@@ -17,6 +17,10 @@
 			"name": "Prototipo 2: prot1",
 			"path": "src/pro/prot1"
 		},
+		{
+			"name": "Prototipo 3: Input System",
+			"path": "src/pro/input"
+		},
 
 	],
 	"settings": {
