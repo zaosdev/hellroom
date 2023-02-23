@@ -13,6 +13,10 @@
 			"name": "Prototipo 1: motor_ES",
 			"path": "src/pro/motor_ES"
 		},
+		{
+			"name": "Prototipo 2: prot1",
+			"path": "src/pro/prot1"
+		},
 
 	],
 	"settings": {
