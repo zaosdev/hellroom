@@ -22,8 +22,8 @@
 			"path": "src/pro/input"
 		},
 		{
-			"name": "Prototipo 4: prueba",
-			"path": "src/pro/prueba"
+			"name": "Prototipo 4: Maquina de Estados",
+			"path": "src/pro/maquinaEstados"
 		},
 		{
 			"name": "Prototipo 5: prototipo5",
