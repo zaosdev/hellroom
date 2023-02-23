@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
     "cmake.sourceDirectory": "${workspaceFolder}/src/pro/prueba"
+=======
+    "cmake.sourceDirectory": "${workspaceFolder}/src/pro/input"
+>>>>>>> 9540e315a74972ddfc0af553c8887d79d7239ffc
 }
