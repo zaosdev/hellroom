@@ -25,6 +25,10 @@
 			"name": "Prototipo 4: prueba",
 			"path": "src/pro/prueba"
 		},
+		{
+			"name": "Prototipo 5: prototipo5",
+			"path": "src/pro/prot5"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
