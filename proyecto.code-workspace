@@ -21,7 +21,10 @@
 			"name": "Prototipo 3: Input System",
 			"path": "src/pro/input"
 		},
-
+		{
+			"name": "Prototipo 4: prueba",
+			"path": "src/pro/prueba"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
