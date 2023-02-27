@@ -7,7 +7,7 @@
 #include "classes/sys/inputSys.hpp"
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
-
+#include "classes/man/inputManager.cpp"
 
 
 #define kVel 5
@@ -16,19 +16,21 @@ int main() {
 
 
   //Create Game manager
-  FVeng::GameManager GameMan{640, 480,"P0. Fundamentos de los Videojuegos. DCCIA"};
+  FVeng::GameManager GameMan{640, 480,"Prototipo Input con multiples teclas"};
 
   //create Sprite manager
   SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
-  game::RenderSys   renSys{GameMan};
-  game::PhysicsSys  phySys{GameMan};
-  game::InputSys    inpSys{GameMan};
+  game::RenderSys     renSys{GameMan};
+  game::PhysicsSys    phySys{GameMan};
+  game::InputManager  inpRec{GameMan.getWindow()};
+  game::InputSys      inpSys{GameMan, inpRec};
+ 
 
 
-GameMan.ent->render = new game::RenderComponent();
-GameMan.ent->physics = new game::PhysicsComponent();
+  GameMan.ent->render = new game::RenderComponent();
+  GameMan.ent->physics = new game::PhysicsComponent();
 
 
   //Creamos una ventana
@@ -45,10 +47,10 @@ GameMan.ent->physics = new game::PhysicsComponent();
   GameMan.ent->physics->pos = {320, 240};
   GameMan.ent->physics->vel = {0,0};
 
-              GameMan.ent->render->Sprite.move(
-                GameMan.ent->physics->pos.x,
-                GameMan.ent->physics->pos.y
-            );
+  GameMan.ent->render->Sprite.move(
+    GameMan.ent->physics->pos.x,
+    GameMan.ent->physics->pos.y
+  );
 
 //std::cout << "I get here" << GameMan.ent->physics->pos.x << std::endl;
 
@@ -57,6 +59,7 @@ GameMan.ent->physics = new game::PhysicsComponent();
   while (GameMan.getWindow().isOpen()) {
     
     //Bucle de obtención de eventos
+    inpRec.update();
     inpSys.update();
     phySys.update();
     renSys.update();
