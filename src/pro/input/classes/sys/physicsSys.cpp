@@ -17,7 +17,7 @@ namespace game
 
     void PhysicsSys::update()
     {
-        std::cout << "I get here" << gMan_.ent->physics->pos.x << std::endl;
+        //std::cout << "I get here" << gMan_.ent->physics->pos.x << std::endl;
 
         gMan_.ent->physics->pos += gMan_.ent->physics->vel;
     }

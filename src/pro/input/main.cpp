@@ -50,10 +50,12 @@ GameMan.ent->physics = new game::PhysicsComponent();
                 GameMan.ent->physics->pos.y
             );
 
-std::cout << "I get here" << GameMan.ent->physics->pos.x << std::endl;
+//std::cout << "I get here" << GameMan.ent->physics->pos.x << std::endl;
 
+  std::vector<sf::Event> events;  // Declarar un vector para almacenar los eventos
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
+    
     //Bucle de obtención de eventos
     inpSys.update();
     phySys.update();

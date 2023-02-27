@@ -9,57 +9,55 @@ namespace game
 
     void InputSys::update()
     {
-        gMan_.ent->physics->vel = {0,0};
-        sf::Event event;
-        while (gMan_.getWindow().pollEvent(event)) {
+    gMan_.ent->physics->vel = {0,0};
 
-            switch (event.type) {
+    sf::Event event;
+    while (gMan_.getWindow().pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+        {
+            gMan_.getWindow().close();
+        }
 
-            //Si se recibe el evento de cerrar la ventana la cierro
-            case sf::Event::Closed:
-                gMan_.getWindow().close();
-                break;
-
-            //Se pulsó una tecla, imprimo su codigo
-            case sf::Event::KeyPressed:
-
-                //Verifico si se pulsa alguna tecla de movimiento
-                switch (event.key.code) {
-
-                //Mapeo del cursor
-                case sf::Keyboard::Right:
-                    gMan_.ent->physics->vel = {5,0};
-
-                break;
-
-                case sf::Keyboard::Left:
-                    gMan_.ent->physics->vel = {-5,0};
-
-                break;
-
-                case sf::Keyboard::Up:
-                    gMan_.ent->physics->vel = {0,-5};
-
-                break;
-
-                case sf::Keyboard::Down:
-                    gMan_.ent->physics->vel = {0,5};
-
-                break;
-
-                //Tecla ESC para salir
-                case sf::Keyboard::Escape:
-                    gMan_.getWindow().close();
-                break;
-
-                //Cualquier tecla desconocida se imprime por pantalla su código
-                default:
-                std::cout << event.key.code << std::endl;
-                break;
-                }
-            default:
-                std::cout << "Evento resize o otro no importante" << std::endl;
-            }
+        // Almacenar cada evento del teclado en el array
+        if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
+        {
+            events_.push_back(event);
         }
     }
+
+    // Recorrer el array de eventos
+    int i = 0;
+    for (auto& event : events_)
+    {
+        // Si es un evento del tipo pulsar letra
+        if (event.type == sf::Event::KeyPressed)
+        {
+            switch (event.key.code) 
+            {
+                case sf::Keyboard::A:
+                    gMan_.ent->physics->vel += {-5,0};
+                    break;
+                case sf::Keyboard::D:
+                    gMan_.ent->physics->vel += {5,0};
+                    break;
+                case sf::Keyboard::S:
+                    gMan_.ent->physics->vel += {0,5};
+                    break;
+                case sf::Keyboard::W:
+                    gMan_.ent->physics->vel += {0,-5};
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        i++;
+        std::cout << "Proceso " << i << " eventos al mismo tiempo" << std::endl;
+    }
+
+    // Limpiar el vector de eventos
+    events_.clear();
+}
+
 }

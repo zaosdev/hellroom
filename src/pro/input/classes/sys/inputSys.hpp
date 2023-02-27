@@ -19,6 +19,7 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            std::vector<sf::Event> events_;
     };
 
 }

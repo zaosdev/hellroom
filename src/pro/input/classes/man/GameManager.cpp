@@ -6,6 +6,8 @@ namespace FVeng
         : window_(sf::VideoMode(x, y), nameGame)
         {
             ent = new game::Entity;
+            window_.setKeyRepeatEnabled(true); // Habilitar entrada de teclado repetido
+            window_.setFramerateLimit(60);
         }
 
         sf::RenderWindow& GameManager::getWindow()
