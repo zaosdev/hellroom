@@ -1,5 +1,5 @@
 #include "inputSys.hpp"
-#include "../facade/inputFacade.cpp"
+#include "../facade/inputFacade.hpp"
 
 #define dash_multiplier 3
 #define movement_speed  5

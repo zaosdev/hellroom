@@ -1,4 +1,5 @@
 #include "inputFacade.hpp"
+#include <iostream>
 namespace KeyMapNamespace
 {
 
@@ -65,6 +66,6 @@ sf::Keyboard::Key getKeyCode(char key)
             return KeyMapNamespace::keyMap[i].keyCode;   //return the keycode
         }
     }
-    std::cout << "Not mapped key, please add it on inputFacade.cpp" << std::endl;
+    std::cout << "Not mapped key: " << key << ", please add it on inputFacade.cpp" << std::endl;
     return sf::Keyboard::Unknown;
 }

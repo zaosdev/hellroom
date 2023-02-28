@@ -7,7 +7,7 @@
 #include "classes/sys/inputSys.hpp"
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
-#include "classes/man/inputManager.cpp"
+#include "classes/man/inputManager.hpp"
 
 
 #define kVel 5
