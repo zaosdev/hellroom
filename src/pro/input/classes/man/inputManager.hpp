@@ -1,13 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "../facade/inputFacade.hpp"
 
 namespace game
 {
 
     struct InputManager
     {
-        InputManager(sf::RenderWindow& window);
+        InputManager(sf::RenderWindow& window); // <<-- fachada de render!!
 
 
         InputManager (const InputManager&) = delete;
@@ -17,7 +18,7 @@ namespace game
 
         void update();
 
-        bool isKeyPressed(sf::Keyboard::Key key);
+        bool isKeyPressed(Key key);
         
         // bool isWPressed() { return KEY_W; }
         // bool isAPressed() { return KEY_A; }
@@ -26,7 +27,7 @@ namespace game
 
         private:
             sf::RenderWindow& window_;
-            std::unordered_map<sf::Keyboard::Key, bool> keyStates_;
+            std::unordered_map<Key, bool> keyStates_;
     };
 
 }

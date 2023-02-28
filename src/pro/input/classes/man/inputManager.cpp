@@ -1,28 +1,29 @@
 #include "inputManager.hpp"
 
+
 namespace game
 {
-    InputManager::InputManager(sf::RenderWindow& window)
+    InputManager::InputManager(sf::RenderWindow& window) //<<-- fachada de render!!
     : window_(window)
     {
     }
 
     void InputManager::update()
     {
-        sf::Event event;
+        Event_t event;
         while (window_.pollEvent(event)) 
         {
                 switch (event.type) 
                 {
-                    case sf::Event::KeyPressed:
+                    case KeyPressed:
                         keyStates_[event.key.code] = true;
                         break;
 
-                    case sf::Event::KeyReleased:
+                    case KeyReleased:
                         keyStates_[event.key.code] = false;
                         break;
 
-                    case sf::Event::Closed:
+                    case Closed:
                         window_.close();
                         break;
 
@@ -33,7 +34,7 @@ namespace game
     }
 
 
-    bool InputManager::isKeyPressed(sf::Keyboard::Key key)
+    bool InputManager::isKeyPressed(Key key)
     {
         auto it = keyStates_.find(key);
         if (it != keyStates_.end()) //if found, can be true or false
