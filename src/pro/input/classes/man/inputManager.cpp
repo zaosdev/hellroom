@@ -14,35 +14,35 @@ namespace game
         {
                 switch (event.type) 
                 {
+                    case sf::Event::KeyPressed:
+                        keyStates_[event.key.code] = true;
+                        break;
 
-                case sf::Event::KeyPressed:
-                    switch(event.key.code)
-                    {
-                        case sf::Keyboard::W: KEY_W = true; break;
-                        case sf::Keyboard::A: KEY_A = true; break;
-                        case sf::Keyboard::S: KEY_S = true; break;
-                        case sf::Keyboard::D: KEY_D = true; break;
-                        default: break;
-                    }
-                break;
+                    case sf::Event::KeyReleased:
+                        keyStates_[event.key.code] = false;
+                        break;
 
-                   
+                    case sf::Event::Closed:
+                        window_.close();
+                        break;
 
-                case sf::Event::KeyReleased:
-                    switch(event.key.code)
-                    {
-                        case sf::Keyboard::W: KEY_W = false; break;
-                        case sf::Keyboard::A: KEY_A = false; break;
-                        case sf::Keyboard::S: KEY_S = false; break;
-                        case sf::Keyboard::D: KEY_D = false; break;
-                        default: break;
-                    }
-                break;
-
-                case sf::Event::Closed: window_.close(); break;
-
-                default:    break;
+                    default:
+                        break;
                 }
+        }
+    }
+
+
+    bool InputManager::isKeyPressed(sf::Keyboard::Key key)
+    {
+        auto it = keyStates_.find(key);
+        if (it != keyStates_.end()) //if found, can be true or false
+        {
+            return it->second;
+        } 
+        else //if not found, never pressed
+        {
+            return false;
         }
     }
 }
