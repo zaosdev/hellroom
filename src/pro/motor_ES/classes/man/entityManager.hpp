@@ -7,9 +7,9 @@ namespace FVeng
     struct EntityManager
     {
 
-        explicit EntityManager()
+        explicit EntityManager(const size_t num_entities = 10)
         {
-            entities_.reserve(100);
+            entities_.reserve(num_entities);
         }
 
         EntityManager (const EntityManager&) = delete;

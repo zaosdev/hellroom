@@ -35,7 +35,7 @@ int main() {
   // Lo dispongo en el centro de la pantalla
   player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
 
-  player.render = game::RenderComponent { .tex{}  , .Sprite{} };
+  player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{320,240} };
 
   player.input = game::InputComponent{};
 

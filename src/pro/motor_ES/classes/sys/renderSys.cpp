@@ -1,5 +1,7 @@
 #include "renderSys.hpp"
 #include "../utils/math.hpp"
+#include <cmath>
+
 
 
 
@@ -23,11 +25,16 @@ namespace game
         {
             window_.draw(Sprite);
         }
+
+        //recover world position and change it to screen position
         void RenderSys::iniSprite(game::Entity& ent)
         {
+            ent.render->window_Pos.x = int( std::round(ent.physics->pos.x));
+            ent.render->window_Pos.y = int( std::round(ent.physics->pos.y));
+
             ent.render->Sprite.setPosition(
-                ent.physics->pos.x,
-                ent.physics->pos.y
+              ent.render->window_Pos.x ,
+              ent.render->window_Pos.y
             );
         }
 
@@ -40,7 +47,7 @@ namespace game
 
             for(auto& ent : EM)
             {
-                if(ent.render)
+                if(ent.render && ent.physics)
                 {
                     iniSprite(ent);
                     drawSprite(ent.render->Sprite);

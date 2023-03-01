@@ -25,7 +25,7 @@ namespace FVeng
         game::Entity* ent;
         private:
 
-        FVeng::EntityManager<game::Entity> EM_;
+        FVeng::EntityManager<game::Entity> EM_{100};
         sf::RenderWindow window_{};
 
 
