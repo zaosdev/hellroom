@@ -9,55 +9,68 @@ namespace game
 
     void InputSys::update()
     {
-        gMan_.ent->physics->vel = {0,0};
-        sf::Event event;
-        while (gMan_.getWindow().pollEvent(event)) {
+        auto& EM = gMan_.getEntityManager();
 
-        switch (event.type) {
+        for(auto& ent : EM)
+        {
+            if(ent.input)
+            {
+                ent.physics->vel = {0,0};
 
-        //Si se recibe el evento de cerrar la ventana la cierro
-        case sf::Event::Closed:
-            gMan_.getWindow().close();
-            break;
+                sf::Event event;
+                while (gMan_.getWindow().pollEvent(event)) {
 
-        //Se pulsó una tecla, imprimo su codigo
-        case sf::Event::KeyPressed:
+                    switch (event.type) 
+                    {
 
-            //Verifico si se pulsa alguna tecla de movimiento
-            switch (event.key.code) {
+                    //Si se recibe el evento de cerrar la ventana la cierro
+                    case sf::Event::Closed:
+                        gMan_.getWindow().close();
+                        break;
 
-            //Mapeo del cursor
-            case sf::Keyboard::Right:
-                gMan_.ent->physics->vel = {5,0};
+                    //Se pulsó una tecla, imprimo su codigo
+                    case sf::Event::KeyPressed:
 
-            break;
+                        //Verifico si se pulsa alguna tecla de movimiento
+                        switch (event.key.code) 
+                        {
 
-            case sf::Keyboard::Left:
-                gMan_.ent->physics->vel = {-5,0};
+                        //Mapeo del cursor
+                        case sf::Keyboard::Right:
+                           ent.physics->vel = {5,0};
 
-            break;
+                        break;
 
-            case sf::Keyboard::Up:
-                gMan_.ent->physics->vel = {0,-5};
+                        case sf::Keyboard::Left:
+                           ent.physics->vel = {-5,0};
 
-            break;
+                        break;
 
-            case sf::Keyboard::Down:
-                gMan_.ent->physics->vel = {0,5};
+                        case sf::Keyboard::Up:
+                           ent.physics->vel = {0,-5};
 
-            break;
+                        break;
 
-            //Tecla ESC para salir
-            case sf::Keyboard::Escape:
-                gMan_.getWindow().close();
-            break;
+                        case sf::Keyboard::Down:
+                           ent.physics->vel = {0,5};
 
-            //Cualquier tecla desconocida se imprime por pantalla su código
-            default:
-            std::cout << event.key.code << std::endl;
-            break;
+                        break;
+
+                        //Tecla ESC para salir
+                        case sf::Keyboard::Escape:
+                            gMan_.getWindow().close();
+                        break;
+
+                        //Cualquier tecla desconocida se imprime por pantalla su código
+                        default:
+                        std::cout << event.key.code << std::endl;
+                        break;
+                        }
+                    }
+                }
+
             }
         }
-        }
+
     }
 }

@@ -23,19 +23,30 @@ namespace game
         {
             window_.draw(Sprite);
         }
-        void RenderSys::iniSprite()
+        void RenderSys::iniSprite(game::Entity& ent)
         {
-            gMan_.ent->render->Sprite.setPosition(
-                gMan_.ent->physics->pos.x,
-                gMan_.ent->physics->pos.y
+            ent.render->Sprite.setPosition(
+                ent.physics->pos.x,
+                ent.physics->pos.y
             );
         }
 
         void RenderSys::update()
         {
-            iniSprite();
+
+            auto& EM = gMan_.getEntityManager();
+
             window_.clear();
-            drawSprite(gMan_.ent->render->Sprite);
+
+            for(auto& ent : EM)
+            {
+                if(ent.render)
+                {
+                    iniSprite(ent);
+                    drawSprite(ent.render->Sprite);
+                }
+            }
+
             window_.display();    
 
         }

@@ -27,37 +27,44 @@ int main() {
   game::InputSys    inpSys{GameMan};
 
 
-GameMan.ent->render = new game::RenderComponent();
-GameMan.ent->physics = new game::PhysicsComponent();
+  auto& EM = GameMan.getEntityManager();
 
+  auto& player = EM.createEntity();
 
-  //Creamos una ventana
-  SPman.loadTexture(GameMan.ent->render->tex,"../resources/sprites.png");
-
-  //Y creo el spritesheet a partir de la imagen anterior
-  SPman.assignTexture(GameMan.ent->render->Sprite,GameMan.ent->render->tex);
-  //Le pongo el centroide donde corresponde
-  SPman.modifySpriteOrigin(GameMan.ent->render->Sprite,{75 / 2, 75 / 2});
-  //Cojo el sprite que me interesa por defecto del sheet
-  SPman.modifyTextureRect(GameMan.ent->render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
   // Lo dispongo en el centro de la pantalla
-  GameMan.ent->physics->pos = {320, 240};
-  GameMan.ent->physics->vel = {0,0};
+  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
 
-              GameMan.ent->render->Sprite.move(
-                GameMan.ent->physics->pos.x,
-                GameMan.ent->physics->pos.y
-            );
+  player.render = game::RenderComponent { .tex{}  , .Sprite{} };
 
-std::cout << "I get here" << GameMan.ent->physics->pos.x << std::endl;
+  player.input = game::InputComponent{};
+
+  //Creamos una ventana
+  SPman.loadTexture(player.render->tex,"../resources/sprites.png");
+  //Y creo el spritesheet a partir de la imagen anterior
+  SPman.assignTexture(player.render->Sprite,player.render->tex);
+  //Le pongo el centroide donde corresponde
+  SPman.modifySpriteOrigin(player.render->Sprite,{75 / 2, 75 / 2});
+  //Cojo el sprite que me interesa por defecto del sheet
+  SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+  //muevo el sprite a la posicion determinada por el componente de fisica
+std::cout << "I get here" << player.physics->pos.x << std::endl;
+
+  player.render->Sprite.move(
+      player.physics->pos.x,
+      player.physics->pos.y
+  );
+
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
     inpSys.update();
+
     phySys.update();
+
     renSys.update();
+std::cout << "last get here" << player.physics->pos.x << std::endl;
 
   }
 
