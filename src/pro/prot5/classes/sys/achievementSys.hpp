@@ -2,8 +2,6 @@
 
 #include "../man/GameManager.hpp"
 
-
-
 namespace game
 {
     struct AchievementSys

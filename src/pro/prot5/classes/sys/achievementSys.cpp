@@ -1,10 +1,11 @@
 
 #include "achievementSys.hpp"
+#include "../man/SpriteManager.hpp"
 #include <iostream>
 
 namespace game
 {
-    
+    SFMLeng::SpriteManager SPman{};
     AchievementSys::AchievementSys(FVeng::GameManager& gameMan)
     : gMan_(gameMan)
     {
