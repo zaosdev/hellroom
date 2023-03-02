@@ -29,6 +29,10 @@
 			"name": "Prototipo 5: prototipo5",
 			"path": "src/pro/prot5"
 		},
+		{
+			"name": "Prototipo 6: Cargar mapa",
+			"path": "src/pro/cargarMapa"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
