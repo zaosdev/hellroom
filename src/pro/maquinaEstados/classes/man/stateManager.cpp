@@ -15,7 +15,7 @@ namespace MaquinaEstados{
         this-> _isRemoving = true;
     }
 
-    void StateMachine::ProcessSTateChanges(){
+    void StateMachine::ProcessStateChanges(){
         if( this->_isRemoving && !this->_states.empty()){
 
             this->_states.pop();

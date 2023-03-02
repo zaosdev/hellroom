@@ -22,7 +22,7 @@ namespace MaquinaEstados{
             void AddState(StateRef NewState, bool isRemplacing = true);
             void RemoveState(  );
 
-            void ProcessSTateChanges( );
+            void ProcessStateChanges( );
             StateRef &GetActivateState( );
 
         private:
