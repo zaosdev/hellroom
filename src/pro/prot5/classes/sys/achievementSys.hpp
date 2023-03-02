@@ -20,5 +20,6 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            static int cont;
     };
 }
