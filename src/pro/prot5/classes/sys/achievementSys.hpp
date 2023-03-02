@@ -17,7 +17,7 @@ namespace game
         AchievementSys& operator=(AchievementSys&&)= delete;
 
         //void iniPhysicsSys();
-        void check(int, int);
+        void update(int, int);
 
 
         private:

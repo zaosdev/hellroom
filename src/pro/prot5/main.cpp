@@ -66,8 +66,9 @@ int main() {
 
     renSys.update();
 
-    achSys.check(player.physics->pos.x, player.physics->pos.y);
-//std::cout << "last get here" << player.physics->pos.x << std::endl;
+    achSys.update(player.physics->pos.x, player.physics->pos.y);
+
+std::cout << "last get here" << player.physics->pos.y << std::endl;
 
   }
 
