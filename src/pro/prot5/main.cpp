@@ -49,7 +49,7 @@ int main() {
   //Cojo el sprite que me interesa por defecto del sheet
   SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
   //muevo el sprite a la posicion determinada por el componente de fisica
-std::cout << "I get here" << player.physics->pos.x << std::endl;
+//std::cout << "I get here" << player.physics->pos.x << std::endl;
 
   player.render->Sprite.move(
       player.physics->pos.x,
@@ -67,7 +67,7 @@ std::cout << "I get here" << player.physics->pos.x << std::endl;
     renSys.update();
 
     achSys.check(player.physics->pos.x, player.physics->pos.y);
-std::cout << "last get here" << player.physics->pos.x << std::endl;
+//std::cout << "last get here" << player.physics->pos.x << std::endl;
 
   }
 

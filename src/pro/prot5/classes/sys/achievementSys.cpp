@@ -19,15 +19,9 @@ namespace game
     {
         auto& EM = gMan_.getEntityManager();
 
-        for(auto& ent : EM)
-        {
-            if(ent.physics)
-            {
-                std::cout << "do get here" << ent.physics->pos.x << std::endl;
-                ent.physics->pos += ent.physics->vel;
-            }
-
-        }        
+        if(x==50 && y==50){
+            std::cout << "LOGRO DESBLOQUEADO POS=50:50" << std::endl;
+        }       
 
     }
 }
