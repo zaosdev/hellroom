@@ -40,4 +40,8 @@ namespace MaquinaEstados{
             this-> _isAdding = false;
         }
     }
+    StateRef &StateMachine::GetActivateState( ){
+        return this ->_states.top();
+    }
+
 }
