@@ -21,7 +21,7 @@ namespace game
 
         void iniRenderSys();
         void drawSprite(sf::Sprite& Sprite);
-        void iniSprite();
+        void iniSprite(game::Entity& ent);
         void update();
 
 

@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../cmp/entity.hpp"
+#include "../man/entityManager.hpp"
+
 
 
 namespace FVeng
@@ -17,9 +19,13 @@ namespace FVeng
         
         sf::RenderWindow& getWindow();
 
+        FVeng::EntityManager<game::Entity> & getEntityManager();
+
+
         game::Entity* ent;
         private:
 
+        FVeng::EntityManager<game::Entity> EM_{100};
         sf::RenderWindow window_{};
 
 

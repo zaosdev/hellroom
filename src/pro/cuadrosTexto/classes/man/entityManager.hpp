@@ -6,14 +6,24 @@ namespace FVeng
     template <typename Entity_type>
     struct EntityManager
     {
-        [[nodiscard]] Entity_type& createEntity() { return entities_.emplace_back();}
 
-        auto& begin() {return entities_.begin();}
+        explicit EntityManager(const size_t num_entities = 10)
+        {
+            entities_.reserve(num_entities);
+        }
 
-        auto& end() {return entities_.end();}
+        EntityManager (const EntityManager&) = delete;
+        EntityManager (EntityManager&&) = delete;
+        EntityManager& operator=(const EntityManager&)= delete;
+        EntityManager& operator=(EntityManager&&)= delete;       
 
+        [[nodiscard]] Entity_type& createEntity() noexcept { return entities_.emplace_back();}
+
+        auto begin() noexcept {return entities_.begin();}
+
+        auto end() noexcept {return entities_.end();}
 
         private:
-            std::vector<Entity_type>& entities_{};
+            std::vector<Entity_type> entities_{};
     };
 }
