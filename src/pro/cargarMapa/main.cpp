@@ -12,6 +12,12 @@
 
 #define kVel 5
 
+void loadMap()
+{
+  tinyxml2::XMLDocument doc;
+  doc.LoadFile("mapa1.tmx");
+}
+
 int main() {
 
 
@@ -27,7 +33,7 @@ int main() {
   game::InputManager  inpRec{GameMan.getWindow()};
   game::InputSys      inpSys{GameMan, inpRec};
  
-
+  loadMap();
 
   GameMan.ent->render = new game::RenderComponent();
   GameMan.ent->physics = new game::PhysicsComponent();
