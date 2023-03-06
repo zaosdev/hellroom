@@ -8,7 +8,7 @@
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
 #include "classes/man/inputManager.hpp"
-
+#include "include/tinyXML2/tinyxml2.h"
 
 #define kVel 5
 
