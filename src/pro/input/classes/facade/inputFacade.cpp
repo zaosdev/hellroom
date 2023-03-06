@@ -44,9 +44,9 @@ namespace KeyMapNamespace
         {'4', sf::Keyboard::Num4},
         {'5', sf::Keyboard::Num5},
         {'6', sf::Keyboard::Num6},
-        // {'7', sf::Keyboard::Num7},
-        // {'8', sf::Keyboard::Num8},
-        // {'9', sf::Keyboard::Num9},
+        {'7', sf::Keyboard::Num7},
+        {'8', sf::Keyboard::Num8},
+        {'9', sf::Keyboard::Num9},
         {' ', sf::Keyboard::Space}
     };
 }

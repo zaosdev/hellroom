@@ -15,14 +15,27 @@
 void loadMap()
 {
   tinyxml2::XMLDocument doc;
-  doc.LoadFile("mapa1.tmx");
+  doc.LoadFile("../media/Mapa1.tmx");
+  tinyxml2::XMLElement* mapElement = doc.FirstChildElement("map");
+  int width, height, tileWidth, tileHeight;
+  if (mapElement) 
+  {
+    mapElement->QueryIntAttribute("width", &width);
+    std::cout << "El ancho del mapa es: " <<  width << std::endl;
+  } else {
+    std::cout << "ERROR NO HAY MAPELEMENT" << std::endl;
+  }
+  // mapElement->QueryIntAttribute("height", &height);
+  // mapElement->QueryIntAttribute("tilewidth", &tileWidth);
+  // mapElement->QueryIntAttribute("tileheight", &tileHeight);
+ // std::cout << "El ancho del mapa es: " << width << std::endl;
 }
 
 int main() {
 
 
   //Create Game manager
-  FVeng::GameManager GameMan{640, 480,"Prototipo Input con multiples teclas"};
+  FVeng::GameManager GameMan{640, 480,"Prototipo Cargar mapa"};
 
   //create Sprite manager
   SFMLeng::SpriteManager SPman{};
