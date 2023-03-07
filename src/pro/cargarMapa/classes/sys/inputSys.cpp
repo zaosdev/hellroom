@@ -27,10 +27,10 @@ namespace game
             gMan_.ent->physics->vel.y *= dash_multiplier; 
         }  
 
-        if(inpRec_.isKeyPressed(getKeyCode('9')))
-        {
+        // if(inpRec_.isKeyPressed(getKeyCode('9')))
+        // {
             
-        }  
+        // }  
 
     }
 

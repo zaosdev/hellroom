@@ -2,8 +2,6 @@
 
 #include "../man/GameManager.hpp"
 
-
-
 namespace game
 {
     struct AchievementSys
@@ -17,10 +15,11 @@ namespace game
         AchievementSys& operator=(AchievementSys&&)= delete;
 
         //void iniPhysicsSys();
-        void update(int, int);
+        void update(Entity& player);
 
 
         private:
             FVeng::GameManager& gMan_;
+            static int cont;
     };
 }
