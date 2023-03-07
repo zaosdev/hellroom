@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-//librerias necesarias para leer texto 
+
 #include <fstream>
 #include <string>
 
@@ -13,14 +13,13 @@
 
 
 
-
 #define kVel 5
 
 int main() {
 
 
   //Create Game manager
-  FVeng::GameManager GameMan{640, 480,"P2. Cuadros de Texto"};
+  FVeng::GameManager GameMan{640, 480,"P2. Cuadro de Texto"};
 
   //create Sprite manager
   SFMLeng::SpriteManager SPman{};
@@ -33,15 +32,15 @@ int main() {
 
   auto& EM = GameMan.getEntityManager();
 
-  // auto& player = EM.createEntity();
+//   auto& player = EM.createEntity();
 
 
-  // // Lo dispongo en el centro de la pantalla
-  // player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
+//   // Lo dispongo en el centro de la pantalla
+//   player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
 
-  // player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{320,240} };
+//   player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{320,240} };
 
-  // player.input = game::InputComponent{};
+//   player.input = game::InputComponent{};
 
 //   //Creamos una ventana
 //   SPman.loadTexture(player.render->tex,"../resources/sprites.png");
@@ -59,49 +58,73 @@ int main() {
 //       player.physics->pos.y
 //   );
 
-  //Aqui empiezo el codigo de cuadros de texto
-  //Leemos el archivo de texto
-  std::ifstream leer("resources/texto.txt");
-  std::string linea;
-
-  std::cout << "ARCHIVO LISTO" << std::endl;
-
-  //para que salga el texto en pantalla necesito un obj texto
-
+//para que salga el texto en pantalla necesito un obj texto
   sf::Font fuente;
   fuente.loadFromFile("resources/Minecraft.ttf"); //fuente con la que se vera el texto
+
   sf::Text texto("", fuente, 16);
   texto.setFillColor(sf::Color::Yellow);
   texto.setPosition(10,10);
+
+  //  // Cargamos el sprite de cuadro de texto
+  // sf::Texture texture;
+  // texture.loadFromFile("resources/cuadro_texto.png");
+  // sf::Sprite cuadro(texture);
+
+  //Creamos un cuadro para el texto
+  sf::RectangleShape cuadro(sf::Vector2f((GameMan.getWindow().getSize().x - 20), 100));
+  cuadro.setPosition(5,5);
+  cuadro.setOutlineThickness(3);
+  cuadro.setOutlineColor(sf::Color::Blue);
+  cuadro.setFillColor(sf::Color::Transparent);
   
-  std::cout << "Todo bien hasta aqui" << std::endl;
+  std::ifstream leer("resources/texto.txt");
+  std::string linea;
 
-  while(std::getline(leer, linea)){
-
-    std::cout << "Leo linea a linea" << std::endl;
-
-    for(int i = 0; i< linea.size(); i++){
-
-      texto.setString(texto.getString() + linea[i]);
-
-      GameMan.getWindow().clear();
-      GameMan.getWindow().draw(texto);
-      GameMan.getWindow().display();
-
-      sf::sleep(sf::milliseconds(100));
-
-    }
-    texto.setString(texto.getString() + "\n");
-  }
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
     inpSys.update();
 
+    // Manejo de eventos de cerrar ventana
+    sf::Event event;
+    while (GameMan.getWindow().pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            GameMan.getWindow().close();
+        }
+    }
+
     phySys.update();
 
-    renSys.update();
+    //renSys.update();
+
+    //Resto del bucle principal del juego
+
+    //Leemos el archivo de texto
+    if (std::getline(leer, linea))
+    {
+      for (std::size_t i = 0; i < linea.size(); i++)
+      {
+        texto.setString(texto.getString() + linea[i]);
+
+        GameMan.getWindow().clear();
+        GameMan.getWindow().draw(cuadro);
+        GameMan.getWindow().draw(texto);
+        GameMan.getWindow().display();
+
+        sf::sleep(sf::milliseconds(100));
+      }
+      texto.setString(texto.getString() + "\n");
+    }
+    else
+    {
+      // Si hemos llegado al final del archivo, lo cerramos y reiniciamos
+      leer.close();
+    }
+
+    // Esperamos un poco antes de la siguiente iteración
+    sf::sleep(sf::milliseconds(10));
 //std::cout << "last get here" << player.physics->pos.x << std::endl;
 
   }
