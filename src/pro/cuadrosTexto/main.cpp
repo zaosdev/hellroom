@@ -40,6 +40,11 @@ int main() {
   sf::Text texto("", fuente, 16);
   texto.setFillColor(sf::Color::Yellow);
   texto.setPosition(10,10);
+  texto.setLineSpacing(1.5);
+
+  sf::Text saltar("PRESS SPACE TO SKIP", fuente, 16);
+  saltar.setFillColor(sf::Color::Yellow);
+  saltar.setPosition(((GameMan.getWindow().getSize().x)/2)-saltar.getLocalBounds().width, (GameMan.getWindow().getSize().y)/2);
 
   //  // Cargamos el sprite de cuadro de texto
   // sf::Texture texture;
@@ -99,6 +104,7 @@ int main() {
         GameMan.getWindow().clear();
         GameMan.getWindow().draw(cuadro);
         GameMan.getWindow().draw(texto);
+        GameMan.getWindow().draw(saltar);
         GameMan.getWindow().display();
 
         //si pulsamos la tecla espacio salimos del bucle 
