@@ -22,7 +22,7 @@ int main() {
   FVeng::GameManager GameMan{640, 480,"P2. Cuadro de Texto"};
 
   //create Sprite manager
-  SFMLeng::SpriteManager SPman{};
+  //SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
   game::RenderSys   renSys{GameMan};
@@ -30,33 +30,8 @@ int main() {
   game::InputSys    inpSys{GameMan};
 
 
-  auto& EM = GameMan.getEntityManager();
+  //auto& EM = GameMan.getEntityManager();
 
-//   auto& player = EM.createEntity();
-
-
-//   // Lo dispongo en el centro de la pantalla
-//   player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
-
-//   player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{320,240} };
-
-//   player.input = game::InputComponent{};
-
-//   //Creamos una ventana
-//   SPman.loadTexture(player.render->tex,"../resources/sprites.png");
-//   //Y creo el spritesheet a partir de la imagen anterior
-//   SPman.assignTexture(player.render->Sprite,player.render->tex);
-//   //Le pongo el centroide donde corresponde
-//   SPman.modifySpriteOrigin(player.render->Sprite,{75 / 2, 75 / 2});
-//   //Cojo el sprite que me interesa por defecto del sheet
-//   SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-//   //muevo el sprite a la posicion determinada por el componente de fisica
-// std::cout << "I get here" << player.physics->pos.x << std::endl;
-
-//   player.render->Sprite.move(
-//       player.physics->pos.x,
-//       player.physics->pos.y
-//   );
 
 //para que salga el texto en pantalla necesito un obj texto
   sf::Font fuente;
@@ -82,6 +57,9 @@ int main() {
   std::string linea;
 
 
+  bool skip = false; //para saber si se lee el texto de una o letra a letra
+
+
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
@@ -97,15 +75,25 @@ int main() {
 
     phySys.update();
 
-    //renSys.update();
+    //lo comento porque si no ahora mismo me borra todo por actualizarse todo el rato
+    
+    //renSys.update(); 
+    
 
     //Resto del bucle principal del juego
 
     //Leemos el archivo de texto
-    if (std::getline(leer, linea))
+
+    //Modificamos para que con una tecla pueda pasar a leer el texto entero
+
+    if (!skip && std::getline(leer, linea))
     {
+      std::cout << "NO SKIP" << std::endl;
+
       for (std::size_t i = 0; i < linea.size(); i++)
       {
+        std::cout << "L BY L" << std::endl;
+
         texto.setString(texto.getString() + linea[i]);
 
         GameMan.getWindow().clear();
@@ -113,16 +101,51 @@ int main() {
         GameMan.getWindow().draw(texto);
         GameMan.getWindow().display();
 
+        //si pulsamos la tecla espacio salimos del bucle 
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+          skip = true;
+          continue;
+        }
+
         sf::sleep(sf::milliseconds(100));
       }
       texto.setString(texto.getString() + "\n");
-    }
-    else
-    {
+    } 
+    else {
+      std::cout << "CIERRO  " << std::endl;
       // Si hemos llegado al final del archivo, lo cerramos y reiniciamos
       leer.close();
+      
     }
+    
+    
+    //si se pulso espacio leemos todo el texto
+  
+    if(skip /*&& std::getline(leer, linea)*/){
+      std::cout << "SKIP" << std::endl;
+      std::string resto = "";
+      
+      while(std::getline(leer, linea)){
 
+        resto += linea + "\n";
+
+      }
+      // //texto.setString(texto.getString() + resto);
+      //texto.setString(resto);
+      texto.setString(texto.getString() + resto + "\n");
+
+
+      GameMan.getWindow().clear();
+      GameMan.getWindow().draw(cuadro);
+      GameMan.getWindow().draw(texto);
+      GameMan.getWindow().display();
+
+      // std::cout << "CIERRO 2 " << std::endl;
+      // leer.close();
+
+    }
+    
+  
     // Esperamos un poco antes de la siguiente iteración
     sf::sleep(sf::milliseconds(10));
 //std::cout << "last get here" << player.physics->pos.x << std::endl;
