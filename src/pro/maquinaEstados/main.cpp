@@ -15,7 +15,8 @@ int main() {
 
   //Cargo la imagen donde reside la textura del sprite
   sf::Texture tex;
-  if (!tex.loadFromFile("resources/sprites.png")) {
+    if (!tex.loadFromFile("resources/sprites.png")) {
+
     std::cerr << "Error cargando la imagen sprites.png";
     exit(0);
   }

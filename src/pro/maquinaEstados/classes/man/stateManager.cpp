@@ -26,7 +26,7 @@ namespace MaquinaEstados{
             }
             this-> _isRemoving = false;
         }
-        if (this-> _isAdding){
+        if (this->_isAdding){
             if(!this->_states.empty()){
                 if(this-> _isRemplacing){
                     this->_states.pop();
@@ -41,7 +41,7 @@ namespace MaquinaEstados{
         }
     }
     StateRef &StateMachine::GetActivateState( ){
-        return this ->_states.top();
+        return this->_states.top();
     }
 
 }

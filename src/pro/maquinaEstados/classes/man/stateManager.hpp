@@ -7,9 +7,6 @@
 
 #include "State.hpp"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGTH 480
-
 namespace MaquinaEstados{
     typedef std:: unique_ptr<State> StateRef;
 
