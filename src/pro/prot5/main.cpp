@@ -68,8 +68,7 @@ int main() {
 
     achSys.update(player);
 
-std::cout << "last get here" << player.physics->pos.y << std::endl;
-
+    std::cout << "last get here" << player.physics->pos.y << std::endl;
   }
 
   return 0;
