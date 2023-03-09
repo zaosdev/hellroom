@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../man/GameManager.hpp"
+#include "../man/SpriteManager.hpp"
+#include "../sys/renderSys.hpp"
 
 namespace game
 {
@@ -22,6 +24,6 @@ namespace game
         private:
             FVeng::GameManager& gMan_;
             SFMLeng::SpriteManager SPman{};
-            game::RenderSys renSys{gameMan};
+            game::RenderSys renSys{gMan_};
     };
 }

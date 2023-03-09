@@ -20,11 +20,11 @@ namespace game
     }*/
     void AchievementSys::showPic(){
         
-        sf::Sprite img;
+        sf::Sprite img;// = SPman.SpriteManager();
         //SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-        SPman.loadTexture(img->tex,"/home/osboxes/Desktop/repositorio abp/proyecto-abp-grupo-j4/src/pro/prot5/logros.png");
+        SPman.loadTexture(img.setTexture(),"/home/osboxes/Desktop/repositorio abp/proyecto-abp-grupo-j4/src/pro/prot5/logros.png");
         //Y creo el spritesheet a partir de la imagen anterior
-        SPman.assignTexture(img->Sprite,img->tex);
+        SPman.assignTexture(img.Sprite,img.tex);
     }
 
     void AchievementSys::update(Entity& player)
