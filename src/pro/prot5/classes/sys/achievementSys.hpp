@@ -16,10 +16,12 @@ namespace game
 
         //void iniPhysicsSys();
         void update(Entity& player);
+        void showPic();
 
 
         private:
             FVeng::GameManager& gMan_;
-            static int cont;
+            SFMLeng::SpriteManager SPman{};
+            game::RenderSys renSys{gameMan};
     };
 }

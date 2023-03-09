@@ -1,6 +1,7 @@
 
 #include "achievementSys.hpp"
 #include "../man/SpriteManager.hpp"
+#include "../sys/renderSys.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -17,7 +18,14 @@ namespace game
     /*void PhysicsSys::iniPhysicsSys()
     {
     }*/
-    //SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+    void AchievementSys::showPic(){
+        
+        sf::Sprite img;
+        //SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+        SPman.loadTexture(img->tex,"/home/osboxes/Desktop/repositorio abp/proyecto-abp-grupo-j4/src/pro/prot5/logros.png");
+        //Y creo el spritesheet a partir de la imagen anterior
+        SPman.assignTexture(img->Sprite,img->tex);
+    }
 
     void AchievementSys::update(Entity& player)
     {

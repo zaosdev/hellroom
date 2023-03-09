@@ -10,7 +10,7 @@ namespace FVeng
         explicit EntityManager(const size_t num_entities = 10)
         {
             entities_.reserve(num_entities);
-        }
+        }//git checkout -b feature/logros
 
         EntityManager (const EntityManager&) = delete;
         EntityManager (EntityManager&&) = delete;
