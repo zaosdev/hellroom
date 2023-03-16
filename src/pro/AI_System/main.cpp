@@ -24,7 +24,8 @@ int main() {
   //Create Game systems
   game::RenderSys     renSys{GameMan};
   game::PhysicsSys    phySys{GameMan};
-  game::InputManager  inpRec{GameMan.getWindow()};
+  sf::RenderWindow& window = GameMan.getWindow();
+  game::InputManager  inpRec{window};
   game::InputSys      inpSys{GameMan, inpRec};
   game::AISys         AISys{};
 
@@ -45,13 +46,13 @@ int main() {
   
 
   //Create the enemy 1
-  enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}};
-  enemy1.render  = game::RenderComponent  { .tex{}  , .Sprite{}, .window_Pos{0,0} };
-  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}}; 
-  SPman.loadTexture(enemy1.render->tex,"../resources/sprites.png");
-  SPman.assignTexture(enemy1.render->Sprite,enemy1.render->tex);
-  SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
-  SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+  // enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}};
+  // enemy1.render  = game::RenderComponent  { .tex{}  , .Sprite{}, .window_Pos{0,0} };
+  // enemy1.AI      = game::AIComponent      { .targetCoord{640,480}}; 
+  // SPman.loadTexture(enemy1.render->tex,"../resources/sprites.png");
+  // SPman.assignTexture(enemy1.render->Sprite,enemy1.render->tex);
+  // SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
+  // SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) 
@@ -62,10 +63,10 @@ int main() {
 
     AISys.update();
 
-    //Update physics
+    // //Update physics
     phySys.update();
 
-    //Render game
+    // //Render game
     renSys.update();
   }
 
