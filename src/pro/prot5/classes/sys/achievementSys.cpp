@@ -50,7 +50,7 @@ namespace game
             }
             if(unlocked == false){
                 std::cout << "LOGRO DESBLOQUEADO POS=40:40" << std::endl;
-                //enseñar logro.png duranto 3 segundos
+                //enseñar logro.png durante 3 segundos
                 std::ofstream archivoE(file);
                 archivoE << "0" << std::endl;
                 archivoE.close();
