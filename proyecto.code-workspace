@@ -34,7 +34,11 @@
 			"path": "src/pro/cargarMapa"
 		},
 		{
-			"name": "Prototipo 7: Guardado del juego",
+			"name": "Prototipo 7: AI System",
+			"path": "src/pro/AI_System"
+		},
+		{
+			"name": "Prototipo 8: Guardado del juego",
 			"path": "src/pro/guardado"
 		},
 	],
