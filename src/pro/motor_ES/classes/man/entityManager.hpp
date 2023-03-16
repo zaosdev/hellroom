@@ -54,7 +54,7 @@ namespace FVeng
             void destroyDeadEntities() noexcept
             {
                 //ALmost impossible to happen, just in case
-                assert(entities.size() < ((0z-1)/2-1));
+                assert(entities_.size() < ((0-1)/2-1));
 
                 //loop backwards through all the entities on the game, check if they are dead and remove them in case they are
                 for(auto i{entities_.size()} ; i!=0; i--)
