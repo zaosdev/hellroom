@@ -8,7 +8,7 @@ add_library(libModulos STATIC)
 add_subdirectory(classes)
 
 #Opciones a pasar al compilador de C++
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -Wall -Wextra")
 #Se desea generar un ejecutable, se especifica donde está el main
 #y ficheros que aporten código que no sean librerias o subcarpetas 
 add_executable(MiJuego main.cpp)
