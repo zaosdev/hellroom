@@ -8,7 +8,7 @@
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
 #include "classes/man/inputManager.hpp"
-
+#include "classes/sys/AISys.hpp"
 
 #define kVel 5
 
@@ -26,7 +26,7 @@ int main() {
   game::PhysicsSys    phySys{GameMan};
   game::InputManager  inpRec{GameMan.getWindow()};
   game::InputSys      inpSys{GameMan, inpRec};
-
+  game::AISys         AISys{};
 
   auto& EM = GameMan.getEntityManager();
 
@@ -56,11 +56,11 @@ int main() {
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) 
   {
-    std::cout << "HOLA??" << player.physics->pos.x << std::endl;
     //Bucle de obtención de eventos
-    inpRec.update();std::cout << "HOLA despues de inprec??" << player.physics->pos.x << std::endl;
+    inpRec.update();
     inpSys.update();
-    std::cout << "I get here" << player.physics->pos.x << std::endl;
+
+    AISys.update();
 
     //Update physics
     phySys.update();
