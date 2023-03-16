@@ -2,7 +2,7 @@
 #include "../facade/inputFacade.hpp"
 
 #define dash_multiplier 3
-#define movement_speed  5
+#define movement_speed  0.2
 namespace game
 {
     InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan)
@@ -12,25 +12,29 @@ namespace game
 
     void InputSys::update()
     {
-        gMan_.ent->physics->vel = {0,0};
-
-        //Movement
-        if(inpRec_.isKeyPressed(getKeyCode('W')))      gMan_.ent->physics->vel += {0,-movement_speed}; 
-        if(inpRec_.isKeyPressed(getKeyCode('A')))      gMan_.ent->physics->vel += {-movement_speed,0}; 
-        if(inpRec_.isKeyPressed(getKeyCode('S')))      gMan_.ent->physics->vel += {0,movement_speed}; 
-        if(inpRec_.isKeyPressed(getKeyCode('D')))      gMan_.ent->physics->vel += {movement_speed,0}; 
-
-        //Dash
-        if(inpRec_.isKeyPressed(getKeyCode(' ')))
+        auto& EM = gMan_.getEntityManager();
+        for(auto& ent : EM)
         {
-            gMan_.ent->physics->vel.x *= dash_multiplier;
-            gMan_.ent->physics->vel.y *= dash_multiplier; 
-        }  
+            if(ent.input)
+            {
+                ent.physics->vel = {0,0};
 
-        if(inpRec_.isKeyPressed(getKeyCode('9')))
-        {
-            
-        }  
+                //Movement
+                if(inpRec_.isKeyPressed(getKeyCode('W')))      ent.physics->vel += {0,-movement_speed}; 
+                if(inpRec_.isKeyPressed(getKeyCode('A')))      ent.physics->vel += {-movement_speed,0}; 
+                if(inpRec_.isKeyPressed(getKeyCode('S')))      ent.physics->vel += {0,movement_speed}; 
+                if(inpRec_.isKeyPressed(getKeyCode('D')))      ent.physics->vel += {movement_speed,0}; 
+
+                //Dash
+                if(inpRec_.isKeyPressed(getKeyCode(' ')))
+                {
+                    ent.physics->vel.x *= dash_multiplier;
+                    ent.physics->vel.y *= dash_multiplier; 
+                }
+            }
+        }
+
+        
 
     }
 
