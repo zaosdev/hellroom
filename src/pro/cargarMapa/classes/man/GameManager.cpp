@@ -14,4 +14,10 @@ namespace FVeng
         {
             return window_;
         }
+
+        void GameManager::initLevel()
+        {
+            mapMan.loadMap("media/Mapa1.tmx");
+        }
+
 }

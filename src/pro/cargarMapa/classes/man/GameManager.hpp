@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../cmp/entity.hpp"
+#include "mapManager.hpp"
+
 
 
 namespace FVeng
@@ -16,11 +18,14 @@ namespace FVeng
         GameManager& operator=(GameManager&&)= delete;       
         
         sf::RenderWindow& getWindow();
+        void initLevel();
+
 
         game::Entity* ent;
         private:
 
         sf::RenderWindow window_{};
+        tXMLeng::mapManager mapMan{};
 
 
 

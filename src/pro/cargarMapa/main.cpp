@@ -8,28 +8,11 @@
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
 #include "classes/man/inputManager.hpp"
-#include "include/tinyXML2/tinyxml2.h"
+
 
 #define kVel 5
 
-void loadMap()
-{
-  tinyxml2::XMLDocument doc;
-  doc.LoadFile("../media/Mapa1.tmx");
-  tinyxml2::XMLElement* mapElement = doc.FirstChildElement("map");
-  int width, height, tileWidth, tileHeight;
-  if (mapElement) 
-  {
-    mapElement->QueryIntAttribute("width", &width);
-    std::cout << "El ancho del mapa es: " <<  width << std::endl;
-  } else {
-    std::cout << "ERROR NO HAY MAPELEMENT" << std::endl;
-  }
-  // mapElement->QueryIntAttribute("height", &height);
-  // mapElement->QueryIntAttribute("tilewidth", &tileWidth);
-  // mapElement->QueryIntAttribute("tileheight", &tileHeight);
- // std::cout << "El ancho del mapa es: " << width << std::endl;
-}
+
 
 int main() {
 
@@ -46,14 +29,13 @@ int main() {
   game::InputManager  inpRec{GameMan.getWindow()};
   game::InputSys      inpSys{GameMan, inpRec};
  
-  loadMap();
-
   GameMan.ent->render = new game::RenderComponent();
   GameMan.ent->physics = new game::PhysicsComponent();
 
-
+  GameMan.initLevel();
+  
   //Creamos una ventana
-  SPman.loadTexture(GameMan.ent->render->tex,"../resources/sprites.png");
+  SPman.loadTexture(GameMan.ent->render->tex,"resources/sprites.png");
 
   //Y creo el spritesheet a partir de la imagen anterior
   SPman.assignTexture(GameMan.ent->render->Sprite,GameMan.ent->render->tex);
