@@ -33,6 +33,10 @@
 			"name": "Prototipo 6: Cargar mapa",
 			"path": "src/pro/cargarMapa"
 		},
+		{
+			"name": "Prototipo 7: AI System",
+			"path": "src/pro/AISystem"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
