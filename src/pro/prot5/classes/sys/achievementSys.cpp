@@ -26,6 +26,7 @@ namespace game
         //Y creo el spritesheet a partir de la imagen anterior
         SPman.assignTexture(img.Sprite,img.tex);
         */
+       //cambios nuevos
     }
 
     void AchievementSys::update(Entity& player)
