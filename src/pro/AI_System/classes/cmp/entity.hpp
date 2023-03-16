@@ -5,6 +5,7 @@
 #include "AIComponent.hpp"
 
 
+
 #include <optional>
 namespace FVeng { template <typename> struct EntityManager; }
 
@@ -23,10 +24,11 @@ namespace game
 
       friend struct FVeng::EntityManager<Entity>;
       
-      std::optional<RenderComponent>  render{};
+      std::optional<RenderComponent> render{};
       std::optional<PhysicsComponent> physics{};
-      std::optional<InputComponent>   input{};
-      std::optional<AIComponent>      AI{};
+      std::optional<InputComponent> input{};
+      std::optional<AIComponent> AI{};
+
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
       [[nodiscard]] constexpr bool alive() const noexcept { return alive_; }

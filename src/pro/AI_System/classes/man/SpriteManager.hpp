@@ -7,7 +7,7 @@ namespace SFMLeng
 
     // struct SFMLSprite
     // {
-    //     SFMLSprite(std::string tex)
+    //     SFMLSprite()
     //     {
 
     //     }
@@ -27,15 +27,17 @@ namespace SFMLeng
         SpriteManager& operator=(const SpriteManager&)= delete;
         SpriteManager& operator=(SpriteManager&&)= delete;
         
-        void loadTexture(sf::Texture& tex, std::string texStr);
+        std::size_t  loadTexture(std::string texStr);
 
-        void assignTexture(sf::Sprite& sp, sf::Texture& Tex);
+        void assignTexture(sf::Sprite& sp, const size_t texIdx);
 
         void modifyTextureRect(sf::Sprite& sp, sf::IntRect rect);
 
         void modifySpriteOrigin(sf::Sprite& sp,FVmath::vec2D origin);
 
         private:
+
+            std::vector<sf::Texture> vecTex_;
 
     };
 }
