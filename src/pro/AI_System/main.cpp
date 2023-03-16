@@ -7,7 +7,7 @@
 #include "classes/sys/inputSys.hpp"
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
-
+#include "classes/man/inputManager.hpp"
 
 
 #define kVel 5
@@ -22,9 +22,10 @@ int main() {
   SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
-  game::RenderSys   renSys{GameMan};
-  game::PhysicsSys  phySys{GameMan};
-  game::InputSys    inpSys{GameMan};
+  game::RenderSys     renSys{GameMan};
+  game::PhysicsSys    phySys{GameMan};
+  game::InputManager  inpRec{GameMan.getWindow()};
+  game::InputSys      inpSys{GameMan, inpRec};
 
 
   auto& EM = GameMan.getEntityManager();
@@ -47,25 +48,26 @@ int main() {
   SPman.modifySpriteOrigin(player.render->Sprite,{75 / 2, 75 / 2});
   //Cojo el sprite que me interesa por defecto del sheet
   SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-  //muevo el sprite a la posicion determinada por el componente de fisica
-std::cout << "I get here" << player.physics->pos.x << std::endl;
 
-  player.render->Sprite.move(
+std::cout << "I get here" << player.physics->pos.x << std::endl;
+    player.render->Sprite.move(
       player.physics->pos.x,
       player.physics->pos.y
   );
-
-
   //Bucle del juego
-  while (GameMan.getWindow().isOpen()) {
+  while (GameMan.getWindow().isOpen()) 
+  {
+    std::cout << "HOLA??" << player.physics->pos.x << std::endl;
     //Bucle de obtención de eventos
+    inpRec.update();std::cout << "HOLA despues de inprec??" << player.physics->pos.x << std::endl;
     inpSys.update();
+    std::cout << "I get here" << player.physics->pos.x << std::endl;
 
+    //Update physics
     phySys.update();
 
+    //Render game
     renSys.update();
-std::cout << "last get here" << player.physics->pos.x << std::endl;
-
   }
 
   return 0;
