@@ -3,6 +3,7 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/renderSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/inputSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/physicsSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/savingSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/man/SpriteManager.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/man/GameManager.cpp"
 )
