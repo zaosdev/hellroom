@@ -42,7 +42,7 @@ namespace game
             //logro 0, posicion (40,40)
             bool unlocked = false;
             std::string cadena;
-            std::string file = "/home/osboxes/Desktop/repositorio abp/proyecto-abp-grupo-j4/src/pro/logros/logros-desbloqueados.txt";
+            std::string file = "/home/osboxes/Desktop/repositorio abp/proyecto-abp-grupo-j4/src/pro/prot5/logros-desbloqueados.txt";
             std::ifstream archivoL(file);
             while (getline (archivoL, cadena)){
                 if(cadena == "0"){
