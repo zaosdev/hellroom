@@ -26,12 +26,20 @@
 			"path": "src/pro/maquinaEstados"
 		},
 		{
-			"name": "Prototipo 5: prototipo5",
-			"path": "src/pro/prot5"
+			"name": "Prototipo 5: logros",
+			"path": "src/pro/logros"
 		},
 		{
 			"name": "Prototipo 6: Cargar mapa",
 			"path": "src/pro/cargarMapa"
+		},
+		{
+			"name": "Prototipo 7: AI System",
+			"path": "src/pro/AI_System"
+		},
+		{
+			"name": "Prototipo 8: Guardado del juego",
+			"path": "src/pro/guardado"
 		},
 	],
 	"settings": {
@@ -82,7 +90,8 @@
 			"sstream": "cpp",
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"cstring": "cpp"
 		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "classes/sys/renderSys.hpp"
 #include "classes/sys/physicsSys.hpp"
 #include "classes/sys/inputSys.hpp"
+#include "classes/sys/savingSys.hpp"
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
 
@@ -25,17 +26,19 @@ int main() {
   game::RenderSys   renSys{GameMan};
   game::PhysicsSys  phySys{GameMan};
   game::InputSys    inpSys{GameMan};
-
+  game::SavingSys   savSys{GameMan};
 
   auto& EM = GameMan.getEntityManager();
 
   auto& player = EM.createEntity();
 
+  //leer ultima posicion
+   std::array<int, 2> posit = savSys.read();
 
   // Lo dispongo en el centro de la pantalla
-  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
+  player.physics = game::PhysicsComponent{ .pos{(float)posit[0], (float)posit[1]}, .vel{0,0}};
 
-  player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{320,240} };
+  player.render = game::RenderComponent { .tex{}  , .Sprite{}, .window_Pos{posit[0], posit[1]} };
 
   player.input = game::InputComponent{};
 
@@ -48,12 +51,16 @@ int main() {
   //Cojo el sprite que me interesa por defecto del sheet
   SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
   //muevo el sprite a la posicion determinada por el componente de fisica
-std::cout << "I get here" << player.physics->pos.x << std::endl;
+
+  std::cout << "I get here" << player.physics->pos.x << std::endl;
+
 
   player.render->Sprite.move(
       player.physics->pos.x,
       player.physics->pos.y
   );
+
+ 
 
 
   //Bucle del juego
@@ -64,7 +71,9 @@ std::cout << "I get here" << player.physics->pos.x << std::endl;
     phySys.update();
 
     renSys.update();
-std::cout << "last get here" << player.physics->pos.x << std::endl;
+
+    savSys.update(player);
+std::cout << "last get here" << player.physics->pos.y << std::endl;
 
   }
 
