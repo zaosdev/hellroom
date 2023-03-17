@@ -35,7 +35,7 @@ int main() {
   GameMan.initLevel();
   
   //Creamos una ventana
-  SPman.loadTexture(GameMan.ent->render->tex,"resources/sprites.png");
+  SPman.loadTexture(GameMan.ent->render->tex,"../resources/sprites.png");
 
   //Y creo el spritesheet a partir de la imagen anterior
   SPman.assignTexture(GameMan.ent->render->Sprite,GameMan.ent->render->tex);

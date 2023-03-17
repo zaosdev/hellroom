@@ -17,7 +17,7 @@ namespace FVeng
 
         void GameManager::initLevel()
         {
-            mapMan.loadMap("media/Mapa1.tmx");
+            mapMan.loadMap("../media/Mapa1.tmx");
         }
 
 }

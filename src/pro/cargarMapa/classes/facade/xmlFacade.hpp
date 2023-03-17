@@ -2,55 +2,81 @@
 
 namespace FVeng
 {
-    
-    template <typename XMLReader, typename XMLElement>
-    struct xmlFacade
+    template <typename XMLElement_type>
+    struct xmlElement_facade
     {
-        xmlFacade() = default;
+        template<typename T,typename U>
+        friend struct xmlReader_facade;
 
-        xmlFacade (const xmlFacade&) = delete;
-        xmlFacade (xmlFacade&&) = delete;
-        xmlFacade& operator=(const xmlFacade&)= delete;
-        xmlFacade& operator=(xmlFacade&&)= delete;     
-    
-        void loadFile(const char* filePath)
+        [[nodiscard]] xmlElement_facade NextSiblingNamed(const char* elemName)
         {
-            doc_.LoadFile(filePath);
+            xmlElement_facade temp{};
+            temp.XMLE = XMLE->NextSiblingElement(elemName);
+            return temp;
         }
 
-        void printError(){ doc_.PrintError();}
-
-        [[nodiscard]] XMLElement* FirstChildElement(const char* elemName)
+        [[nodiscard]] xmlElement_facade FirstChildNamed(const char* elemName)
         {
-            return doc_.FirstChildElement(elemName);
+            xmlElement_facade temp{};
+            temp.XMLE = XMLE->FirstChildElement(elemName);
+            return temp;
         }
 
         template<typename T>
-        void queryAttribute(XMLElement* elem, const char* attName,  T attribute) 
+        void queryAttribute(const char* attName, T attribute) 
         {
-            // elem->QueryIntAttribute(attName, attribute);
+            queryAttribute<T>(attName, attribute ,typename queryTypes<T>::Type());
         };
 
-        template<>
-        void queryAttribute<int*>(XMLElement* elem, const char* attName,  int* attribute) 
+        template<typename T>
+        void queryAttribute(const char* attName, T attribute, int_Type) 
         {
-            elem->QueryIntAttribute(attName, attribute);
+            XMLE->QueryIntAttribute(attName, attribute);
         };
                 
-        template<>
-        void queryAttribute<bool*>(XMLElement* elem, const char* attName,  bool* attribute) 
+        template<typename T>
+        void queryAttribute(const char* attName, T attribute,  bool_Type ) 
         {
-            elem->QueryBoolAttribute(attName, attribute);
+            XMLE->QueryBoolAttribute(attName, attribute);
         };        
 
-        template<>
-        void queryAttribute<const char**>(XMLElement* elem, const char* attName,  const char** attribute) 
+        template<typename T>
+        void queryAttribute(const char* attName, T attribute,  const_char_Type ) 
         {
-            elem->QueryStringAttribute(attName, attribute);
-        };        
+            XMLE->QueryStringAttribute(attName, attribute);
+        };
+
+        [[nodiscard]] bool isEmpty() noexcept
+        {
+            if(XMLE) return true;
+            else return false;
+        }
 
         private:
-            XMLReader doc_{};
-
+         XMLElement_type* XMLE{};
     };
+    
+    template <typename XMLReader_type,typename XMLElement_type>
+    struct xmlReader_facade
+    {
+
+        void loadFile(const char* filePath)
+        {
+            XMLR.LoadFile(filePath);
+        }
+
+        void printError(){ XMLR.PrintError();}
+
+        [[nodiscard]] xmlElement_facade<XMLElement_type> FirstChildOnDocument(const char* elemName)
+        {
+            xmlElement_facade<XMLElement_type> temp{};
+            temp.XMLE = XMLR.FirstChildElement(elemName);
+            return temp;
+        }
+
+        private:
+
+         XMLReader_type XMLR{};   
+    };
+
 }
