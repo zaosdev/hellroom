@@ -11,6 +11,6 @@ namespace FVAI
         SEEK
     };
 
-    FVmath::Point2D arrive(FVmath::Point2D origin, FVmath::Point2D target);
+    FVmath::Point2D arrive(FVmath::Point2D origin, FVmath::Point2D target, double speed);
 
 }

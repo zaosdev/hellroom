@@ -36,9 +36,8 @@ int main() {
   auto tex = SPman.loadTexture("../resources/sprites.png");
 
   // Lo dispongo en el centro de la pantalla
-  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
+  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}, .mov_speed = 5};
   player.render = game::RenderComponent { .texIndex=tex  , .Sprite{}, .window_Pos{320,240} };
-
   player.input = game::InputComponent{};
 
   SPman.assignTexture(player.render->Sprite,player.render->texIndex);
@@ -47,7 +46,7 @@ int main() {
  
 
   //Create the enemy 1
-  enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}};
+  enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
   enemy1.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
   enemy1.AI      = game::AIComponent      { .targetCoord{640,480}}; 
   SPman.assignTexture(enemy1.render->Sprite,enemy1.render->texIndex);

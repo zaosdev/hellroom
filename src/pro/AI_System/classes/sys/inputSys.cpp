@@ -2,7 +2,7 @@
 #include "../facade/inputFacade.hpp"
 
 #define dash_multiplier 3
-#define movement_speed  0.2
+#define movement_speed  5
 namespace game
 {
     InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan)

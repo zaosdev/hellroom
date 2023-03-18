@@ -22,12 +22,13 @@ namespace game
                 {
                     case FVAI::SB::ARRIVE:
                     {
-                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord);
+                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
                         break;
                     }
                     default:break;
                 }
-                ent.physics->pos+= addPos;
+                std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
+                ent.physics->vel = addPos;
             }
 
         }  
