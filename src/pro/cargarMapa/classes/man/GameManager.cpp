@@ -28,16 +28,16 @@ namespace FVeng
         {
             SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
-
-
-            // SPman.loadTexture(GameMan.ent->render->tex,"../resources/sprites.png");
-
         }
 
         void GameManager::initGame()
         {
-
+            initLevel();
+            LoadAllTextures();
+            createMap();
+            createPlayer();
         }
+
         void GameManager::createPlayer()
         {
             auto& e = EM_.createEntity();
@@ -48,6 +48,8 @@ namespace FVeng
             e.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
             e.render->Sprite.move(
                 e.physics->pos.x,
                 e.physics->pos.y
@@ -55,9 +57,15 @@ namespace FVeng
 
             e.input = game::InputComponent{};
         }
+
         void GameManager::createMap()
         {
+            auto& e = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{} };
 
+            e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));         
+            e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
         }
 
         void GameManager::initEntityRender(game::Entity& entity, FVmath::vec2D origin, sf::IntRect TexRect)

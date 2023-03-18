@@ -2,9 +2,10 @@
 
 #include "../../include/tinyXML2/tinyxml2.h"
 #include "../facade/xmlFacade.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "../utils/math.hpp"
+
 #include <vector>
+#include <iostream>
 
 namespace tXMLeng
 {
@@ -18,26 +19,22 @@ namespace tXMLeng
 
         struct TileSet
         {
-            int tileWidth   {DEFAULT_VALUE};
-            int tileHeight  {DEFAULT_VALUE};
+            FVmath::vec2Di tileSize{DEFAULT_VALUE,DEFAULT_VALUE};
             int tilecount   {DEFAULT_VALUE};
             int colummns    {DEFAULT_VALUE};
+
         };
 
         struct TileMap
         {
-            int width       {DEFAULT_VALUE};
-            int height      {DEFAULT_VALUE};
-            int tileWidth   {DEFAULT_VALUE};
-            int tileHeight  {DEFAULT_VALUE};
+            FVmath::vec2Di mapSize{DEFAULT_VALUE,DEFAULT_VALUE};
+            FVmath::vec2Di tileSize{DEFAULT_VALUE,DEFAULT_VALUE};
             int numLayers   {0};
             int activeLayer {0};
 
             std::vector<std::vector<int>> tileMap{};
 
             const char* filePath{};
-
-
 
         };
 
@@ -50,20 +47,19 @@ namespace tXMLeng
         
         void loadMap(XMLElem& map);
         void obtainMapTexturePath(XMLElem& map);
-        void loadTileSet(const char * filePath);
         void obtainMapInfo(XMLElem& map);
         void InitMap(const char * filePath);
         void setActiveLayer(int newLayer);
         const char * getTexturePath() const;
-
-
-
-
-
+        FVmath::vec2Di getMapSize() const;
+        FVmath::vec2Di getTileSizePath() const;
+        std::vector<int>& getCurrentLayer();
 
         private:
 
         TileMap map_{};
+        TileSet tile_{};
+
         XMLReader xmlDoc_{};
 
     };

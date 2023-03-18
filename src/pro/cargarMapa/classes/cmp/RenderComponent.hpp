@@ -11,7 +11,7 @@ namespace game
     {
         int texIndex{};
         sf::Sprite Sprite{};
-        sfml_util::FVSprite FVSprite{};
         FVmath::vec2Di window_Pos{};
+        
     };
 }

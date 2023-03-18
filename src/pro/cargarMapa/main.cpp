@@ -25,11 +25,15 @@ int main() {
   game::InputManager  inpRec{window};
   game::InputSys      inpSys{GameMan, inpRec};
 
+  GameMan.initGame();
+
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
     GameMan.getEntityManager().update();
+    
+    inpRec.update();
     inpSys.update();
 
     phySys.update();
