@@ -11,7 +11,7 @@ namespace game
     void InputManager::update()
     {
         Event_t event;
-        std::cout << "Inicio de inputmanager";
+        //std::cout << "Inicio de inputmanager";
         while (window_.pollEvent(event)) 
         {
                 switch (event.type) 

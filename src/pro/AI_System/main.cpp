@@ -24,10 +24,9 @@ int main() {
   //Create Game systems
   game::RenderSys     renSys{GameMan};
   game::PhysicsSys    phySys{GameMan};
-  sf::RenderWindow& window = GameMan.getWindow();
-  game::InputManager  inpRec{window};
+  game::InputManager  inpRec{GameMan.getWindow()};
   game::InputSys      inpSys{GameMan, inpRec};
-  game::AISys         AISys{};
+  game::AISys         AISys {GameMan};
 
   auto& EM = GameMan.getEntityManager();
 
@@ -58,12 +57,14 @@ int main() {
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) 
   {
-    //Bucle de obtención de eventos
+    //  //Update entities in manager
     GameMan.getEntityManager().update();
 
+    //  //Update controls
     inpRec.update();
     inpSys.update();
 
+    // //Update AI 
     AISys.update();
 
     // //Update physics
