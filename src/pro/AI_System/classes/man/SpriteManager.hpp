@@ -33,7 +33,7 @@ namespace SFMLeng
 
         void modifyTextureRect(sf::Sprite& sp, sf::IntRect rect);
 
-        void modifySpriteOrigin(sf::Sprite& sp,FVmath::vec2D origin);
+        void modifySpriteOrigin(sf::Sprite& sp,FVmath::Point2D origin);
 
         private:
 

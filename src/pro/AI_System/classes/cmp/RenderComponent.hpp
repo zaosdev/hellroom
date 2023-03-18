@@ -7,8 +7,8 @@ namespace game
 {
     struct RenderComponent
     {
-        std::size_t texIndex{};
-        sf::Sprite Sprite{};
-        FVmath::vec2Di window_Pos{};
+        std::size_t         texIndex{};
+        sf::Sprite          Sprite{};
+        FVmath::Point2Di    window_Pos{};
     };
 }

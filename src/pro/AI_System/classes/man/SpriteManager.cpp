@@ -18,7 +18,7 @@ namespace SFMLeng
         sp.setTextureRect(rect);
     }
 
-    void SpriteManager::modifySpriteOrigin(sf::Sprite& sp,FVmath::vec2D origin)
+    void SpriteManager::modifySpriteOrigin(sf::Sprite& sp,FVmath::Point2D origin)
     {
         sp.setOrigin(origin.x,origin.y);
     }

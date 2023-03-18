@@ -5,7 +5,7 @@ namespace game
 {
     struct PhysicsComponent
     {
-        FVmath::vec2D pos;
-        FVmath::vec2D vel;
+        FVmath::Point2D pos;
+        FVmath::Point2D vel;
     };
 }
