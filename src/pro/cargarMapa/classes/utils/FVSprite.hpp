@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "math.hpp"
+
 
 namespace sfml_util{
 
@@ -16,34 +18,40 @@ namespace sfml_util{
             target.draw(vertices_, states);
         }
 
-        void initVertexArray( int width, int height, std::vector<int> tileMapLayer, int tileWidth, int tileHeight)
+        void assignTexture(sf::Texture* newTex)
+        {
+            if(newTex) texPtr_ = newTex;
+            else std::terminate();
+        }
+
+        void initVertexArray( FVmath::vec2Di Size, std::vector<int>& tileMapLayer, FVmath::vec2Di tileSize )
         {
             vertices_.setPrimitiveType(sf::Quads);
-            vertices_.resize(width * height *4);
+            vertices_.resize(Size.x * Size.y *4);
 
             int gid{-1}, tu, tv;
             sf::Vertex* quad;
 
-            for(int i{0}; i<height; i++)
+            for(int i{0}; i<Size.x ; i++)
             {
-                for(int j{0}; j<width; j++)
+                for(int j{0}; j<Size.y; j++)
                 {
-                    gid = tileMapLayer[i+j*width];
+                    gid = tileMapLayer[i+j*Size.x];
 
-                    tu = gid % (texPtr_->getSize().x / tileWidth );
-                    tv = gid / (texPtr_->getSize().x / tileWidth );
+                    tu = gid % (texPtr_->getSize().x / tileSize.x);
+                    tv = gid / (texPtr_->getSize().x / tileSize.x);
 
-                    quad = &vertices_[(i+j*width)*4];
+                    quad = &vertices_[(i+j*Size.x )*4];
 
-                    quad[0].position = sf::Vector2f(i*tileWidth, j*tileHeight);
-                    quad[1].position = sf::Vector2f((i+1)*tileWidth, j*tileHeight);
-                    quad[2].position = sf::Vector2f((i+1)*tileWidth, (j+1)*tileHeight);
-                    quad[3].position = sf::Vector2f(i*tileWidth, (j+1)*tileHeight);
+                    quad[0].position = sf::Vector2f(i*tileSize.x, j*tileSize.y);
+                    quad[1].position = sf::Vector2f((i+1)*tileSize.x, j*tileSize.y);
+                    quad[2].position = sf::Vector2f((i+1)*tileSize.x, (j+1)*tileSize.y);
+                    quad[3].position = sf::Vector2f(i*tileSize.x, (j+1)*tileSize.y);
 
-                    quad[0].texCoords = sf::Vector2f(tu *tileWidth , tv * tileHeight);
-                    quad[1].texCoords = sf::Vector2f((tu+1) *tileWidth , tv * tileHeight);
-                    quad[2].texCoords = sf::Vector2f((tu+1) *tileWidth , (tv+1) * tileHeight);
-                    quad[3].texCoords = sf::Vector2f(tu *tileWidth , (tv+1) * tileHeight);
+                    quad[0].texCoords = sf::Vector2f(tu *tileSize.x , tv * tileSize.y);
+                    quad[1].texCoords = sf::Vector2f((tu+1) *tileSize.x , tv * tileSize.y);
+                    quad[2].texCoords = sf::Vector2f((tu+1) *tileSize.x , (tv+1) * tileSize.y);
+                    quad[3].texCoords = sf::Vector2f(tu *tileSize.x , (tv+1) * tileSize.y);
 
                 }
             }

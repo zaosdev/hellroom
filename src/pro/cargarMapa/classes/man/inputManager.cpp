@@ -11,6 +11,7 @@ namespace game
     void InputManager::update()
     {
         Event_t event;
+
         while (window_.pollEvent(event)) 
         {
                 switch (event.type) 

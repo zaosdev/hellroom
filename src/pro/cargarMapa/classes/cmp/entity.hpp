@@ -2,6 +2,8 @@
 #include "RenderComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
+#include "MapComponent.hpp"
+
 
 
 #include <optional>
@@ -25,6 +27,7 @@ namespace game
       std::optional<RenderComponent> render{};
       std::optional<PhysicsComponent> physics{};
       std::optional<InputComponent> input{};
+      std::optional<MapComponent> map{};
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
       [[nodiscard]] constexpr bool alive() const noexcept { return alive_; }

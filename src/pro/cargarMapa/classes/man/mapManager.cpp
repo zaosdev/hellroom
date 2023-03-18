@@ -10,6 +10,7 @@ namespace tXMLeng
         xmlDoc_.loadFile(filePath);
         
         XMLElem mapElement = xmlDoc_.FirstChildOnDocument("map");
+
         xmlDoc_.printError();
 
         if (mapElement.isEmpty()) 
@@ -20,7 +21,8 @@ namespace tXMLeng
 
             loadMap(mapElement);
         } 
-        else {
+        else 
+        {
             xmlDoc_.printError();
         }
     }
@@ -33,19 +35,21 @@ namespace tXMLeng
             while(layer.isEmpty())
             {
                 map_.tileMap.emplace_back();
-                map_.tileMap[map_.numLayers].reserve(map_.height*map_.width);
+                map_.tileMap[map_.numLayers].reserve(map_.mapSize.y*map_.mapSize.x);
                 
                 auto currentTile = layer.FirstChildNamed("data").FirstChildNamed("tile") ; 
-                for(int y{0}; y<map_.height; y++)
+                for(int y{0}; y<map_.mapSize.y; y++)
                 {
-                    for(int x{0}; x<map_.width; x++)
+                    for(int x{0}; x<map_.mapSize.x; x++)
                     {
                         int& gid = map_.tileMap[map_.numLayers].emplace_back();
                         currentTile.queryAttribute<int*>("gid",&gid);
-                        // std::cout << gid << "|";
+                        std::cout << map_.tileMap[map_.numLayers].back() << "|";
+                        std::cout << gid << "|";
+
                         currentTile = currentTile.NextSiblingNamed("tile");
                     }
-                    //std::cout << "" << std::endl;
+                    std::cout << "" << std::endl;
                 }
                 map_.numLayers++;
                 layer = layer.NextSiblingNamed("layer");
@@ -56,10 +60,10 @@ namespace tXMLeng
 
     void mapManager::obtainMapInfo(XMLElem& map)
     {
-        map.queryAttribute<int*>("width", &map_.width);
-        map.queryAttribute<int*>("height", &map_.height);
-        map.queryAttribute<int*>("tilewidth", &map_.tileHeight);
-        map.queryAttribute<int*>("tileheight", &map_.tileWidth);
+        map.queryAttribute<int*>("width", &map_.mapSize.x);
+        map.queryAttribute<int*>("height", &map_.mapSize.y);
+        map.queryAttribute<int*>("tilewidth", &map_.tileSize.x);
+        map.queryAttribute<int*>("tileheight", &map_.tileSize.y);
     }
 
 
@@ -67,7 +71,25 @@ namespace tXMLeng
     {
         XMLElem tsxElement = map.FirstChildNamed("tileset");
 
-        tsxElement.queryAttribute<const char**>("source",&map_.filePath);
+        const char* tsxPath;
+
+
+        
+        tsxElement.queryAttribute<const char**>("source",&tsxPath);
+
+        XMLReader tempDoc{};
+        std::cout << tsxPath;
+
+        tempDoc.loadFile(tsxPath);
+        xmlDoc_.printError();
+
+        XMLElem tileSet = tempDoc.FirstChildOnDocument("tileset");
+
+
+
+        XMLElem img = tileSet.FirstChildNamed("image");
+
+        img.queryAttribute<const char**>("source", &map_.filePath);
     }
 
     void mapManager::setActiveLayer(int newLayer)
@@ -80,6 +102,20 @@ namespace tXMLeng
         return map_.filePath;
     }
 
+    FVmath::vec2Di mapManager::getMapSize() const
+    {
+        return map_.mapSize;
+    }
+    FVmath::vec2Di mapManager::getTileSizePath() const
+    {
+        return map_.tileSize;
+
+    }
+    std::vector<int>& mapManager::getCurrentLayer()
+    {
+        return map_.tileMap[map_.activeLayer];
+
+    }
 
 }
 

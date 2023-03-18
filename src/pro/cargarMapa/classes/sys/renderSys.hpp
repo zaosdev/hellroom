@@ -20,7 +20,10 @@ namespace game
         RenderSys& operator=(RenderSys&&)= delete;
 
         void iniRenderSys();
-        void drawSprite(sf::Sprite& Sprite);
+        // template<typename T>
+        void draw(sf::Sprite& Sprite);
+        void drawFV(sfml_util::FVSprite& Sprite);
+
         void iniSprite(game::Entity& ent);
         void update();
 

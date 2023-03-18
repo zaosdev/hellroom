@@ -23,7 +23,7 @@ namespace game
         {
             if(ent.physics)
             {
-                std::cout << "do get here" << ent.physics->pos.x << std::endl;
+                //std::cout << "do get here" << ent.physics->pos.x << std::endl;
                 ent.physics->pos += ent.physics->vel;
             }
 

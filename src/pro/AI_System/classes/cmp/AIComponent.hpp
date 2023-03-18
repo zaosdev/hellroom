@@ -10,6 +10,6 @@ namespace game
     {
         FVmath::Point2D  targetCoord;        //get position for arriving
         FVAI::SB         behaviour;          //behaviour of entity
-        EntityIDType     targetID;                  //look at the player
+        EntityIDType     targetID;           //look at the player
     };
 }

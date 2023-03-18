@@ -21,8 +21,16 @@ namespace game
         {
             
         }
-        void RenderSys::drawSprite(sf::Sprite& Sprite)
+
+        // template<typename T>
+        void RenderSys::draw(sf::Sprite& Sprite)
         {
+            window_.draw(Sprite);
+        }
+
+        void RenderSys::drawFV(sfml_util::FVSprite& Sprite)
+        {
+            std::cout << "Inicio de inputmanager";
             window_.draw(Sprite);
         }
 
@@ -47,10 +55,13 @@ namespace game
 
             for(auto& ent : EM)
             {
+                if(ent.map) drawFV(ent.map->FVSprite);
                 if(ent.render && ent.physics)
                 {
                     iniSprite(ent);
-                    drawSprite(ent.render->Sprite);
+                    draw(ent.render->Sprite);
+                    //draw(ent.render->FVSprite);
+
                 }
             }
 
