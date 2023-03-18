@@ -1,5 +1,8 @@
 #pragma once
 
+#include "utils/AI.hpp"
+#include "math.hpp"
+
 namespace FVAI
 {
     enum class SB
@@ -8,6 +11,6 @@ namespace FVAI
         SEEK
     };
 
-    void arrive();
+    FVmath::Point2D arrive(FVmath::Point2D origin, FVmath::Point2D target);
 
 }

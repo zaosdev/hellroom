@@ -15,19 +15,19 @@ namespace game
 
         for(auto& ent : EM)
         {
-            if(ent.AI)
+            if(ent.AI && ent.physics)
             {
+                FVmath::Point2D addPos;
                 switch(ent.AI->behaviour)
                 {
                     case FVAI::SB::ARRIVE:
                     {
-                        FVAI::arrive();
+                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord);
                         break;
                     }
                     default:break;
                 }
-                
-
+                ent.physics->pos+= addPos;
             }
 
         }  
