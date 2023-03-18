@@ -2,6 +2,7 @@
 
 #include "../../include/tinyXML2/tinyxml2.h"
 #include "../facade/xmlFacade.hpp"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 
@@ -30,10 +31,13 @@ namespace tXMLeng
             int tileWidth   {DEFAULT_VALUE};
             int tileHeight  {DEFAULT_VALUE};
             int numLayers   {0};
+            int activeLayer {0};
 
             std::vector<std::vector<int>> tileMap{};
 
             const char* filePath{};
+
+
 
         };
 
@@ -44,9 +48,17 @@ namespace tXMLeng
         mapManager& operator=(const mapManager&)= delete;
         mapManager& operator=(mapManager&&)= delete;
         
-        void loadMap(const char * filePath);
-        void obtainMapTexture();
+        void loadMap(XMLElem& map);
+        void obtainMapTexturePath(XMLElem& map);
         void loadTileSet(const char * filePath);
+        void obtainMapInfo(XMLElem& map);
+        void InitMap(const char * filePath);
+        void setActiveLayer(int newLayer);
+        const char * getTexturePath() const;
+
+
+
+
 
 
         private:

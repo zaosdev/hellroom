@@ -33,7 +33,6 @@ int main() {
 
   // Lo dispongo en el centro de la pantalla
   player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
-  auto tex = SPman.loadTexture("../resources/sprites.png");
   player.render = game::RenderComponent { .texIndex=tex  , .Sprite{}, .window_Pos{320,240} };
 
   player.input = game::InputComponent{};

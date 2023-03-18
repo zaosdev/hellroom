@@ -1,11 +1,17 @@
 #pragma once 
-#include <SFML/Graphics.hpp>
+
+#include "../utils/FVSprite.hpp"
+#include "../utils/math.hpp"
+
+
 
 namespace game
 {
-    struct RenderComponent
+    struct RenderComponent 
     {
-        sf::Texture tex{};
+        int texIndex{};
         sf::Sprite Sprite{};
+        sfml_util::FVSprite FVSprite{};
+        FVmath::vec2Di window_Pos{};
     };
 }

@@ -1,13 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../utils/math.hpp"
+#include <unordered_map>
 
 namespace SFMLeng
 {
 
     // struct SFMLSprite
     // {
-    //     SFMLSprite(std::string tex)
+    //     SFMLSprite()
     //     {
 
     //     }
@@ -27,15 +28,23 @@ namespace SFMLeng
         SpriteManager& operator=(const SpriteManager&)= delete;
         SpriteManager& operator=(SpriteManager&&)= delete;
         
-        void loadTexture(sf::Texture& tex, std::string texStr);
+        std::size_t  loadTexture(std::string texStr, const char* textName);
 
-        void assignTexture(sf::Sprite& sp, sf::Texture& Tex);
+        void assignTexture(sf::Sprite& sp, int);
 
         void modifyTextureRect(sf::Sprite& sp, sf::IntRect rect);
 
         void modifySpriteOrigin(sf::Sprite& sp,FVmath::vec2D origin);
 
+        sf::Texture& getTextureByName(const char*);
+
+        int getTextureIdxByName(const char*);
+
+
         private:
+
+         std::vector<sf::Texture> vecTex_;
+         std::unordered_map<const char*, int> TextureIndexList_;
 
     };
 }

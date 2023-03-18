@@ -5,9 +5,8 @@
 namespace tXMLeng
 {
 
-    void mapManager::loadMap(const char* filePath)
+    void mapManager::InitMap(const char * filePath)
     {
-            
         xmlDoc_.loadFile(filePath);
         
         XMLElem mapElement = xmlDoc_.FirstChildOnDocument("map");
@@ -15,17 +14,21 @@ namespace tXMLeng
 
         if (mapElement.isEmpty()) 
         {
+            obtainMapInfo(mapElement);
 
-            mapElement.queryAttribute<int*>("width", &map_.width);
-            mapElement.queryAttribute<int*>("height", &map_.height);
-            mapElement.queryAttribute<int*>("tilewidth", &map_.tileHeight);
-            mapElement.queryAttribute<int*>("tileheight", &map_.tileWidth);
+            obtainMapTexturePath(mapElement);
 
-            XMLElem tsxElement = mapElement.FirstChildNamed("tileset");
+            loadMap(mapElement);
+        } 
+        else {
+            xmlDoc_.printError();
+        }
+    }
 
-            tsxElement.queryAttribute<const char**>("source",&map_.filePath);
-
-            XMLElem layer = mapElement.FirstChildNamed("layer");
+    void mapManager::loadMap(XMLElem& map)
+    {
+            
+            XMLElem layer = map.FirstChildNamed("layer");
 
             while(layer.isEmpty())
             {
@@ -48,10 +51,35 @@ namespace tXMLeng
                 layer = layer.NextSiblingNamed("layer");
             }
 
-
-        } else {
-            xmlDoc_.printError();
-        }
     }
+
+
+    void mapManager::obtainMapInfo(XMLElem& map)
+    {
+        map.queryAttribute<int*>("width", &map_.width);
+        map.queryAttribute<int*>("height", &map_.height);
+        map.queryAttribute<int*>("tilewidth", &map_.tileHeight);
+        map.queryAttribute<int*>("tileheight", &map_.tileWidth);
+    }
+
+
+    void mapManager::obtainMapTexturePath(XMLElem& map)
+    {
+        XMLElem tsxElement = map.FirstChildNamed("tileset");
+
+        tsxElement.queryAttribute<const char**>("source",&map_.filePath);
+    }
+
+    void mapManager::setActiveLayer(int newLayer)
+    {
+        map_.activeLayer = newLayer;
+    }
+
+    const char * mapManager::getTexturePath() const
+    {
+        return map_.filePath;
+    }
+
+
 }
 

@@ -7,9 +7,10 @@ namespace SFMLeng
     SpriteManager::SpriteManager() = default;
 
 
-    void SpriteManager::assignTexture(sf::Sprite& sp, sf::Texture&  Tex)
+    void SpriteManager::assignTexture(sf::Sprite& sp, int idx)
     {
-        sp.setTexture(Tex);
+        auto& tex =  vecTex_[idx];
+        sp.setTexture(tex);
     }
 
     void SpriteManager::modifyTextureRect(sf::Sprite& sp, sf::IntRect rect)
@@ -22,13 +23,32 @@ namespace SFMLeng
         sp.setOrigin(origin.x,origin.y);
     }
 
-
-    void SpriteManager::loadTexture(sf::Texture& tex, std::string texStr)
+    std::size_t SpriteManager::loadTexture( std::string texStr, const char* textName)
     {
+        auto& tex = vecTex_.emplace_back();
         if (!tex.loadFromFile(texStr)) {
-        std::cerr << "Error cargando la imagen sprites.png";
-        exit(0);
-    }
+            std::cerr << "Error cargando la imagen sprites.png";
+            exit(0);
+        }
+        else
+        {
+            TextureIndexList_[textName] = vecTex_.size()-1;
+            return vecTex_.size()-1;
+        }
 
     }
+
+    sf::Texture& SpriteManager::getTextureByName(const char* textureName)
+    {
+        auto idx = TextureIndexList_[textureName];
+        auto& tex =  vecTex_[idx];
+        return tex;
+    }
+
+    int SpriteManager::getTextureIdxByName(const char* textureName)
+    {
+        return TextureIndexList_[textureName];
+    }
+
+
 }

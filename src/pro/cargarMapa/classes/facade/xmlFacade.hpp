@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/types.hpp"
+
 namespace FVeng
 {
     template <typename XMLElement_type>
@@ -25,23 +27,23 @@ namespace FVeng
         template<typename T>
         void queryAttribute(const char* attName, T attribute) 
         {
-            queryAttribute<T>(attName, attribute ,typename queryTypes<T>::Type());
+            queryAttribute<T>(attName, attribute ,typename FV_types::queryTypes<T>::Type());
         };
 
         template<typename T>
-        void queryAttribute(const char* attName, T attribute, int_Type) 
+        void queryAttribute(const char* attName, T attribute, FV_types::int_Type) 
         {
             XMLE->QueryIntAttribute(attName, attribute);
         };
                 
         template<typename T>
-        void queryAttribute(const char* attName, T attribute,  bool_Type ) 
+        void queryAttribute(const char* attName, T attribute,  FV_types::bool_Type ) 
         {
             XMLE->QueryBoolAttribute(attName, attribute);
         };        
 
         template<typename T>
-        void queryAttribute(const char* attName, T attribute,  const_char_Type ) 
+        void queryAttribute(const char* attName, T attribute,  FV_types::const_char_Type ) 
         {
             XMLE->QueryStringAttribute(attName, attribute);
         };
@@ -75,7 +77,7 @@ namespace FVeng
         }
 
         private:
-
+        
          XMLReader_type XMLR{};   
     };
 
