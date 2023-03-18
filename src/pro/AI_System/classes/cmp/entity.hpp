@@ -3,7 +3,7 @@
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "AIComponent.hpp"
-
+#include "utils/types.hpp"
 
 
 #include <optional>
@@ -13,7 +13,7 @@ namespace game
 {
     struct Entity
     {
-      using id_type = uint32_t;
+      using id_type = EntityIDType;
       using tag_type = id_type;
 
       enum class TAG : tag_type
