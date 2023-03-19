@@ -21,8 +21,8 @@ namespace game
 
         void iniRenderSys();
         void drawSprite(sf::Sprite& Sprite);
-        void iniSprite(game::Entity& ent);
-        void update();
+        void iniSprite(game::Entity& ent, double pt);
+        void update(double percentTick);
 
 
         private:

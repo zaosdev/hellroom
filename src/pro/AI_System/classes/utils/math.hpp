@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 namespace FVmath
 {
@@ -15,6 +16,22 @@ namespace FVmath
             result.x = -x;
             result.y = -y;
             return result;
+        }
+
+        //Overload scalar multiplication
+        Point2D_t operator*(type scalar) const 
+        {
+            Point2D_t result;
+            result.x = x * scalar;
+            result.y = y * scalar;
+            return result;
+        }
+
+        //Overload operator << 
+        friend std::ostream& operator<<(std::ostream& os, const Point2D_t& point) 
+        {
+            os << "(" << point.x << ", " << point.y << ")";
+            return os;
         }
 
         //non-Temporal version

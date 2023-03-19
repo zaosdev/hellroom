@@ -17,7 +17,7 @@ namespace game
         PhysicsSys& operator=(PhysicsSys&&)= delete;
 
         void iniPhysicsSys();
-        void update();
+        void update(double dt);
 
 
         private:

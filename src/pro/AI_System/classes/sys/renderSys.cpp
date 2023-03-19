@@ -1,6 +1,7 @@
 #include "renderSys.hpp"
 #include "../utils/math.hpp"
 #include <cmath>
+#include <iostream>
 
 
 
@@ -27,10 +28,16 @@ namespace game
         }
 
         //recover world position and change it to screen position
-        void RenderSys::iniSprite(game::Entity& ent)
+        void RenderSys::iniSprite(game::Entity& ent, double pt)
         {
-            ent.render->window_Pos.x = int( std::round(ent.physics->pos.x));
-            ent.render->window_Pos.y = int( std::round(ent.physics->pos.y));
+            //render sprite position according to the changes
+            FVmath::Point2D newState = ent.physics->pos;
+            FVmath::Point2D oldState = ent.physics->prevPos;
+            std::cout << "newstate: " << newState << std::endl;
+            std::cout << "oldstate: " << oldState << std::endl;
+
+            ent.render->window_Pos.x = oldState.x * (1 - pt) + newState.x * pt;
+            ent.render->window_Pos.y = oldState.y * (1 - pt) + newState.y * pt;
 
             ent.render->Sprite.setPosition(
               ent.render->window_Pos.x ,
@@ -38,7 +45,7 @@ namespace game
             );
         }
 
-        void RenderSys::update()
+        void RenderSys::update(double percentTick)
         {
 
             auto& EM = gMan_.getEntityManager();
@@ -49,7 +56,7 @@ namespace game
             {
                 if(ent.render && ent.physics)
                 {
-                    iniSprite(ent);
+                    iniSprite(ent, percentTick);
                     drawSprite(ent.render->Sprite);
                 }
             }

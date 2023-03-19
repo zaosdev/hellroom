@@ -9,6 +9,6 @@ namespace game
     {
         std::size_t         texIndex{};
         sf::Sprite          Sprite{};
-        FVmath::Point2Di    window_Pos{};
+        FVmath::Point2D     window_Pos{};
     };
 }

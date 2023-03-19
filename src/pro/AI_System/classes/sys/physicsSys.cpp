@@ -15,7 +15,7 @@ namespace game
     {
     }
 
-    void PhysicsSys::update()
+    void PhysicsSys::update(double dt)
     {
         auto& EM = gMan_.getEntityManager();
 
@@ -23,8 +23,10 @@ namespace game
         {
             if(ent.physics)
             {
-                //std::cout << "do get here" << ent.physics->pos.x << std::endl;
-                ent.physics->pos += ent.physics->vel;
+                //Save the last position
+                ent.physics->prevPos = ent.physics->pos;
+                //Update the new position
+                ent.physics->pos    += ent.physics->vel * dt;
             }
 
         }        
