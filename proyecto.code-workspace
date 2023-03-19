@@ -45,6 +45,10 @@
 			"name": "Prototipo 9: Sistema de Sonido",
 			"path": "src/pro/soundSys"
 		},
+		{
+			"name": "Prototipo 10: Bucle4",
+			"path": "src/pro/bucle4"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
