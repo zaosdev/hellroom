@@ -55,7 +55,7 @@ int main() {
   //Create the enemy 1 : ARRIVE BEHAVIOUR
   enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
   enemy1.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::ARRIVE, .friction = 3, .perceptionTime = 30}; 
+  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::ARRIVE, .friction = 3, .perceptionTime = 3}; 
   SPman.assignTexture(enemy1.render->Sprite,enemy1.render->texIndex);
   SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
   SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
@@ -71,7 +71,7 @@ int main() {
   //Create the enemy 3 : SEEK BEHAVIOUR
   enemy3.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
   enemy3.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy3.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::SEEK, .perceptionTime = 10}; 
+  enemy3.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::SEEK, .perceptionTime = 2}; 
   SPman.assignTexture(enemy3.render->Sprite,enemy3.render->texIndex);
   SPman.modifySpriteOrigin(enemy3.render->Sprite,{75 / 2, 75 / 2});
   SPman.modifyTextureRect(enemy3.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
@@ -120,7 +120,7 @@ int main() {
     inpSys.update();
 
     // //Update AI 
-    AISys.update(bb, 0.17);
+    AISys.update(bb, 0.017);
 
     // //Update physics
     phySys.update();
