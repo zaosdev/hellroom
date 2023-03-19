@@ -3,6 +3,7 @@
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "AIComponent.hpp"
+#include "ColliderComponent.hpp"
 #include "utils/types.hpp"
 
 

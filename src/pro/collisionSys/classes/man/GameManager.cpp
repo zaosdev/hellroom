@@ -18,4 +18,12 @@ namespace FVeng
             return EM_;
         }
 
+
+        // auto GameManager::first_valid() {
+        //     auto valid = [](Entity const& e) {
+        //         return e.alive() && e.collider && e.physics;
+        //     };
+        //     for(auto& e : EntityManager)
+        // }
+
 }

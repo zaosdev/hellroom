@@ -1,10 +1,13 @@
 #pragma once 
-#include "../utils/types.hpp"
+// #include <iostream>
+#include "../utils/math.hpp"
+// #include "SpriteManager.hpp"
 
-namespace game
-{
-    struct ColliderComponent
-    {
+namespace game {
+
+    struct ColliderComponent{
         
+        FVmath::Rect2D BBox{};
     };
+    
 }

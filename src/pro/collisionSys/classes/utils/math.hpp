@@ -81,4 +81,29 @@ namespace FVmath
     using Point2D  =  Point2D_t<double>;
     using Point2Di =  Point2D_t<int>;
 
+
+    //Dim2D sprite dimensions
+
+    struct Dim2D{
+        uint32_t w{}, h{};
+        uint32_t size() const noexcept { return w*h; }
+    };
+    
+
+    //Rect2D
+
+    struct Rect2D{
+
+        Rect2D() = default;
+
+        Rect2D(Dim2D const dim, int32_t const dw, int32_t const dh): left{dw}, right{int32_t(dim.w) - dw}, up{dh}, down{int32_t(dim.h) - dh} {
+
+        }
+
+        int32_t left{}, right{};
+        int32_t up{}, down{};
+        constexpr bool operator <=> (Rect2D const&) const noexcept = default;
+    };
+
+
 }
