@@ -106,7 +106,7 @@ int main() {
 
   //Create blackboard for updating the targetIDs
   game::blackBoardComponent bb {.targetID = player.id()};
-  bb.tActive = false;
+  //bb.tActive = false;
 
 
   //Bucle del juego
