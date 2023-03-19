@@ -41,6 +41,10 @@
 			"name": "Prototipo 8: Guardado del juego",
 			"path": "src/pro/guardado"
 		},
+		{
+			"name": "Prototipo 9: soundSys",
+			"path": "src/pro/soundSys"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
