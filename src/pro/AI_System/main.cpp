@@ -73,9 +73,9 @@ int main() {
   SPman.modifyTextureRect(enemy3.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
   //Create the enemy 4 : FLEE BEHAVIOUR
-  enemy4.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
-  enemy4.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy4.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::FLEE, .targetID = player.id()}; 
+  enemy4.physics = game::PhysicsComponent { .pos{640,480}, .vel{0,0}, .mov_speed = 1};
+  enemy4.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{640,480} };
+  enemy4.AI      = game::AIComponent      { .targetCoord{641,481}, .behaviour = FVAI::SB::FLEE, .targetID = player.id()}; 
   SPman.assignTexture(enemy4.render->Sprite,enemy4.render->texIndex);
   SPman.modifySpriteOrigin(enemy4.render->Sprite,{75 / 2, 75 / 2});
   SPman.modifyTextureRect(enemy4.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));

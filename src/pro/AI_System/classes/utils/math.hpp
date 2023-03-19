@@ -8,6 +8,14 @@ namespace FVmath
         type x{};
         type y{};
 
+        //Overload operator negation
+        Point2D_t operator-() const {
+            Point2D_t result;
+            result.x = -x;
+            result.y = -y;
+            return result;
+        }
+
         //non-Temporal version
         Point2D_t operator+(const Point2D_t& rhs)
         {

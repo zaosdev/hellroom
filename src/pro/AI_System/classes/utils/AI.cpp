@@ -42,6 +42,10 @@ FVmath::Point2D FVAI::seek(FVmath::Point2D origin, FVmath::Point2D target, doubl
 
 FVmath::Point2D FVAI::pursue(FVmath::Point2D origin, FVmath::Point2D target, double speed)
 {
-    std::cout << "hola???" << std::endl;
     return seek(origin, target, speed); 
+}
+
+FVmath::Point2D FVAI::flee(FVmath::Point2D origin, FVmath::Point2D target, double speed)
+{
+    return -seek(origin, target, speed); 
 }

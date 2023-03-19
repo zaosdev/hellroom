@@ -39,17 +39,17 @@ namespace game
                             FVmath::Point2D proxTargetPos = Target->physics->pos + Target->physics->vel;
                             //Send to the AI
                             addPos = FVAI::pursue(ent.physics->pos, proxTargetPos, ent.physics->mov_speed);
-                            std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
                         }
                         break;
                     }
                     case FVAI::SB::FLEE:
                     {
+                        addPos = FVAI::flee(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
                         break;
                     }
                     default:break;
                 }
-                
+                std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
                 ent.physics->vel = addPos;
             }
 
