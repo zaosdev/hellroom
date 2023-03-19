@@ -31,7 +31,10 @@ int main() {
   auto& EM = GameMan.getEntityManager();
 
   auto& player  = EM.createEntity();
-  auto& enemy1  = EM.createEntity();
+  auto& enemy1  = EM.createEntity(); //ARRIVE
+  auto& enemy2  = EM.createEntity(); //PURSUE 
+  auto& enemy3  = EM.createEntity(); //SEEK
+  auto& enemy4  = EM.createEntity(); //FLEE
 
   auto tex = SPman.loadTexture("../resources/sprites.png");
 
@@ -45,13 +48,37 @@ int main() {
   SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
  
 
-  //Create the enemy 1
+  //Create the enemy 1 : ARRIVE BEHAVIOUR
   enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
   enemy1.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}}; 
+  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::ARRIVE, .friction = 3}; 
   SPman.assignTexture(enemy1.render->Sprite,enemy1.render->texIndex);
   SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
   SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+  //Create the enemy 2 : PURSUE BEHAVIOUR
+  enemy2.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
+  enemy2.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
+  enemy2.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::PURSUE, .targetID = player.id()}; 
+  SPman.assignTexture(enemy2.render->Sprite,enemy2.render->texIndex);
+  SPman.modifySpriteOrigin(enemy2.render->Sprite,{75 / 2, 75 / 2});
+  SPman.modifyTextureRect(enemy2.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+  //Create the enemy 3 : SEEK BEHAVIOUR
+  enemy3.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
+  enemy3.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
+  enemy3.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::SEEK}; 
+  SPman.assignTexture(enemy3.render->Sprite,enemy3.render->texIndex);
+  SPman.modifySpriteOrigin(enemy3.render->Sprite,{75 / 2, 75 / 2});
+  SPman.modifyTextureRect(enemy3.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+  //Create the enemy 4 : FLEE BEHAVIOUR
+  enemy4.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = 4};
+  enemy4.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
+  enemy4.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::FLEE, .targetID = player.id()}; 
+  SPman.assignTexture(enemy4.render->Sprite,enemy4.render->texIndex);
+  SPman.modifySpriteOrigin(enemy4.render->Sprite,{75 / 2, 75 / 2});
+  SPman.modifyTextureRect(enemy4.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) 

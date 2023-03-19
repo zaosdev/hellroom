@@ -35,6 +35,16 @@ namespace FVeng
             addNewEntities();
         }
 
+        //Return the entity using an ID
+        Entity_type* getEntityByID(EntityIDType ID)
+        {
+            for(auto& entity : entities_)
+            {
+                if(entity.id() == ID) return &entity;
+            }
+            return nullptr;
+        }
+
         auto begin() noexcept {return entities_.begin();}
 
         auto end() noexcept {return entities_.end();}

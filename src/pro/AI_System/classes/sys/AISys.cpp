@@ -22,12 +22,34 @@ namespace game
                 {
                     case FVAI::SB::ARRIVE:
                     {
-                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
+                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed, ent.AI->friction);
+                        break;
+                    }
+                    case FVAI::SB::SEEK:
+                    {
+                        addPos = FVAI::seek(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
+                        break;
+                    }
+                    case FVAI::SB::PURSUE:
+                    {
+                        auto* Target = EM.getEntityByID(ent.AI->targetID);
+                        if(Target!=nullptr && Target->physics)
+                        {
+                            //Precalculate position
+                            FVmath::Point2D proxTargetPos = Target->physics->pos + Target->physics->vel;
+                            //Send to the AI
+                            addPos = FVAI::pursue(ent.physics->pos, proxTargetPos, ent.physics->mov_speed);
+                            std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
+                        }
+                        break;
+                    }
+                    case FVAI::SB::FLEE:
+                    {
                         break;
                     }
                     default:break;
                 }
-                std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
+                
                 ent.physics->vel = addPos;
             }
 
