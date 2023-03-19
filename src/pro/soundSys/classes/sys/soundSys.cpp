@@ -6,57 +6,68 @@ namespace game{
 
     //SoundSys::SoundSys() : isPlaying(false) {}
 
-    SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan){}
+    SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan), isPlaying(false){
+   
+    }
 
 
     void SoundSys::loadSound(const std::string& soundfile){
-
+        
         if(!sB.loadFromFile(soundfile)){
             std::cout << "SOUND FILE NOT FOUND" << std::endl;
         }
+        sound.setPitch(1.5); //provisional
         sound.setBuffer(sB);
     }
 
     void SoundSys::playSound(){
-        //if(!isPlaying){
+       if(!isPlaying){
             sound.play();
-        //     isPlaying = true;
-        // }
+            isPlaying = true;
+        }
         
     }
 
     void SoundSys::stopSound(){
-        //if(isPlaying){
+       if(isPlaying){
             sound.stop();
-        //    isPlaying = false;
-        //}
+           isPlaying = false;
+        }
     }
 
-    // void SoundSys::setLoop(bool loop){
-    //     sound.setLoop(loop);
-    // }
+    void SoundSys::setLoop(bool loop){
+        sound.setLoop(loop);
+    }
 
-    void SoundSys::update(){
+   
+
+    void SoundSys::update(/*SoundSys sfx*/){
         //copiado de inputSys.cpp para añadir sonidos
         //Movement
-        if(inpRec_.isKeyPressed(getKeyCode('W'))) {
+        if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
             std::cout << "BOTON W" << std::endl;
-        }     
-        if(inpRec_.isKeyPressed(getKeyCode('A'))){
-            std::cout << "BOTON A" << std::endl;
-        }      
-        if(inpRec_.isKeyPressed(getKeyCode('S'))){
-            std::cout << "BOTON S" << std::endl;
-        }     
-        if(inpRec_.isKeyPressed(getKeyCode('D'))){
-            std::cout << "BOTON D" << std::endl;
-        }      
+         
+                this->setLoop(true);
+                this->playSound();
+            
+                std::cout << "Sonandoooo" << std::endl;
+          
+        }
+        else{
+            this->setLoop(false);
+            this->stopSound();
+        }  
+
 
         //Dash
-        if(inpRec_.isKeyPressed(getKeyCode(' '))){
-            std::cout << "BOTON SPACE" << std::endl;
-        
-        }  
+        // if(inpRec_.isKeyPressed(getKeyCode(' '))){
+        //     std::cout << "BOTON SPACE" << std::endl;
+        //     sfx.setLoop(false);
+        //     sfx.playSound();
+        // }
+        // else{
+        //     sfx.stopSound();
+        // }
 
     }
 }

@@ -1,11 +1,12 @@
 //Sistema de sonido
 #pragma once
-
-#include <SFML/Audio.hpp>
-#include <iostream>
-
 #include "../man/GameManager.hpp"
 #include "../man/inputManager.hpp"
+#include <SFML/Audio.hpp>
+#include <iostream>
+#include <map>
+
+
 
 
 namespace game{
@@ -25,10 +26,12 @@ namespace game{
 
             void loadSound(const std::string& soundfile);
             void playSound();
-            //void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
+            void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
             void stopSound();
 
-            void update(); // reproducira sonidos segun la tecla pulsada
+            void update(/*SoundSys sfx*/); // reproducira sonidos segun la tecla pulsada
+            
+            // void asignSound();
 
             //std::map<sf::Keyboard::Key, SoundSys> soundMap;
             
@@ -38,6 +41,9 @@ namespace game{
 
             sf::SoundBuffer sB;
             sf::Sound sound;
-            //bool isPlaying;
+
+
+            bool isPlaying;
+            std::map<sf::Keyboard::Key, SoundSys> soundMap;
     };
 }

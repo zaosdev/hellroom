@@ -36,7 +36,7 @@ int main() {
   GameMan.ent->physics = new game::PhysicsComponent();
 
   //Creamos una ventana
-  SPman.loadTexture(GameMan.ent->render->tex,"../resources/sprites.png");
+  SPman.loadTexture(GameMan.ent->render->tex,"resources/sprites.png");
 
   //Y creo el spritesheet a partir de la imagen anterior
   SPman.assignTexture(GameMan.ent->render->Sprite,GameMan.ent->render->tex);
@@ -64,7 +64,10 @@ int main() {
   //creo un mapa para asignar sonidos a teclas (esto seguramente deberia estar en el soundSys.cpp u otra parte)
 
   //auto tecla = sf::Keyboard::isKeyPressed;
+  soundSys.loadSound("resources/SFX/16_human_walk_stone_1.wav");
+  
 
+  //soundSys.asignSound();
 
   std::vector<sf::Event> events; 
   //Bucle del juego
@@ -98,7 +101,7 @@ int main() {
 
     // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
     //   if(!isPlaying){
-    //     dashSound.playSound();
+    //     soundSys.playSound();
     //     isPlaying = true;
     //     std::cout << "Sonandoooo" << std::endl;
     //   }
