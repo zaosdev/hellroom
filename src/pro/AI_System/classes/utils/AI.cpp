@@ -49,3 +49,16 @@ FVmath::Point2D FVAI::flee(FVmath::Point2D origin, FVmath::Point2D target, doubl
 {
     return -seek(origin, target, speed); 
 }
+
+FVmath::Point2D FVAI::cross(FVAI::PriotiryCross priority, double speed)
+{
+    if(priority == FVAI::PriotiryCross::FIRSTX) return {speed, 0};
+    else                                        return {0, speed};
+}
+
+FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path, double speed)
+{
+    auto addPos = seek(origin, path.getCurrent(), speed);
+    if(addPos == FVmath::Point2D{}) path.getNext();
+    return addPos;
+}

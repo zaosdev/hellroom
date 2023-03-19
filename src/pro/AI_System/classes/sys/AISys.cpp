@@ -47,9 +47,19 @@ namespace game
                         addPos = FVAI::flee(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
                         break;
                     }
+                    case FVAI::SB::CROSSCREEN:
+                    {
+                        addPos = FVAI::cross(ent.AI->priotiryCross, ent.physics->mov_speed);
+                        break;
+                    }
+                    case FVAI::SB::FOLLOWPATH:
+                    {
+                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
+                        break;
+                    }
                     default:break;
                 }
-                std::cout << "position adding: " << addPos.x << ", "<< addPos.y << std::endl;
+                
                 ent.physics->vel = addPos;
             }
 

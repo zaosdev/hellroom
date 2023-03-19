@@ -9,6 +9,7 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/facade/inputFacade.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/AISys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/AI.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/utils/circularIterator.cpp"
 )
 
 #Y donde se encuentran los .h

@@ -9,7 +9,8 @@ namespace FVmath
         type y{};
 
         //Overload operator negation
-        Point2D_t operator-() const {
+        Point2D_t operator-() const 
+        {
             Point2D_t result;
             result.x = -x;
             result.y = -y;
@@ -25,6 +26,12 @@ namespace FVmath
 
             return res;
         }
+
+        bool operator==(const Point2D_t& p2) 
+        {
+            return x == p2.x && y == p2.y;
+        }
+
 
         //Temporal version
         Point2D_t operator+(Point2D_t&& rhs)
