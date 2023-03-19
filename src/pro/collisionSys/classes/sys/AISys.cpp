@@ -1,0 +1,87 @@
+#include "AISys.hpp"
+#include "utils/AI.hpp"
+#include <iostream>
+
+namespace game
+{
+    AISys::AISys(FVeng::GameManager& gameMan)
+    : gMan_(gameMan)
+    {
+    }
+
+    void AISys::perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM,  blackBoardComponent& bb, double const dt)
+    {
+        //Check if accumulated time > cooldown
+        AI->accumulatedTime += dt;
+        if(AI->accumulatedTime <= AI->perceptionTime) return;
+            
+        //Time passed: Unaccumulate time
+        AI->accumulatedTime -= AI->perceptionTime;
+
+        //Check blackboard
+        if(bb.tActive)
+        {
+            AI->targetID    = bb.targetID;
+            auto& targeted  = *EM.getEntityByID(bb.targetID);
+            AI->targetCoord =  targeted.physics->pos;
+        }
+    }
+
+    void AISys::update(blackBoardComponent bb, double const dt)
+    {
+        auto& EM = gMan_.getEntityManager();
+
+        for(auto& ent : EM)
+        {
+            if(ent.AI && ent.physics)
+            {
+                FVmath::Point2D addPos;
+                perception(ent.AI, EM, bb, dt);
+                switch(ent.AI->behaviour)
+                {
+                    case FVAI::SB::ARRIVE:
+                    {
+                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed, ent.AI->friction);
+                        break;
+                    }
+                    case FVAI::SB::SEEK:
+                    {
+                        addPos = FVAI::seek(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
+                        break;
+                    }
+                    case FVAI::SB::PURSUE:
+                    {
+                        auto* Target = EM.getEntityByID(ent.AI->targetID);
+                        if(Target!=nullptr && Target->physics)
+                        {
+                            //Precalculate position
+                            FVmath::Point2D proxTargetPos = Target->physics->pos + Target->physics->vel;
+                            //Send to the AI
+                            addPos = FVAI::pursue(ent.physics->pos, proxTargetPos, ent.physics->mov_speed);
+                        }
+                        break;
+                    }
+                    case FVAI::SB::FLEE:
+                    {
+                        addPos = FVAI::flee(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
+                        break;
+                    }
+                    case FVAI::SB::CROSSCREEN:
+                    {
+                        addPos = FVAI::cross(ent.AI->priotiryCross, ent.physics->mov_speed);
+                        break;
+                    }
+                    case FVAI::SB::FOLLOWPATH:
+                    {
+                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
+                        break;
+                    }
+                    default:break;
+                }
+                
+                ent.physics->vel = addPos;
+            }
+
+        }  
+    }
+}

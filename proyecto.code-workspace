@@ -45,6 +45,10 @@
 			"name": "Prototipo 9: Sistema de Sonido",
 			"path": "src/pro/soundSys"
 		},
+		{
+			"name": "Prototipo 10: Sistema de Colisiones",
+			"path": "src/pro/collisionSys"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
