@@ -1,35 +1,65 @@
 #include "soundSys.hpp"
+//#include "inputSys.hpp"
+#include "../facade/inputFacade.hpp"
+
+namespace game{
+
+    //SoundSys::SoundSys() : isPlaying(false) {}
+
+    SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan){}
 
 
-//SoundSys::SoundSys() : isPlaying(false) {}
+    void SoundSys::loadSound(const std::string& soundfile){
 
-void SoundSys::loadSound(const std::string& soundfile){
-
-    if(!sB.loadFromFile(soundfile)){
-        std::cout << "SOUND FILE NOT FOUND" << std::endl;
+        if(!sB.loadFromFile(soundfile)){
+            std::cout << "SOUND FILE NOT FOUND" << std::endl;
+        }
+        sound.setBuffer(sB);
     }
-    sound.setBuffer(sB);
-}
 
-void SoundSys::playSound(){
-    //if(!isPlaying){
-        sound.play();
-    //     isPlaying = true;
+    void SoundSys::playSound(){
+        //if(!isPlaying){
+            sound.play();
+        //     isPlaying = true;
+        // }
+        
+    }
+
+    void SoundSys::stopSound(){
+        //if(isPlaying){
+            sound.stop();
+        //    isPlaying = false;
+        //}
+    }
+
+    // void SoundSys::setLoop(bool loop){
+    //     sound.setLoop(loop);
     // }
-    
+
+    void SoundSys::update(){
+        //copiado de inputSys.cpp para añadir sonidos
+        //Movement
+        if(inpRec_.isKeyPressed(getKeyCode('W'))) {
+            std::cout << "BOTON W" << std::endl;
+        }     
+        if(inpRec_.isKeyPressed(getKeyCode('A'))){
+            std::cout << "BOTON A" << std::endl;
+        }      
+        if(inpRec_.isKeyPressed(getKeyCode('S'))){
+            std::cout << "BOTON S" << std::endl;
+        }     
+        if(inpRec_.isKeyPressed(getKeyCode('D'))){
+            std::cout << "BOTON D" << std::endl;
+        }      
+
+        //Dash
+        if(inpRec_.isKeyPressed(getKeyCode(' '))){
+            std::cout << "BOTON SPACE" << std::endl;
+        
+        }  
+
+    }
 }
-
-void SoundSys::stopSound(){
-    //if(isPlaying){
-        sound.stop();
-    //    isPlaying = false;
-    //}
-}
-
-// void SoundSys::setLoop(bool loop){
-//     sound.setLoop(loop);
-// }
-
 
 //codigo basura
 

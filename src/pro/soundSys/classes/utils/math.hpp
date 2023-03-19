@@ -2,51 +2,47 @@
 
 namespace FVmath
 {
-    template<typename type>
-    struct vec2Dt
+    struct vec2D
     {
-        type x{};
-        type y{};
+        float x{};
+        float y{};
 
         //non-Temporal version
-        vec2Dt operator+(const vec2Dt& rhs)
+        vec2D operator+(const vec2D& vec)
         {
-            vec2Dt res;
-            res.x = x+rhs.x;
-            res.y=  y+rhs.y;
+            vec2D res;
+            res.x = x+vec.x;
+            res.y=  y+vec.y;
 
             return res;
         }
 
         //Temporal version
-        vec2Dt operator+(vec2Dt&& rhs)
+        vec2D operator+(vec2D&& vec)
         {
-            vec2Dt res;
-            res.x = x+rhs.x;
-            res.y=  y+rhs.y;
+            vec2D res;
+            res.x = x+vec.x;
+            res.y=  y+vec.y;
 
             return res;
         }
 
-        vec2Dt operator+=(const vec2Dt& rhs)
+        vec2D operator+=(const vec2D& vec)
         {
-            x = x+rhs.x;
-            y = y+rhs.y;
+            x = x+vec.x;
+            y = y+vec.y;
 
             return *this;
         }
 
-        vec2Dt operator+=(vec2Dt&& rhs)
+        vec2D operator+=(vec2D&& vec)
         {
-            x = x+rhs.x;
-            y = y+rhs.y;
+            x = x+vec.x;
+            y = y+vec.y;
 
             return *this;
         }
+
 
     };
-
-    using vec2D = vec2Dt<float>;
-    using vec2Di = vec2Dt<int>;
-
 }
