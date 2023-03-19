@@ -9,7 +9,25 @@ namespace game
     {
     }
 
-    void AISys::update()
+    void AISys::perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM,  blackBoardComponent& bb, double const dt)
+    {
+        //Check if accumulated time > cooldown
+        AI->accumulatedTime += dt;
+        if(AI->accumulatedTime <= AI->perceptionTime) return;
+            
+        //Time passed: Unaccumulate time
+        AI->accumulatedTime -= AI->perceptionTime;
+
+        //Check blackboard
+        if(bb.tActive)
+        {
+            AI->targetID    = bb.targetID;
+            auto& targeted  = *EM.getEntityByID(bb.targetID);
+            AI->targetCoord =  targeted.physics->pos;
+        }
+    }
+
+    void AISys::update(blackBoardComponent bb, double const dt)
     {
         auto& EM = gMan_.getEntityManager();
 
@@ -18,6 +36,7 @@ namespace game
             if(ent.AI && ent.physics)
             {
                 FVmath::Point2D addPos;
+                perception(ent.AI, EM, bb, dt);
                 switch(ent.AI->behaviour)
                 {
                     case FVAI::SB::ARRIVE:

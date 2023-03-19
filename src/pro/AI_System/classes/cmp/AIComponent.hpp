@@ -14,6 +14,8 @@ namespace game
         double                          friction;           //slowing component for certain behaviours such as arrive
         EntityIDType                    targetID;           //look at the player
         FVAI::PriotiryCross             priotiryCross;      //for behaviour that cross the window such as arriveRect and Crosscreen   
-        FVAI::circularIterator          path;             // usar std::vector para almacenar la ruta
+        FVAI::circularIterator          path;               //usar std::vector para almacenar la ruta
+        double                          perceptionTime {10}; //time 2 check the world
+        double                          accumulatedTime;    //time passed to check
     };
 }
