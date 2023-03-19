@@ -1,10 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+//#include <map>
 
 #include "include/config.h"
 #include "classes/sys/renderSys.hpp"
 #include "classes/sys/physicsSys.hpp"
 #include "classes/sys/inputSys.hpp"
+#include "classes/sys/soundSys.hpp" //sonido
 #include "classes/man/GameManager.hpp"
 #include "classes/man/SpriteManager.hpp"
 
@@ -16,71 +18,84 @@ int main() {
 
 
   //Create Game manager
-  FVeng::GameManager GameMan{640, 480,"P0. Fundamentos de los Videojuegos. DCCIA"};
+  FVeng::GameManager GameMan{640, 480,"P9. Sistema de Sonido"};
 
   //create Sprite manager
-  SFMLeng::SpriteManager SPman{};
+  //SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
   game::RenderSys   renSys{GameMan};
   game::PhysicsSys  phySys{GameMan};
   game::InputSys    inpSys{GameMan};
+  
+  //puedo suponer que para que este bien hecho tengo que hacerlo igual que los otros sistemas game::SoundSys soundSys{GameMan}; ... lo probare si primero me funciona de esta manera
+  SoundSys dashSound; //instancia de SoundSys
+  dashSound.loadSound("resources/SFX/15_human_dash_1.wav");//cargo el archivo de audio
+ 
+  bool isPlaying = false;
 
+  //creo un mapa para asignar sonidos a teclas (esto seguramente deberia estar en el soundSys.cpp u otra parte)
 
-  auto& player = GameMan.getEntityManager().createEntity();
-  auto& enemy1 = GameMan.getEntityManager().createEntity();
-
-
-  // Lo dispongo en el centro de la pantalla
-  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}};
-  player.render = game::RenderComponent { .texIndex=tex  , .Sprite{}, .window_Pos{320,240} };
-
-  player.input = game::InputComponent{};
-//player.render->tex
-  //Creamos una ventana
-  //Y creo el spritesheet a partir de la imagen anterior
-  SPman.assignTexture(player.render->Sprite,player.render->texIndex);
-  //Le pongo el centroide donde corresponde
-  SPman.modifySpriteOrigin(player.render->Sprite,{75 / 2, 75 / 2});
-  //Cojo el sprite que me interesa por defecto del sheet
-  SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-  //muevo el sprite a la posicion determinada por el componente de fisica
-  std::cout << "I get here" << player.physics->pos.x << std::endl;
-
-  player.render->Sprite.move(
-      player.physics->pos.x,
-      player.physics->pos.y
-  );
-
-  enemy1.physics = game::PhysicsComponent{ .pos{120, 240}, .vel{0,0}};
-  enemy1.render = game::RenderComponent { .texIndex=tex  , .Sprite{}, .window_Pos{120,240} };
-
-  //Y creo el spritesheet a partir de la imagen anterior
-  SPman.assignTexture(enemy1.render->Sprite,enemy1.render->texIndex);
-  //Le pongo el centroide donde corresponde
-  SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
-  //Cojo el sprite que me interesa por defecto del sheet
-  SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(2 * 75, 0 * 75, 75, 75));
-  //muevo el sprite a la posicion determinada por el componente de fisica
-  std::cout << "I get here" << enemy1.physics->pos.x << std::endl;
-
-  enemy1.render->Sprite.move(
-      enemy1.physics->pos.x,
-      enemy1.physics->pos.y
-  );
+  //auto tecla = sf::Keyboard::isKeyPressed;
 
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
-    //Bucle de obtención de eventos
+
+    sf::Event event;
+    // Manejo de eventos de cerrar ventana
+    while (GameMan.getWindow().pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            GameMan.getWindow().close();
+        }
+    }
+   
     GameMan.getEntityManager().update();
     inpSys.update();
-
     phySys.update();
 
+    
+
+    // for(auto const& pair:soundMap){
+    //   if(sf::Keyboard::isKeyPressed(pair.first)){
+    //     pair.second.playSound();
+    //   }
+    // }
+
+    //esto seguramente deberia estar en un inputManager...
+    //de momento lo hago a lo cutre
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+      if(!isPlaying){
+        dashSound.playSound();
+        isPlaying = true;
+        std::cout << "Sonandoooo" << std::endl;
+      }
+    }
+    else{
+      isPlaying = false;
+    }
+
+    // if(tecla(sf::Keyboard::A) || tecla(sf::Keyboard::D) || tecla(sf::Keyboard::W) || tecla(sf::Keyboard::S)) {
+    //   //if(!isPlaying){
+    //     moveSound.playSound();
+    //     //isPlaying = true;
+        
+      
+    // }
+    // else{
+    //   isPlaying = false;
+    // }
+    
     renSys.update();
-    std::cout << "last get here" << player.physics->pos.x << std::endl;
 
+
+    // while (GameMan.getWindow().pollEvent(event)) {
+    //     if (event.type == sf::Event::Closed) {
+    //         GameMan.getWindow().close();
+    //     }
+    // }
+   
+    //sf::sleep(sf::milliseconds(20));
   }
-
   return 0;
 }
