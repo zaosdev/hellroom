@@ -34,8 +34,8 @@
 			"path": "src/pro/cargarMapa"
 		},
 		{
-			"name": "Prototipo 7: AI System",
-			"path": "src/pro/AI_System"
+			"name": "Prototipo 7: AI System & PercentTick",
+			"path": "src/pro/AI_System+PercentTick"
 		},
 		{
 			"name": "Prototipo 8: Guardado del juego",
@@ -44,10 +44,6 @@
 		{
 			"name": "Prototipo 9: Sistema de Sonido",
 			"path": "src/pro/soundSys"
-		},
-		{
-			"name": "Prototipo 10: Bucle4",
-			"path": "src/pro/bucle4"
 		},
 	],
 	"settings": {
