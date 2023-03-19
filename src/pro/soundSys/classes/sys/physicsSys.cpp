@@ -17,17 +17,8 @@ namespace game
 
     void PhysicsSys::update()
     {
-        auto& EM = gMan_.getEntityManager();
+        //std::cout << "I get here" << gMan_.ent->physics->pos.x << std::endl;
 
-        for(auto& ent : EM)
-        {
-            if(ent.physics)
-            {
-                std::cout << "do get here" << ent.physics->pos.x << std::endl;
-                ent.physics->pos += ent.physics->vel;
-            }
-
-        }        
-
+        gMan_.ent->physics->pos += gMan_.ent->physics->vel;
     }
 }
