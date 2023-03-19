@@ -33,11 +33,11 @@ namespace game
             //render sprite position according to the changes
             FVmath::Point2D newState = ent.physics->pos;
             FVmath::Point2D oldState = ent.physics->prevPos;
-            std::cout << "newstate: " << newState << std::endl;
-            std::cout << "oldstate: " << oldState << std::endl;
+            
 
             ent.render->window_Pos.x = oldState.x * (1 - pt) + newState.x * pt;
             ent.render->window_Pos.y = oldState.y * (1 - pt) + newState.y * pt;
+            //std::cout << "newstate: " << newState  << "oldstate" << oldState <<  "rendered position: " <<  ent.render->window_Pos << std::endl;
 
             ent.render->Sprite.setPosition(
               ent.render->window_Pos.x ,
@@ -47,7 +47,6 @@ namespace game
 
         void RenderSys::update(double percentTick)
         {
-
             auto& EM = gMan_.getEntityManager();
 
             window_.clear();
