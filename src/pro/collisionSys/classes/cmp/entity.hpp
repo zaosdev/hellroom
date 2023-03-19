@@ -19,7 +19,9 @@ namespace game
       enum class TAG : tag_type
       {
         //add new tags when needed and delete placeholder
-        placeholerTag,
+        Bullet,
+        Enemy,
+        Player,
       };
 
       friend struct FVeng::EntityManager<Entity>;
@@ -28,6 +30,7 @@ namespace game
       std::optional<PhysicsComponent> physics{};
       std::optional<InputComponent>   input{};
       std::optional<AIComponent>      AI{};
+      std::optional<ColliderComponent> collider{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
