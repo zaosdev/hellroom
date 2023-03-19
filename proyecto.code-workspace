@@ -14,7 +14,7 @@
 			"path": "src/pro/motor_ES"
 		},
 		{
-			"name": "Prototipo 2: cuadrosTexto",
+			"name": "Prototipo 2: Cuadros de Texto",
 			"path": "src/pro/cuadrosTexto"
 		},
 		{
@@ -26,7 +26,7 @@
 			"path": "src/pro/maquinaEstados"
 		},
 		{
-			"name": "Prototipo 5: logros",
+			"name": "Prototipo 5: Logros",
 			"path": "src/pro/logros"
 		},
 		{
@@ -42,7 +42,7 @@
 			"path": "src/pro/guardado"
 		},
 		{
-			"name": "Prototipo 9: soundSys",
+			"name": "Prototipo 9: Sistema de Sonido",
 			"path": "src/pro/soundSys"
 		},
 	],
