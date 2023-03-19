@@ -121,9 +121,9 @@ int main() {
     {
       std::cout << "NO SKIP" << std::endl;
 
-      for (std::size_t i = 0; i < linea.size() && !skip; i++)
+      for (std::size_t i = 0; i < linea.size() /*&& !skip*/; i++)
       {
-        std::cout << "L BY L " <<  i << std::endl;
+        //std::cout << "L BY L " <<  i << std::endl;
 
         texto.setString(texto.getString() + linea[i]);
 
@@ -136,9 +136,9 @@ int main() {
         //si pulsamos la tecla espacio salimos del bucle 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
           //skip = true;
-          std::cout << "AAAAAAAAAAAAAAAAAAAAA" << std::endl;
+          //std::cout << "AA " << i << std::endl;
           skip = true;
-          //continue;
+          continue;
         }
 
         sf::sleep(sf::milliseconds(100));
@@ -146,7 +146,7 @@ int main() {
       texto.setString(texto.getString() + "\n");
     } 
     else {
-      std::cout << "CIERRO  " << std::endl;
+      //std::cout << "CIERRO  " << std::endl;
       // Si hemos llegado al final del archivo, lo cerramos y reiniciamos
       leer.close();
       
