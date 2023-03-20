@@ -5,6 +5,7 @@
 #include "AIComponent.hpp"
 #include "ColliderComponent.hpp"
 #include "utils/types.hpp"
+#include "utils/Sprite.hpp"
 
 
 #include <optional>
@@ -39,11 +40,11 @@ namespace game
       constexpr void mark4destruction() noexcept { alive_ = false; }
       constexpr void addTag(TAG t) noexcept
       {
-        tags = tags | tag_type(t); 
+        tags = tags | static_cast<tag_type>(t); 
       }   
       constexpr tag_type hasTag(TAG t) const noexcept
       {
-        return (tags & tag_type(t));
+        return 0 != (tags & static_cast<tag_type>(t));
       }
 
     private:

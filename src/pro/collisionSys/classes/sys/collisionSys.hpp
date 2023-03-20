@@ -8,13 +8,13 @@ namespace game
 
     struct CollisionSys
     {
-        CollisionSys(FVeng::GameManager& gameMan);
+        // CollisionSys(FVeng::GameManager& gameMan);
 
 
-        CollisionSys (const CollisionSys&) = delete;
-        CollisionSys (CollisionSys&&) = delete;
-        CollisionSys& operator=(const CollisionSys&)= delete;
-        CollisionSys& operator=(CollisionSys&&)= delete;
+        // CollisionSys (const CollisionSys&) = delete;
+        // CollisionSys (CollisionSys&&) = delete;
+        // CollisionSys& operator=(const CollisionSys&)= delete;
+        // CollisionSys& operator=(CollisionSys&&)= delete;
 
         void update(FVeng::GameManager& gameMan);
 

@@ -24,19 +24,19 @@ namespace FVeng
 
         game::Entity* ent;
 
-        auto first(auto Valid){
-            for(auto& e : EM_){
-                if(Valid(e))
-                    return EntityManager::entity_iterator(&e);
-            }
-            return EM_.end();
-        }
+        // auto first(auto Valid){
+        //     for(auto& e : EM_){
+        //         if(Valid(e))
+        //             return EntityManager::entity_iterator(&e);
+        //     }
+        //     return EM_.end();
+        // }
 
-        auto next(EntityManager::entity_iterator const it, auto Valid){
-            if(it < EM_.end())
-                return std::find_if(it + 1, EM_.end(), Valid);
-            return EM_.end();
-        }
+        // auto next(EntityManager::entity_iterator const it, auto Valid){
+        //     if(it < EM_.end())
+        //         return std::find_if(it + 1, EM_.end(), Valid);
+        //     return EM_.end();
+        // }
 
         private:
 

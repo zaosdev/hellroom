@@ -56,7 +56,7 @@ int main() {
  
   //Create collider
   player.collider = { .BBox {player.render->Sprite.getGlobalBounds()}};
-
+  std::cout << "collider created" << std::endl;
   
 
   // //Create the enemy 1 : ARRIVE BEHAVIOUR
@@ -128,7 +128,7 @@ int main() {
 
     if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
     {
-        std::cout << "updating ia" << std::endl;
+        //std::cout << "updating ia" << std::endl;
         //restart the clock and get dt
         double dt = updateClock.restart().asSeconds();
     
@@ -143,7 +143,7 @@ int main() {
         phySys.update(dt);
         
     }
-    std::cout << "updating render" << std::endl;
+    //std::cout << "updating render" << std::endl;
     // //Render game
     float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
     renSys.update(percentTick);
