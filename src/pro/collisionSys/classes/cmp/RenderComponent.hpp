@@ -5,6 +5,11 @@
 
 namespace game
 {
+
+    // struct Sprite {
+    //     FVmath::Dim2D dim{};
+    // };
+
     struct RenderComponent
     {
         std::size_t         texIndex{};

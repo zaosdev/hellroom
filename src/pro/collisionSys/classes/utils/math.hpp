@@ -94,16 +94,41 @@ namespace FVmath
 
     struct Rect2D{
 
-        Rect2D() = default;
-
-        Rect2D(Dim2D const dim, int32_t const dw, int32_t const dh): left{dw}, right{int32_t(dim.w) - dw}, up{dh}, down{int32_t(dim.h) - dh} {
-
-        }
+        struct Segment { 
+            int32_t min{}, max{};
+        };
 
         int32_t left{}, right{};
         int32_t up{}, down{};
-        constexpr bool operator <=> (Rect2D const&) const noexcept = default;
+
+
+        [[nodiscard]]  constexpr bool segmentsCollide(Segment const A, Segment const B) const noexcept {
+            return not (A.max < B.min || B.max < A.min);
+        }
+
+
+        [[nodiscard]]  constexpr bool collidesWith(Rect2D const& B) const noexcept {
+
+            return (segmentsCollide({left, right}, {B.left, B.right}) && segmentsCollide({up, down}, {B.up, B.down}));
+
+        }
+
+        //constexpr bool operator<=>(Rect2D const&) const noexcept = default;
+
+
+        static Rect2D from(Dim2D const dim, int32_t const dw, int32_t const dh) {
+
+           return{
+                .left   = dw,
+                .right  = int32_t(dim.w) - dw,
+                .up     = dh, 
+                .down   = int32_t(dim.h) - dh,
+
+           };
+
+        }
     };
+
 
 
 }
