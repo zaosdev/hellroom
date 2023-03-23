@@ -16,7 +16,7 @@ namespace MaquinaEstados{
             StateMachine( ) {}
             ~StateMachine( ) {}
 
-            void AddState(StateRef NewState, bool isRemplacing = true);
+            void AddState(StateRef NewState, bool isReplacing = true);
             void RemoveState(  );
 
             void ProcessStateChanges( );
@@ -28,7 +28,7 @@ namespace MaquinaEstados{
 
             bool _isRemoving;
             bool _isAdding;
-            bool _isRemplacing;
+            bool _isReplacing;
     };
 
 }

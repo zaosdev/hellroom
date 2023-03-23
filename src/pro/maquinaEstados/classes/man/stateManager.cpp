@@ -3,10 +3,10 @@
 
 namespace MaquinaEstados{
 
-    void StateMachine::AddState(StateRef newState, bool isRemplacing){
+    void StateMachine::AddState(StateRef newState, bool isReplacing){
 
         this-> _isAdding = true;
-        this -> _isRemplacing = isRemplacing;
+        this -> _isReplacing = isReplacing;
 
         this-> _newState = std::move(newState);
     }
@@ -28,7 +28,7 @@ namespace MaquinaEstados{
         }
         if (this->_isAdding){
             if(!this->_states.empty()){
-                if(this-> _isRemplacing){
+                if(this-> _isReplacing){
                     this->_states.pop();
                 }
                 else{
