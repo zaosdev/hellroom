@@ -11,6 +11,7 @@ namespace game
     {
         int texIndex{};
         sfml_util::FVSprite FVSprite{};
+        int maxLowerLayer{0};
         
     };
 }

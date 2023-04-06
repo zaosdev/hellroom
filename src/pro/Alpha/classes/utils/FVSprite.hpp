@@ -24,7 +24,7 @@ namespace sfml_util{
             else std::terminate();
         }
 
-        void initVertexArray( FVmath::Point2Di Size, std::vector<int>& tileMapLayer, FVmath::Point2Di tileSize )
+        void initVertexArray( FVmath::Point2Di Size, const std::vector<int>& tileMapLayer, FVmath::Point2Di tileSize )
         {
             vertices_.setPrimitiveType(sf::Quads);
             vertices_.resize(Size.x * Size.y *4);

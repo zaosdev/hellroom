@@ -22,7 +22,9 @@ namespace game
         void iniRenderSys();
         // template<typename T>
         void draw(sf::Sprite& Sprite);
-        void drawFV(sfml_util::FVSprite& Sprite);
+        void drawMap(MapComponent& Sprite);
+        void drawUpperMap(MapComponent& Sprite);
+        //void drawFV(sfml_util::FVSprite& Sprite);
 
         void iniSprite(game::Entity& ent, double pt);
         void update(double percentTick);

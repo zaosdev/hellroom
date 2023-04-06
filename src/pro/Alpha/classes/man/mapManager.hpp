@@ -31,6 +31,7 @@ namespace tXMLeng
             FVmath::Point2Di tileSize{DEFAULT_VALUE,DEFAULT_VALUE};
             int numLayers   {0};
             int activeLayer {0};
+            int maxBaseLayer{0};
 
             std::vector<std::vector<int>> tileMap{};
 
@@ -50,10 +51,14 @@ namespace tXMLeng
         void obtainMapInfo(XMLElem& map);
         void InitMap(const char * filePath);
         void setActiveLayer(int newLayer);
+        int  getActiveLayer() const;
         const char * getTexturePath() const;
-        FVmath::Point2Di getMapSize() const;
-        FVmath::Point2Di getTileSizePath() const;
-        std::vector<int>& getCurrentLayer();
+        const FVmath::Point2Di getMapSize() const;
+        const FVmath::Point2Di getTileSizePath() const;
+        const std::vector<int>& getCurrentLayer() const;
+        const int& getMaxBaseLayer() const;
+        int getTotalLayerCount() const;
+
 
         private:
 

@@ -28,11 +28,33 @@ namespace game
             window_.draw(Sprite);
         }
 
-        void RenderSys::drawFV(sfml_util::FVSprite& Sprite)
+        void RenderSys::drawMap(MapComponent& Map)
         {
-            std::cout << "Inicio de inputmanager";
-            window_.draw(Sprite);
+            //std::cout << "Inicio de inputmanager";
+            window_.draw(Map.FVSprite);
+
+            for(int i{1}; i<Map.maxLowerLayer;i++)
+            {
+                gMan_.setRenderNextLayer(Map);
+                window_.draw(Map.FVSprite);
+
+            }
+
         }
+
+        void RenderSys::drawUpperMap(MapComponent& Map)
+        {
+            //std::cout << "Inicio de inputmanager";
+            for(int i{gMan_.getMapManager().getActiveLayer()+1}; i<gMan_.getMapManager().getTotalLayerCount();i++)
+            {
+                gMan_.setRenderNextLayer(Map);
+                window_.draw(Map.FVSprite);
+            }
+
+            gMan_.resetMap(Map);
+
+        }
+
 
         //recover world position and change it to screen position
         void RenderSys::iniSprite(game::Entity& ent, double pt)
@@ -54,14 +76,19 @@ namespace game
 
         void RenderSys::update(double percentTick)
         {
-
             auto& EM = gMan_.getEntityManager();
 
             window_.clear();
 
+            game::Entity* mapEnt{};
+            
             for(auto& ent : EM)
             {
-                if(ent.map) drawFV(ent.map->FVSprite);
+                if(ent.map)
+                {
+                    drawMap(*ent.map);
+                    mapEnt = &ent;
+                }
                 if(ent.render && ent.physics)
                 {
                     iniSprite(ent,percentTick);
@@ -70,6 +97,9 @@ namespace game
 
                 }
             }
+
+
+            drawUpperMap(*mapEnt->map);
 
             window_.display();    
 

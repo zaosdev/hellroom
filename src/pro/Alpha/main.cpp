@@ -72,7 +72,7 @@ int main() {
 
     }
 
-    std::cout << "updating render" << std::endl;
+    //std::cout << "updating render" << std::endl;
     // //Render game
     float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
     renSys.update(percentTick);

@@ -24,15 +24,21 @@ namespace FVeng
             return bb_;
         }
 
+        [[nodiscard]] tXMLeng::mapManager& GameManager::getMapManager()
+        {
+            return mapMan;
+        }
+
+
 
         void GameManager::initLevel()
         {
-            mapMan.InitMap("media/Mapa1.tmx");
+            mapMan.InitMap("../media/Mapa2.tmx");
         }
 
         void GameManager::LoadAllTextures()
         {
-            SPman.loadTexture("resources/sprites.png", PLAYER_TEXT);
+            SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
         }
 
@@ -72,9 +78,10 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{} };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer() };
 
-            e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));         
+            e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
+            //mapMan.setActiveLayer(-1);         
             e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
         }
 
@@ -98,6 +105,21 @@ namespace FVeng
                           
                                     
         }
+
+        void GameManager::setRenderNextLayer(game::MapComponent& map)
+        {
+            int currentLayer = mapMan.getActiveLayer();
+            currentLayer++;
+            mapMan.setActiveLayer(currentLayer);
+            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
+        }
+
+        void GameManager::resetMap(game::MapComponent& map)
+        {
+            mapMan.setActiveLayer(0);
+            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
+        }
+
 
         void GameManager::createEnemyPursue(FVmath::Point2D Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
         {

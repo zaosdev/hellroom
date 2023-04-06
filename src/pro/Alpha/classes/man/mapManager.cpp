@@ -30,7 +30,7 @@ namespace tXMLeng
     void mapManager::loadMap(XMLElem& map)
     {
             
-            XMLElem layer = map.FirstChildNamed("layer");
+            XMLElem layer = map.FirstChildNamed("group").FirstChildNamed("layer");
 
             while(layer.isEmpty())
             {
@@ -44,6 +44,7 @@ namespace tXMLeng
                     {
                         int& gid = map_.tileMap[map_.numLayers].emplace_back();
                         currentTile.queryAttribute<int*>("gid",&gid);
+                        gid-=1;
                         std::cout << map_.tileMap[map_.numLayers].back() << "|";
                         std::cout << gid << "|";
 
@@ -64,6 +65,15 @@ namespace tXMLeng
         map.queryAttribute<int*>("height", &map_.mapSize.y);
         map.queryAttribute<int*>("tilewidth", &map_.tileSize.x);
         map.queryAttribute<int*>("tileheight", &map_.tileSize.y);
+        map.queryAttribute<int*>("maxBaseLayer", &map_.maxBaseLayer);
+
+
+
+    }
+
+    int  mapManager::getActiveLayer() const
+    {
+        return map_.activeLayer;
     }
 
 
@@ -102,20 +112,31 @@ namespace tXMLeng
         return map_.filePath;
     }
 
-    FVmath::Point2Di mapManager::getMapSize() const
+    const FVmath::Point2Di mapManager::getMapSize() const
     {
         return map_.mapSize;
     }
-    FVmath::Point2Di mapManager::getTileSizePath() const
+    const FVmath::Point2Di mapManager::getTileSizePath() const
     {
         return map_.tileSize;
 
     }
-    std::vector<int>& mapManager::getCurrentLayer()
+    const std::vector<int>& mapManager::getCurrentLayer() const
     {
         return map_.tileMap[map_.activeLayer];
 
     }
+
+    const int& mapManager::getMaxBaseLayer() const
+    {
+        return map_.maxBaseLayer;
+    }
+
+    int mapManager::getTotalLayerCount() const
+    {
+        return map_.tileMap.size();
+    }
+
 
 }
 

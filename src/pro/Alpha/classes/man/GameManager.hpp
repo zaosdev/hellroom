@@ -31,11 +31,15 @@ namespace FVeng
         void createEnemyArrive(FVmath::Point2D Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2D Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
+        void setRenderNextLayer(game::MapComponent& map);
+        void resetMap(game::MapComponent& map);
         void LoadAllTextures();
         void initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect);
 
         FVeng::EntityManager<game::Entity>& getEntityManager();
         game::blackBoardComponent& getBB();
+        tXMLeng::mapManager& getMapManager();
+
         
 
         private:
