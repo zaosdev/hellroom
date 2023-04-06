@@ -5,7 +5,11 @@ namespace game
 {
     struct SpawnerComponent
     {
-        tXMLeng::Spawner SpawnInfo;
-        
+        tXMLeng::Spawner SpawnInfo{};
+        sf::Clock TimerSpawn{};
+        float minTime{5};
+        size_t capacity{0};
+        size_t maxCapacity{5};
+
     };
 }
