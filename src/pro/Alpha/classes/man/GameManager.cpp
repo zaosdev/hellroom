@@ -47,19 +47,19 @@ namespace FVeng
             initLevel();
             LoadAllTextures();
             createMap();
-            auto& player = createPlayer();
+            createAllSpawner();
+            auto& player = createPlayer({320,240});
             bb_.targetID = player.id();
 
         }
 
-        [[maybe_unused]] game::Entity& GameManager::createPlayer()
+        [[maybe_unused]] game::Entity& GameManager::createPlayer(FVmath::Point2Di Pos)
         {
             auto& e = EM_.createEntity();
 
-
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
-            e.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0},.mov_speed =640/4};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
@@ -85,13 +85,13 @@ namespace FVeng
             e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
         }
 
-        void GameManager::createEnemyArrive(FVmath::Point2D Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
+        void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.physics = game::PhysicsComponent{ .pos{Pos}, .vel{0,0}, .mov_speed =640/4};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0}, .mov_speed =640/4};
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
@@ -106,9 +106,24 @@ namespace FVeng
                                     
         }
 
+        //Create all spawners on the current map
+        void GameManager::createAllSpawner()
+        {
 
+            for(auto& spawner : mapMan.getSpawners())
+                createSpawner(spawner);
+            
+        }
 
+        //Creates a concrete instance of a Spawner
+        void GameManager::createSpawner(tXMLeng::Spawner& spawner)
+        {
+            auto& e = EM_.createEntity();
 
+            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
+        }
+
+        //Loads next layer info in the Sprite, to change layer being drawn
         void GameManager::setRenderNextLayer(game::MapComponent& map)
         {
             int currentLayer = mapMan.getActiveLayer();
@@ -117,6 +132,7 @@ namespace FVeng
             map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
         }
 
+        //Called to reset Sprite info once all map layers have been drawn
         void GameManager::resetMap(game::MapComponent& map)
         {
             mapMan.setActiveLayer(0);
@@ -124,13 +140,13 @@ namespace FVeng
         }
 
 
-        void GameManager::createEnemyPursue(FVmath::Point2D Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        void GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.physics = game::PhysicsComponent{ .pos{Pos}, .vel{0,0},.mov_speed =640/4};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
@@ -154,6 +170,18 @@ namespace FVeng
             SPman.modifySpriteOrigin(entity.render->Sprite, origin); //{75 / 2, 75 / 2}
             //Cojo el sprite que me interesa por defecto del sheet
             SPman.modifyTextureRect(entity.render->Sprite, TexRect); //sf::IntRect(0 * 75, 0 * 75, 75, 75));
+        }
+
+
+        game::Entity& GameManager::getPlayer()
+        {
+            for(auto& player : EM_)
+            {
+                if(player.input)
+                {
+                    return player;
+                }
+            }
         }
 
 

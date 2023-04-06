@@ -11,6 +11,8 @@
 #include "classes/man/GameManager.hpp"
 #include "classes/man/inputManager.hpp"
 #include "classes/sys/AISys.hpp"
+#include "classes/sys/spawnSys.hpp"
+
 #include "utils/circularIterator.hpp"
 #include "cmp/blackBoardComponent.hpp"
 
@@ -35,6 +37,7 @@ int main() {
   game::InputManager  inpRec{window};
   game::InputSys      inpSys{GameMan, inpRec};
   game::AISys         AISys{GameMan};
+  game::SpawnSys         spwnSys{GameMan};
   game::SoundSys      soundSys{GameMan, inpRec};
   game::AchievementSys achSys{GameMan};
   game::SavingSys saveSys{GameMan};
@@ -63,6 +66,9 @@ int main() {
       AISys.update(GameMan.getBB(), dt);
 
       phySys.update(dt);
+
+      //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
+      spwnSys.update();
 
       soundSys.update();
       // achSys.update();

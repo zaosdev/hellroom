@@ -18,11 +18,10 @@ namespace game{
             //SoundSys(); /*: isPlaying(false) {}*/
             SoundSys(FVeng::GameManager& gameMan, InputManager& intpRec);
 
-            // SoundSys (const SoundSys&) = delete;
-            // SoundSys (SoundSys&&) = delete;
-            // SoundSys& operator=(const SoundSys&)= delete;
-            // SoundSys& operator=(SoundSys&&)= delete;
-
+            SoundSys (const SoundSys&) = delete;
+            SoundSys (SoundSys&&) = delete;
+            SoundSys& operator=(const SoundSys&)= delete;
+            SoundSys& operator=(SoundSys&&)= delete;
 
             void loadSound(const std::string& soundfile);
             void playSound();

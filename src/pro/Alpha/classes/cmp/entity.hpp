@@ -5,6 +5,8 @@
 #include "InputComponent.hpp"
 #include "AIComponent.hpp"
 #include "MapComponent.hpp"
+#include "SpawnerComponent.hpp"
+
 
 #include <optional>
 
@@ -25,11 +27,13 @@ namespace game
 
       friend struct FVeng::EntityManager<Entity>;
       
-      std::optional<RenderComponent> render{};
+      std::optional<RenderComponent>  render{};
       std::optional<PhysicsComponent> physics{};
-      std::optional<InputComponent> input{};
-      std::optional<MapComponent> map{};
+      std::optional<InputComponent>   input{};
+      std::optional<MapComponent>     map{};
       std::optional<AIComponent>      AI{};
+      std::optional<SpawnerComponent> Spawn{};
+
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

@@ -27,10 +27,13 @@ namespace FVeng
         sf::RenderWindow& getWindow();
         void initLevel();
         void initGame();
-        game::Entity& createPlayer();
-        void createEnemyArrive(FVmath::Point2D Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
-        void createEnemyPursue(FVmath::Point2D Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
+        game::Entity& createPlayer(FVmath::Point2Di Pos);
+        void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
+        void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
+
+        void createSpawner(tXMLeng::Spawner& spawner);
+        void createAllSpawner();
         void setRenderNextLayer(game::MapComponent& map);
         void resetMap(game::MapComponent& map);
         void LoadAllTextures();
@@ -39,6 +42,8 @@ namespace FVeng
         FVeng::EntityManager<game::Entity>& getEntityManager();
         game::blackBoardComponent& getBB();
         tXMLeng::mapManager& getMapManager();
+        game::Entity& getPlayer();
+
 
         
 

@@ -20,6 +20,9 @@ namespace tXMLeng
             obtainMapTexturePath(mapElement);
 
             loadMap(mapElement);
+
+            GenerateSpawners(mapElement);
+
         } 
         else 
         {
@@ -54,7 +57,7 @@ namespace tXMLeng
         
         auto Spawner_Type = spawners.FirstChildNamed("properties").FirstChildNamed("property"); 
 
-        Spawner_Type.queryAttribute<int*>("height", &tempType);
+        Spawner_Type.queryAttribute<int*>("value", &tempType);
         spawner.type = SpawnerType{tempType};
 
     }
@@ -173,7 +176,6 @@ namespace tXMLeng
     {
         return SpawnerInfo_;
     }
-
 
 }
 

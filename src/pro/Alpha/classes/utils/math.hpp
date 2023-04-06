@@ -80,5 +80,5 @@ namespace FVmath
 
     using Point2D = Point2Dt<float>;
     using Point2Di = Point2Dt<int>;
-
+    
 }

@@ -47,20 +47,20 @@ namespace tXMLeng
         mapManager& operator=(const mapManager&)= delete;
         mapManager& operator=(mapManager&&)= delete;
         
-        void loadMap(XMLElem& map);
-        void obtainMapTexturePath(XMLElem& map);
-        void obtainMapInfo(XMLElem& map);
-        void InitMap(const char * filePath);
-        void setActiveLayer(int newLayer);
-        int  getActiveLayer() const;
+        void  loadMap(XMLElem& map);
+        void  obtainMapTexturePath(XMLElem& map);
+        void  obtainMapInfo(XMLElem& map);
+        void  InitMap(const char * filePath);
+        void  setActiveLayer(int newLayer);
+        int   getActiveLayer() const;
         const char * getTexturePath() const;
         const FVmath::Point2Di getMapSize() const;
         const FVmath::Point2Di getTileSizePath() const;
         const std::vector<int>& getCurrentLayer() const;
         const int& getMaxBaseLayer() const;
-        int getTotalLayerCount() const;
-        void GenerateSpawners(XMLElem& spawners);
-        void assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
+        int   getTotalLayerCount() const;
+        void  GenerateSpawners(XMLElem& spawners);
+        void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
         std::vector<Spawner>& getSpawners();
 
         private:
