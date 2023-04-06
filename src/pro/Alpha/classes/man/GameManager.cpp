@@ -106,6 +106,9 @@ namespace FVeng
                                     
         }
 
+
+
+
         void GameManager::setRenderNextLayer(game::MapComponent& map)
         {
             int currentLayer = mapMan.getActiveLayer();

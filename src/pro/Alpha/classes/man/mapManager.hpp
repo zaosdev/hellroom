@@ -2,7 +2,8 @@
 
 #include "../../include/tinyXML2/tinyxml2.h"
 #include "../facade/xmlFacade.hpp"
-#include "../utils/math.hpp"
+#include "../utils/Spawner.hpp"
+
 
 #include <vector>
 #include <iostream>
@@ -58,12 +59,15 @@ namespace tXMLeng
         const std::vector<int>& getCurrentLayer() const;
         const int& getMaxBaseLayer() const;
         int getTotalLayerCount() const;
-
+        void GenerateSpawners(XMLElem& spawners);
+        void assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
+        std::vector<Spawner>& getSpawners();
 
         private:
 
         TileMap map_{};
         TileSet tile_{};
+        std::vector<Spawner> SpawnerInfo_{};
 
         XMLReader xmlDoc_{};
 

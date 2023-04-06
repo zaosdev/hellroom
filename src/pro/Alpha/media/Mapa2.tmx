@@ -4821,9 +4821,6 @@
   </data>
  </layer>
  <objectgroup id="4" name="spawner">
-  <properties>
-   <property name="type" type="int" value="0"/>
-  </properties>
   <object id="1" x="56" y="69" width="48" height="48">
    <properties>
     <property name="type" type="int" value="1"/>

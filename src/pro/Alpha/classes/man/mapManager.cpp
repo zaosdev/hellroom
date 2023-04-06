@@ -27,6 +27,38 @@ namespace tXMLeng
         }
     }
 
+
+    void mapManager::GenerateSpawners(XMLElem& map)
+    {
+        XMLElem spawners = map.FirstChildNamed("objectgroup").FirstChildNamed("object");
+
+        while(spawners.isEmpty())
+        {
+            Spawner& spawner = SpawnerInfo_.emplace_back();
+
+            assignSpawnInfo(spawner,spawners);
+
+            spawners = spawners.NextSiblingNamed("object");
+        }
+    }
+
+    void mapManager::assignSpawnInfo(Spawner& spawner,XMLElem& spawners )
+    {
+
+        spawners.queryAttribute<int*>("x", &spawner.SpawnOrigin.x);
+        spawners.queryAttribute<int*>("y", &spawner.SpawnOrigin.y);
+        spawners.queryAttribute<int*>("width", &spawner.SpawnRange.x);
+        spawners.queryAttribute<int*>("height", &spawner.SpawnRange.y);
+
+        int tempType{};
+        
+        auto Spawner_Type = spawners.FirstChildNamed("properties").FirstChildNamed("property"); 
+
+        Spawner_Type.queryAttribute<int*>("height", &tempType);
+        spawner.type = SpawnerType{tempType};
+
+    }
+
     void mapManager::loadMap(XMLElem& map)
     {
             
@@ -135,6 +167,11 @@ namespace tXMLeng
     int mapManager::getTotalLayerCount() const
     {
         return map_.tileMap.size();
+    }
+
+    std::vector<Spawner>& mapManager::getSpawners()
+    {
+        return SpawnerInfo_;
     }
 
 
