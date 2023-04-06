@@ -4,50 +4,10 @@
 			"path": "."
 		},
 		
-		//Aquí se agrega cada subproyecto, separado por comas
+
 		{
-			"name": "Prototipo 0: plantilla_fv",
-			"path": "src/pro/plantilla_fv"
-		},
-		{
-			"name": "Prototipo 1: motor_ES",
-			"path": "src/pro/motor_ES"
-		},
-		{
-			"name": "Prototipo 2: Cuadros de Texto",
-			"path": "src/pro/cuadrosTexto"
-		},
-		{
-			"name": "Prototipo 3: Input System",
-			"path": "src/pro/input"
-		},
-		{
-			"name": "Prototipo 4: Maquina de Estados",
-			"path": "src/pro/maquinaEstados"
-		},
-		{
-			"name": "Prototipo 5: Logros",
-			"path": "src/pro/logros"
-		},
-		{
-			"name": "Prototipo 6: Cargar mapa",
-			"path": "src/pro/cargarMapa"
-		},
-		{
-			"name": "Prototipo 7: AI System & PercentTick",
-			"path": "src/pro/AI_System+PercentTick"
-		},
-		{
-			"name": "Prototipo 8: Guardado del juego",
-			"path": "src/pro/guardado"
-		},
-		{
-			"name": "Prototipo 9: Sistema de Sonido",
-			"path": "src/pro/soundSys"
-		},
-		{
-			"name": "Prototipo 10: Sistema de Colisiones",
-			"path": "src/pro/collisionSys"
+			"name": "Alpha",
+			"path": "src/pro/Alpha"
 		},
 	],
 	"settings": {

@@ -1,0 +1,121 @@
+#include "mapManager.hpp"
+
+
+
+namespace tXMLeng
+{
+
+    void mapManager::InitMap(const char * filePath)
+    {
+        xmlDoc_.loadFile(filePath);
+        
+        XMLElem mapElement = xmlDoc_.FirstChildOnDocument("map");
+
+        xmlDoc_.printError();
+
+        if (mapElement.isEmpty()) 
+        {
+            obtainMapInfo(mapElement);
+
+            obtainMapTexturePath(mapElement);
+
+            loadMap(mapElement);
+        } 
+        else 
+        {
+            xmlDoc_.printError();
+        }
+    }
+
+    void mapManager::loadMap(XMLElem& map)
+    {
+            
+            XMLElem layer = map.FirstChildNamed("layer");
+
+            while(layer.isEmpty())
+            {
+                map_.tileMap.emplace_back();
+                map_.tileMap[map_.numLayers].reserve(map_.mapSize.y*map_.mapSize.x);
+                
+                auto currentTile = layer.FirstChildNamed("data").FirstChildNamed("tile") ; 
+                for(int y{0}; y<map_.mapSize.y; y++)
+                {
+                    for(int x{0}; x<map_.mapSize.x; x++)
+                    {
+                        int& gid = map_.tileMap[map_.numLayers].emplace_back();
+                        currentTile.queryAttribute<int*>("gid",&gid);
+                        std::cout << map_.tileMap[map_.numLayers].back() << "|";
+                        std::cout << gid << "|";
+
+                        currentTile = currentTile.NextSiblingNamed("tile");
+                    }
+                    std::cout << "" << std::endl;
+                }
+                map_.numLayers++;
+                layer = layer.NextSiblingNamed("layer");
+            }
+
+    }
+
+
+    void mapManager::obtainMapInfo(XMLElem& map)
+    {
+        map.queryAttribute<int*>("width", &map_.mapSize.x);
+        map.queryAttribute<int*>("height", &map_.mapSize.y);
+        map.queryAttribute<int*>("tilewidth", &map_.tileSize.x);
+        map.queryAttribute<int*>("tileheight", &map_.tileSize.y);
+    }
+
+
+    void mapManager::obtainMapTexturePath(XMLElem& map)
+    {
+        XMLElem tsxElement = map.FirstChildNamed("tileset");
+
+        const char* tsxPath;
+
+
+        
+        tsxElement.queryAttribute<const char**>("source",&tsxPath);
+
+        XMLReader tempDoc{};
+        std::cout << tsxPath;
+
+        tempDoc.loadFile(tsxPath);
+        xmlDoc_.printError();
+
+        XMLElem tileSet = tempDoc.FirstChildOnDocument("tileset");
+
+
+
+        XMLElem img = tileSet.FirstChildNamed("image");
+
+        img.queryAttribute<const char**>("source", &map_.filePath);
+    }
+
+    void mapManager::setActiveLayer(int newLayer)
+    {
+        map_.activeLayer = newLayer;
+    }
+
+    const char * mapManager::getTexturePath() const
+    {
+        return map_.filePath;
+    }
+
+    FVmath::Point2Di mapManager::getMapSize() const
+    {
+        return map_.mapSize;
+    }
+    FVmath::Point2Di mapManager::getTileSizePath() const
+    {
+        return map_.tileSize;
+
+    }
+    std::vector<int>& mapManager::getCurrentLayer()
+    {
+        return map_.tileMap[map_.activeLayer];
+
+    }
+
+}
+
