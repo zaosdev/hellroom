@@ -7,10 +7,14 @@ namespace game
     {
     }
 
+
+
     void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos)
     {
-        auto enemyChoice = FVmath::calcualteRandom(2,1);
 
+        // gMan_.SpawnDummy(Pos);
+        auto enemyChoice = FVmath::calcualteRandom(2,1);
+        
         switch (enemyChoice)
         {
         case 1:

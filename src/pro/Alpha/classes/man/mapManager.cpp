@@ -80,12 +80,12 @@ namespace tXMLeng
                         int& gid = map_.tileMap[map_.numLayers].emplace_back();
                         currentTile.queryAttribute<int*>("gid",&gid);
                         gid-=1;
-                        std::cout << map_.tileMap[map_.numLayers].back() << "|";
-                        std::cout << gid << "|";
+                        // std::cout << map_.tileMap[map_.numLayers].back() << "|";
+                        // std::cout << gid << "|";
 
                         currentTile = currentTile.NextSiblingNamed("tile");
                     }
-                    std::cout << "" << std::endl;
+                    //std::cout << "" << std::endl;
                 }
                 map_.numLayers++;
                 layer = layer.NextSiblingNamed("layer");
@@ -130,11 +130,16 @@ namespace tXMLeng
 
         XMLElem tileSet = tempDoc.FirstChildOnDocument("tileset");
 
-
-
         XMLElem img = tileSet.FirstChildNamed("image");
 
-        img.queryAttribute<const char**>("source", &map_.filePath);
+        const char * tempFilePath{};
+
+        img.queryAttribute<const char**>("source", &tempFilePath);
+
+        map_.filePath = tempFilePath;
+
+        std::cout << "img path" << map_.filePath << std::endl;
+
     }
 
     void mapManager::setActiveLayer(int newLayer)
@@ -142,7 +147,7 @@ namespace tXMLeng
         map_.activeLayer = newLayer;
     }
 
-    const char * mapManager::getTexturePath() const
+    const std::string mapManager::getTexturePath() const
     {
         return map_.filePath;
     }

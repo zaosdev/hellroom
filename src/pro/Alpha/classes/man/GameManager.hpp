@@ -3,6 +3,8 @@
 #include "../cmp/entity.hpp"
 #include "../cmp/blackBoardComponent.hpp"
 #include "../utils/AI.hpp"
+#include "../utils/random.hpp"
+
 #include "entityManager.hpp"
 #include "SpriteManager.hpp"
 #include "mapManager.hpp"
@@ -40,6 +42,7 @@ namespace FVeng
         void resetMap(game::MapComponent& map);
         void LoadAllTextures();
         void initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect);
+        void SpawnDummy(FVmath::Point2Di Pos);
 
         FVeng::EntityManager<game::Entity>& getEntityManager();
         game::blackBoardComponent& getBB();
@@ -52,9 +55,10 @@ namespace FVeng
         private:
 
         sf::RenderWindow window_{};
-        tXMLeng::mapManager mapMan{};
         //create Sprite manager
         SFMLeng::SpriteManager SPman{};
+        tXMLeng::mapManager mapMan{};
+
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         

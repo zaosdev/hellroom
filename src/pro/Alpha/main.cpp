@@ -46,7 +46,10 @@ int main() {
   //create the player and update(needed fot the hud)
   GameMan.initGame();
   GameMan.getEntityManager().update();
+
   game::HUDSys            HudSys{GameMan};
+
+
   game::RenderSys         renSys{GameMan, HudSys};
   //renSys.iniRenderSys(HudSys);
   //renSys.addHUD(HudSys);
@@ -72,7 +75,7 @@ int main() {
       phySys.update(dt);
 
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-      //spwnSys.update();
+      spwnSys.update();
 
       soundSys.update();
 

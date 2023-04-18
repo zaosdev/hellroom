@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
+
 
 namespace tXMLeng
 {
@@ -36,7 +38,7 @@ namespace tXMLeng
 
             std::vector<std::vector<int>> tileMap{};
 
-            const char* filePath{};
+            std::string filePath{};
 
         };
 
@@ -53,7 +55,7 @@ namespace tXMLeng
         void  InitMap(const char * filePath);
         void  setActiveLayer(int newLayer);
         int   getActiveLayer() const;
-        const char * getTexturePath() const;
+        const std::string getTexturePath() const;
         const FVmath::Point2Di getMapSize() const;
         const FVmath::Point2Di getTileSizePath() const;
         const std::vector<int>& getCurrentLayer() const;

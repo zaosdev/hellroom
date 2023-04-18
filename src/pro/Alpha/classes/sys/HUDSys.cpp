@@ -1,6 +1,8 @@
 #include "HUDSys.hpp"
 #include <string>
 #include <iomanip>
+#include <algorithm>
+
 //#include "../utils/math.hpp"
 //#include <cmath>
 namespace game
@@ -11,7 +13,7 @@ namespace game
     : gMan_   (Gman),
      window_  (gMan_.getWindow()),
      player_  (gMan_.getPlayer()),
-     heart_   (gMan_.createHeart())
+     heart_   (gMan_.createHeart().id())
     {
         if (!font_.loadFromFile("../media/font/Retro_Gaming.ttf")) {
             // manejar error de carga de fuente
@@ -46,23 +48,29 @@ namespace game
         //std::cout << "SemiHeart: " << semiHeart << std::endl;
         //Render the full hearts
         int spacing = 35;
+
+        auto& EM = gMan_.getEntityManager();
+
+        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==heart_;});
+
+        auto& trueHeart = *it.base();
         for(int i = 0; i <= fullHearts; i++)
         {
-            heart_.render->Sprite.setPosition(
+            trueHeart.render->Sprite.setPosition(
               0 + i * spacing,
               0
             );
-            if(i < fullHearts) window_.draw(heart_.render->Sprite);
+            if(i < fullHearts) window_.draw(trueHeart.render->Sprite);
         }
         //Render the heart semi filled
-        int sizeX = heart_.render->Sprite.getTexture()->getSize().x;
-        int sizeY = heart_.render->Sprite.getTexture()->getSize().y;
-        heart_.render->Sprite.setTextureRect(sf::IntRect{0, 0, static_cast<int> (semiHeart * sizeX), sizeY});
+        int sizeX = trueHeart.render->Sprite.getTexture()->getSize().x;
+        int sizeY = trueHeart.render->Sprite.getTexture()->getSize().y;
+        //trueHeart.render->Sprite.setTextureRect(sf::IntRect{0, 0, static_cast<int> (semiHeart * sizeX), sizeY});
         //std::cout << "Deberia mostrar: "  << static_cast<int> (semiHeart * sizeX) << ", " << sizeY << std::endl;
-        window_.draw(heart_.render->Sprite);
+        window_.draw(trueHeart.render->Sprite);
         
         //Return  sprite to normality
-        heart_.render->Sprite.setTextureRect({0, 0, sizeX, sizeY});
+        //heart_.render->Sprite.setTextureRect({0, 0, sizeX, sizeY});
     }
 
     void HUDSys::update()

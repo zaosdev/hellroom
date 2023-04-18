@@ -38,6 +38,7 @@ namespace FVeng
 
         void GameManager::LoadAllTextures()
         {
+
             SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
             SPman.loadTexture("../media/HUD/heart-red.png", HEART_TEXT);
@@ -61,9 +62,7 @@ namespace FVeng
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
-            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -80,6 +79,10 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Player); 
 
             //create life 
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
             return e;
         }
@@ -103,9 +106,7 @@ namespace FVeng
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
-            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -116,7 +117,11 @@ namespace FVeng
                           
             //health status 
             float life = 50;
-            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};                  
+            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};     
+
+            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));             
         }
 
         //Create all spawners on the current map
@@ -161,9 +166,7 @@ namespace FVeng
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
-            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -172,6 +175,35 @@ namespace FVeng
 
             e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
+
+            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
+        }
+
+        void GameManager::SpawnDummy(FVmath::Point2Di Pos)
+        {
+            std::cout << "Spawn DUMMY" << std::endl;
+
+            auto& e = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+                        FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );    
+
+            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+            auto row = FVmath::calcualteRandom(3,1);
+
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(row * 75, 0 * 75, 75, 75));
+
+
         }
 
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
@@ -195,7 +227,6 @@ namespace FVeng
             //Cojo el sprite que me interesa por defecto del sheet
             SPman.modifyTextureRect(entity.render->Sprite, TexRect); //sf::IntRect(0 * 75, 0 * 75, 75, 75));
         }
-
 
         game::Entity& GameManager::getPlayer()
         {

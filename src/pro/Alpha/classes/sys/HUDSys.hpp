@@ -40,7 +40,7 @@ namespace game
             sf::Clock           clock_;
             sf::Text            text_;
             sf::Font            font_;
-            Entity&             heart_;
+            size_t             heart_;
             double    accumulatedTime;    //time passed (seconds)
     };
 }
