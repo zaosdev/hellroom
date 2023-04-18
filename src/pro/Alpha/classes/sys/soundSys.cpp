@@ -45,12 +45,12 @@ namespace game{
         //copiado de inputSys.cpp para añadir sonidos
         //Movement
         if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
-            std::cout << "BOTON W" << std::endl;
+            //std::cout << "BOTON W" << std::endl;
          
                 this->setLoop(true);
                 this->playSound();
             
-                std::cout << "Sonandoooo" << std::endl;
+                //std::cout << "Sonandoooo" << std::endl;
           
         }
         else{

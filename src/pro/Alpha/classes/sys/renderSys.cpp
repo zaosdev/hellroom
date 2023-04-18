@@ -8,18 +8,20 @@
 
 namespace game
 {
-        RenderSys::RenderSys(FVeng::GameManager& Gman)
-        : gMan_(Gman), window_(gMan_.getWindow())
+        RenderSys::RenderSys(FVeng::GameManager& Gman, HUDSys& hud)
+        : gMan_(Gman), 
+          window_(gMan_.getWindow()),
+          HUD_ (hud)
         {
         }
         RenderSys::~RenderSys()
         {
-            window_.close();
+            if(window_.isOpen()) window_.close();
         }
 
         void RenderSys::iniRenderSys()
         {
-            
+         
         }
 
         // template<typename T>
@@ -72,6 +74,15 @@ namespace game
               ent.render->window_Pos.x ,
               ent.render->window_Pos.y
             );
+
+            if(ent.health && !ent.hasTag(game::Entity::TAG::Player))
+            {
+                float percentLife   = ent.health->currentLife / ent.health->maxLife;
+                int   colorquantity = percentLife * 255;
+                sf::Color color(255, colorquantity, colorquantity, 255);
+                ent.render->Sprite.setColor(color);
+            }
+            
         }
 
         void RenderSys::update(double percentTick)
@@ -100,6 +111,8 @@ namespace game
 
 
             drawUpperMap(*mapEnt->map);
+
+            HUD_.update();
 
             window_.display();    
 

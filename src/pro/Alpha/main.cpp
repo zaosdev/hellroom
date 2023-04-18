@@ -12,6 +12,8 @@
 #include "classes/man/inputManager.hpp"
 #include "classes/sys/AISys.hpp"
 #include "classes/sys/spawnSys.hpp"
+#include "classes/sys/healthSys.hpp"
+#include "classes/sys/HUDSys.hpp"
 
 #include "utils/circularIterator.hpp"
 #include "cmp/blackBoardComponent.hpp"
@@ -25,27 +27,29 @@ int main() {
 
 
   //Create Game manager
-  FVeng::GameManager GameMan{screenWidth, screenHeight,"P0. Fundamentos de los Videojuegos. DCCIA"};
+  FVeng::GameManager GameMan{screenWidth, screenHeight, "Hellroom"};
 
   //create Sprite manager
   SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
-  game::RenderSys     renSys{GameMan};
-  game::PhysicsSys    phySys{GameMan};
-  sf::RenderWindow&   window = GameMan.getWindow();
-  game::InputManager  inpRec{window};
-  game::InputSys      inpSys{GameMan, inpRec};
-  game::AISys         AISys{GameMan};
-  game::SpawnSys         spwnSys{GameMan};
-  game::SoundSys      soundSys{GameMan, inpRec};
-  game::AchievementSys achSys{GameMan};
-  game::SavingSys saveSys{GameMan};
-
-
-
-
+  game::PhysicsSys        phySys{GameMan};
+  sf::RenderWindow&       window = GameMan.getWindow();
+  game::InputManager      inpRec{window};
+  game::InputSys          inpSys{GameMan, inpRec};
+  game::AISys             AISys{GameMan};
+  game::HealthSys         healthSys{GameMan};
+  game::SpawnSys          spwnSys{GameMan};
+  game::SoundSys          soundSys{GameMan, inpRec};
+  game::AchievementSys    achSys{GameMan};
+  game::SavingSys         saveSys{GameMan};
+  //create the player and update(needed fot the hud)
   GameMan.initGame();
+  GameMan.getEntityManager().update();
+  game::HUDSys            HudSys{GameMan};
+  game::RenderSys         renSys{GameMan, HudSys};
+  //renSys.iniRenderSys(HudSys);
+  //renSys.addHUD(HudSys);
 
   //Game clock
   sf::Clock clock;
@@ -68,21 +72,19 @@ int main() {
       phySys.update(dt);
 
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-      spwnSys.update();
+      //spwnSys.update();
 
       soundSys.update();
+
+      healthSys.update(dt);
       // achSys.update();
       // saveSys.update();
-
-
-
     }
 
     //std::cout << "updating render" << std::endl;
     // //Render game
     float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
     renSys.update(percentTick);
-
   }
 
   return 0;

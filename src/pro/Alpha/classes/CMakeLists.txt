@@ -15,6 +15,8 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/spawnSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/AI.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/circularIterator.cpp"   
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/healthSys.cpp"   
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/HUDSys.cpp"
 )
 
 #Y donde se encuentran los .h

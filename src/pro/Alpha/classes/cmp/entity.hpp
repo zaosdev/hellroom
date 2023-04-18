@@ -6,6 +6,7 @@
 #include "AIComponent.hpp"
 #include "MapComponent.hpp"
 #include "SpawnerComponent.hpp"
+#include "healthComponent.hpp"
 
 
 #include <optional>
@@ -22,7 +23,7 @@ namespace game
       enum class TAG : tag_type
       {
         //add new tags when needed and delete placeholder
-        placeholerTag,
+        Player = 0x001,
       };
 
       friend struct FVeng::EntityManager<Entity>;
@@ -33,7 +34,7 @@ namespace game
       std::optional<MapComponent>     map{};
       std::optional<AIComponent>      AI{};
       std::optional<SpawnerComponent> Spawn{};
-
+      std::optional<HealthComponent>  health{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

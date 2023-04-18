@@ -40,6 +40,7 @@ namespace FVeng
         {
             SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
+            SPman.loadTexture("../media/HUD/heart-red.png", HEART_TEXT);
         }
 
         void GameManager::initGame()
@@ -62,14 +63,23 @@ namespace FVeng
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
             e.render->Sprite.move(
                 e.physics->pos.x,
                 e.physics->pos.y
             );
 
-            e.input = game::InputComponent{};
+            e.input  = game::InputComponent{};
+
+            //health status 
+            float life = 500;
+            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};
+
+            //add tag player
+            e.addTag(game::Entity::TAG::Player); 
+
+            //create life 
 
             return e;
         }
@@ -91,8 +101,9 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0}, .mov_speed =640/4};
-            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
+            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
@@ -101,9 +112,11 @@ namespace FVeng
                 e.physics->pos.y
             );
 
-            e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .perceptionTime=perceptionTime}; 
+            e.AI     = game::AIComponent      { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
                           
-                                    
+            //health status 
+            float life = 50;
+            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};                  
         }
 
         //Create all spawners on the current map
@@ -146,8 +159,9 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
-            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
+            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
@@ -160,7 +174,17 @@ namespace FVeng
                                     
         }
 
+        [[maybe_unused]] game::Entity&  GameManager::createHeart()
+        {
+            auto& e = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(HEART_TEXT);
 
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},sf::IntRect(0,0,38,30));
+
+            return e;
+        }
 
         void GameManager::initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect)
         {

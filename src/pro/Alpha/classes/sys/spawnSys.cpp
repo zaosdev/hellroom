@@ -14,13 +14,13 @@ namespace game
         switch (enemyChoice)
         {
         case 1:
-            gMan_.createEnemyArrive(Pos,{320,240},0.1,1);
+            gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         case 2:
-            gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),1);
+            gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),4);
             break;
         default:
-            gMan_.createEnemyArrive(Pos,{320,240},0.1,1);
+            gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         }
     }
@@ -65,7 +65,7 @@ namespace game
         {
             auto f = isEnemySpawner(e);
 
-            std::cout << f << std::endl;
+            //std::cout << f << std::endl;
 
             if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
             {
