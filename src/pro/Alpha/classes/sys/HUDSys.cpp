@@ -43,7 +43,7 @@ namespace game
         //Every 100 hp, render one heart
         int   fullHearts   = static_cast<int>(ch / lifeHeart); //5
         float semiHeart    = (static_cast<int>(ch) % lifeHeart) / 100.f;
-        std::cout << "SemiHeart: " << semiHeart << std::endl;
+        //std::cout << "SemiHeart: " << semiHeart << std::endl;
         //Render the full hearts
         int spacing = 35;
         for(int i = 0; i <= fullHearts; i++)
