@@ -14,6 +14,7 @@
 #include "classes/sys/spawnSys.hpp"
 #include "classes/sys/healthSys.hpp"
 #include "classes/sys/HUDSys.hpp"
+#include "classes/sys/collisionSys.hpp"
 
 #include "utils/circularIterator.hpp"
 #include "cmp/blackBoardComponent.hpp"
@@ -21,7 +22,7 @@
 
 int main() {
 
-  //esto es una prueba
+
 
   constexpr int screenWidth = 640;
   constexpr int screenHeight = 480;
@@ -44,6 +45,7 @@ int main() {
   game::SoundSys          soundSys{GameMan, inpRec};
   game::AchievementSys    achSys{GameMan};
   game::SavingSys         saveSys{GameMan};
+  game::CollisionSys      collisionSys{GameMan, SPman};
   //create the player and update(needed fot the hud)
   GameMan.initGame();
   GameMan.getEntityManager().update();
@@ -75,6 +77,7 @@ int main() {
 
       phySys.update(dt);
 
+      collisionSys.update();
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
       spwnSys.update();
 

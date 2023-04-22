@@ -17,8 +17,8 @@ FVmath::Point2D FVAI::arrive(FVmath::Point2D origin, FVmath::Point2D target, dou
     }
     else
     {
-        std::cout << "Distance: " << distance<< std::endl;
-        std::cout << "Arrival radius:" << arrivalRadius << std::endl;
+        // std::cout << "Distance: " << distance<< std::endl;
+        // std::cout << "Arrival radius:" << arrivalRadius << std::endl;
     }
     
     //Calculate the desired direction and angle

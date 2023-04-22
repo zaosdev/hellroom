@@ -226,6 +226,7 @@ namespace FVeng
             SPman.modifySpriteOrigin(entity.render->Sprite, origin); //{75 / 2, 75 / 2}
             //Cojo el sprite que me interesa por defecto del sheet
             SPman.modifyTextureRect(entity.render->Sprite, TexRect); //sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
         }
 
         game::Entity& GameManager::getPlayer()

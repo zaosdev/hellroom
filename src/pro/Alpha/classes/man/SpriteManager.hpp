@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../utils/math.hpp"
 #include <unordered_map>
+#include <vector>
 
 namespace SFMLeng
 {
@@ -40,6 +41,9 @@ namespace SFMLeng
 
         int getTextureIdxByName(const char*);
 
+        //void getboundingBox(sf::Sprite& sp);
+        sf::FloatRect bbox;
+        std::vector<sf::FloatRect> bboxes;
 
         private:
 

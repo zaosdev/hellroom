@@ -11,6 +11,21 @@ namespace SFMLeng
     {
         auto& tex =  vecTex_[idx];
         sp.setTexture(tex);
+        bbox = sp.getGlobalBounds();
+        bboxes.push_back(bbox);
+
+
+        // std::cout << "Bounding box: left=" << bbox.left 
+        //   << " top=" << bbox.top 
+        //   << " width=" << bbox.width 
+        //   << " height=" << bbox.height << std::endl;
+
+        
+        // for (std::size_t i = 0; i < bboxes.size(); ++i) {
+        //     std::cout << "bboxes[" << i << "] = " << bboxes.size() << "\n";
+    
+        // }
+
     }
 
     void SpriteManager::modifyTextureRect(sf::Sprite& sp, sf::IntRect rect)
