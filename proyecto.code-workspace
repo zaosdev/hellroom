@@ -49,6 +49,10 @@
 			"name": "Prototipo 10: Sistema de Colisiones",
 			"path": "src/pro/collisionSys"
 		},
+		{
+			"name": "Prototipo 11: Menus",
+			"path": "src/pro/menu"
+		},
 	],
 	"settings": {
 		"editor.wordWrap": "on",
