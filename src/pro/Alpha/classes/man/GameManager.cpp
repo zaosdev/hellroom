@@ -114,10 +114,13 @@ namespace FVeng
             );
 
             e.AI     = game::AIComponent      { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
-                          
+
             //health status 
             float life = 50;
             e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};     
+
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 

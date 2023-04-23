@@ -73,19 +73,20 @@ int main() {
       inpRec.update();
       inpSys.update();
 
-      //AISys.update(GameMan.getBB(), dt);
+      AISys.update(GameMan.getBB(), dt);
 
       phySys.update(dt);
 
-      //collisionSys.update();
+      collisionSys.update();
+
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-      //spwnSys.update();
+      spwnSys.update();
 
-      soundSys.update();
+      //soundSys.update();
 
-      //healthSys.update(dt);
-      // achSys.update();
-      // saveSys.update();
+      healthSys.update(dt);
+      //achSys.update();
+      //saveSys.update();
     }
 
     //std::cout << "updating render" << std::endl;

@@ -19,6 +19,7 @@ namespace game
 
         //bool checkCollision(const sf::FloatRect bbox1, const sf::FloatRect bbox2); //comprueba si hay colisión entre dos sprites usando su bounding box
         //void collisionDetect(const std::vector<sf::FloatRect>& bboxes); //comprueba colisiones y realiza las acciones necesarias
+        void colliding(bool collision);
         void update(); //gestionara las colisiones
 
 

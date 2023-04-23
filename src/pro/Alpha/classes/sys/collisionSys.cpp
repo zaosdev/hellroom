@@ -59,10 +59,21 @@ namespace game
         
     // }
 
+    void CollisionSys::colliding(bool collision){
+      
+      if(collision){ //std::cout << "Player y Enemy estan colisionando" << std::endl;
+        
+      
+      }
+      //else std::cout << "NO HAY COLISION" << std::endl;
+    }
      
     void CollisionSys::update()
     {
-      sf::FloatRect pl_bbox ;
+      
+      sf::FloatRect player_bbox ;
+      sf::FloatRect enemy_bbox ;
+      bool checkCollision = false;
 
         //std::cout << "hay colision??" << std::endl;
       //collisionDetect(spriteMan_.bboxes);
@@ -74,17 +85,28 @@ namespace game
 
     //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
       auto& EM = gMan_.getEntityManager();
+    
 
       for(auto& ent : EM){
 
         if(ent.hasTag(game::Entity::TAG::Player)){
-          pl_bbox = ent.render->Sprite.getGlobalBounds();
+          player_bbox = ent.render->Sprite.getGlobalBounds();
           //sf::FloatRect pl_bboxH = ent.render->Sprite.getGlobalBounds().height;
-
         }
+
+        if(ent.hasTag(game::Entity::TAG::Enemy)){
+          enemy_bbox = ent.render->Sprite.getGlobalBounds();
+        }
+
+        checkCollision = player_bbox.intersects(enemy_bbox);
+
+        colliding(checkCollision);
       }
 
-      std::cout << "BBOX PLAYER WIDTH" << pl_bbox.width << "\n" << "BBOX PLAYER HEIGHT" << pl_bbox.height << std::endl;
+
+      // std::cout << "BBOX PLAYER WIDTH:  " << player_bbox.width << "\n" << "BBOX PLAYER HEIGHT:  " << player_bbox.height << std::endl;
+
+      // std::cout << "BBOX ENEMY WIDTH:  " << enemy_bbox.width << "\n" << "BBOX ENEMY HEIGHT:  " << enemy_bbox.height << std::endl;
 
     }
 }
