@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "../cmp/entity.hpp"
 #include "../man/GameManager.hpp"
-
+#include "HUDSys.hpp"
 
 
 
@@ -11,7 +11,7 @@ namespace game
 {
     struct RenderSys
     {
-        RenderSys(FVeng::GameManager& Gman);
+        RenderSys(FVeng::GameManager& Gman, HUDSys& HUD);
         ~RenderSys();
 
         RenderSys (const RenderSys&) = delete;
@@ -20,13 +20,19 @@ namespace game
         RenderSys& operator=(RenderSys&&)= delete;
 
         void iniRenderSys();
-        void drawSprite(sf::Sprite& Sprite);
+        // template<typename T>
+        void draw(sf::Sprite& Sprite);
+        void drawMap(MapComponent& Sprite);
+        void drawUpperMap(MapComponent& Sprite);
+        //void drawFV(sfml_util::FVSprite& Sprite);
+
         void iniSprite(game::Entity& ent, double pt);
         void update(double percentTick);
-
+       // void addHUD(HUDSys& hud);
 
         private:
             FVeng::GameManager& gMan_;
             sf::RenderWindow& window_;
+            HUDSys&              HUD_;
     };
 }

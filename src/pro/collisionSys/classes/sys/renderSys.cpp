@@ -1,7 +1,6 @@
 #include "renderSys.hpp"
 #include "../utils/math.hpp"
 #include <cmath>
-#include <iostream>
 
 
 
@@ -9,23 +8,55 @@
 
 namespace game
 {
-        RenderSys::RenderSys(FVeng::GameManager& Gman)
-        : gMan_(Gman), window_(gMan_.getWindow())
+        RenderSys::RenderSys(FVeng::GameManager& Gman, HUDSys& hud)
+        : gMan_(Gman), 
+          window_(gMan_.getWindow()),
+          HUD_ (hud)
         {
         }
         RenderSys::~RenderSys()
         {
-            window_.close();
+            if(window_.isOpen()) window_.close();
         }
 
         void RenderSys::iniRenderSys()
         {
-            
+         
         }
-        void RenderSys::drawSprite(sf::Sprite& Sprite)
+
+        // template<typename T>
+        void RenderSys::draw(sf::Sprite& Sprite)
         {
             window_.draw(Sprite);
         }
+
+        void RenderSys::drawMap(MapComponent& Map)
+        {
+            //std::cout << "Inicio de inputmanager";
+            window_.draw(Map.FVSprite);
+
+            for(int i{1}; i<Map.maxLowerLayer;i++)
+            {
+                gMan_.setRenderNextLayer(Map);
+                window_.draw(Map.FVSprite);
+
+            }
+
+        }
+
+        void RenderSys::drawUpperMap(MapComponent& Map)
+        {
+            //std::cout << "Inicio de inputmanager";
+            for(int i{gMan_.getMapManager().getActiveLayer()+1}; i<gMan_.getMapManager().getTotalLayerCount();i++)
+            {
+                gMan_.setRenderNextLayer(Map);
+                window_.draw(Map.FVSprite);
+            }
+
+            gMan_.resetMap(Map);
+
+        }
+
 
         //recover world position and change it to screen position
         void RenderSys::iniSprite(game::Entity& ent, double pt)
@@ -43,6 +74,15 @@ namespace game
               ent.render->window_Pos.x ,
               ent.render->window_Pos.y
             );
+
+            if(ent.health && !ent.hasTag(game::Entity::TAG::Player))
+            {
+                float percentLife   = ent.health->currentLife / ent.health->maxLife;
+                int   colorquantity = percentLife * 255;
+                sf::Color color(255, colorquantity, colorquantity, 255);
+                ent.render->Sprite.setColor(color);
+            }
+            
         }
 
         void RenderSys::update(double percentTick)
@@ -51,14 +91,28 @@ namespace game
 
             window_.clear();
 
+            game::Entity* mapEnt{};
+            
             for(auto& ent : EM)
             {
+                if(ent.map)
+                {
+                    drawMap(*ent.map);
+                    mapEnt = &ent;
+                }
                 if(ent.render && ent.physics)
                 {
-                    iniSprite(ent, percentTick);
-                    drawSprite(ent.render->Sprite);
+                    iniSprite(ent,percentTick);
+                    draw(ent.render->Sprite);
+                    //draw(ent.render->FVSprite);
+
                 }
             }
+
+
+            drawUpperMap(*mapEnt->map);
+
+            HUD_.update();
 
             window_.display();    
 

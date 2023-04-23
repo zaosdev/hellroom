@@ -1,8 +1,5 @@
 #pragma once
 #include <vector>
-#include <cassert>
-#include <limits>
-
 //#include <assert>
 
 namespace FVeng
@@ -11,9 +8,6 @@ namespace FVeng
     struct EntityManager
     {
         using entity_id_type = typename Entity_type::id_type;
-        using entity_iterator = typename std::vector<Entity_type>::iterator;
-
-        static constexpr entity_id_type INVALID_ENTITY_ID {0};
 
         explicit EntityManager(const size_t num_entities = 10)
         {
@@ -42,7 +36,7 @@ namespace FVeng
         }
 
         //Return the entity using an ID
-        Entity_type* getEntityByID(EntityIDType ID)
+        Entity_type* getEntityByID(entity_id_type ID)
         {
             for(auto& entity : entities_)
             {

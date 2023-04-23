@@ -22,8 +22,9 @@ namespace game
         if(bb.tActive)
         {
             AI->targetID    = bb.targetID;
-            auto& targeted  = *EM.getEntityByID(bb.targetID);
-            AI->targetCoord =  targeted.physics->pos;
+            auto* targeted  = EM.getEntityByID(bb.targetID);
+            if(targeted != nullptr)
+            AI->targetCoord =  targeted->physics->pos;
         }
     }
 
@@ -41,12 +42,12 @@ namespace game
                 {
                     case FVAI::SB::ARRIVE:
                     {
-                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed, ent.AI->friction);
+                        addPos = FVAI::arrive(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed, ent.AI->arrivalRadius, ent.AI->friction, true, ent.AI->time2arrive);
                         break;
                     }
                     case FVAI::SB::SEEK:
                     {
-                        addPos = FVAI::seek(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed);
+                        addPos = FVAI::seek(ent.physics->pos, ent.AI->targetCoord, ent.physics->mov_speed, ent.AI->arrivalRadius);
                         break;
                     }
                     case FVAI::SB::PURSUE:
@@ -57,7 +58,7 @@ namespace game
                             //Precalculate position
                             FVmath::Point2D proxTargetPos = Target->physics->pos + Target->physics->vel;
                             //Send to the AI
-                            addPos = FVAI::pursue(ent.physics->pos, proxTargetPos, ent.physics->mov_speed);
+                            addPos = FVAI::pursue(ent.physics->pos, proxTargetPos, ent.physics->mov_speed, ent.AI->arrivalRadius);
                         }
                         break;
                     }

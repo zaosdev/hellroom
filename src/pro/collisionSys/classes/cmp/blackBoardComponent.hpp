@@ -1,11 +1,13 @@
 #pragma once 
-#include "../utils/types.hpp"
+
 
 namespace game
 {
+    struct Entity;
+
     struct blackBoardComponent
     {
         bool         tActive {true};      
-        EntityIDType targetID;
+        Entity::id_type targetID;
     };
 }

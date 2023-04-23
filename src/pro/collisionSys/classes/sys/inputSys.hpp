@@ -10,7 +10,6 @@ namespace game
     {
         InputSys(FVeng::GameManager& gameMan, InputManager& intpRec);
 
-
         InputSys (const InputSys&) = delete;
         InputSys (InputSys&&) = delete;
         InputSys& operator=(const InputSys&)= delete;

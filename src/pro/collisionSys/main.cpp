@@ -1,148 +1,94 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <algorithm>
 
 #include "include/config.h"
 #include "classes/sys/renderSys.hpp"
 #include "classes/sys/physicsSys.hpp"
 #include "classes/sys/inputSys.hpp"
+#include "classes/sys/soundSys.hpp"
+#include "classes/sys/achievementSys.hpp"
+#include "classes/sys/savingSys.hpp"
 #include "classes/man/GameManager.hpp"
-#include "classes/man/SpriteManager.hpp"
 #include "classes/man/inputManager.hpp"
 #include "classes/sys/AISys.hpp"
+#include "classes/sys/spawnSys.hpp"
+#include "classes/sys/healthSys.hpp"
+#include "classes/sys/HUDSys.hpp"
+#include "classes/sys/collisionSys.hpp"
+
 #include "utils/circularIterator.hpp"
 #include "cmp/blackBoardComponent.hpp"
 
-#define kVel 5
 
 int main() {
 
 
+
+  constexpr int screenWidth = 640;
+  constexpr int screenHeight = 480;
+
+
   //Create Game manager
-  static double screenWidth  = 640;
-  static double screenHeight = 480;
-  FVeng::GameManager GameMan{(int)screenWidth, (int)screenHeight,"P0. Fundamentos de los Videojuegos. DCCIA"};
+  FVeng::GameManager GameMan{screenWidth, screenHeight, "Hellroom"};
 
   //create Sprite manager
   SFMLeng::SpriteManager SPman{};
 
   //Create Game systems
-  game::RenderSys     renSys{GameMan};
-  game::PhysicsSys    phySys{GameMan};
-  game::InputManager  inpRec{GameMan.getWindow()};
-  game::InputSys      inpSys{GameMan, inpRec};
-  game::AISys         AISys {GameMan};
+  game::PhysicsSys        phySys{GameMan};
+  sf::RenderWindow&       window = GameMan.getWindow();
+  game::InputManager      inpRec{window};
+  game::InputSys          inpSys{GameMan, inpRec};
+  game::AISys             AISys{GameMan};
+  game::HealthSys         healthSys{GameMan};
+  game::SpawnSys          spwnSys{GameMan};
+  game::SoundSys          soundSys{GameMan, inpRec};
+  game::AchievementSys    achSys{GameMan};
+  game::SavingSys         saveSys{GameMan};
+  game::CollisionSys      collisionSys{GameMan/*, SPman*/};
+  //create the player and update(needed fot the hud)
+  GameMan.initGame();
+  GameMan.getEntityManager().update();
 
-  auto& EM = GameMan.getEntityManager();
+  game::HUDSys            HudSys{GameMan};
 
-  auto& player  = EM.createEntity();
-  auto& enemy1  = EM.createEntity(); //ARRIVE
-  auto& enemy2  = EM.createEntity(); //PURSUE 
-  auto& enemy3  = EM.createEntity(); //SEEK
-  auto& enemy4  = EM.createEntity(); //FLEE
-  auto& enemy5  = EM.createEntity(); //CROSSCREEN
-  auto& enemy6  = EM.createEntity(); //FOLLOWPATH
 
-  auto tex = SPman.loadTexture("../resources/sprites.png");
-
-  // Lo dispongo en el centro de la pantalla
-  player.physics = game::PhysicsComponent{ .pos{320, 240}, .vel{0,0}, .mov_speed = screenWidth/3}; //640 --> ancho de pantalla / 3 --> 3 segundos para cruzar la pantalla en ancho
-  player.render = game::RenderComponent { .texIndex=tex  , .Sprite{}, .window_Pos{320,240} };
-  player.input = game::InputComponent{};
-
-  SPman.assignTexture(player.render->Sprite,player.render->texIndex);
-  SPman.modifySpriteOrigin(player.render->Sprite,{75 / 2, 75 / 2});
-  SPman.modifyTextureRect(player.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
- 
-  //Create collider
-  player.collider = { .BBox {player.render->Sprite.getGlobalBounds()}};
-  std::cout << "collider created" << std::endl;
-  
-
-  // //Create the enemy 1 : ARRIVE BEHAVIOUR
-  enemy1.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = screenWidth / 4};
-  enemy1.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy1.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::ARRIVE, .friction = 0.1, .perceptionTime = 3}; 
-  SPman.assignTexture(enemy1.render->Sprite,enemy1.render->texIndex);
-  SPman.modifySpriteOrigin(enemy1.render->Sprite,{75 / 2, 75 / 2});
-  SPman.modifyTextureRect(enemy1.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  // // //Create the enemy 2 : PURSUE BEHAVIOUR
-  // enemy2.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = screenWidth / 4};
-  // enemy2.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  // enemy2.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::PURSUE, .targetID = player.id(), .perceptionTime = 1}; 
-  // SPman.assignTexture(enemy2.render->Sprite,enemy2.render->texIndex);
-  // SPman.modifySpriteOrigin(enemy2.render->Sprite,{75 / 2, 75 / 2});
-  // SPman.modifyTextureRect(enemy2.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  // // //Create the enemy 3 : SEEK BEHAVIOUR
-  // enemy3.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = screenWidth / 4};
-  // enemy3.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  // enemy3.AI      = game::AIComponent      { .targetCoord{640,480}, .behaviour = FVAI::SB::SEEK, .perceptionTime = 2}; 
-  // SPman.assignTexture(enemy3.render->Sprite,enemy3.render->texIndex);
-  // SPman.modifySpriteOrigin(enemy3.render->Sprite,{75 / 2, 75 / 2});
-  // SPman.modifyTextureRect(enemy3.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  // // //Create the enemy 4 : FLEE BEHAVIOUR
-  // enemy4.physics = game::PhysicsComponent { .pos{screenWidth/2,screenHeight/2}, .vel{0,0}, .mov_speed = screenWidth / 2};
-  // enemy4.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{screenWidth/2,screenHeight/2} };
-  // enemy4.AI      = game::AIComponent      { .targetCoord{641,481}, .behaviour = FVAI::SB::FLEE, .targetID = player.id()}; 
-  // SPman.assignTexture(enemy4.render->Sprite,enemy4.render->texIndex);
-  // SPman.modifySpriteOrigin(enemy4.render->Sprite,{75 / 2, 75 / 2});
-  // SPman.modifyTextureRect(enemy4.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  // // //Create the enemy 5 : CROSSCREEN BEHAVIOUR
-  // enemy5.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = screenWidth / 6};
-  // enemy5.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  // enemy5.AI      = game::AIComponent      { .targetCoord{641,481}, .behaviour = FVAI::SB::CROSSCREEN, .targetID = player.id(), .priotiryCross=FVAI::PriotiryCross::FIRSTY}; 
-  // SPman.assignTexture(enemy5.render->Sprite,enemy5.render->texIndex);
-  // SPman.modifySpriteOrigin(enemy5.render->Sprite,{75 / 2, 75 / 2});
-  // SPman.modifyTextureRect(enemy5.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  // //Create the enemy 6 : FOLLOWPATH BEHAVIOUR
-  std::vector<FVAI::circularIterator::PointType> path {{50,200}, {250,200}, {250,0}, {50,0}};
-  FVAI::circularIterator iterator;
-  iterator.setPath(path);
-
-  enemy6.physics = game::PhysicsComponent { .pos{0,0}, .vel{0,0}, .mov_speed = screenWidth / 7};
-  enemy6.render  = game::RenderComponent  { .texIndex=tex  , .Sprite{}, .window_Pos{0,0} };
-  enemy6.AI      = game::AIComponent      { .targetCoord{641,481}, .behaviour = FVAI::SB::FOLLOWPATH, .targetID = player.id(), .path = iterator}; 
-  SPman.assignTexture(enemy6.render->Sprite,enemy6.render->texIndex);
-  SPman.modifySpriteOrigin(enemy6.render->Sprite,{75 / 2, 75 / 2});
-  SPman.modifyTextureRect(enemy6.render->Sprite,sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
-  //Create blackboard for updating the targetIDs
-  game::blackBoardComponent bb {.targetID = player.id()};
-  //bb.tActive = false;
+  game::RenderSys         renSys{GameMan, HudSys};
+  //renSys.iniRenderSys(HudSys);
+  //renSys.addHUD(HudSys);
 
   //Game clock
   sf::Clock clock;
   sf::Clock updateClock;
-  static double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
+  constexpr double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
 
   //Bucle del juego
-  while (GameMan.getWindow().isOpen()) 
-  {
-    // //Update entities in manager
+  while (GameMan.getWindow().isOpen()) {
+    //Bucle de obtención de eventos
     GameMan.getEntityManager().update();
-
     if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
     {
-        //std::cout << "updating ia" << std::endl;
-        //restart the clock and get dt
-        double dt = updateClock.restart().asSeconds();
-    
-        // //Update controls
-        inpRec.update();
-        inpSys.update();
+      double dt = updateClock.restart().asSeconds();
 
-        // //Update AI 
-        AISys.update(bb, dt);
+      inpRec.update();
+      inpSys.update();
 
-        // //Update physics
-        phySys.update(dt);
-        
+      AISys.update(GameMan.getBB(), dt);
+
+      phySys.update(dt);
+
+      collisionSys.update();
+
+      //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
+      spwnSys.update();
+
+      //soundSys.update();
+
+      healthSys.update(dt);
+      //achSys.update();
+      //saveSys.update();
     }
+
     //std::cout << "updating render" << std::endl;
     // //Render game
     float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt

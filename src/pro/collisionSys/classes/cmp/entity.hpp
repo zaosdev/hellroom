@@ -1,29 +1,31 @@
 #pragma once
+
 #include "RenderComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "InputComponent.hpp"
 #include "AIComponent.hpp"
-#include "ColliderComponent.hpp"
-#include "utils/types.hpp"
-#include "utils/Sprite.hpp"
+#include "MapComponent.hpp"
+#include "SpawnerComponent.hpp"
+#include "healthComponent.hpp"
 
 
 #include <optional>
+
 namespace FVeng { template <typename> struct EntityManager; }
 
 namespace game
 {
     struct Entity
     {
-      using id_type  = EntityIDType;
+      using id_type = uint32_t;
       using tag_type = id_type;
 
       enum class TAG : tag_type
       {
         //add new tags when needed and delete placeholder
-        Bullet,
-        Enemy,
-        Player,
+        Player = 0x001,
+        Enemy  = 0x010,
+        
       };
 
       friend struct FVeng::EntityManager<Entity>;
@@ -31,8 +33,10 @@ namespace game
       std::optional<RenderComponent>  render{};
       std::optional<PhysicsComponent> physics{};
       std::optional<InputComponent>   input{};
+      std::optional<MapComponent>     map{};
       std::optional<AIComponent>      AI{};
-      std::optional<ColliderComponent> collider{};
+      std::optional<SpawnerComponent> Spawn{};
+      std::optional<HealthComponent>  health{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
@@ -40,11 +44,11 @@ namespace game
       constexpr void mark4destruction() noexcept { alive_ = false; }
       constexpr void addTag(TAG t) noexcept
       {
-        tags = tags | static_cast<tag_type>(t); 
+        tags = tags | tag_type(t); 
       }   
       constexpr tag_type hasTag(TAG t) const noexcept
       {
-        return 0 != (tags & static_cast<tag_type>(t));
+        return (tags & tag_type(t));
       }
 
     private:
