@@ -45,7 +45,7 @@ int main() {
   game::SoundSys          soundSys{GameMan, inpRec};
   game::AchievementSys    achSys{GameMan};
   game::SavingSys         saveSys{GameMan};
-  game::CollisionSys      collisionSys{GameMan, SPman};
+  game::CollisionSys      collisionSys{GameMan/*, SPman*/};
   //create the player and update(needed fot the hud)
   GameMan.initGame();
   GameMan.getEntityManager().update();
