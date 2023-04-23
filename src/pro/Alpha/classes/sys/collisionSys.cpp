@@ -22,6 +22,8 @@ namespace game
 
     // Verificar si los dos objetos se superponen
     if (ent1_bbox.intersects(ent2_bbox)) {
+
+      //std::cout << "COLISIONAN" << std::endl;
         // Obtener la distancia entre los dos objetos
         float distance = std::sqrt(std::pow(sprite1.getPosition().x - sprite2.getPosition().x, 2) +
                                    std::pow(sprite1.getPosition().y - sprite2.getPosition().y, 2));
@@ -86,7 +88,7 @@ namespace game
           //Entity& prevEnt = enemy_ent;
 
           //Entity enemy1 = EM.getEntityByID(enemy_ent_id);
-          std::cout << "ENEMY1 " << enemy_ent.id() << " ENEMY2 " << prevEnt->id() << std::endl;
+          //std::cout << "ENEMY1 " << enemy_ent.id() << " ENEMY2 " << prevEnt->id() << std::endl;
 
           prevEnt = &enemy_ent;
           //colliding();
@@ -97,10 +99,29 @@ namespace game
           // }
         }
 
-        if(!player_bbox.intersects(enemy_bbox)){ 
+        if(player_bbox.intersects(enemy_bbox)){ 
         
-         //std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
-        //if player and enemy colliding then call healthsys 
+         std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
+        //if player and enemy colliding then call healthsys
+          
+            //std::cout << "COLISIONAN" << std::endl;
+              // Obtener la distancia entre los dos objetos
+              float distance = std::sqrt(std::pow(player_sprite.getPosition().x - enemy_sprite.getPosition().x, 2) +
+                                        std::pow(player_sprite.getPosition().y - enemy_sprite.getPosition().y, 2));
+              // Calcular la distancia necesaria para separar los dos objetos
+              float overlap = (distance - player_bbox.width / 2 - enemy_bbox.width / 2) / 2;
+              // Calcular la dirección en la que alejar cada objeto
+              sf::Vector2f dir1 = player_sprite.getPosition() - enemy_sprite.getPosition();
+              dir1 /= distance;
+              sf::Vector2f dir2 = -dir1;
+              // Alejar los dos objetos en direcciones opuestas
+              player_sprite.move(dir1 * overlap);
+              enemy_sprite.move(dir2 * overlap);
+
+              // Actualizar la posición de los objetos
+              player_sprite.setPosition(player_sprite.getPosition());
+              enemy_sprite.setPosition(enemy_sprite.getPosition());
+          }
         
         }
         
@@ -112,4 +133,3 @@ namespace game
       // std::cout << "BBOX ENEMY WIDTH:  " << enemy_bbox.width << "\n" << "BBOX ENEMY HEIGHT:  " << enemy_bbox.height << std::endl;
 
     }
-}

@@ -178,7 +178,10 @@ namespace FVeng
 
             e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
 
+            
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
