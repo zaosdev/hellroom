@@ -62,16 +62,29 @@ namespace game
      
     void CollisionSys::update()
     {
+      sf::FloatRect pl_bbox ;
 
         //std::cout << "hay colision??" << std::endl;
       //collisionDetect(spriteMan_.bboxes);
-      std::cout << spriteMan_.bboxes.size() << std::endl;
+     // std::cout << spriteMan_.bboxes.size() << std::endl;
     //   for (std::size_t i = 0; i < spriteMan_.bboxes.size(); ++i) {
     //         std::cout << "hay colision??" << spriteMan_.bboxes[i].height << std::endl;
     
     //     }
 
-    //la idea es sacar del game la entidad usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
+    //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
+      auto& EM = gMan_.getEntityManager();
+
+      for(auto& ent : EM){
+
+        if(ent.hasTag(game::Entity::TAG::Player)){
+          pl_bbox = ent.render->Sprite.getGlobalBounds();
+          //sf::FloatRect pl_bboxH = ent.render->Sprite.getGlobalBounds().height;
+
+        }
+      }
+
+      std::cout << "BBOX PLAYER WIDTH" << pl_bbox.width << "\n" << "BBOX PLAYER HEIGHT" << pl_bbox.height << std::endl;
 
     }
 }

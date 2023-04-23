@@ -18,6 +18,8 @@ namespace game{
         }
         sound.setPitch(1.5); //provisional
         sound.setBuffer(sB);
+
+        std::cout << "SOUND LOADED" << std::endl;
     }
 
     void SoundSys::playSound(){
@@ -25,7 +27,7 @@ namespace game{
             sound.play();
             isPlaying = true;
         }
-        
+        std::cout << "PLAYING WALKING SOUND" << std::endl;
     }
 
     void SoundSys::stopSound(){
