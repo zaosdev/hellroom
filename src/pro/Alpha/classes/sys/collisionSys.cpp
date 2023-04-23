@@ -71,5 +71,7 @@ namespace game
     
     //     }
 
+    //la idea es sacar del game la entidad usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
+
     }
 }
