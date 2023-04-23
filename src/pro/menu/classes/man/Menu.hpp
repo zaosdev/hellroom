@@ -11,6 +11,7 @@ class Menu{
         void draw(sf::RenderWindow &window);
         void MoveUp();
         void MoveDown();
+        int GetPressedItem() {return selectedItemIndex;}
 
     private:
         int selectedItemIndex;

@@ -1,7 +1,7 @@
 #include "Menu.hpp"
 
 Menu::Menu(float width, float height){
-    if(!font.loadFromFile("arial.ttf")){
+    if(!font.loadFromFile("Arial.ttf")){
         //handle error
     }
 
