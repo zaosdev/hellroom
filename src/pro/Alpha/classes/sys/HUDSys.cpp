@@ -65,12 +65,12 @@ namespace game
         //Render the heart semi filled
         int sizeX = trueHeart.render->Sprite.getTexture()->getSize().x;
         int sizeY = trueHeart.render->Sprite.getTexture()->getSize().y;
-        //trueHeart.render->Sprite.setTextureRect(sf::IntRect{0, 0, static_cast<int> (semiHeart * sizeX), sizeY});
+        trueHeart.render->Sprite.setTextureRect(sf::IntRect{0, 0, static_cast<int> (semiHeart * sizeX), sizeY});
         //std::cout << "Deberia mostrar: "  << static_cast<int> (semiHeart * sizeX) << ", " << sizeY << std::endl;
         window_.draw(trueHeart.render->Sprite);
         
         //Return  sprite to normality
-        //heart_.render->Sprite.setTextureRect({0, 0, sizeX, sizeY});
+        trueHeart.render->Sprite.setTextureRect({0, 0, sizeX, sizeY});
     }
 
     void HUDSys::update()
