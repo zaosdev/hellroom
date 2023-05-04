@@ -11,9 +11,9 @@ namespace game{
     }
 
 
-    void SoundSys::loadSound(const std::string& soundfile){
+    void SoundSys::loadSound(/*const std::string& soundfile*/){
         
-        if(!sB.loadFromFile(soundfile)){
+        if(!sB.loadFromFile("resources/SFX/16_human_walk_stone_1.wav")){
             std::cout << "SOUND FILE NOT FOUND" << std::endl;
         }
         sound.setPitch(1.5); //provisional
@@ -46,6 +46,26 @@ namespace game{
     void SoundSys::update(/*SoundSys sfx*/){
         //copiado de inputSys.cpp para añadir sonidos
         //Movement
+
+        if(!sB.loadFromFile("resources/SFX/16_human_walk_stone_1.wav")){
+            std::cout << "SOUND FILE NOT FOUND" << std::endl;
+        }
+        sound.setPitch(1.5); //provisional
+        sound.setBuffer(sB);
+
+        std::cout << "SOUND LOADED" << std::endl;
+
+
+
+        // Creamos un SoundBuffer para almacenar un sonio
+        // Cargamos un archivo en el buffer
+        
+
+        // Creamos un sonido
+        // Le asignamos el buffer cargado
+        // establecemos el volumen a 80
+
+
         if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
             //std::cout << "BOTON W" << std::endl;
          

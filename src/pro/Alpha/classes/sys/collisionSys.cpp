@@ -100,9 +100,26 @@ namespace game
         }
 
         if(player_bbox.intersects(enemy_bbox)){ 
+
+
+           // std::cout << "COLISIONAN" << std::endl;
+
+          // // Calcular la dirección en la que mover los sprites
+          // float offsetX = std::abs(player_sprite.getPosition().x - enemy_sprite.getPosition().x);
+          // float offsetY = std::abs(player_sprite.getPosition().y - enemy_sprite.getPosition().y);
+          // sf::Vector2f offset;
+          // if (offsetX > offsetY) {
+          //     offset.x = player_sprite.getPosition().x > enemy_sprite.getPosition().x ? offsetX : -offsetX;
+          // } else {
+          //     offset.y = player_sprite.getPosition().y > enemy_sprite.getPosition().y ? offsetY : -offsetY;
+          // }
+
+          // // Reposicionar los sprites para que no se solapen
+          // player_sprite.move(offset / 2.f);
+          // enemy_sprite.move(-offset / 2.f);
         
-         std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
-        //if player and enemy colliding then call healthsys
+        //  //std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
+        // //if player and enemy colliding then call healthsys
           
             //std::cout << "COLISIONAN" << std::endl;
               // Obtener la distancia entre los dos objetos
@@ -115,12 +132,23 @@ namespace game
               dir1 /= distance;
               sf::Vector2f dir2 = -dir1;
               // Alejar los dos objetos en direcciones opuestas
-              player_sprite.move(dir1 * overlap);
-              enemy_sprite.move(dir2 * overlap);
+              sf::Vector2f newposplayer = dir1 * overlap;
+              sf::Vector2f newposenemy = dir2 * overlap;
+
+
+              //otra opcion  de momento ignorar
+              // player_sprite.setPosition(player_sprite.getPosition() + correction);
+              // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);player_sprite.setPosition(player_sprite.getPosition() + correction);
+              // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);
 
               // Actualizar la posición de los objetos
-              player_sprite.setPosition(player_sprite.getPosition());
-              enemy_sprite.setPosition(enemy_sprite.getPosition());
+               player_sprite.setPosition(newposplayer);
+               enemy_sprite.setPosition(newposenemy);
+              std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
+              
+          }
+          else{
+            //std::cout << "NO HAY COLISIONES" << std::endl;
           }
         
         }

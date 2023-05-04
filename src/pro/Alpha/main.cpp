@@ -62,22 +62,30 @@ int main() {
   sf::Clock updateClock;
   constexpr double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
 
+  soundSys.loadSound();
+  
+
   //Bucle del juego
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
+
+    collisionSys.update();
+
     GameMan.getEntityManager().update();
     if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
     {
       double dt = updateClock.restart().asSeconds();
 
+      
       inpRec.update();
       inpSys.update();
 
-      AISys.update(GameMan.getBB(), dt);
+      
+      //AISys.update(GameMan.getBB(), dt);
 
       phySys.update(dt);
 
-      collisionSys.update();
+      
 
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
       spwnSys.update();
