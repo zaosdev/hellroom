@@ -23,7 +23,7 @@ namespace game{
             SoundSys& operator=(const SoundSys&)= delete;
             SoundSys& operator=(SoundSys&&)= delete;
 
-            void loadSound(const std::string& soundfile);
+            void loadSound(/*const std::string& soundfile*/);
             void playSound();
             void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
             void stopSound();
@@ -33,13 +33,15 @@ namespace game{
             // void asignSound();
 
             //std::map<sf::Keyboard::Key, SoundSys> soundMap;
+            sf::SoundBuffer sB;
+            sf::Sound sound;
             
         private: 
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
 
-            sf::SoundBuffer sB;
-            sf::Sound sound;
+            // sf::SoundBuffer sB;
+            // sf::Sound sound;
 
 
             bool isPlaying;
