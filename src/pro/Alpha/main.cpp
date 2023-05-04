@@ -69,7 +69,7 @@ int main() {
   while (GameMan.getWindow().isOpen()) {
     //Bucle de obtención de eventos
 
-    collisionSys.update();
+   
 
     GameMan.getEntityManager().update();
     if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
@@ -81,11 +81,11 @@ int main() {
       inpSys.update();
 
       
-      //AISys.update(GameMan.getBB(), dt);
+      AISys.update(GameMan.getBB(), dt);
 
       phySys.update(dt);
 
-      
+      collisionSys.update();
 
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
       spwnSys.update();
