@@ -27,11 +27,7 @@ namespace game
         
 
         Entity* prevEnt;
-        
     
-
-        sf::Sprite player_sprite; 
-        sf::Sprite enemy_sprite; 
         sf::FloatRect player_bbox;
         sf::FloatRect enemy_bbox;
 

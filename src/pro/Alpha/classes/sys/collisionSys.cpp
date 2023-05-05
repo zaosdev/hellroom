@@ -72,98 +72,94 @@ namespace game
       auto& EM = gMan_.getEntityManager();
       
     
+      sf::Sprite* playerSprite;
+      std::vector<sf::Sprite*> enemySprites;
+
+      //Entity and enemy obtention loop
       for(auto& ent : EM){
-
-        if(ent.hasTag(game::Entity::TAG::Player)){
-          player_sprite = ent.render->Sprite;
-          player_bbox = ent.render->Sprite.getGlobalBounds();
-          //sf::FloatRect pl_bboxH = ent.render->Sprite.getGlobalBounds().height;
-          //std::cout << "ID ENTIDAD PLAYER:  " << ent.id() << std::endl;
-
+        if(ent.hasTag(game::Entity::TAG::Player))
+        {
+          playerSprite  = &ent.render->Sprite;
+          player_bbox   = ent.render->Sprite.getGlobalBounds();
         }
        
-        if(ent.hasTag(game::Entity::TAG::Enemy)){
-          //enemy_sprite = ent.render->Sprite;
+        else if(ent.hasTag(game::Entity::TAG::Enemy))
+        {
+          enemySprites.push_back(&ent.render->Sprite);
           enemy_bbox = ent.render->Sprite.getGlobalBounds();
-
-          //entidad actual
-          game::Entity& enemy_ent = ent;
-          //unsigned int enemy_ent = ent.id();
-          //if(enemy_ent_id != NULL && prevEnt != enemy_ent_id) std::cout << "ENTIDAD ACTUAL " << enemy_ent_id << " ENTIDAD PREVIA " << prevEnt << std::endl;
-          
-          //Entity& prevEnt = enemy_ent;
-
-          //Entity enemy1 = EM.getEntityByID(enemy_ent_id);
-          //std::cout << "ENEMY1 " << enemy_ent.id() << " ENEMY2 " << prevEnt->id() << std::endl;
-
-          prevEnt = &enemy_ent;
-          //colliding();
-          //noOverlap(enemy_ent, prevEnt);
-
-          // if(enemy_ent.render->Sprite.getGlobalBounds().intersects(prevEnt.render->Sprite.getGlobalBounds())){
-          noOverlap(enemy_ent, *prevEnt);
-          // }
         }
+      }
 
-        if(player_bbox.intersects(enemy_bbox)){ 
+      //Acction loop. Every enemy against player
+      for(auto& enemySprite : enemySprites)
+      {
+          //noOverlap(*playerSprite, *enemySprite); si vas a usar esto cambialo para qie acepte sprites
+      }
 
 
-           // std::cout << "COLISIONAN" << std::endl;
-
-          // // Calcular la dirección en la que mover los sprites
-          // float offsetX = std::abs(player_sprite.getPosition().x - enemy_sprite.getPosition().x);
-          // float offsetY = std::abs(player_sprite.getPosition().y - enemy_sprite.getPosition().y);
-          // sf::Vector2f offset;
-          // if (offsetX > offsetY) {
-          //     offset.x = player_sprite.getPosition().x > enemy_sprite.getPosition().x ? offsetX : -offsetX;
-          // } else {
-          //     offset.y = player_sprite.getPosition().y > enemy_sprite.getPosition().y ? offsetY : -offsetY;
-          // }
-
-          // // Reposicionar los sprites para que no se solapen
-          // player_sprite.move(offset / 2.f);
-          // enemy_sprite.move(-offset / 2.f);
-        
-        //  //std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
-        // //if player and enemy colliding then call healthsys
           
-            //std::cout << "COLISIONAN" << std::endl;
-              // Obtener la distancia entre los dos objetos
-              float distance = std::sqrt(std::pow(player_sprite.getPosition().x - enemy_sprite.getPosition().x, 2) +
-                                        std::pow(player_sprite.getPosition().y - enemy_sprite.getPosition().y, 2));
-              // Calcular la distancia necesaria para separar los dos objetos
-              float overlap = (distance - player_bbox.width / 2 - enemy_bbox.width / 2) / 2;
-              // Calcular la dirección en la que alejar cada objeto
-              sf::Vector2f dir1 = player_sprite.getPosition() - enemy_sprite.getPosition();
-              dir1 /= distance;
-              sf::Vector2f dir2 = -dir1;
-              // Alejar los dos objetos en direcciones opuestas
-              sf::Vector2f newposplayer = dir1 * overlap;
-              sf::Vector2f newposenemy = dir2 * overlap;
+          // }
+    }
+
+        // if(player_bbox.intersects(enemy_bbox)){ 
 
 
-              //otra opcion  de momento ignorar
-              // player_sprite.setPosition(player_sprite.getPosition() + correction);
-              // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);
+        //    // std::cout << "COLISIONAN" << std::endl;
+
+        //   // // Calcular la dirección en la que mover los sprites
+        //   // float offsetX = std::abs(player_sprite.getPosition().x - enemy_sprite.getPosition().x);
+        //   // float offsetY = std::abs(player_sprite.getPosition().y - enemy_sprite.getPosition().y);
+        //   // sf::Vector2f offset;
+        //   // if (offsetX > offsetY) {
+        //   //     offset.x = player_sprite.getPosition().x > enemy_sprite.getPosition().x ? offsetX : -offsetX;
+        //   // } else {
+        //   //     offset.y = player_sprite.getPosition().y > enemy_sprite.getPosition().y ? offsetY : -offsetY;
+        //   // }
+
+        //   // // Reposicionar los sprites para que no se solapen
+        //   // player_sprite.move(offset / 2.f);
+        //   // enemy_sprite.move(-offset / 2.f);
+        
+        // //  //std::cout << "Player y Enemy estan colisionando restar vida a player" << player_bbox.intersects(enemy_bbox) << std::endl;
+        // // //if player and enemy colliding then call healthsys
+          
+        //     //std::cout << "COLISIONAN" << std::endl;
+        //       // Obtener la distancia entre los dos objetos
+        //       float distance = std::sqrt(std::pow(player_sprite.getPosition().x - enemy_sprite.getPosition().x, 2) +
+        //                                 std::pow(player_sprite.getPosition().y - enemy_sprite.getPosition().y, 2));
+        //       // Calcular la distancia necesaria para separar los dos objetos
+        //       float overlap = (distance - player_bbox.width / 2 - enemy_bbox.width / 2) / 2;
+        //       // Calcular la dirección en la que alejar cada objeto
+        //       sf::Vector2f dir1 = player_sprite.getPosition() - enemy_sprite.getPosition();
+        //       dir1 /= distance;
+        //       sf::Vector2f dir2 = -dir1;
+        //       // Alejar los dos objetos en direcciones opuestas
+        //       sf::Vector2f newposplayer = dir1 * overlap;
+        //       sf::Vector2f newposenemy = dir2 * overlap;
+
+
+        //       //otra opcion  de momento ignorar
+        //       // player_sprite.setPosition(player_sprite.getPosition() + correction);
+        //       // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);
              
 
-              // Actualizar la posición de los objetos
-              //std::cout << " POS PREVIA   " << player_sprite.getPosition().x << std::endl;  
+        //       // Actualizar la posición de los objetos
+        //       //std::cout << " POS PREVIA   " << player_sprite.getPosition().x << std::endl;  
 
-               player_sprite.setPosition(newposplayer);
-               enemy_sprite.setPosition(newposenemy);
+        //        player_sprite.setPosition(newposplayer);
+        //        enemy_sprite.setPosition(newposenemy);
 
 
-              // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
+        //       // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
               
-          }
-          else{
-            //std::cout << "NO HAY COLISIONES" << std::endl;
-          }
+        //   }
+        //   else{
+        //     //std::cout << "NO HAY COLISIONES" << std::endl;
+        //   }
         
-        }
+      //   }
         
-      }
+      // }
 
 
       // std::cout << "BBOX PLAYER WIDTH:  " << player_bbox.width << "\n" << "BBOX PLAYER HEIGHT:  " << player_bbox.height << std::endl;
