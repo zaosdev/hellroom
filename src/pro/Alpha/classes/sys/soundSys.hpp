@@ -2,7 +2,7 @@
 #pragma once
 #include "../man/GameManager.hpp"
 #include "../man/inputManager.hpp"
-#include <SFML/Audio.hpp>
+#include "../utils/soundLoader.hpp"
 #include <iostream>
 #include <map>
 
@@ -23,28 +23,23 @@ namespace game{
             SoundSys& operator=(const SoundSys&)= delete;
             SoundSys& operator=(SoundSys&&)= delete;
 
-            void loadSound(/*const std::string& soundfile*/);
-            void playSound();
+            void loadSounds(/*const std::string& soundfile*/); //cargara todos los sonidos del juego en buffers
+            void playSound(); 
             void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
             void stopSound();
 
-            void update(/*SoundSys sfx*/); // reproducira sonidos segun la tecla pulsada
-            
-            // void asignSound();
-
-            //std::map<sf::Keyboard::Key, SoundSys> soundMap;
-            sf::SoundBuffer sB;
-            sf::Sound sound;
+            void update(); // reproducira sonidos segun la tecla pulsada
+    
+            // sound por entidad --> player, enemy, bullet player, bullet enemy
+            sf::Sound soundP;
+            sf::Sound soundE;
+            sf::Sound soundBP;
+            sf::Sound soundBF;
             
         private: 
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
-
-            // sf::SoundBuffer sB;
-            // sf::Sound sound;
-
-
             bool isPlaying;
-            std::map<sf::Keyboard::Key, SoundSys> soundMap;
+            
     };
 }

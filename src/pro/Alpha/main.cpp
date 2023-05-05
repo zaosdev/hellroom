@@ -62,7 +62,7 @@ int main() {
   sf::Clock updateClock;
   constexpr double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
 
-  soundSys.loadSound();
+  soundSys.loadSounds();
   
 
   //Bucle del juego
