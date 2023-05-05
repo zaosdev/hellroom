@@ -2,12 +2,14 @@
 
 namespace FVeng
 {
-        GameManager::GameManager(int x, int y, std::string nameGame)
-        : window_(sf::VideoMode(x, y), nameGame)
-        {
-            window_.setKeyRepeatEnabled(true); // Habilitar entrada de teclado repetido
-            window_.setFramerateLimit(60);
-        }
+        GameManager::GameManager(sf::RenderWindow& window)
+        :window_ {window} 
+        {}
+        // : window_(sf::VideoMode(x, y), nameGame)
+        // {
+        //     window_.setKeyRepeatEnabled(true); // Habilitar entrada de teclado repetido
+        //     window_.setFramerateLimit(60);
+        // }
 
         [[nodiscard]] sf::RenderWindow& GameManager::getWindow()
         {

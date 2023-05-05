@@ -11,9 +11,7 @@ namespace game
 
     HUDSys::HUDSys(FVeng::GameManager& Gman)
     : gMan_   (Gman),
-     window_  (gMan_.getWindow()),
-     player_  (gMan_.getPlayer()),
-     heart_   (gMan_.createHeart().id())
+     window_  (gMan_.getWindow())
     {
         if (!font_.loadFromFile("../media/font/Retro_Gaming.ttf")) {
             // manejar error de carga de fuente
@@ -37,10 +35,20 @@ namespace game
         clock_.restart();
     }
 
+    void HUDSys::setPlayer(Entity* player)
+    {   
+        player_ = player;
+    }
+
+    void HUDSys::setHeartID(size_t id)
+    {
+        heart_ = id;
+    }
+
     void HUDSys::renderHearts()
     {
         //Get the player's health
-        auto& hc = player_.health;
+        auto& hc = player_->health;
         float ch = hc->currentLife;
         //Every 100 hp, render one heart
         int   fullHearts   = static_cast<int>(ch / lifeHeart); //5
