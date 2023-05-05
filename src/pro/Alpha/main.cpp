@@ -90,7 +90,7 @@ int main() {
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
       spwnSys.update();
 
-      //soundSys.update();
+      soundSys.update();
 
       healthSys.update(dt);
       //achSys.update();
