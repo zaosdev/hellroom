@@ -46,7 +46,7 @@ namespace FVEng{
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
         {
-            Init();
+            //Init(); Init is automatically executed by the state machine
             std::cout << "Game init correctly" << std::endl;
         }
 
