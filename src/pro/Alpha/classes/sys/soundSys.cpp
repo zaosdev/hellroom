@@ -13,13 +13,14 @@ namespace game{
 
     void SoundSys::loadSound(/*const std::string& soundfile*/){
         
-        if(!sB.loadFromFile("resources/SFX/16_human_walk_stone_1.wav")){
+        if(!sB.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){
             std::cout << "SOUND FILE NOT FOUND" << std::endl;
         }
+        else std::cout << "SOUND LOADED" << std::endl;
         sound.setPitch(1.5); //provisional
         sound.setBuffer(sB);
 
-        std::cout << "SOUND LOADED" << std::endl;
+        
     }
 
     void SoundSys::playSound(){
@@ -44,35 +45,16 @@ namespace game{
    
 
     void SoundSys::update(/*SoundSys sfx*/){
-        //copiado de inputSys.cpp para añadir sonidos
+   
         //Movement
 
-        if(!sB.loadFromFile("resources/SFX/16_human_walk_stone_1.wav")){
-            std::cout << "SOUND FILE NOT FOUND" << std::endl;
-        }
-        sound.setPitch(1.5); //provisional
-        sound.setBuffer(sB);
-
-        std::cout << "SOUND LOADED" << std::endl;
-
-
-
-        // Creamos un SoundBuffer para almacenar un sonio
-        // Cargamos un archivo en el buffer
-        
-
-        // Creamos un sonido
-        // Le asignamos el buffer cargado
-        // establecemos el volumen a 80
-
-
-        if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
-            //std::cout << "BOTON W" << std::endl;
+            if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
+            std::cout << "BOTON W" << std::endl;
          
                 this->setLoop(true);
                 this->playSound();
             
-                //std::cout << "Sonandoooo" << std::endl;
+                std::cout << "Sonandoooo" << std::endl;
           
         }
         else{
@@ -93,22 +75,3 @@ namespace game{
 
     }
 }
-
-//codigo basura
-
-// std::map<sf::Keyboard::Key, SoundSys> soundMap;
-// soundMap[sf::Keyboard::A] = SoundSys();
-// soundMap[sf::Keyboard::A].loadSound("resources/SFX/16_human_walk_stone_1.wav");
-// soundMap[sf::Keyboard::B] = SoundSys();
-// soundMap[sf::Keyboard::B].loadSound("resources/SFX/16_human_walk_stone_3.wav");
-
-
-// for (auto const& pair : soundMap) {
-//         if (sf::Keyboard::isKeyPressed(pair.first)) {
-//             pair.second.setLoop(true);
-//             pair.second.playSound();
-//         } else {
-//             pair.second.setLoop(false);
-//             pair.second.stopSound();
-//         }
-//     }

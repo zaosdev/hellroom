@@ -148,13 +148,13 @@ namespace game
              
 
               // Actualizar la posición de los objetos
-              std::cout << " POS PREVIA   " << player_sprite.getPosition().x << std::endl;  
+              //std::cout << " POS PREVIA   " << player_sprite.getPosition().x << std::endl;  
 
                player_sprite.setPosition(newposplayer);
                enemy_sprite.setPosition(newposenemy);
 
 
-              std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
+              // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
               
           }
           else{
