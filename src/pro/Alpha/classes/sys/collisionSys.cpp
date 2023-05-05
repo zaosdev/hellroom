@@ -31,15 +31,21 @@ namespace game
         float overlap = (distance - ent1_bbox.width / 2 - ent2_bbox.width / 2) / 2;
         // Calcular la dirección en la que alejar cada objeto
         sf::Vector2f dir1 = sprite1.getPosition() - sprite2.getPosition();
-        dir1 /= distance;
+
+        /*if(distance != 0)*/ dir1 /= distance;
+        //else dir1.x = 72; dir1.y = 72;
         sf::Vector2f dir2 = -dir1;
         // Alejar los dos objetos en direcciones opuestas
-        sprite1.move(dir1 * overlap);
-        sprite2.move(dir2 * overlap);
+        sf::Vector2f newposent1 = dir1 * overlap;
+        sf::Vector2f newposent2 = dir2 * overlap;
 
         // Actualizar la posición de los objetos
-        ent1.render->Sprite.setPosition(sprite1.getPosition());
-        ent2.render->Sprite.setPosition(sprite2.getPosition());
+        ent1.render->Sprite.setPosition(sprite1.getPosition() + newposent1);
+        ent2.render->Sprite.setPosition(sprite2.getPosition() + newposent2);
+
+
+        // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << ent1.render->Sprite.getPosition().x << "\n" << " ENT 2 POS " << ent2.render->Sprite.getPosition().x << std::endl;
+
     }
 }
 
@@ -138,12 +144,16 @@ namespace game
 
               //otra opcion  de momento ignorar
               // player_sprite.setPosition(player_sprite.getPosition() + correction);
-              // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);player_sprite.setPosition(player_sprite.getPosition() + correction);
               // enemy_sprite.setPosition(enemy_sprite.getPosition() - correction);
+             
 
               // Actualizar la posición de los objetos
+              std::cout << " POS PREVIA   " << player_sprite.getPosition().x << std::endl;  
+
                player_sprite.setPosition(newposplayer);
                enemy_sprite.setPosition(newposenemy);
+
+
               std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " r1.x " << dir1.x << " r1.y " << dir1.y << "\n" << " r2.x " << dir2.x << " r2.y " << dir2.y << "\n" << " PLAYER POS " << player_sprite.getPosition().x << "\n" << " ENEMY POS " << enemy_sprite.getPosition().x << std::endl;
               
           }

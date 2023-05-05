@@ -3,6 +3,7 @@
 #include "../cmp/entity.hpp"
 #include "../man/GameManager.hpp"
 #include "../man/SpriteManager.hpp"
+#include "../sys/renderSys.hpp"
 
 
 
