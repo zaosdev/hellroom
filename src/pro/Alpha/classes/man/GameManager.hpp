@@ -4,6 +4,8 @@
 #include "../cmp/blackBoardComponent.hpp"
 #include "../utils/AI.hpp"
 #include "../utils/random.hpp"
+#include "../utils/soundLoader.hpp"
+
 
 #include "entityManager.hpp"
 #include "SpriteManager.hpp"
@@ -48,7 +50,7 @@ namespace FVeng
         game::blackBoardComponent& getBB();
         tXMLeng::mapManager& getMapManager();
         game::Entity& getPlayer();
-
+        
 
         
 
@@ -62,6 +64,7 @@ namespace FVeng
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         
+        FVSound::soundLoader SoundL_{};
 
 
 

@@ -4,29 +4,30 @@
 #include <SFML/Audio.hpp>
 #include <map>
 
+namespace FVSound{
+    class soundLoader{
+        public:
+            soundLoader(){
+                //carga de sonidos en buffers
+                sBplayerStep.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav");
+                sBplayerDash.loadFromFile("../resources/SFX/15_human_dash_1.wav");
 
-class soundLoader{
-    public:
-        soundLoader(){
-            //carga de sonidos en buffers
-            sB_player_step.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav");
-            sB_player_dash.loadFromFile("../resources/SFX/15_human_dash_1.wav");
+                
+                //agregar buffers al mapa
+                sBfrs["playerStep"] = sBplayerStep;
+                sBfrs["playerDash"] = sBplayerDash;
+            }
+        
+            //mapa de buffers para los sonidos del juego
+            std::map<std::string, sf::SoundBuffer> sBfrs; 
 
-            
-            //agregar buffers al mapa
-
-
-        }
+        private:
+            sf::SoundBuffer sBplayerStep;
+            sf::SoundBuffer sBplayerDash;
     
-        //mapa de buffers para los sonidos del juego
-        std::map<std::string, sf::SoundBuffer> sBfrs; 
 
-    private:
-        sf::SoundBuffer sB_player_step;
-        sf::SoundBuffer sB_player_dash;
-   
-
-};
+    };
+}
 
 #endif
 
