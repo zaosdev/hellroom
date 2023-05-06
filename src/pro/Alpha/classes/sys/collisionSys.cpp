@@ -13,57 +13,78 @@ namespace game
 
   CollisionSys::~CollisionSys() = default;
 
+  void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
+  //void CollisionSys::noOverlap(sf::Sprite& sprite1, sf::Sprite& sprite2){
+    sf::Sprite sprite1 = ent1.render->Sprite;
+    sf::Sprite sprite2 = ent2.render->Sprite;
 
-  void CollisionSys::noOverlap(game::Entity& ent1, game::Entity& ent2){
-    sf::Sprite& sprite1 = ent1.render->Sprite;
-    sf::FloatRect ent1_bbox = sprite1.getGlobalBounds();
-    sf::Sprite& sprite2 = ent2.render->Sprite;
-    sf::FloatRect ent2_bbox = sprite2.getGlobalBounds();
+
+    sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
+    sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
+
+    // std::cout << " Player BBOX  " << sprite1Bbox.width << std::endl;
+    // std::cout << " Enemy BBOX  " << sprite2Bbox.width << std::endl;
+
 
     // Verificar si los dos objetos se superponen
-    if (ent1_bbox.intersects(ent2_bbox)) {
+    if (sprite1Bbox.intersects(sprite2Bbox)) {
 
       //std::cout << "COLISIONAN" << std::endl;
         // Obtener la distancia entre los dos objetos
         float distance = std::sqrt(std::pow(sprite1.getPosition().x - sprite2.getPosition().x, 2) +
                                    std::pow(sprite1.getPosition().y - sprite2.getPosition().y, 2));
         // Calcular la distancia necesaria para separar los dos objetos
-        float overlap = (distance - ent1_bbox.width / 2 - ent2_bbox.width / 2) / 2;
+        float overlap = (distance - sprite1Bbox.width / 2 - sprite2Bbox.width / 2) / 2;
         // Calcular la dirección en la que alejar cada objeto
         sf::Vector2f dir1 = sprite1.getPosition() - sprite2.getPosition();
 
-        /*if(distance != 0)*/ dir1 /= distance;
-        //else dir1.x = 72; dir1.y = 72;
+        if(distance != 0) dir1 /= distance;
+        else dir1.x = 1.0f; dir1.y = 1.0f;
+
         sf::Vector2f dir2 = -dir1;
         // Alejar los dos objetos en direcciones opuestas
-        sf::Vector2f newposent1 = dir1 * overlap;
-        sf::Vector2f newposent2 = dir2 * overlap;
+        sf::Vector2f newpossprite1 = dir1 * overlap;
+        sf::Vector2f newpossprite2 = dir2 * overlap;
+
+
+        // const float dampingFactor = 0.9f;
+
+        // newpossprite1 *= dampingFactor;
+        // newpossprite2 *= dampingFactor;
+
+        FVmath::Point2D newpos1;
+        newpos1.x = newpossprite1.x;
+        newpos1.y = newpossprite1.y;
+
+        FVmath::Point2D newpos2;
+        newpos2.x = newpossprite2.x;
+        newpos2.y = newpossprite2.y;
+
+        
+
+        //FVmath::Point2D newpos2(newpossprite2.x, newpossprite2.y);
 
         // Actualizar la posición de los objetos
-        ent1.render->Sprite.setPosition(sprite1.getPosition() + newposent1);
-        ent2.render->Sprite.setPosition(sprite2.getPosition() + newposent2);
 
+        // sprite1.move(newpossprite1);
+        // sprite2.move(newpossprite2);
 
-        // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << ent1.render->Sprite.getPosition().x << "\n" << " ENT 2 POS " << ent2.render->Sprite.getPosition().x << std::endl;
+       // ent1.physics->pos += newpos1;    /*+= ent.physics->vel * dt*/
+        ent2.physics->pos += newpos2;
+
+        // sprite1.setPosition(newpossprite1);
+        // sprite2.setPosition(newpossprite2);
+
+        std::cout << " ent1 X " << ent1.physics->pos.x << std::endl;
+        std::cout << " ent2 X " << ent2.physics->pos.x << std::endl;
+
+        //sigue sin verse la colision pero lo calcula bien, no veo donde esta el problema
+
+        // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << sprite1.getPosition().x << "\n" << " ENT 2 POS " << sprite2.getPosition().x << std::endl;
 
     }
 }
 
-
-    // void CollisionSys::colliding(){
-      
-    //   if(player_bbox.intersects(enemy_bbox)){ 
-        
-    //     //std::cout << "Player y Enemy estan colisionando restar vida a player" << std::endl;
-    //     //if player and enemy colliding then call healthsys 
-        
-    //   }
-    //   if(enemy_bbox.intersects(enemy_bbox)){
-    //     //std::cout << "Colision entre enemigos" << std::endl;
-    //    // noOverlap(enemy1_sprite, enemy2_sprite, enemy1_bbox, enemy2_bbox);
-    //   }
-    //   //faltaria colision con mapa y al tener armas colision con balas
-    // }
      
     void CollisionSys::update()
     {
@@ -73,28 +94,47 @@ namespace game
       
     
       sf::Sprite* playerSprite;
-      std::vector<sf::Sprite*> enemySprites;
+      //std::vector<sf::Sprite*> enemySprites;
+      std::vector<Entity*> enemies;
+      Entity* player;
 
       //Entity and enemy obtention loop
       for(auto& ent : EM){
         if(ent.hasTag(game::Entity::TAG::Player))
         {
+          player = &ent;
           playerSprite  = &ent.render->Sprite;
-          player_bbox   = ent.render->Sprite.getGlobalBounds();
+          playerBbox   = ent.render->Sprite.getGlobalBounds();
         }
        
         else if(ent.hasTag(game::Entity::TAG::Enemy))
         {
-          enemySprites.push_back(&ent.render->Sprite);
-          enemy_bbox = ent.render->Sprite.getGlobalBounds();
+          
+          //entidad = &ent;
+          enemies.push_back(&ent);
+          //enemySprites.push_back(&ent.render->Sprite); 
+          //enemyBbox = ent.render->Sprite.getGlobalBounds();
         }
       }
 
-      //Acction loop. Every enemy against player
-      for(auto& enemySprite : enemySprites)
-      {
-          //noOverlap(*playerSprite, *enemySprite); si vas a usar esto cambialo para qie acepte sprites
+      for(auto& enemyEnt : enemies){
+        
+        noOverlap(*player, *enemyEnt);
+
       }
+        
+
+
+
+      //Acction loop. Every enemy against player
+      // for(auto& enemySprite : enemySprites)
+      // {
+        
+      //   if (playerBbox.intersects(enemySprite->getGlobalBounds())){  entidad->physics->pos.x = 0; entidad->physics->pos.y = 0; }
+ 
+      //   //std::cout << "ENEMY  " << enemySprites.size() << std::endl;
+      //   //noOverlap(*playerSprite, *enemySprite); //si vas a usar esto cambialo para que acepte sprites
+      // }
 
 
           
@@ -160,6 +200,17 @@ namespace game
       //   }
         
       // }
+
+
+
+
+
+
+
+
+
+
+
 
 
       // std::cout << "BBOX PLAYER WIDTH:  " << player_bbox.width << "\n" << "BBOX PLAYER HEIGHT:  " << player_bbox.height << std::endl;

@@ -80,12 +80,12 @@ int main() {
       inpRec.update();
       inpSys.update();
 
-      
+      collisionSys.update();
       AISys.update(GameMan.getBB(), dt);
 
       phySys.update(dt);
 
-      collisionSys.update();
+      
 
       //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
       spwnSys.update();
