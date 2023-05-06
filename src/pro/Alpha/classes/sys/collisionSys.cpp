@@ -14,76 +14,101 @@ namespace game
   CollisionSys::~CollisionSys() = default;
 
   void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
-  //void CollisionSys::noOverlap(sf::Sprite& sprite1, sf::Sprite& sprite2){
+
     sf::Sprite sprite1 = ent1.render->Sprite;
     sf::Sprite sprite2 = ent2.render->Sprite;
 
-
+    
     sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
     sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
 
-    // std::cout << " Player BBOX  " << sprite1Bbox.width << std::endl;
-    // std::cout << " Enemy BBOX  " << sprite2Bbox.width << std::endl;
+    sf::Vector2f sprite1POS = sprite1.getPosition();
+    sf::Vector2f sprite2POS = sprite2.getPosition();
+
+    sf::Vector2f s1_HalfSize = {sprite1Bbox.height /2 , sprite1Bbox.width / 2};
+    sf::Vector2f s2_HalfSize = {sprite2Bbox.height /2 , sprite2Bbox.width / 2};
 
 
-    // Verificar si los dos objetos se superponen
-    if (sprite1Bbox.intersects(sprite2Bbox)) {
-
-      //std::cout << "COLISIONAN" << std::endl;
-        // Obtener la distancia entre los dos objetos
-        float distance = std::sqrt(std::pow(sprite1.getPosition().x - sprite2.getPosition().x, 2) +
-                                   std::pow(sprite1.getPosition().y - sprite2.getPosition().y, 2));
-        // Calcular la distancia necesaria para separar los dos objetos
-        float overlap = (distance - sprite1Bbox.width / 2 - sprite2Bbox.width / 2) / 2;
-        // Calcular la dirección en la que alejar cada objeto
-        sf::Vector2f dir1 = sprite1.getPosition() - sprite2.getPosition();
-
-        if(distance != 0) dir1 /= distance;
-        else dir1.x = 1.0f; dir1.y = 1.0f;
-
-        sf::Vector2f dir2 = -dir1;
-        // Alejar los dos objetos en direcciones opuestas
-        sf::Vector2f newpossprite1 = dir1 * overlap;
-        sf::Vector2f newpossprite2 = dir2 * overlap;
+    float deltaX = sprite2POS.x - sprite1POS.x;
+    float deltaY = sprite2POS.y - sprite1POS.y;
 
 
-        // const float dampingFactor = 0.9f;
 
-        // newpossprite1 *= dampingFactor;
-        // newpossprite2 *= dampingFactor;
 
-        FVmath::Point2D newpos1;
-        newpos1.x = newpossprite1.x;
-        newpos1.y = newpossprite1.y;
+   /////PROBEMOS OTRA IDEA 
 
-        FVmath::Point2D newpos2;
-        newpos2.x = newpossprite2.x;
-        newpos2.y = newpossprite2.y;
+  // //void CollisionSys::noOverlap(sf::Sprite& sprite1, sf::Sprite& sprite2){
+  //   sf::Sprite sprite1 = ent1.render->Sprite;
+  //   sf::Sprite sprite2 = ent2.render->Sprite;
+
+    
+  //   sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
+  //   sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
+
+  //   // std::cout << " Player BBOX  " << sprite1Bbox.width << std::endl;
+  //   // std::cout << " Enemy BBOX  " << sprite2Bbox.width << std::endl;
+
+
+    // // Verificar si los dos objetos se superponen
+    // if (sprite1Bbox.intersects(sprite2Bbox)) {
+
+      /////PONGO EN PAUSA ESTA IDEA, VOY A PROBAR OTRA
+
+      // //std::cout << "COLISIONAN" << std::endl;
+      //   // Obtener la distancia entre los dos objetos
+      //   float distance = std::sqrt(std::pow(sprite1.getPosition().x - sprite2.getPosition().x, 2) +
+      //                              std::pow(sprite1.getPosition().y - sprite2.getPosition().y, 2));
+      //   // Calcular la distancia necesaria para separar los dos objetos
+      //   float overlap = (distance - sprite1Bbox.width / 2 - sprite2Bbox.width / 2) / 2;
+      //   // Calcular la dirección en la que alejar cada objeto
+      //   sf::Vector2f dir1 = sprite1.getPosition() - sprite2.getPosition();
+
+      //   if(distance != 0) dir1 /= distance;
+      //   else dir1.x = 1.0f; dir1.y = 1.0f;
+
+      //   sf::Vector2f dir2 = -dir1;
+      //   // Alejar los dos objetos en direcciones opuestas
+      //   sf::Vector2f newpossprite1 = dir1 * overlap;
+      //   sf::Vector2f newpossprite2 = dir2 * overlap;
+
+
+      //   // const float dampingFactor = 0.9f;
+
+      //   // newpossprite1 *= dampingFactor;
+      //   // newpossprite2 *= dampingFactor;
+
+      //   FVmath::Point2D newpos1;
+      //   newpos1.x = newpossprite1.x;
+      //   newpos1.y = newpossprite1.y;
+
+      //   FVmath::Point2D newpos2;
+      //   newpos2.x = newpossprite2.x;
+      //   newpos2.y = newpossprite2.y;
 
         
 
-        //FVmath::Point2D newpos2(newpossprite2.x, newpossprite2.y);
+      //   //FVmath::Point2D newpos2(newpossprite2.x, newpossprite2.y);
 
-        // Actualizar la posición de los objetos
+      //   // Actualizar la posición de los objetos
 
-        // sprite1.move(newpossprite1);
-        // sprite2.move(newpossprite2);
+      //   // sprite1.move(newpossprite1);
+      //   // sprite2.move(newpossprite2);
 
-       // ent1.physics->pos += newpos1;    /*+= ent.physics->vel * dt*/
-        ent2.physics->pos += newpos2;
+      //  // ent1.physics->pos += newpos1;    /*+= ent.physics->vel * dt*/
+      //   ent2.physics->pos += newpos2;
 
-        // sprite1.setPosition(newpossprite1);
-        // sprite2.setPosition(newpossprite2);
+      //   // sprite1.setPosition(newpossprite1);
+      //   // sprite2.setPosition(newpossprite2);
 
-        std::cout << " ent1 X " << ent1.physics->pos.x << std::endl;
-        std::cout << " ent2 X " << ent2.physics->pos.x << std::endl;
+      //   //std::cout << " ent1 X " << ent1.physics->pos.x << std::endl;
+      //   //std::cout << " ent2 X " << ent2.physics->pos.x << std::endl;
 
-        //sigue sin verse la colision pero lo calcula bien, no veo donde esta el problema
+      //   //sigue sin verse la colision pero lo calcula bien, no veo donde esta el problema
 
-        // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << sprite1.getPosition().x << "\n" << " ENT 2 POS " << sprite2.getPosition().x << std::endl;
+      //   // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << sprite1.getPosition().x << "\n" << " ENT 2 POS " << sprite2.getPosition().x << std::endl;
 
     }
-}
+
 
      
     void CollisionSys::update()
