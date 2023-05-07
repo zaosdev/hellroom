@@ -20,6 +20,8 @@ namespace game
         HUDSys& operator=(HUDSys&&)= delete;
 
         void iniRenderSys();
+        void setPlayer  (Entity* player);
+        void setHeartID (size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -36,11 +38,11 @@ namespace game
         private:
             FVeng::GameManager& gMan_;
             sf::RenderWindow&   window_;
-            Entity&             player_;
+            Entity*             player_;
             sf::Clock           clock_;
             sf::Text            text_;
             sf::Font            font_;
-            size_t             heart_;
+            size_t              heart_;
             double    accumulatedTime;    //time passed (seconds)
     };
 }

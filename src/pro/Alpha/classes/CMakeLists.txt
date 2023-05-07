@@ -18,6 +18,8 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/healthSys.cpp"   
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/HUDSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/collisionSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/man/stateManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/states/mainMenuState.cpp"
 )
 
 #Y donde se encuentran los .h

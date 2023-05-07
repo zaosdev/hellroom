@@ -20,7 +20,7 @@ namespace FVeng
         #define HEART_TEXT  "heart_sprite"
 
 
-        GameManager(int x, int y, std::string nameGame);
+        GameManager(sf::RenderWindow& window);
 
         GameManager (const GameManager&) = delete;
         GameManager (GameManager&&) = delete;
@@ -54,7 +54,7 @@ namespace FVeng
 
         private:
 
-        sf::RenderWindow window_{};
+        sf::RenderWindow& window_;
         //create Sprite manager
         SFMLeng::SpriteManager SPman{};
         tXMLeng::mapManager mapMan{};
