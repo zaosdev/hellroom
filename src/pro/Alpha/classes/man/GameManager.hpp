@@ -18,7 +18,7 @@ namespace FVeng
         #define PLAYER_TEXT "player_sprite"
         #define MAP_TEXT    "map_sprite"
         #define HEART_TEXT  "heart_sprite"
-
+        #define COIN_TEXT   "coin_sprite"
 
         GameManager(sf::RenderWindow& window);
 
@@ -32,6 +32,7 @@ namespace FVeng
         void initGame();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
         game::Entity& createHeart();
+        game::Entity& createCoin();
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();

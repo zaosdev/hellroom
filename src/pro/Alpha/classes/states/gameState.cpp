@@ -14,6 +14,7 @@
 #include "../classes/sys/healthSys.hpp"
 #include "../classes/sys/HUDSys.hpp"
 #include "../classes/sys/collisionSys.hpp"
+#include "../classes/sys/rewardSys.hpp"
 
 #include "../classes/man/stateManager.hpp"
 
@@ -42,6 +43,7 @@ namespace FVEng{
         , collisionSys  { GameMan }
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys }
+        , rewardSys     { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -57,6 +59,7 @@ namespace FVEng{
             GameMan.getEntityManager().update();
             HudSys.setPlayer(&GameMan.getPlayer());
             HudSys.setHeartID(GameMan.createHeart().id());
+            HudSys.setCoinID(GameMan.createCoin().id());
             //soundSys.loadSound();
         }
 
@@ -69,25 +72,27 @@ namespace FVEng{
                 GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
-                double dt = updateClock.restart().asSeconds();
+                    double dt = updateClock.restart().asSeconds();
 
-                inpRec.update();
-                inpSys.update();
+                    inpRec.update();
+                    inpSys.update();
 
-                AISys.update(GameMan.getBB(), dt);
+                    AISys.update(GameMan.getBB(), dt);
 
-                phySys.update(dt);
+                    phySys.update(dt);
 
-                collisionSys.update();
+                    collisionSys.update();
 
-                //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-                spwnSys.update();
+                    //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
+                    spwnSys.update();
 
-                //soundSys.update();
+                    //soundSys.update();
 
-                healthSys.update(dt);
-                //achSys.update();
-                //saveSys.update();
+                    healthSys.update(dt);
+
+                    rewardSys.update();
+                    //achSys.update();
+                    saveSys.update();
                 }
 
                 //std::cout << "updating render" << std::endl;
@@ -104,6 +109,7 @@ namespace FVEng{
         sf::RenderWindow&   window_;
         FVEng::StateMachine& SM_;
 
+
         FVeng::GameManager      GameMan;
         SFMLeng::SpriteManager  SPman;
         game::PhysicsSys        phySys;
@@ -118,6 +124,7 @@ namespace FVEng{
         game::CollisionSys      collisionSys;
         game::HUDSys            HudSys;
         game::RenderSys         renSys;
+        game::RewardSys         rewardSys;
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

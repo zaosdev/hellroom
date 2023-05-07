@@ -13,7 +13,7 @@ namespace game
     {
 
         // gMan_.SpawnDummy(Pos);
-        auto enemyChoice = FVmath::calcualteRandom(2,1);
+        auto enemyChoice = FVmath::calculateRandom(2,1);
         
         switch (enemyChoice)
         {
@@ -39,12 +39,12 @@ namespace game
         //CALCULATE POINT ON THE X AXIS
         auto xAxisMax = spawnInfo.SpawnOrigin.x+spawnInfo.SpawnRange.x;
 
-        auto xAxisPoint = FVmath::calcualteRandom(xAxisMax,spawnInfo.SpawnOrigin.x);
+        auto xAxisPoint = FVmath::calculateRandom(xAxisMax,spawnInfo.SpawnOrigin.x);
 
         //CALCULATE POINT ON THE Y AXIS
         auto yAxisMax = spawnInfo.SpawnOrigin.y+spawnInfo.SpawnRange.y;
 
-        auto yAxisPoint = FVmath::calcualteRandom(yAxisMax,spawnInfo.SpawnOrigin.y);
+        auto yAxisPoint = FVmath::calculateRandom(yAxisMax,spawnInfo.SpawnOrigin.y);
 
         //RETURN RESULTING POINT
         return{xAxisPoint,yAxisPoint};

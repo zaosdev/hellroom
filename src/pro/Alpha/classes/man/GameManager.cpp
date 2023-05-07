@@ -1,4 +1,9 @@
 #include "GameManager.hpp"
+#include "utils/gameData.hpp"
+
+#define PLAYER_SPRITE_PATH  "../resources/sprites.png"
+#define HEARTH_PATH         "../media/HUD/heart-red.png"
+#define COIN_PATH           "../media/HUD/coin.png"
 
 namespace FVeng
 {
@@ -40,10 +45,10 @@ namespace FVeng
 
         void GameManager::LoadAllTextures()
         {
-
-            SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
+            SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
-            SPman.loadTexture("../media/HUD/heart-red.png", HEART_TEXT);
+            SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
+            SPman.loadTexture(COIN_PATH, COIN_TEXT);
         }
 
         void GameManager::initGame()
@@ -81,8 +86,12 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Player); 
 
             //create life 
-
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            //create data component
+            int coins = FVData::getCoins();
+
+            e.data   = game::DataComponent {.coins = coins};
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
@@ -115,16 +124,18 @@ namespace FVeng
                 e.physics->pos.y
             );
 
-            e.AI     = game::AIComponent      { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
+            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
             //health status 
             float life = 50;
-            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};     
+            e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};     
 
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
 
-            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+            e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            e.reward = game::RewardComponent    {.min_reward = 1, .max_reward = 3};
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));             
         }
@@ -182,9 +193,10 @@ namespace FVeng
                                     
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
-
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+            e.reward = game::RewardComponent    {.min_reward = 2, .max_reward = 4};
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         }
@@ -207,7 +219,7 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            auto row = FVmath::calcualteRandom(3,1);
+            auto row = FVmath::calculateRandom(3,1);
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(row * 75, 1 * 75, 75, 75));
 
@@ -216,12 +228,24 @@ namespace FVeng
 
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
         {
-            auto& e = EM_.createEntity();
+            auto& e     = EM_.createEntity();
             auto texIdx = SPman.getTextureIdxByName(HEART_TEXT);
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
             initEntityRender(e, {0,0},sf::IntRect(0,0,38,30));
+
+            return e;
+        }
+
+        [[maybe_unused]] game::Entity&  GameManager::createCoin()
+        {
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(COIN_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
 
             return e;
         }
