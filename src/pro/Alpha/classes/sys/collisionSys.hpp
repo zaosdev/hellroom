@@ -27,6 +27,7 @@ namespace game
         //void noOverlap(sf::Sprite& sprite1, sf::Sprite& sprite2);
         void update(); //gestionara las colisiones
         
+       // float push = 1.0f;
 
         Entity* prevEnt;
     
