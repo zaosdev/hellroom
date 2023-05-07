@@ -60,6 +60,7 @@ namespace FVEng{
             HudSys.setPlayer(&GameMan.getPlayer());
             HudSys.setHeartID(GameMan.createHeart().id());
             HudSys.setCoinID(GameMan.createCoin().id());
+            HudSys.setClockID(GameMan.createClock().id());
             //soundSys.loadSound();
         }
 

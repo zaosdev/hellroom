@@ -23,6 +23,7 @@ namespace game
         void setPlayer  (Entity* player);
         void setHeartID (size_t id);
         void setCoinID  (size_t id);
+        void setClockID (size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -35,7 +36,7 @@ namespace game
         void renderCoins();
         void renderTimer();
         void restartTime();
-
+        void setMaxTime(double newTime);
 
         private:
             FVeng::GameManager& gMan_;
@@ -47,6 +48,8 @@ namespace game
             sf::Font            font_;
             size_t              heart_;
             size_t              coin_;
-            double    accumulatedTime;    //time passed (seconds)
+            size_t              clocksp_;
+            double              accumulatedTime;    //time passed (seconds)
+            double              maxTime_ = 99;
     };
 }

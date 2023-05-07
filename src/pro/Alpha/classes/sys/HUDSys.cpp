@@ -23,7 +23,7 @@ namespace game
         timeText_.setFillColor(sf::Color::Black);
         timeText_.setFont(font_);
         //timeText_.setCharacterSize(40);
-        timeText_.setPosition({static_cast<float>(window_.getSize().x - 150), 0});
+        timeText_.setPosition({static_cast<float>(window_.getSize().x - 85), 0});
 
         //Configurate coins text
         coinText_.setFillColor(sf::Color::Black);
@@ -59,6 +59,16 @@ namespace game
     void HUDSys::setCoinID(size_t id)
     {
         coin_ = id;
+    }
+
+    void HUDSys::setClockID(size_t id)
+    {
+        clocksp_ = id;
+    }
+
+    void HUDSys::setMaxTime(double newTime)
+    {
+        maxTime_ = newTime;
     }
 
     void HUDSys::renderHearts()
@@ -99,15 +109,27 @@ namespace game
 
     void HUDSys::renderTimer()
     {
+        //Get the clock sprite
+        auto& EM = gMan_.getEntityManager();
+        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==clocksp_;});
+        auto& trueClock = *it.base();
+
+        //Position the coin
+        trueClock.render->Sprite.setPosition(
+            600
+        ,   0
+        );
+
         //Add time to counter and restart clock
         accumulatedTime += clock_.getElapsedTime().asSeconds();
         clock_.restart();
 
         //Set the string to show
-        timeText_.setString(std::to_string(int(accumulatedTime)));  // int cast to avoid showing decimals
+        timeText_.setString(std::to_string(int(maxTime_ - accumulatedTime)));  // int cast to avoid showing decimals
 
         //Draw
         window_.draw(timeText_);
+        window_.draw(trueClock.render->Sprite);
     }
 
     void HUDSys::renderCoins()

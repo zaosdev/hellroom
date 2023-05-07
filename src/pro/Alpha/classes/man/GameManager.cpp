@@ -4,6 +4,7 @@
 #define PLAYER_SPRITE_PATH  "../resources/sprites.png"
 #define HEARTH_PATH         "../media/HUD/heart-red.png"
 #define COIN_PATH           "../media/HUD/coin.png"
+#define CLOCK_PATH          "../media/HUD/clock.png"
 
 namespace FVeng
 {
@@ -49,6 +50,7 @@ namespace FVeng
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
             SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
+            SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
         }
 
         void GameManager::initGame()
@@ -242,6 +244,18 @@ namespace FVeng
         {
             auto& e     = EM_.createEntity();
             auto texIdx = SPman.getTextureIdxByName(COIN_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
+
+            return e;
+        }
+
+        [[maybe_unused]] game::Entity&  GameManager::createClock()
+        {
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(CLOCK_TEXT);
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
