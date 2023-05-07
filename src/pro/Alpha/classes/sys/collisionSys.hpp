@@ -24,6 +24,9 @@ namespace game
         //void colliding();
         
         void noOverlap(Entity& sprite1, Entity& sprite2);
+        void playerCollision(float intersectX, float intersectY,  float deltaX,  float deltaY, Entity& ent2, FVmath::Point2D ent2POS );
+        //void shieldCollision(float intersectX, float intersectY,  float deltaX,  float deltaY, Entity& ent1, FVmath::Point2D ent1POS, Entity& ent2, FVmath::Point2D ent2POS );
+
         //void noOverlap(sf::Sprite& sprite1, sf::Sprite& sprite2);
         void update(); //gestionara las colisiones
         
@@ -37,6 +40,7 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            //tXMLeng::mapManager::TileMap map_{};
            // SFMLeng::SpriteManager& spriteMan_; 
             
     };
