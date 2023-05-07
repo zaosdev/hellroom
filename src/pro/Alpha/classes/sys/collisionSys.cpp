@@ -13,98 +13,70 @@ namespace game
 
   CollisionSys::~CollisionSys() = default;
 
-  // void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
+  //########################################################################
 
-   
+  void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
 
-  //   sf::Sprite sprite1 = ent1.render->Sprite;
-  //   sf::Sprite sprite2 = ent2.render->Sprite;
+    sf::Sprite sprite1 = ent1.render->Sprite;
+    sf::Sprite sprite2 = ent2.render->Sprite;
 
-    
-  //   sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
-  //   sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
+    sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
+    sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
 
-  //   sf::Vector2f sprite1POS = sprite1.getPosition();
-  //   sf::Vector2f sprite2POS = sprite2.getPosition();
+    sf::Vector2f sprite1POS = sprite1.getPosition();
+    sf::Vector2f sprite2POS = sprite2.getPosition();
 
-  //   FVmath::Point2D ent1POS = ent1.physics->pos;
-  //   FVmath::Point2D ent2POS = ent2.physics->pos;
-
-  //   // std::cout << " ENT " << ent1POS.x << std::endl;
-  //   // std::cout << ent1POS.y << std::endl;
-    
-  //   // std::cout << " SPRITE " << sprite1POS.x << std::endl;
-  //   // std::cout << sprite1POS.y << std::endl;
-  //   // std::cout << sprite2POS.x << std::endl;
-  //   // std::cout << sprite2POS.y << std::endl;
+    FVmath::Point2D ent1POS = ent1.physics->pos;
+    FVmath::Point2D ent2POS = ent2.physics->pos;
 
 
-  //   sf::Vector2f s1_HalfSize = {sprite1Bbox.height /2.0f , sprite1Bbox.width / 2.0f};
-  //   sf::Vector2f s2_HalfSize = {sprite2Bbox.height /2.0f , sprite2Bbox.width / 2.0f};
+    sf::Vector2f s1_HalfSize = {sprite1Bbox.height /2.0f , sprite1Bbox.width / 2.0f};
+    sf::Vector2f s2_HalfSize = {sprite2Bbox.height /2.0f , sprite2Bbox.width / 2.0f};
 
-  //   float deltaX = sprite2POS.x - sprite1POS.x;
-  //   float deltaY = sprite2POS.y - sprite1POS.y;
+    float deltaX = sprite2POS.x - sprite1POS.x;
+    float deltaY = sprite2POS.y - sprite1POS.y;
 
-  //   // float deltaX = ent2POS.x - ent1POS.x;
-  //   // float deltaY = ent2POS.y - ent1POS.y;
+    // float deltaX = ent2POS.x - ent1POS.x;
+    // float deltaY = ent2POS.y - ent1POS.y;
 
-  //   float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
-  //   float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
+    float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
+    float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
 
+
+    if(intersectX > intersectY) {
+
+      if(deltaX > 0.0f){
+        // ent1.physics->pos.x = ent1POS.x + (intersectX * (1.0f /*- push*/));
+
+        ent2.physics->pos.x = ent2POS.x + (-intersectX);
+        
+      }
+      else{
+        // ent1.physics->pos.x = ent1POS.x +  (-intersectX * (1.0f /*- push*/));
+
+        ent2.physics->pos.x = ent2POS.x +  (intersectX );
+        
+      }
+    }
+    else{
+      if(deltaY > 0.0f){
+      //ent1.physics->pos.y = ent1POS.y + (intersectY * (1.0f /*- push*/));
+ 
+        ent2.physics->pos.y = ent2POS.y + (-intersectY);
+          
+      }
+
+      else{
+
+        // ent1.physics->pos.y = ent1POS.y + (-intersectY * (1.0f /*- push*/));
   
 
-  //   if(intersectX > intersectY) {
-  //     if(deltaX > 0.0f){
-        
-      
+        ent2.physics->pos.y = ent2POS.y + (intersectY);
 
-  //       // ent1.physics->pos.x = ent1POS.x + (intersectX * (1.0f /*- push*/));
-  //       // ent1.physics->pos.y = ent2POS.y +  0.0f;
-        
-  //       ent2.physics->pos.x = ent2POS.x + (-intersectX);
-  //       ent2.physics->pos.y = ent2POS.y +  0.0f;
+      }
+    }
 
-  //     }
-  //     else{
-
-        
-  //       // ent1.physics->pos.x = ent1POS.x +  (-intersectX * (1.0f /*- push*/));
-  //       // ent1.physics->pos.y = ent2POS.y + 0.0f;
-        
-  //       ent2.physics->pos.x = ent2POS.x +  (intersectX );
-  //       ent2.physics->pos.y = ent2POS.y + 0.0f;
-
-  //     }
-  //   }
-  //   else{
-  //     if(deltaY > 0.0f){
-        
-      
-  //       // ent1.physics->pos.y = ent1POS.y + (intersectY * (1.0f /*- push*/));
-  //       // ent1.physics->pos.x = ent1POS.x + 0.0f;
-        
-  //       ent2.physics->pos.y = ent2POS.y + (-intersectY);
-  //       ent2.physics->pos.x = ent2POS.x + 0.0f;
-          
-  //     }
-
-  //     else{
-
-  //       // ent1.physics->pos.y = ent1POS.y + (-intersectY * (1.0f /*- push*/));
-  //       // ent1.physics->pos.x = ent1POS.x + 0
-
-  //       ent2.physics->pos.y = ent2POS.y + (intersectY);
-  //       ent2.physics->pos.x = ent2POS.x + 0.0f;
-
-  //       //velocidad por angulo = movimiento
-
-  //       /* lo que quiero es que al chocar con player siga moviendose pero sin atravesarlo
-
-
-
-  //         */
-  //     }
-  //   }
+ // #####################################################################################################
 
 
 
@@ -202,8 +174,10 @@ namespace game
 
   //     //   // std::cout << "DISTANCE " << distance << "\n" << " OVERLAP " << overlap << "\n" << " dir1.x " << dir1.x << " dir1.y " << dir1.y << "\n" << " dir2.x " << dir2.x << " dir2.y " << dir2.y << "\n" << " ENT 1 POS " << sprite1.getPosition().x << "\n" << " ENT 2 POS " << sprite2.getPosition().x << std::endl;
 
-  //   }
+     }
 
+  /*
+  ############################################################################################
   //VERSION MAS LIMPIA DE noOverlap
 
     void CollisionSys::noOverlap(Entity& ent1, Entity& ent2) {
@@ -233,10 +207,10 @@ namespace game
         }
       }
     }
-
+    ##################################################################################################
+*/
      
-    void CollisionSys::update()
-    {
+    void CollisionSys::update(){
       
     //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
       auto& EM = gMan_.getEntityManager();
