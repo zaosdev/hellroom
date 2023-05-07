@@ -8,6 +8,8 @@
 #include "SpawnerComponent.hpp"
 #include "healthComponent.hpp"
 #include "effectComponent.hpp"
+#include "CollisionComponent.hpp"
+
 
 
 
@@ -40,7 +42,7 @@ namespace game
       std::optional<SpawnerComponent> Spawn{};
       std::optional<HealthComponent>  health{};
       std::optional<EffectComponent>  effct{};
-
+      std::optional<CollisionComponent>  coll{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

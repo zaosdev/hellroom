@@ -10,6 +10,41 @@ namespace game
 
   }
   
+
+  bool checkCollision(Entity& collider1, Entity& collider2)
+  {
+      auto& rect1Pos = collider1.physics->pos;
+      auto& rect2Pos = collider2.physics->pos;
+
+      auto& rect1BBox = *collider1.coll;
+      auto& rect2BBox = *collider2.coll;
+
+      if (
+      rect1Pos.x <= rect2Pos.x + rect2BBox.width &&
+      rect1Pos.x + rect1BBox.width >= rect2Pos.x &&
+      rect1Pos.y <= rect2Pos.y + rect2BBox.height &&
+      rect1BBox.height + rect1Pos.y >= rect2Pos.y
+      )
+			{
+          return true;
+      }
+			else
+      {
+          return false;
+      }
+  }
+
+  void resolveCollision(Entity& movingEntity, Entity& staticEntity)
+  {
+      auto& rect1Pos = movingEntity.physics->pos;
+      auto& rect2Pos = staticEntity.physics->pos;
+
+      auto& rect1Vel = movingEntity.physics->vel;
+
+      FVmath::Point2D DirectionX{rect1Pos.x,rect1Pos.x+(rect1Pos.x*rect1Vel.x)}
+
+      if()
+  }
   
 
   CollisionSys::~CollisionSys() = default;

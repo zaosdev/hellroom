@@ -4,6 +4,8 @@
 #include "../man/GameManager.hpp"
 #include "../man/SpriteManager.hpp"
 #include "../sys/renderSys.hpp"
+#include "../utils/math.hpp"
+
 
 
 
@@ -19,7 +21,8 @@ namespace game
         CollisionSys& operator=(const CollisionSys&)= delete;
         CollisionSys& operator=(CollisionSys&&)= delete;
 
-        //bool checkCollision(const sf::FloatRect bbox1, const sf::FloatRect bbox2); //comprueba si hay colisión entre dos sprites usando su bounding box
+        bool checkCollision(Entity& collider1, Entity& collider2); //comprueba si hay colisión entre entidades
+        void resolveCollision(Entity& movingEntity, Entity& staticEntity); //Only works for 1 moving entity against a static one
         //void collisionDetect(const std::vector<sf::FloatRect>& bboxes); //comprueba colisiones y realiza las acciones necesarias
         //void colliding();
         
