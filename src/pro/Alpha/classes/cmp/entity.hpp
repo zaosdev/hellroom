@@ -7,6 +7,8 @@
 #include "MapComponent.hpp"
 #include "SpawnerComponent.hpp"
 #include "healthComponent.hpp"
+#include "effectComponent.hpp"
+
 
 
 #include <optional>
@@ -37,6 +39,8 @@ namespace game
       std::optional<AIComponent>      AI{};
       std::optional<SpawnerComponent> Spawn{};
       std::optional<HealthComponent>  health{};
+      std::optional<EffectComponent>  effct{};
+
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
