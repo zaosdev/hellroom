@@ -14,11 +14,8 @@
 #include "../classes/sys/healthSys.hpp"
 #include "../classes/sys/HUDSys.hpp"
 #include "../classes/sys/collisionSys.hpp"
-<<<<<<< HEAD
 #include "../classes/sys/rewardSys.hpp"
-=======
 #include "../classes/sys/weaponSys.hpp"
->>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
 
 #include "../classes/man/stateManager.hpp"
 
@@ -38,7 +35,6 @@ namespace FVEng{
         , phySys        { GameMan }
         , inpRec        { window_ }
         , inpSys        { GameMan, inpRec }
-        , weaponSys     { GameMan }
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
@@ -49,6 +45,7 @@ namespace FVEng{
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
+        , weaponSys     { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -94,18 +91,14 @@ namespace FVEng{
 
                     //soundSys.update();
 
-<<<<<<< HEAD
                     healthSys.update(dt);
+
+                    weaponSys.update();
 
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
-=======
-                healthSys.update(dt);
-                //achSys.update();
-                //saveSys.update();
-                weaponSys.update();
->>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
+                
                 }
 
                 //std::cout << "updating render" << std::endl;
@@ -137,11 +130,8 @@ namespace FVEng{
         game::CollisionSys      collisionSys;
         game::HUDSys            HudSys;
         game::RenderSys         renSys;
-<<<<<<< HEAD
         game::RewardSys         rewardSys;
-=======
         game::WeaponSys         weaponSys;
->>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

@@ -144,7 +144,7 @@ namespace FVEng{
             if(selectedItemIndex == 1) //Options option
             {   
                 std::cout << "Entering store..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), true);
+                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
             }
             if(selectedItemIndex == 2) //Exit option
             {

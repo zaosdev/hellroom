@@ -190,7 +190,6 @@ namespace FVEng{
             {
                 moveUp();
             }
-
             for(auto& option : menu_)
             {
                 option.setFillColor(sf::Color::White);
@@ -201,8 +200,13 @@ namespace FVEng{
             {
                 changeStateAccordingToSelectedIndex();
             }
+            if(scapePressed_)
+            {
+                //remove this state ( main menu is behind this and not deleted)
+                SM_.RemoveState();
+            }
             //once handled, restart values
-            upPressed_ = downPressed_ =  enterPressed_ =false;
+            upPressed_ = downPressed_ =  enterPressed_ = scapePressed_ = false;
         }
 
 
@@ -298,9 +302,13 @@ namespace FVEng{
             {
                 downPressed_ = true;
             }
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
                 enterPressed_ = true;
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                scapePressed_ = true;
             }
         }
 
@@ -339,7 +347,7 @@ namespace FVEng{
         sf::Sprite coin_sp_;
         sf::Text pets_cost_[MAX_NUMBER_OF_ITEMS];
 
-        bool upPressed_, downPressed_;
+        bool upPressed_, downPressed_, scapePressed_;
         bool enterPressed_ = false;
         
         std::vector<bool> boughtPets_;

@@ -48,14 +48,10 @@ namespace FVeng
         {
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
-<<<<<<< HEAD
             SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
-=======
-            SPman.loadTexture("../media/HUD/heart-red.png", HEART_TEXT);
             SPman.loadTexture("../media/bullet.png", BULLET_TEXT);
->>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
         }
 
         void GameManager::initGame()
