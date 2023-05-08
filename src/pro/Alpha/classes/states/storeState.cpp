@@ -5,11 +5,17 @@
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
 #include "gameState.cpp"
+#include "../utils/gameData.hpp"
 
 #define MAX_NUMBER_OF_ITEMS 3
 #define PET1_PATH "../media/pets/pet.png"
 #define PET2_PATH "../media/pets/pet.png"
 #define PET3_PATH "../media/pets/pet.png"
+#define COIN_PATH "../media/HUD/coin.png"
+#define PET1_COST 300 //vitalis
+#define PET2_COST 400 //guardian
+#define PET3_COST 500 //centinela
+
 namespace FVEng{
     class storeState : public State {
     public:
@@ -39,6 +45,7 @@ namespace FVEng{
             if (    !pet1Texture_.loadFromFile(PET1_PATH)
                 ||  !pet2Texture_.loadFromFile(PET2_PATH)
                 ||  !pet3Texture_.loadFromFile(PET3_PATH)
+                ||  !coinTexture_.loadFromFile(COIN_PATH)
                 ) 
             {
                 std::cout << "Error loading pet image" << std::endl;
@@ -48,18 +55,29 @@ namespace FVEng{
             pets_[0].setTexture(pet1Texture_);
             pets_[1].setTexture(pet2Texture_);
             pets_[2].setTexture(pet3Texture_);
+            coin_sp_.setTexture(coinTexture_);
 
+
+            updateUI();
+
+            
 
             //Configurate color and position of text
             configurateMenuAccordingToWindow();
+
+            
+
         }
 
         void executeState() override
         {
             for(int i = 0; i < 60; i++)
             {
-                RegisterKeys();
-                if(i % 30== 0) {HandleInput();}
+                if(i % 10== 0) 
+                {
+                    RegisterKeys();
+                    HandleInput();
+                }
                 Render();
             }
         }
@@ -68,13 +86,23 @@ namespace FVEng{
         {
             for(int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
             {
+                sf::Vector2f menu_position = sf::Vector2f(  window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - menu_[i].getLocalBounds().width/2.0f, 
+                                                            window_.getSize().y / (4 + i%2));
+                sf::Vector2f pet_position  = sf::Vector2f(  window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - pets_[i].getLocalBounds().width/2.0f, 
+                                                         (  window_.getSize().y + pets_[i].getLocalBounds().height + 80) / (4 + i%2));
+                
+                sf::Vector2f cost_position = sf::Vector2f(  pet_position.x, pet_position.y + pets_[i].getLocalBounds().height);
                 menu_[i].setFont(font_);
                 menu_[i].setFillColor(sf::Color::White);
                 menu_[i].setString(pet_names_[i]);
-                menu_[i].setPosition(sf::Vector2f(window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - menu_[i].getLocalBounds().width/2.0f, window_.getSize().y / (4 + i%2)));
-                pets_[i].setPosition(sf::Vector2f(window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - pets_[i].getLocalBounds().width/2.0f, window_.getSize().y / (4 + i%2)));
+                menu_[i].setPosition(menu_position);
+                pets_[i].setPosition(pet_position);
+                pets_cost_[i].setPosition(cost_position);
             }
-
+            sf::Vector2f coins_position = sf::Vector2f  (  window_.getSize().x / 2.0f - coins_text_.getLocalBounds().width, 
+                                                           window_.getSize().y * .06f);
+            coins_text_.setPosition(coins_position);
+            coin_sp_.setPosition(coins_position.x + coins_text_.getGlobalBounds().width + 20, coins_position.y);
 
         }
 
@@ -102,6 +130,29 @@ namespace FVEng{
             {
                 window_.draw(pet);
             }
+            for(auto& cost : pets_cost_)
+            {
+                window_.draw(cost);
+            }
+            window_.draw(coins_text_);
+            window_.draw(coin_sp_);
+
+            //move the coin sprite next to the prices
+            auto savedPosition = coin_sp_.getPosition();
+            for(size_t i = 0; i < boughtPets_.size(); i++)
+            {
+                if(boughtPets_[i] == false)
+                {
+                    //move to the price
+                    auto coinPosition = 
+                        sf::Vector2f(pets_cost_[i].getPosition().x  + pets_cost_[i].getGlobalBounds().width + 10, 
+                                     pets_cost_[i].getPosition().y);
+                    coin_sp_.setPosition(coinPosition);
+                    window_.draw(coin_sp_);
+                }
+            }
+            coin_sp_.setPosition(savedPosition);
+
             window_.display();
         }
 
@@ -151,27 +202,88 @@ namespace FVEng{
                 changeStateAccordingToSelectedIndex();
             }
             //once handled, restart values
-            upPressed_ = downPressed_ = false;
+            upPressed_ = downPressed_ =  enterPressed_ =false;
         }
 
 
         void changeStateAccordingToSelectedIndex()
         {
-            if(selectedItemIndex == 0) //Play option
+            if(selectedItemIndex == 0) //Vitalis option
             {
-                std::cout << "Entering game mode..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::gameState>(SM_.getWindow(), SM_), true);
+                buyOrSelectPet(selectedItemIndex, PET1_COST);
             }
-            if(selectedItemIndex == 1) //Options option
+            if(selectedItemIndex == 1) //Guardian option
             {   
-                std::cout << "Options..." << std::endl;
+                buyOrSelectPet(selectedItemIndex, PET2_COST);
             }
-            if(selectedItemIndex == 2) //Exit option
+            if(selectedItemIndex == 2) //Centinela option
             {
-                std::cout << "Exit..." << std::endl;
-                window_.close();
+                buyOrSelectPet(selectedItemIndex, PET3_COST);
             }
             enterPressed_ = false;
+        }
+
+        void buyOrSelectPet(int selectedItemIndex, int cost)
+        {
+            std::cout << "Buying or selecting pet 1..." << std::endl;
+            if(selectedPet_ == selectedItemIndex) return;
+            if(boughtPets_[selectedItemIndex] == false)
+            {
+                if(available_coins_ < cost) return;
+                else
+                {
+                    available_coins_ -= cost;
+                    FVData::writeCoins(available_coins_);
+                    boughtPets_[selectedItemIndex] = true;
+                    FVData::writeBoughtPets(boughtPets_);
+                }
+            }
+            else
+            {
+                FVData::writeSelectedPet(selectedItemIndex);
+            }
+
+            updateUI();
+            
+        }
+
+        void updateUI()
+        {
+            available_coins_ = FVData::getCoins();
+            coins_text_.setFont(font_);
+            coins_text_.setFillColor(sf::Color::Black);
+            coins_text_.setString(std::to_string(available_coins_));
+            
+
+            //set pets cost
+            pets_cost_[0].setString(std::to_string(PET1_COST));
+            pets_cost_[1].setString(std::to_string(PET2_COST));
+            pets_cost_[2].setString(std::to_string(PET3_COST));
+            for(auto& cost : pets_cost_)
+            {
+                cost.setFont(font_);
+                cost.setFillColor(sf::Color::White);
+            }
+            
+            
+            //check if some pet is bought and then change the string
+            boughtPets_ = FVData::getBoughtPets();
+            for(size_t i = 0; i < boughtPets_.size(); i++)
+            {
+                if(boughtPets_[i] == true)
+                {
+                    pets_cost_[i].setString("Bought");
+                }
+            }
+
+            
+            //if some pet is selected, change the text and color
+            selectedPet_ = FVData::getSelectedPet();
+            if(selectedPet_ != -1)
+            {
+                pets_cost_[selectedPet_].setString("Selected");
+                pets_cost_[selectedPet_].setFillColor(sf::Color::Magenta);
+            } 
         }
 
 
@@ -219,10 +331,19 @@ namespace FVEng{
         int selectedItemIndex = 0;
         sf::Font font_;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
-        sf::Text coins_;
-        std::vector<std::string> pet_names_ {"Centinela", "Guardian", "Vitalis"};
+        
+        std::vector<std::string> pet_names_ {"Vitalis", "Guardian", "Centinela"};
+        
+        int  available_coins_ = 0;
+        sf::Text coins_text_;
+        sf::Sprite coin_sp_;
+        sf::Text pets_cost_[MAX_NUMBER_OF_ITEMS];
+
         bool upPressed_, downPressed_;
         bool enterPressed_ = false;
+        
+        std::vector<bool> boughtPets_;
+        int selectedPet_ = -1;
 
         FVEng::StateMachine& SM_;
     };

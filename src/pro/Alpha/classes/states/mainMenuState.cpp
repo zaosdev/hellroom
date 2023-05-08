@@ -41,8 +41,11 @@ namespace FVEng{
         {
             for(int i = 0; i < 60; i++)
             {
-                RegisterKeys();
-                if(i % 30== 0) {HandleInput();}
+                if(i % 10==0) 
+                {
+                    RegisterKeys();
+                    HandleInput();
+                }
                 Render();
             }
         }
@@ -127,7 +130,7 @@ namespace FVEng{
                 changeStateAccordingToSelectedIndex();
             }
             //once handled, restart values
-            upPressed_ = downPressed_ = false;
+            upPressed_ = downPressed_ =  enterPressed_= false;
         }
 
 
