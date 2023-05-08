@@ -29,7 +29,6 @@ namespace game
                 std::cout << "entra" << std::endl;
                 auto& pos = e.physics->pos;
                 if(e.weapon->especial!=mejora::normal){
-
                     auto current_time = std::chrono::steady_clock::now();
                     auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - tiempo_comienzo_1).count();
                     if (elapsed_time >= 10) { //<- segundo que dura un tipo d disparo especial
