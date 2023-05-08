@@ -44,6 +44,7 @@ namespace FVeng
             SPman.loadTexture("../resources/sprites.png", PLAYER_TEXT);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
             SPman.loadTexture("../media/HUD/heart-red.png", HEART_TEXT);
+            SPman.loadTexture("../media/bullet.png", BULLET_TEXT);
         }
 
         void GameManager::initGame()
@@ -72,6 +73,8 @@ namespace FVeng
             );
 
             e.input  = game::InputComponent{};
+
+            e.weapon = game::WeaponComponent{};
 
             //health status 
             float life = 500;
@@ -127,6 +130,26 @@ namespace FVeng
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));             
+        }
+
+        void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
+
+            auto& e = EM_.createEntity();
+
+            e.physics = game::PhysicsComponent{.prevPos{float(Pos.x)+30,float(Pos.y)+35}, .pos{float(Pos.x)+30,float(Pos.y)+35}, .vel{float(Vel.x),float(Vel.y)},.mov_speed =640/4};
+
+            auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
+            std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+            
         }
 
         //Create all spawners on the current map

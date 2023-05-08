@@ -14,6 +14,7 @@
 #include "../classes/sys/healthSys.hpp"
 #include "../classes/sys/HUDSys.hpp"
 #include "../classes/sys/collisionSys.hpp"
+#include "../classes/sys/weaponSys.hpp"
 
 #include "../classes/man/stateManager.hpp"
 
@@ -33,6 +34,7 @@ namespace FVEng{
         , phySys        { GameMan }
         , inpRec        { window_ }
         , inpSys        { GameMan, inpRec }
+        , weaponSys     { GameMan }
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
@@ -88,6 +90,7 @@ namespace FVEng{
                 healthSys.update(dt);
                 //achSys.update();
                 //saveSys.update();
+                weaponSys.update();
                 }
 
                 //std::cout << "updating render" << std::endl;
@@ -118,6 +121,7 @@ namespace FVEng{
         game::CollisionSys      collisionSys;
         game::HUDSys            HudSys;
         game::RenderSys         renSys;
+        game::WeaponSys         weaponSys;
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

@@ -8,6 +8,7 @@
 #include "SpawnerComponent.hpp"
 #include "healthComponent.hpp"
 #include "effectComponent.hpp"
+#include "weaponComponent.hpp"
 
 
 
@@ -40,6 +41,7 @@ namespace game
       std::optional<SpawnerComponent> Spawn{};
       std::optional<HealthComponent>  health{};
       std::optional<EffectComponent>  effct{};
+      std::optional<WeaponComponent>  weapon{};
 
 
 
