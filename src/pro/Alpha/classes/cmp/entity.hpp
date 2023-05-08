@@ -7,8 +7,15 @@
 #include "MapComponent.hpp"
 #include "SpawnerComponent.hpp"
 #include "healthComponent.hpp"
+<<<<<<< HEAD
 #include "dataComponent.hpp"
 #include "rewardComponent.hpp"
+=======
+#include "effectComponent.hpp"
+#include "weaponComponent.hpp"
+
+
+>>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
 
 #include <optional>
 
@@ -38,8 +45,14 @@ namespace game
       std::optional<AIComponent>      AI{};
       std::optional<SpawnerComponent> Spawn{};
       std::optional<HealthComponent>  health{};
+<<<<<<< HEAD
       std::optional<DataComponent>    data{};
       std::optional<RewardComponent>  reward{};
+=======
+      std::optional<EffectComponent>  effct{};
+      std::optional<WeaponComponent>  weapon{};
+
+>>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

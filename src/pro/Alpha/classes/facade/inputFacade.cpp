@@ -47,7 +47,11 @@ namespace KeyMapNamespace
         {'7', sf::Keyboard::Num7},
         {'8', sf::Keyboard::Num8},
         {'9', sf::Keyboard::Num9},
-        {' ', sf::Keyboard::Space}
+        {' ', sf::Keyboard::Space},
+        {'u', sf::Keyboard::Up},
+        {'d', sf::Keyboard::Down},
+        {'l', sf::Keyboard::Left},
+        {'r', sf::Keyboard::Right}
     };
 }
 

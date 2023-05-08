@@ -18,8 +18,13 @@ namespace FVeng
         #define PLAYER_TEXT "player_sprite"
         #define MAP_TEXT    "map_sprite"
         #define HEART_TEXT  "heart_sprite"
+<<<<<<< HEAD
         #define COIN_TEXT   "coin_sprite"
         #define CLOCK_TEXT  "clock_sprite"
+=======
+        #define BULLET_TEXT "bullet_sprite"
+
+>>>>>>> 4ea725d3bb52d340a37e08d66a986de48a621103
 
         GameManager(sf::RenderWindow& window);
 
@@ -39,6 +44,7 @@ namespace FVeng
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
 
+        void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
         void setRenderNextLayer(game::MapComponent& map);

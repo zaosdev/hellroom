@@ -13,6 +13,7 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/savingSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/AISys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/spawnSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/weaponSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/AI.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/circularIterator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/gameData.cpp"    
