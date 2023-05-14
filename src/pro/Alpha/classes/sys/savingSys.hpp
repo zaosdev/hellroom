@@ -17,13 +17,13 @@ namespace game
         SavingSys& operator=(SavingSys&&)= delete;
 
         //void iniPhysicsSys();
-        void update(Entity& player);
-        std::array<int, 2> read();
+        void update();
+
 
 
         private:
             FVeng::GameManager& gMan_;
-            SFMLeng::SpriteManager SPman{};
-            //game::RenderSys renSys{gMan};
+            sf::Clock           clock_;
+            int                 saveTime_ = 5;
     };
 }

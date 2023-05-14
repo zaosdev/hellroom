@@ -20,9 +20,12 @@ namespace FVeng
         #define PLAYER_TEXT "player_sprite"
         #define MAP_TEXT    "map_sprite"
         #define HEART_TEXT  "heart_sprite"
+        #define COIN_TEXT   "coin_sprite"
+        #define CLOCK_TEXT  "clock_sprite"
+        #define BULLET_TEXT "bullet_sprite"
 
 
-        GameManager(int x, int y, std::string nameGame);
+        GameManager(sf::RenderWindow& window);
 
         GameManager (const GameManager&) = delete;
         GameManager (GameManager&&) = delete;
@@ -34,10 +37,13 @@ namespace FVeng
         void initGame();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
         game::Entity& createHeart();
+        game::Entity& createCoin();
+        game::Entity& createClock();
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
 
+        void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
         void setRenderNextLayer(game::MapComponent& map);
@@ -56,7 +62,7 @@ namespace FVeng
 
         private:
 
-        sf::RenderWindow window_{};
+        sf::RenderWindow& window_;
         //create Sprite manager
         SFMLeng::SpriteManager SPman{};
         tXMLeng::mapManager mapMan{};

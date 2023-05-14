@@ -1,32 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
+#include <memory>
+#include "classes/man/stateManager.hpp"
+#include "classes/states/mainMenuState.cpp"
 #include "include/config.h"
-#include "classes/sys/renderSys.hpp"
-#include "classes/sys/physicsSys.hpp"
-#include "classes/sys/inputSys.hpp"
-#include "classes/sys/soundSys.hpp"
-#include "classes/sys/achievementSys.hpp"
-#include "classes/sys/savingSys.hpp"
-#include "classes/man/GameManager.hpp"
-#include "classes/man/inputManager.hpp"
-#include "classes/sys/AISys.hpp"
-#include "classes/sys/spawnSys.hpp"
-#include "classes/sys/healthSys.hpp"
-#include "classes/sys/HUDSys.hpp"
-#include "classes/sys/collisionSys.hpp"
-
-#include "utils/circularIterator.hpp"
-#include "cmp/blackBoardComponent.hpp"
-
 
 int main() {
 
-
-
-  constexpr int screenWidth = 640;
+  constexpr int screenWidth  = 640;
   constexpr int screenHeight = 480;
 
+<<<<<<< HEAD
 
   //Create Game manager
   FVeng::GameManager GameMan{screenWidth, screenHeight, "Hellroom"};
@@ -101,6 +85,14 @@ int main() {
     // //Render game
     float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
     renSys.update(percentTick);
+=======
+  FVEng::StateMachine StateMachine{screenWidth, screenHeight, "Hellroom"};
+  StateMachine.AddState(std::make_unique<FVEng::mainMenuState>(StateMachine.getWindow(), StateMachine), true);
+  while(StateMachine.getWindow().isOpen())
+  {
+      StateMachine.ProcessStateChanges();
+      StateMachine.GetActivateState()->executeState();
+>>>>>>> developer
   }
 
   return 0;

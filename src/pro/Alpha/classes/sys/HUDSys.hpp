@@ -20,6 +20,10 @@ namespace game
         HUDSys& operator=(HUDSys&&)= delete;
 
         void iniRenderSys();
+        void setPlayer  (Entity* player);
+        void setHeartID (size_t id);
+        void setCoinID  (size_t id);
+        void setClockID (size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -29,18 +33,23 @@ namespace game
         //void iniSprite(game::Entity& ent, double pt);
         void update();
         void renderHearts();
-
+        void renderCoins();
+        void renderTimer();
         void restartTime();
-
+        void setMaxTime(double newTime);
 
         private:
             FVeng::GameManager& gMan_;
             sf::RenderWindow&   window_;
-            Entity&             player_;
+            Entity*             player_;
             sf::Clock           clock_;
-            sf::Text            text_;
+            sf::Text            timeText_;
+            sf::Text            coinText_;
             sf::Font            font_;
-            size_t             heart_;
-            double    accumulatedTime;    //time passed (seconds)
+            size_t              heart_;
+            size_t              coin_;
+            size_t              clocksp_;
+            double              accumulatedTime;    //time passed (seconds)
+            double              maxTime_ = 99;
     };
 }

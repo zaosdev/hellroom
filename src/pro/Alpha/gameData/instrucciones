@@ -1,0 +1,9 @@
+//SELECTED PET DATA:
+ -1 = ninguna, 0 = pet1...
+
+//BOUHTS PET DATA
+pet1,0
+pet2,0
+pet3,0
+
+nombre, comprado(1) - no comprado(0)

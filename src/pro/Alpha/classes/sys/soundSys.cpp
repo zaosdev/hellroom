@@ -31,7 +31,7 @@ namespace game{
             soundP.play();
             isPlaying = true;
         }
-        std::cout << "PLAYING WALKING SOUND" << std::endl;
+        //std::cout << "PLAYING WALKING SOUND" << std::endl;
     }
 
     void SoundSys::stopSound(){

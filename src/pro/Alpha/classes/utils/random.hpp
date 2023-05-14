@@ -4,7 +4,7 @@
 
 namespace FVmath
 {
-    [[nodiscard]] inline static int calcualteRandom(int maxNum, int minNum = 0) noexcept
+    [[nodiscard]] inline static int calculateRandom(int maxNum, int minNum = 0) noexcept
     {
         //example max 15, min = -5
         std::random_device rd;
