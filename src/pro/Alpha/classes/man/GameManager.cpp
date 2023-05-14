@@ -86,6 +86,8 @@ namespace FVeng
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
+            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};
+
             return e;
         }
 
@@ -126,7 +128,9 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));             
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
+
+            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};           
         }
 
         //Create all spawners on the current map
@@ -187,6 +191,8 @@ namespace FVeng
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+
+            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};
         }
 
         void GameManager::SpawnDummy(FVmath::Point2Di Pos)

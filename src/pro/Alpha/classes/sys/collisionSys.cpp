@@ -8,11 +8,46 @@ namespace game
   : gMan_(gameMan)/*, spriteMan_(spriteMan)*/{
 
 
-  }
-  
+  }  
 
-  bool checkCollision(Entity& collider1, Entity& collider2)
-  {
+  CollisionSys::~CollisionSys() = default;
+
+  //########################################################################
+
+    void CollisionSys::update()
+    {
+      //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
+      auto& EM = gMan_.getEntityManager();
+      
+      sf::Sprite* playerSprite;
+      //std::vector<sf::Sprite*> enemySprites;
+      std::vector<Entity*> enemies;
+
+      Entity& player = gMan_.getPlayer();
+
+      //Entity and enemy obtention loop
+      for(auto& ent : EM)
+      {
+        if(!ent.hasTag(game::Entity::TAG::Player))
+        {
+          if(ent.hasTag(game::Entity::TAG::Enemy))
+          {
+            if(checkCollision(player,ent))
+            {
+              noOverlap(player,ent);
+            }
+          }
+          //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
+          // else if()
+          // {
+
+          // }
+        }
+      }
+    }
+
+    bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
+    {
       auto& rect1Pos = collider1.physics->pos;
       auto& rect2Pos = collider2.physics->pos;
 
@@ -34,46 +69,29 @@ namespace game
       }
   }
 
-  void resolveCollision(Entity& movingEntity, Entity& staticEntity)
-  {
-      auto& rect1Pos = movingEntity.physics->pos;
-      auto& rect2Pos = staticEntity.physics->pos;
-
-      auto& rect1Vel = movingEntity.physics->vel;
-
-      FVmath::Point2D DirectionX{rect1Pos.x,rect1Pos.x+(rect1Pos.x*rect1Vel.x)}
-
-      if()
-  }
-  
-
-  CollisionSys::~CollisionSys() = default;
-
-  //########################################################################
-
    void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
 
-    sf::Sprite sprite1 = ent1.render->Sprite;
-    sf::Sprite sprite2 = ent2.render->Sprite;
+    // sf::Sprite sprite1 = ent1.render->Sprite;
+    // sf::Sprite sprite2 = ent2.render->Sprite;
 
-    sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
-    sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
+    // sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
+    // sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
 
-    sf::Vector2f sprite1POS = sprite1.getPosition();
-    sf::Vector2f sprite2POS = sprite2.getPosition();
+    // sf::Vector2f sprite1POS = sprite1.getPosition();
+    // sf::Vector2f sprite2POS = sprite2.getPosition();
 
     FVmath::Point2D ent1POS = ent1.physics->pos;
     FVmath::Point2D ent2POS = ent2.physics->pos;
 
 
-    sf::Vector2f s1_HalfSize = {sprite1Bbox.height /2.0f , sprite1Bbox.width / 2.0f};
-    sf::Vector2f s2_HalfSize = {sprite2Bbox.height /2.0f , sprite2Bbox.width / 2.0f};
+    sf::Vector2f s1_HalfSize = {ent1.coll->height /2.0f , ent1.coll->width / 2.0f};
+    sf::Vector2f s2_HalfSize = {ent2.coll->height /2.0f , ent2.coll->width / 2.0f};
 
-    float deltaX = sprite2POS.x - sprite1POS.x;
-    float deltaY = sprite2POS.y - sprite1POS.y;
+    // float deltaX = sprite2POS.x - sprite1POS.x;
+    // float deltaY = sprite2POS.y - sprite1POS.y;
 
-    // float deltaX = ent2POS.x - ent1POS.x;
-    // float deltaY = ent2POS.y - ent1POS.y;
+    float deltaX = ent2POS.x - ent1POS.x;
+    float deltaY = ent2POS.y - ent1POS.y;
 
     float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
@@ -121,7 +139,9 @@ namespace game
 
       }
     }
-  }
+  }     
+
+
 
   //void CollisionSys::shieldCollision(float intersectX, float intersectY,  float deltaX,  float deltaY, Entity& ent1, FVmath::Point2D ent1POS, Entity& ent2, FVmath::Point2D ent2POS ){
     
@@ -163,52 +183,6 @@ namespace game
     //   }
     // }
   //}
-
-     
-    void CollisionSys::update(){
-      
-    //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
-      auto& EM = gMan_.getEntityManager();
-      
-    
-      sf::Sprite* playerSprite;
-      //std::vector<sf::Sprite*> enemySprites;
-      std::vector<Entity*> enemies;
-      Entity* player;
-      
-
-      //Entity and enemy obtention loop
-      for(auto& ent : EM){
-        if(ent.hasTag(game::Entity::TAG::Player))
-        {
-          player = &ent;
-          playerSprite  = &ent.render->Sprite;
-          playerBbox   = ent.render->Sprite.getGlobalBounds();
-        }
-       
-        else if(ent.hasTag(game::Entity::TAG::Enemy))
-        {
-          
-          //entidad = &ent;
-          enemies.push_back(&ent);
-          //enemySprites.push_back(&ent.render->Sprite); 
-          //enemyBbox = ent.render->Sprite.getGlobalBounds();
-        }
-      }
-
-      for(auto& enemyEnt : enemies){
-
-       
-        if(playerBbox.intersects(enemyEnt->render->Sprite.getGlobalBounds())){
-          noOverlap(*player, *enemyEnt);
-      
-
-        }
-        
-      }
-        
-    }
-
 
       //Acction loop. Every enemy against player
       // for(auto& enemySprite : enemySprites)
@@ -284,17 +258,6 @@ namespace game
       //   }
         
       // }
-
-
-
-
-
-
-
-
-
-
-
 
 
       // std::cout << "BBOX PLAYER WIDTH:  " << player_bbox.width << "\n" << "BBOX PLAYER HEIGHT:  " << player_bbox.height << std::endl;

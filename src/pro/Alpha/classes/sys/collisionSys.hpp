@@ -22,7 +22,7 @@ namespace game
         CollisionSys& operator=(CollisionSys&&)= delete;
 
         bool checkCollision(Entity& collider1, Entity& collider2); //comprueba si hay colisión entre entidades
-        void resolveCollision(Entity& movingEntity, Entity& staticEntity); //Only works for 1 moving entity against a static one
+        //void resolveCollision(Entity& movingEntity, Entity& staticEntity); //Only works for 1 moving entity against a static one
         //void collisionDetect(const std::vector<sf::FloatRect>& bboxes); //comprueba colisiones y realiza las acciones necesarias
         //void colliding();
         
