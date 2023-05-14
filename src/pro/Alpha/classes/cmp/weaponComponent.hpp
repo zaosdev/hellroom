@@ -16,6 +16,5 @@ namespace game
         bool on{false};
         directionType direction{};
         mejora especial{};
-
     };
 }

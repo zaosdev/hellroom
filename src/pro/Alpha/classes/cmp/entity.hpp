@@ -11,7 +11,7 @@
 #include "rewardComponent.hpp"
 #include "effectComponent.hpp"
 #include "weaponComponent.hpp"
-
+#include "shieldComponent.hpp"
 
 
 #include <optional>
@@ -46,7 +46,7 @@ namespace game
       std::optional<RewardComponent>  reward{};
       std::optional<EffectComponent>  effct{};
       std::optional<WeaponComponent>  weapon{};
-
+      std::optional<ShieldComponent>  shield{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

@@ -6,6 +6,7 @@
 
 
 //display time, player health, player bullets...
+#define spacing 35
 
 namespace game
 {
@@ -24,6 +25,7 @@ namespace game
         void setHeartID (size_t id);
         void setCoinID  (size_t id);
         void setClockID (size_t id);
+        void setShieldID(size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -32,7 +34,8 @@ namespace game
 
         //void iniSprite(game::Entity& ent, double pt);
         void update();
-        void renderHearts();
+        FVmath::Point2Di renderHearts ();
+        void renderShield(FVmath::Point2Di lastHeartPosition);
         void renderCoins();
         void renderTimer();
         void restartTime();
@@ -49,6 +52,7 @@ namespace game
             size_t              heart_;
             size_t              coin_;
             size_t              clocksp_;
+            size_t              shieldsp_;
             double              accumulatedTime;    //time passed (seconds)
             double              maxTime_ = 99;
     };

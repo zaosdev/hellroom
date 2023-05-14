@@ -2,12 +2,14 @@
 #include "utils/gameData.hpp"
 
 #define PLAYER_SPRITE_PATH  "../resources/sprites.png"
-#define HEARTH_PATH         "../media/HUD/heart-red.png"
+#define HEARTH_PATH         "../media/HUD/heart.png"
 #define COIN_PATH           "../media/HUD/coin.png"
 #define CLOCK_PATH          "../media/HUD/clock.png"
+#define SHIELD_SP_PATH      "../media/HUD/shield.png"
 #define PET1_SP_PATH        "../media/pets/vitalis.png"
 #define PET2_SP_PATH        "../media/pets/guardian.png"
 #define PET3_SP_PATH        "../media/pets/sentinel.png"
+
 
 namespace FVeng
 {
@@ -58,6 +60,7 @@ namespace FVeng
             SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
+            SPman.loadTexture(SHIELD_SP_PATH, SHIELD_TEXT);
         }
 
         void GameManager::initGame()
@@ -106,7 +109,9 @@ namespace FVeng
             //create data component
             int coins = FVData::getCoins();
 
-            e.data   = game::DataComponent {.coins = coins};
+            e.data   = game::DataComponent      {.coins = coins};
+
+            e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
@@ -341,6 +346,18 @@ namespace FVeng
         {
             auto& e     = EM_.createEntity();
             auto texIdx = SPman.getTextureIdxByName(CLOCK_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
+
+            return e;
+        }
+
+        [[maybe_unused]] game::Entity&  GameManager::createShield()
+        {
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(SHIELD_TEXT);
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 

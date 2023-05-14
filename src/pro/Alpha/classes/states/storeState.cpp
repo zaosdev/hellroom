@@ -52,11 +52,21 @@ namespace FVEng{
                 std::terminate();
             }
 
+            //Set texture
             pets_[0].setTexture(pet1Texture_);
             pets_[1].setTexture(pet2Texture_);
             pets_[2].setTexture(pet3Texture_);
             coin_sp_.setTexture(coinTexture_);
 
+            //Redimensionate to 128x128
+            // FVmath::Point2Di originalSize  = {(int) pet1Texture_.getSize().x, (int) pet1Texture_.getSize().y};
+            // FVmath::Point2Di objectiveSize = {128, 128}; 
+            // float xScale = objectiveSize.x / originalSize.x;
+            // float yScale = objectiveSize.y / originalSize.y;
+            // for(auto& pet : pets_)
+            // {
+            //    pet.setScale(xScale, yScale)
+            // }
 
             updateUI();
 

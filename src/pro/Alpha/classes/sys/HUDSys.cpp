@@ -66,13 +66,19 @@ namespace game
         clocksp_ = id;
     }
 
+    void HUDSys::setShieldID(size_t id)
+    {
+        shieldsp_ = id;
+    }
+
     void HUDSys::setMaxTime(double newTime)
     {
         maxTime_ = newTime;
     }
 
-    void HUDSys::renderHearts()
+    FVmath::Point2Di HUDSys::renderHearts()
     {
+        FVmath::Point2Di lastHeartPosition;
         //Get the player's health
         auto& hc = player_->health;
         float ch = hc->currentLife;
@@ -81,8 +87,6 @@ namespace game
         float semiHeart    = (static_cast<int>(ch) % lifeHeart) / 100.f;
         //std::cout << "SemiHeart: " << semiHeart << std::endl;
         //Render the full hearts
-        int spacing = 35;
-
         auto& EM = gMan_.getEntityManager();
 
         auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==heart_;});
@@ -94,6 +98,7 @@ namespace game
               0 + i * spacing,
               0
             );
+            lastHeartPosition = {0 + i * spacing, 0};
             if(i < fullHearts) window_.draw(trueHeart.render->Sprite);
         }
         //Render the heart semi filled
@@ -105,7 +110,38 @@ namespace game
         
         //Return  sprite to normality
         trueHeart.render->Sprite.setTextureRect({0, 0, sizeX, sizeY});
+
+        return lastHeartPosition;
     }
+
+    void HUDSys::renderShield(FVmath::Point2Di lastHeartPosition)
+    {
+        //Get the player's shield
+        auto& sh = player_->shield;
+
+        auto& EM = gMan_.getEntityManager();
+
+        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==shieldsp_;});
+
+        //set shield position
+        auto& trueShield = *it.base();
+        trueShield.render->Sprite.setPosition(
+          lastHeartPosition.x + spacing,
+          lastHeartPosition.y
+        );
+ 
+        //Render the shield semi filled according to refresh time
+        FVmath::Point2D shieldSize = {    (float) trueShield.render->Sprite.getTexture()->getSize().x
+                                     ,    (float) trueShield.render->Sprite.getTexture()->getSize().y };
+        float refreshPropotion      = sh->passedTime / sh->refreshTime;
+
+        sf::Color color(refreshPropotion * 255, refreshPropotion * 255, refreshPropotion * 255, 255);
+        trueShield.render->Sprite.setColor(color);
+
+        trueShield.render->Sprite.setTextureRect({0, 0, (int) (shieldSize.x * refreshPropotion), (int) shieldSize.y});
+        window_.draw(trueShield.render->Sprite);
+    }
+
 
     void HUDSys::renderTimer()
     {
@@ -160,7 +196,10 @@ namespace game
     void HUDSys::update()
     {   
         //Render player's life
-        renderHearts();
+        auto lastPos = renderHearts();
+
+        //Render the shield indicator
+        renderShield(lastPos);
 
         //Render player's coins
         renderCoins();

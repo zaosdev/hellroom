@@ -24,7 +24,7 @@ namespace FVeng
         #define PET1_TEXT   "pet1_sprite"
         #define PET2_TEXT   "pet2_sprite"
         #define PET3_TEXT   "pet3_sprite"
-
+        #define SHIELD_TEXT "shield_sprite"
 
         GameManager(sf::RenderWindow& window);
 
@@ -38,9 +38,10 @@ namespace FVeng
         void initGame();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
         game::Entity& createPet   (FVmath::Point2Di Pos);
-        game::Entity& createHeart();
-        game::Entity& createCoin();
-        game::Entity& createClock();
+        game::Entity& createHeart   ();
+        game::Entity& createCoin    ();
+        game::Entity& createClock   ();
+        game::Entity& createShield  ();
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
