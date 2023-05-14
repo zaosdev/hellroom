@@ -16,6 +16,7 @@
 #include "../classes/sys/collisionSys.hpp"
 #include "../classes/sys/rewardSys.hpp"
 #include "../classes/sys/weaponSys.hpp"
+#include "../classes/sys/petSys.hpp"
 
 #include "../classes/man/stateManager.hpp"
 
@@ -46,6 +47,7 @@ namespace FVEng{
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
+        , petSys        { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -63,6 +65,7 @@ namespace FVEng{
             HudSys.setHeartID(GameMan.createHeart().id());
             HudSys.setCoinID(GameMan.createCoin().id());
             HudSys.setClockID(GameMan.createClock().id());
+            petSys.initPetSys();
             //soundSys.loadSound();
         }
 
@@ -83,6 +86,8 @@ namespace FVEng{
                     AISys.update(GameMan.getBB(), dt);
 
                     phySys.update(dt);
+
+                    petSys.update(dt);
 
                     collisionSys.update();
 
@@ -132,6 +137,7 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
+        game::PetSys            petSys;
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

@@ -21,6 +21,9 @@ namespace FVeng
         #define COIN_TEXT   "coin_sprite"
         #define CLOCK_TEXT  "clock_sprite"
         #define BULLET_TEXT "bullet_sprite"
+        #define PET1_TEXT   "pet1_sprite"
+        #define PET2_TEXT   "pet2_sprite"
+        #define PET3_TEXT   "pet3_sprite"
 
 
         GameManager(sf::RenderWindow& window);
@@ -34,6 +37,7 @@ namespace FVeng
         void initLevel();
         void initGame();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
+        game::Entity& createPet   (FVmath::Point2Di Pos);
         game::Entity& createHeart();
         game::Entity& createCoin();
         game::Entity& createClock();

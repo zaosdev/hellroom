@@ -8,9 +8,9 @@
 #include "../utils/gameData.hpp"
 
 #define MAX_NUMBER_OF_ITEMS 3
-#define PET1_PATH "../media/pets/pet.png"
-#define PET2_PATH "../media/pets/pet.png"
-#define PET3_PATH "../media/pets/pet.png"
+#define PET1_PATH "../media/pets/vitalis.png"
+#define PET2_PATH "../media/pets/guardian.png"
+#define PET3_PATH "../media/pets/sentinel.png"
 #define COIN_PATH "../media/HUD/coin.png"
 #define PET1_COST 300 //vitalis
 #define PET2_COST 400 //guardian
@@ -340,7 +340,7 @@ namespace FVEng{
         sf::Font font_;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
         
-        std::vector<std::string> pet_names_ {"Vitalis", "Guardian", "Centinela"};
+        std::vector<std::string> pet_names_ {"Vitalis", "Guardian", "Sentinel"};
         
         int  available_coins_ = 0;
         sf::Text coins_text_;

@@ -5,6 +5,9 @@
 #define HEARTH_PATH         "../media/HUD/heart-red.png"
 #define COIN_PATH           "../media/HUD/coin.png"
 #define CLOCK_PATH          "../media/HUD/clock.png"
+#define PET1_SP_PATH        "../media/pets/vitalis.png"
+#define PET2_SP_PATH        "../media/pets/guardian.png"
+#define PET3_SP_PATH        "../media/pets/sentinel.png"
 
 namespace FVeng
 {
@@ -52,6 +55,9 @@ namespace FVeng
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
             SPman.loadTexture("../media/bullet.png", BULLET_TEXT);
+            SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
+            SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
+            SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
         }
 
         void GameManager::initGame()
@@ -61,6 +67,10 @@ namespace FVeng
             createMap();
             createAllSpawner();
             auto& player = createPlayer({320,240});
+            if(FVData::getSelectedPet() != -1)
+            {
+                createPet({320,240});
+            }
             bb_.targetID = player.id();
 
         }
@@ -99,6 +109,58 @@ namespace FVeng
             e.data   = game::DataComponent {.coins = coins};
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+            return e;
+        }
+
+
+        [[maybe_unused]] game::Entity& GameManager::createPet(FVmath::Point2Di Pos)
+        {
+            //Read the pet we must use
+            int petNum = FVData::getSelectedPet();
+
+            auto& e = EM_.createEntity();
+
+            int texIdx = -1; 
+            switch (petNum)
+            {
+                case 0:  texIdx = SPman.getTextureIdxByName(PET1_TEXT); break;
+                case 1:  texIdx = SPman.getTextureIdxByName(PET2_TEXT); break;
+                case 2:  texIdx = SPman.getTextureIdxByName(PET3_TEXT); break;
+                default: break;
+            }
+
+            
+            
+            // Lo dispongo en el centro de la pantalla
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            if(petNum == 3)
+            {
+                e.weapon = game::WeaponComponent{};
+            }
+            
+
+            //health status 
+            float life = 200;
+            e.health = game::HealthComponent{ .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};
+
+            //add tag player
+            e.addTag(game::Entity::TAG::Pet); 
+
+            //create life 
+            if(texIdx != -1)
+            {
+                e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+            }
+
+            initEntityRender(e, {0,0}, sf::IntRect(0, 0, 32, 32));
 
             return e;
         }
@@ -149,7 +211,7 @@ namespace FVeng
 
             auto& e = EM_.createEntity();
 
-            e.physics = game::PhysicsComponent{.prevPos{float(Pos.x)+30,float(Pos.y)+35}, .pos{float(Pos.x)+30,float(Pos.y)+35}, .vel{float(Vel.x),float(Vel.y)},.mov_speed =640/4};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35}, .vel{float(Vel.x),float(Vel.y)},.mov_speed =640/4};
 
             auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
             std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
