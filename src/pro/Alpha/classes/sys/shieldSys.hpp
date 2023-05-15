@@ -19,7 +19,7 @@ namespace game
         ShieldSys& operator=(ShieldSys&&)= delete;
 
         void update(double dt);
-        void activateShield(game::Entity& ent, bool activatedFromOutSide);
+        void activateShield(game::Entity& ent, bool restartTime);
        
 
         private:

@@ -4,8 +4,9 @@
 
 namespace game
 {
-    PetSys::PetSys(FVeng::GameManager& gameMan)
+    PetSys::PetSys(FVeng::GameManager& gameMan, game::ShieldSys& shieldSys)
     : gMan_(gameMan)
+    , ssys_(shieldSys)
     {
     }
 
@@ -48,7 +49,12 @@ namespace game
                         ent.health->positiveAffection    = 0.1;
                         break;
                     case 1: //guardian
-
+                        if(ent.shield->active)
+                        {
+                            std::cout << "el escudo de la mascota esta activo.... " << std::endl;
+                            ssys_.activateShield(player, false);
+                        }
+                        else  std::cout << "el escudo de la mascota NOOOOOOOO esta activo.... " << std::endl;
                         break;
                     case 2: //sentinel
 
