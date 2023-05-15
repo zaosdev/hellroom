@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 #include "classes/man/stateManager.hpp"
-#include "classes/states/mainMenuState.cpp"
+#include "classes/states/mainMenuState.hpp"
 #include "include/config.h"
 
 int main() {

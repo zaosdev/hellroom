@@ -4,7 +4,7 @@
 
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
-#include "gameState.cpp"
+#include "gameState.hpp"
 #include "../utils/gameData.hpp"
 
 #define MAX_NUMBER_OF_ITEMS 3

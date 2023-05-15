@@ -12,7 +12,7 @@ namespace game
     struct RenderSys
     {
         RenderSys(FVeng::GameManager& Gman, HUDSys& HUD);
-        ~RenderSys();
+        ~RenderSys() = default;
 
         RenderSys (const RenderSys&) = delete;
         RenderSys (RenderSys&&) = delete;

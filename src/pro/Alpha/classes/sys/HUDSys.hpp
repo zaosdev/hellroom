@@ -13,7 +13,7 @@ namespace game
     struct HUDSys
     {
         HUDSys(FVeng::GameManager& Gman);
-        ~HUDSys();
+        ~HUDSys() = default;
 
         HUDSys (const HUDSys&) = delete;
         HUDSys (HUDSys&&) = delete;

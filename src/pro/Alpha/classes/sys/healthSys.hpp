@@ -2,6 +2,7 @@
 
 #include "../man/GameManager.hpp"
 #include "../cmp/blackBoardComponent.hpp"
+// #include "../states/state.hpp"
 
 namespace game
 {
@@ -22,7 +23,6 @@ namespace game
         void setMortality  (std::optional<game::HealthComponent>&);
 
         private:
-            FVeng::GameManager& gMan_;
-
+            FVeng::GameManager&  gMan_;
     };
 }

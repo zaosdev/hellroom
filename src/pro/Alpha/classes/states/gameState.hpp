@@ -21,8 +21,8 @@
 #include "../classes/sys/effectSys.hpp"
 
 
-#include "../classes/man/stateManager.hpp"
-
+#include "../man/stateManager.hpp"
+#include "../states/gameOverState.hpp"
 
 #include "../utils/circularIterator.hpp"
 #include "../cmp/blackBoardComponent.hpp"
@@ -79,7 +79,7 @@ namespace FVEng{
         void executeState() override
         {
             //Bucle del juego
-            while (GameMan.getWindow().isOpen()) 
+            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0) 
             {
                 //Bucle de obtención de eventos
                 GameMan.getEntityManager().update();
@@ -124,6 +124,9 @@ namespace FVEng{
                 float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
                 renSys.update(percentTick);
             }
+
+            //player is dead
+            SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
         }
 
 

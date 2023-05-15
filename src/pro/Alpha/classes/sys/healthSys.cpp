@@ -48,8 +48,8 @@ namespace game
             {
                 auto& hc = ent.health;
 
-               // hc->negativeAffection = 2;
-               // hc->positiveAffection = 1;
+                // hc->negativeAffection = 2;
+                // hc->positiveAffection = 1;
                 //if inmortality time didnt pass, damage will be discarded, else apply both effects
                 if(hc->isInmortal)
                 {
@@ -66,8 +66,12 @@ namespace game
                 if(hc->currentLife > hc->maxLife) hc->currentLife = hc->maxLife;
                 else if (hc->currentLife <= 0)
                 {
-                    if(ent.hasTag(game::Entity::TAG::Player)) {std::cout << "Player is dead, state machine change to new state" << std::endl;}
-                    else {
+                    if(ent.hasTag(game::Entity::TAG::Player) &&  not (ent.hasTag(game::Entity::TAG::Bullet)))
+                    {
+                        std::cout << "Player is dead, state machine change to new state" << std::endl;
+                    }
+                    else 
+                    {
                         gMan_.createHealth(ent.physics->pos);
                         ent.mark4destruction();
                     }
