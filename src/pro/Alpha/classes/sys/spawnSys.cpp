@@ -21,10 +21,10 @@ namespace game
             gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         case 2:
-            gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),4);
+            gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
             break;
         case 3: 
-            gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),5);
+            gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
             break;
         default:
             gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
