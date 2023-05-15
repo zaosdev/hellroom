@@ -182,6 +182,8 @@ namespace game
       //Action loops - ENEMY - PLAYER
       for(auto& enemyEnt : enemies)
       {
+        if(player->shield->active) break;
+        
         if(playerBbox.intersects(enemyEnt->render->Sprite.getGlobalBounds()))
         {
           noOverlap(*player, *enemyEnt);

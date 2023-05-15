@@ -211,6 +211,38 @@ namespace FVeng
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));             
         }
 
+        void GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8 };
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            ); 
+
+            e.weapon    = game::WeaponComponent {};              
+
+            e.AI        = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::STAY, .targetID=targetID, .perceptionTime=perceptionTime};         
+                                    
+            e.render    = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+            e.reward    = game::RewardComponent    {.min_reward = 2, .max_reward = 4};
+
+            float life = 50;
+            e.health    = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
+
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
+
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+        }
+
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
 
             auto& e = EM_.createEntity();

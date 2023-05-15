@@ -77,10 +77,20 @@ namespace game
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
                         break;
                     }
+                    case FVAI::SB::STAY:
+                    {
+                        addPos = FVAI::stay();
+                        break;
+                    }
                     default:break;
                 }
-                
                 ent.physics->vel = addPos;
+
+                if(ent.weapon)
+                {
+                    ent.weapon->direction = directionType::este; // por probar
+                    ent.weapon->on;
+                }
             }
 
         }  

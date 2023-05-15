@@ -50,6 +50,11 @@ FVmath::Point2D FVAI::pursue(FVmath::Point2D origin, FVmath::Point2D target, dou
     return seek(origin, target, speed, arrivalRadius); 
 }
 
+FVmath::Point2D FVAI::stay()
+{
+    return {};
+}
+
 FVmath::Point2D FVAI::flee(FVmath::Point2D origin, FVmath::Point2D target, double speed)
 {
     return -seek(origin, target, speed); 

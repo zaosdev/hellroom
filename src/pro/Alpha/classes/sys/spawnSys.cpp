@@ -13,7 +13,7 @@ namespace game
     {
 
         // gMan_.SpawnDummy(Pos);
-        auto enemyChoice = FVmath::calculateRandom(2,1);
+        auto enemyChoice = FVmath::calculateRandom(3,1);
         
         switch (enemyChoice)
         {
@@ -22,6 +22,9 @@ namespace game
             break;
         case 2:
             gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),4);
+            break;
+        case 3: 
+            gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),5);
             break;
         default:
             gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
