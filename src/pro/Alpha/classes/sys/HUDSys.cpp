@@ -98,7 +98,8 @@ namespace game
               0 + i * spacing,
               0
             );
-            lastHeartPosition = {0 + i * spacing, 0};
+            if(semiHeart == 0) lastHeartPosition = {0 + (i-1) * spacing, 0};
+            else               lastHeartPosition = {0 + i   * spacing, 0}; 
             if(i < fullHearts) window_.draw(trueHeart.render->Sprite);
         }
         //Render the heart semi filled

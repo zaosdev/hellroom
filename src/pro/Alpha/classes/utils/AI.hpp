@@ -8,6 +8,7 @@ namespace FVAI
 {
     enum class SB
     {
+        STAY,
         ARRIVE,
         SEEK,
         PURSUE,
@@ -23,6 +24,7 @@ namespace FVAI
     };
 
     FVmath::Point2D arrive      (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius, double friction, bool decreaseVelocity, double time2arrive);
+    FVmath::Point2D stay        ();
     FVmath::Point2D seek        (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
     FVmath::Point2D pursue      (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
     FVmath::Point2D flee        (FVmath::Point2D origin, FVmath::Point2D target, double speed);

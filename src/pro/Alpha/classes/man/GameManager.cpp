@@ -188,7 +188,7 @@ namespace FVeng
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/6 };
 
 
             e.render->Sprite.move(
@@ -198,18 +198,49 @@ namespace FVeng
 
             e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
-            //health status 
-            float life = 50;
-            e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 1 / 2};     
-
-            //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy); 
-
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
             e.reward = game::RewardComponent    {.min_reward = 1, .max_reward = 3};
 
+            float life = 50;
+            e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0};   
+
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
+
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));             
+        }
+
+        void GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8 };
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            ); 
+
+            e.weapon    = game::WeaponComponent {};              
+
+            e.AI        = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::STAY, .targetID=targetID, .perceptionTime=perceptionTime};         
+                                    
+            e.render    = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+            e.reward    = game::RewardComponent    {.min_reward = 2, .max_reward = 4};
+
+            float life = 50;
+            e.health    = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
+
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
+
+            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         }
 
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
@@ -230,8 +261,9 @@ namespace FVeng
                 e.physics->pos.y
             );
 
+            //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
-            
+            e.addTag(game::Entity::TAG::Player);
         }
 
         //Create all spawners on the current map
@@ -275,7 +307,7 @@ namespace FVeng
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8 };
 
 
             e.render->Sprite.move(
@@ -285,12 +317,15 @@ namespace FVeng
 
             e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
-            //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy); 
-            
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             e.reward = game::RewardComponent    {.min_reward = 2, .max_reward = 4};
+
+            float life = 50;
+            e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
+
+            //add tag enemy
+            e.addTag(game::Entity::TAG::Enemy); 
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         }

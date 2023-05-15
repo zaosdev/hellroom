@@ -2,6 +2,8 @@
 #include "../classes/man/mapManager.hpp"
 #include <iostream>
 
+#define defaultDamage 30
+
 namespace game
 {
   CollisionSys::CollisionSys(FVeng::GameManager& gameMan/*, SFMLeng::SpriteManager& spriteMan*/)
@@ -130,7 +132,8 @@ namespace game
   //}
 
      
-    void CollisionSys::update(){
+    void CollisionSys::update()
+    {
       
     //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
       auto& EM = gMan_.getEntityManager();
@@ -139,37 +142,69 @@ namespace game
       sf::Sprite* playerSprite;
       //std::vector<sf::Sprite*> enemySprites;
       std::vector<Entity*> enemies;
+      std::vector<Entity*> enemyBullets;
       Entity* player;
-      
+      std::vector<Entity*> playerBullets;
 
       //Entity and enemy obtention loop
       for(auto& ent : EM){
         if(ent.hasTag(game::Entity::TAG::Player))
         {
-          player = &ent;
-          playerSprite  = &ent.render->Sprite;
-          playerBbox   = ent.render->Sprite.getGlobalBounds();
+          if(ent.hasTag(game::Entity::TAG::Bullet))
+          {
+            playerBullets.push_back(&ent);
+          }
+          else
+          {
+            player = &ent;
+            playerSprite  = &ent.render->Sprite;
+            playerBbox   = ent.render->Sprite.getGlobalBounds();
+          }
         }
        
         else if(ent.hasTag(game::Entity::TAG::Enemy))
         {
           
-          //entidad = &ent;
-          enemies.push_back(&ent);
-          //enemySprites.push_back(&ent.render->Sprite); 
-          //enemyBbox = ent.render->Sprite.getGlobalBounds();
+          //enemy bullet
+          if(ent.hasTag(game::Entity::TAG::Bullet))
+          {
+            enemyBullets.push_back(&ent);
+          }
+          else
+          {
+            enemies.push_back(&ent);
+          }
         }
       }
 
-      for(auto& enemyEnt : enemies){
 
-       
-        if(playerBbox.intersects(enemyEnt->render->Sprite.getGlobalBounds())){
-          noOverlap(*player, *enemyEnt);
-      
 
-        }
+      //Action loops - ENEMY - PLAYER
+      for(auto& enemyEnt : enemies)
+      {
+        if(player->shield->active) break;
         
+        if(playerBbox.intersects(enemyEnt->render->Sprite.getGlobalBounds()))
+        {
+          noOverlap(*player, *enemyEnt);
+          player->health->negativeAffection = defaultDamage / 2;
+        }
+      }
+
+      //Action loops - PLAYER BULLETS - ENEMIES
+      for(auto& playerBullet : playerBullets)
+      {
+        for(auto& enemy : enemies)
+        {
+          auto bulletBB = playerBullet->render->Sprite.getGlobalBounds();
+          auto enemyBB  = enemy->render->Sprite.getGlobalBounds();
+          if(bulletBB.intersects(enemyBB))
+          {
+            noOverlap(*playerBullet, *enemy);
+            playerBullet->mark4destruction();
+            enemy->health->negativeAffection = defaultDamage;
+          }
+        }
       }
         
     }
