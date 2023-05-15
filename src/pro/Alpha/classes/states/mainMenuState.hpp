@@ -4,8 +4,8 @@
 
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
-#include "gameState.cpp"
-#include "storeState.cpp"
+#include "../states/gameState.hpp"
+#include "../states/storeState.hpp"
 
 #define MAX_NUMBER_OF_ITEMS 3
 

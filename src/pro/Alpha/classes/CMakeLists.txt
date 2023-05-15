@@ -22,7 +22,6 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/HUDSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/collisionSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/man/stateManager.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/states/mainMenuState.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/petSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/shieldSys.cpp"
 )
