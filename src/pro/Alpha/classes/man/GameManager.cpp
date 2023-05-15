@@ -156,10 +156,8 @@ namespace FVeng
             {
                 e.shield = game::ShieldComponent{.refreshTime = 4.f, .autoActive = true , .max_ActivatedTime = 2.f};
             } 
-            else if(petNum == 2) //Sentinel
-            {
-                e.weapon = game::WeaponComponent{};
-            }
+            // else if(petNum == 2) //Sentinel
+            // {}
             
 
             //health status 
@@ -347,6 +345,34 @@ namespace FVeng
             //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
             e.addTag(game::Entity::TAG::Enemy);
+        }
+
+        void GameManager::createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 15, 0 * 15, 15, 15));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(0),float(0)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.setColor(sf::Color(200, 0, 0, 255));
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 1.25, .arrivalRadius = 10, .perceptionTime = 100};
+
+            e.AI->targetCoord = targetCoord;
+            e.AI->behaviour   = sb;
+
+            //Set player bullet
+            e.addTag(game::Entity::TAG::Bullet);
+            e.addTag(game::Entity::TAG::Player);
         }
 
         //Create all spawners on the current map

@@ -26,6 +26,8 @@ namespace game
       std::vector<Entity*> enemies{};
       std::vector<Entity*> stat_coll{};
       std::vector<Entity*> plyrBullets{};
+      std::vector<Entity*> enmyBullets{};
+
 
 
       //bool nomore{false};
@@ -41,11 +43,17 @@ namespace game
         {
           if(ent.hasTag(game::Entity::TAG::Enemy))
           {
-            enemies.push_back(&ent);
-            if (DynamicEntityVsStaticEntity(player, dt, ent))
+            if(!ent.hasTag(game::Entity::TAG::Bullet))
             {
-              collInstance.push_back({ &ent, player.coll->contactTime });
-
+              enemies.push_back(&ent);
+              if (DynamicEntityVsStaticEntity(player, dt, ent))
+              {
+                collInstance.push_back({ &ent, player.coll->contactTime });
+              }
+            }
+            else
+            {
+              enmyBullets.push_back(&ent);
             }
           }
           else 
@@ -70,6 +78,7 @@ namespace game
         else if(ent.hasTag(game::Entity::TAG::Bullet))
         {
           plyrBullets.push_back(&ent);
+
         }
       }
 
@@ -139,6 +148,18 @@ namespace game
 
       if(bullet->alive())
           bullet->physics->pos+=bullet->physics->vel*dt;
+    }
+
+    for(auto* enmyBullet : enmyBullets)
+    {
+      if(DynamicEntityVsStaticEntity(*enmyBullet, dt, player))
+        {
+            collInstance.push_back({&player, enmyBullet->coll->contactTime });
+            enmyBullet->mark4destruction();
+            player.health->negativeAffection = defaultDamage;
+        }
+      if(enmyBullet->alive())
+        enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
 
 
