@@ -9,7 +9,7 @@ namespace game{
         
         isPlayingStep = false;
         isPlayingDash = false;
-
+        isPlayingPB   = false;
 
         //musicPlaying = false;
    
@@ -19,16 +19,11 @@ namespace game{
     void SoundSys::loadSounds(/*const std::string& soundfile*/){
 
         
-<<<<<<< HEAD
-        // loadSound("playerStep","../resources/SFX/16_human_walk_stone_1.wav");
-        // loadSound("playerDash","../resources/SFX/15_human_dash_1.wav");
-=======
         // loadSound("playerStep","../media/SFX/16_human_walk_stone_1.wav");
         // loadSound("playerDash","../media/SFX/15_human_dash_1.wav");
->>>>>>> main
         if(!sBplayerStep.loadFromFile("../media/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
         if(!sBplayerDash.loadFromFile("../media/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
-
+        if(!sBplayerBullet.loadFromFile("../media/SFX/Laser_Shoot2.wav")){std::cout << "FAILED TO LOAD PLAYERBULLET" << std::endl;}
         // sBfrs["playerStep"] = sBplayerStep;
         // sBfrs["playerDash"] = sBplayerDash;
 
@@ -36,7 +31,11 @@ namespace game{
         soundP.setBuffer(sBplayerStep); //asigno el sonido que necesito
         
         soundD.setPitch(1.5);
+        soundPbullet.setVolume(50);
         soundD.setBuffer(sBplayerDash);
+
+        soundPbullet.setVolume(30);
+        soundPbullet.setBuffer(sBplayerBullet);
 
 
         if (!music.openFromFile("../media/MUSIC/OST-Juego.wav")) {

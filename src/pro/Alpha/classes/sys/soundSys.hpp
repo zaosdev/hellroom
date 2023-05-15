@@ -37,33 +37,28 @@ namespace game{
 
            // std::map<std::string, sf::SoundBuffer> sBfrs; 
             
-            // sf::SoundBuffer sBplayerStep;
-            // sf::SoundBuffer sBplayerDash;
+            sf::SoundBuffer sBplayerStep;
+            sf::SoundBuffer sBplayerDash;
+            sf::SoundBuffer sBplayerBullet;
 
-
-            // sf::Sound sound;
-            // sf::Sound soundP;
-            // sf::Sound soundD;
+            //sf::Sound sound;
+            sf::Sound soundP;
+            sf::Sound soundD;
+            sf::Sound soundPbullet;
             // sf::Sound soundBP;
             // sf::Sound soundBF;
+            sf::Music music;
+            bool isPlayingStep, isPlayingDash, isPlayingPB, musicPlaying;
+
             
         private: 
             
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
 
-            sf::SoundBuffer sBplayerStep;
-            sf::SoundBuffer sBplayerDash;
+            //sf::Music music;
 
-            //sf::Sound sound;
-            sf::Sound soundP;
-            sf::Sound soundD;
-            // sf::Sound soundBP;
-            // sf::Sound soundBF;
-
-            sf::Music music;
-
-            bool isPlayingStep, isPlayingDash, musicPlaying;
+            
             
     };
 }

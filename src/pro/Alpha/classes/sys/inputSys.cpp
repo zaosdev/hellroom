@@ -48,10 +48,17 @@ namespace game
             }
 
             //bullet
+
+            if(inpRec_.isKeyPressed(getKeyCode('u'))|| inpRec_.isKeyPressed(getKeyCode('d')) || inpRec_.isKeyPressed(getKeyCode('l')) || inpRec_.isKeyPressed(getKeyCode('r'))){
+
+                soundSys.setLoop(true, soundSys.soundPbullet);
+                soundSys.playSound(soundSys.soundPbullet, soundSys.isPlayingPB);
+
                 if(inpRec_.isKeyPressed(getKeyCode('u'))){
                     std::cout << "up" << std::endl;
                      ent.weapon->on=true; 
                      ent.weapon->direction=directionType::norte;
+    
                 }    
                 if(inpRec_.isKeyPressed(getKeyCode('d'))){
                      ent.weapon->on=true; 
@@ -65,6 +72,10 @@ namespace game
                      ent.weapon->on=true; 
                      ent.weapon->direction=directionType::este;
                 }   
+            }
+            else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
+
+                
         }
 
         
