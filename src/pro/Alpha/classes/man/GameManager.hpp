@@ -57,6 +57,7 @@ namespace FVeng
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
+        void createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
         void setRenderNextLayer(game::MapComponent& map);

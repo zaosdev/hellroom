@@ -37,6 +37,7 @@ namespace game
         {
             if(ent.AI && ent.physics)
             {
+                ent.AI->timeAlive += dt;
                 FVmath::Point2D addPos;
                 bool percep = perception(ent.AI, EM, bb, dt);
                 switch(ent.AI->behaviour)

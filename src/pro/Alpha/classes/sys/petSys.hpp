@@ -30,6 +30,8 @@ namespace game
             FVeng::GameManager& gMan_;
             game::ShieldSys& ssys_;
             double totalTime_ = 0.0;
+            double clockTime_ = 0;
+            sf::Clock clock_;
             int    petNum_    = -1;
     };
 }

@@ -15,6 +15,7 @@ namespace game
     void PetSys::initPetSys()
     {
         petNum_ = FVData::getSelectedPet();
+        clock_.restart();
     }
 
     void PetSys::update(double dt)
@@ -26,7 +27,6 @@ namespace game
 
         for(auto& ent : EM)
         {
-            
             if(ent.physics && ent.hasTag(Entity::TAG::Pet))
             {
                 //Save the last position
@@ -57,7 +57,25 @@ namespace game
                         //else  std::cout << "el escudo de la mascota NOOOOOOOO esta activo.... " << std::endl;
                         break;
                     case 2: //sentinel
-
+                        if(clockTime_ > 0.5)
+                        {
+                            clockTime_ = 0;
+                            FVmath::Point2D randomEnemyPos = {0,0};
+                            for(auto& ent : EM)
+                            {
+                                if(ent.hasTag(game::Entity::TAG::Enemy))
+                                {
+                                    randomEnemyPos  = ent.physics->pos;
+                                    break;
+                                }
+                            }
+                            if(randomEnemyPos != FVmath::Point2D{0,0}) gMan_.createPetBullet(ent.physics->pos, FVAI::SB::SEEK, randomEnemyPos);
+                        }
+                        else 
+                        {
+                            clockTime_ += clock_.getElapsedTime().asSeconds();
+                        }
+                        clock_.restart();
                         break;
                     default:
                         break;
