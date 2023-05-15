@@ -36,6 +36,7 @@ namespace game
         Pet    = 1 << 3,
         Bullet = 1 << 4,
         STATIC_COLL = 1 << 5,
+        Health = 1 << 6,
 
       };
 

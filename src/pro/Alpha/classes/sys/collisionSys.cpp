@@ -56,8 +56,7 @@ namespace game
               enmyBullets.push_back(&ent);
             }
           }
-          else 
-          if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
+          else if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
           {
             stat_coll.push_back(&ent);
             		// Work out collision point, add it to vector along with rect ID
@@ -68,6 +67,14 @@ namespace game
                   collInstance.push_back({ &ent, player.coll->contactTime });
                 }
               // }
+          }
+          else if(ent.hasTag(game::Entity::TAG::Health))
+          {
+            if (DynamicEntityVsStaticEntity(player, dt, ent))
+            {
+              ent.effct->affectedPartyID= player.id();
+              ent.effct->state=effectState::readyToApply;
+            }
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
@@ -114,6 +121,7 @@ namespace game
         //COLISION DEL ENEMIGO CON EL PLAYER
         if (DynamicEntityVsStaticEntity(*enemy, dt, player))
         {
+          player.health->negativeAffection = 1;
           collInstance.push_back({&player, enemy->coll->contactTime });
         }
 

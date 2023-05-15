@@ -25,6 +25,8 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/states/mainMenuState.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/petSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/shieldSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/effectSys.cpp"
+
 )
 
 #Y donde se encuentran los .h

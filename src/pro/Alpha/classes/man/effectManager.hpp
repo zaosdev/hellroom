@@ -86,7 +86,7 @@ namespace FV_factory {
         {
             unsigned long idx; 
 
-            idx = static_cast<unsigned long>(FVmath::calcualteRandom(int(effectsNameList.size()-1)));
+            idx = static_cast<unsigned long>(FVmath::calculateRandom(int(effectsNameList.size()-1)));
 
             auto resultingEffect = createEffectNamed(getEffectNameByIndex(idx));
 
@@ -146,7 +146,7 @@ namespace FV_factory {
                 {
                     maxValue*=10;
 
-                    int randValue = FVmath::calcualteRandom(maxValue,minValue);
+                    int randValue = FVmath::calculateRandom(maxValue,minValue);
 
                     randValue/=10;
 
@@ -154,7 +154,7 @@ namespace FV_factory {
                 }
                 else
                 {
-                    int randValue = FVmath::calcualteRandom(maxValue,minValue);
+                    int randValue = FVmath::calculateRandom(maxValue,minValue);
 
                     finalValue = float(randValue);
 
