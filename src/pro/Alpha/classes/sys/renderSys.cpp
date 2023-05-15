@@ -82,6 +82,20 @@ namespace game
                 sf::Color color(255, colorquantity, colorquantity, 255);
                 ent.render->Sprite.setColor(color);
             }
+
+            else if(ent.hasTag(game::Entity::TAG::Player))
+            {
+                if(ent.shield->active)
+                {
+                    sf::Color color(255, 215, 0, 255);
+                    ent.render->Sprite.setColor(color);
+                }
+                else
+                {
+                    sf::Color color(255, 255, 255, 255);
+                    ent.render->Sprite.setColor(color);
+                }
+            }
             
         }
 

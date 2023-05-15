@@ -48,7 +48,7 @@ namespace game
             {
                 auto& hc = ent.health;
 
-                hc->negativeAffection = 2;
+               // hc->negativeAffection = 2;
                // hc->positiveAffection = 1;
                 //if inmortality time didnt pass, damage will be discarded, else apply both effects
                 if(hc->isInmortal)
