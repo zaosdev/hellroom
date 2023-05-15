@@ -51,10 +51,10 @@ namespace game
                     case 1: //guardian
                         if(ent.shield->active)
                         {
-                            std::cout << "el escudo de la mascota esta activo.... " << std::endl;
+                            //std::cout << "el escudo de la mascota esta activo.... " << std::endl;
                             ssys_.activateShield(player, false);
                         }
-                        else  std::cout << "el escudo de la mascota NOOOOOOOO esta activo.... " << std::endl;
+                        //else  std::cout << "el escudo de la mascota NOOOOOOOO esta activo.... " << std::endl;
                         break;
                     case 2: //sentinel
 
