@@ -61,7 +61,15 @@
 			"typeinfo": "cpp",
 			"cstring": "cpp",
 			"set": "cpp",
-			"iomanip": "cpp"
+			"iomanip": "cpp",
+			"strstream": "cpp",
+			"chrono": "cpp",
+			"complex": "cpp",
+			"list": "cpp",
+			"ratio": "cpp",
+			"thread": "cpp",
+			"cfenv": "cpp",
+			"cinttypes": "cpp"
 		}
 	}
 }

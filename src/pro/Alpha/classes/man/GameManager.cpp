@@ -52,7 +52,7 @@ namespace FVeng
             LoadAllTextures();
             createMap();
             createAllSpawner();
-            auto& player = createPlayer({320,240});
+            auto& player = createPlayer({100,100});
             bb_.targetID = player.id();
 
         }
@@ -63,13 +63,7 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4};
-
-
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
 
             e.input  = game::InputComponent{};
 
@@ -86,7 +80,12 @@ namespace FVeng
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
-            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            e.coll = game::CollisionComponent{};
 
             return e;
         }
@@ -95,27 +94,51 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer() };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider{false} };
 
             e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
             //mapMan.setActiveLayer(-1);         
-            e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
+            e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSize());
+
+            for(auto posColl : mapMan.getColliderData())
+            {
+                createMapCollider(posColl);
+            }
         }
+
+        [[maybe_unused]] game::Entity& GameManager::createMapCollider(FVmath::Point2Di Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+
+            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .mapCollider=true };
+
+            e.coll = game::CollisionComponent{};           
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+            // Lo dispongo en el centro de la pantalla
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            return e;
+        }
+
 
         void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
-
-            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
-
-
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );
 
             e.AI     = game::AIComponent      { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
@@ -130,7 +153,16 @@ namespace FVeng
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
 
-            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};           
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            e.coll = game::CollisionComponent{};           
         }
 
         //Create all spawners on the current map
@@ -156,14 +188,14 @@ namespace FVeng
             int currentLayer = mapMan.getActiveLayer();
             currentLayer++;
             mapMan.setActiveLayer(currentLayer);
-            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
+            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSize());
         }
 
         //Called to reset Sprite info once all map layers have been drawn
         void GameManager::resetMap(game::MapComponent& map)
         {
             mapMan.setActiveLayer(0);
-            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSizePath());
+            map.FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSize());
         }
 
 
@@ -173,14 +205,7 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
-
-
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );               
+           
 
             e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
@@ -192,7 +217,16 @@ namespace FVeng
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
 
-            e.coll = game::CollisionComponent{.height{e.render->Sprite.getGlobalBounds().height}, .width{e.render->Sprite.getGlobalBounds().width}};
+            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
+
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );    
+
+            e.coll = game::CollisionComponent{};  
         }
 
         void GameManager::SpawnDummy(FVmath::Point2Di Pos)

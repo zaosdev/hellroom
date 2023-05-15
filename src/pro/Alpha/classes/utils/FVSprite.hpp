@@ -29,7 +29,7 @@ namespace sfml_util{
             vertices_.setPrimitiveType(sf::Quads);
             vertices_.resize(Size.x * Size.y *4);
 
-            int gid{-1}, tu, tv;
+            int gid{-1}, tu{}, tv{};
             sf::Vertex* quad;
 
             for(int i{0}; i<Size.x ; i++)

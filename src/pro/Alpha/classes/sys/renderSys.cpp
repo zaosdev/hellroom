@@ -95,7 +95,7 @@ namespace game
             
             for(auto& ent : EM)
             {
-                if(ent.map)
+                if(ent.map && ent.map->mapCollider==false)
                 {
                     drawMap(*ent.map);
                     mapEnt = &ent;
@@ -108,7 +108,6 @@ namespace game
 
                 }
             }
-
 
             drawUpperMap(*mapEnt->map);
 

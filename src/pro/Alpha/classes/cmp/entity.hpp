@@ -29,7 +29,7 @@ namespace game
         //add new tags when needed and delete placeholder
         Player = 0x001,
         Enemy  = 0x010,
-        
+        STATIC_COLL = 0x100,
       };
 
       friend struct FVeng::EntityManager<Entity>;

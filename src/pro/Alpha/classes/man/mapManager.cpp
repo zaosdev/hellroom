@@ -21,6 +21,8 @@ namespace tXMLeng
 
             loadMap(mapElement);
 
+            loadColliders(mapElement);
+
             GenerateSpawners(mapElement);
 
         } 
@@ -92,6 +94,39 @@ namespace tXMLeng
             }
 
     }
+    
+
+    void mapManager::loadColliders(XMLElem& map)
+    {
+            
+        XMLElem groups = map.FirstChildNamed("group");
+        XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
+        map_.colliderLayer.reserve(map_.mapSize.y*map_.mapSize.x);
+            
+        auto currentTile = colliderData.FirstChildNamed("data").FirstChildNamed("tile") ; 
+        for(int y{0}; y<map_.mapSize.y; y++)
+        {
+            for(int x{0}; x<map_.mapSize.x; x++)
+            {
+
+                int tempGid{};
+                currentTile.queryAttribute<int*>("gid",&tempGid);
+
+                if(tempGid==MAGIC_COLL_NUMBER)
+                {
+                    FVmath::Point2Di& posColl = map_.colliderLayer.emplace_back();
+
+                    posColl.x = x*map_.tileSize.x;
+                    posColl.y = y*map_.tileSize.y;
+                }
+
+                // std::cout << map_.tileMap[map_.numLayers].back() << "|";
+                // std::cout << gid << "|";
+                currentTile = currentTile.NextSiblingNamed("tile");
+            }
+            //std::cout << "" << std::endl;
+        }
+    }
 
 
     void mapManager::obtainMapInfo(XMLElem& map)
@@ -156,7 +191,7 @@ namespace tXMLeng
     {
         return map_.mapSize;
     }
-    const FVmath::Point2Di mapManager::getTileSizePath() const
+    const FVmath::Point2Di mapManager::getTileSize() const
     {
         return map_.tileSize;
 
@@ -166,6 +201,12 @@ namespace tXMLeng
         return map_.tileMap[map_.activeLayer];
 
     }
+
+    const std::vector<FVmath::Point2Di>& mapManager::getColliderData() const
+    {
+        return map_.colliderLayer;
+    }
+
 
     const int& mapManager::getMaxBaseLayer() const
     {

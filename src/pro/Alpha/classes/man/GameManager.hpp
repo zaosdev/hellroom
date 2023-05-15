@@ -31,6 +31,8 @@ namespace FVeng
         void initLevel();
         void initGame();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
+        game::Entity& createMapCollider(FVmath::Point2Di Pos);
+
         game::Entity& createHeart();
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);

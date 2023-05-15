@@ -14,14 +14,17 @@ namespace game
 
   //########################################################################
 
-    void CollisionSys::update()
+    void CollisionSys::update(float dt)
     {
       //la idea es sacar del game la entidgame::Entity::TAG::Playerd usar el hasTag y con suerte obtener el bbox y asi comprobar colisiones con el intersect() y luego gestionarlas -> llamar a healthsys para que gestione temas de salud y crear una funcion que detenga el desplazamiento o permita empujar 
       auto& EM = gMan_.getEntityManager();
       
-      sf::Sprite* playerSprite;
+      //sf::Sprite* playerSprite{};
       //std::vector<sf::Sprite*> enemySprites;
-      std::vector<Entity*> enemies;
+      std::vector<Entity*> enemies{};
+      std::vector<Entity*> stat_coll{};
+
+      //bool nomore{false};
 
       Entity& player = gMan_.getPlayer();
 
@@ -32,9 +35,21 @@ namespace game
         {
           if(ent.hasTag(game::Entity::TAG::Enemy))
           {
-            if(checkCollision(player,ent))
+            enemies.push_back(&ent);
+            if(player.render->Sprite.getGlobalBounds().intersects(ent.render->Sprite.getGlobalBounds()))
             {
               noOverlap(player,ent);
+            }
+          }
+          else if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
+          {
+            stat_coll.push_back(&ent);
+
+            //if(DynamicEntityVsStaticEntity(player,dt,ent))
+            if(checkCollision(player,ent))
+            {
+              ResolveDynamicEntityVsEntity(player,ent,dt);
+              player.physics->pos+=player.physics->vel*dt;
             }
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
@@ -44,21 +59,32 @@ namespace game
           // }
         }
       }
+
+      // for(auto* enemy : enemies)
+      // {
+      //   for(auto* wallColl : stat_coll)
+      //   {
+      //     if(checkCollision(*wallColl,*enemy))
+      //     {
+      //       noOverlap(*enemy,*wallColl);
+      //     }
+      //   }
+      // }
     }
 
     bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
     {
-      auto& rect1Pos = collider1.physics->pos;
-      auto& rect2Pos = collider2.physics->pos;
+      auto rect1Pos = collider1.physics->pos;
+      auto rect2Pos = collider2.physics->pos;
 
-      auto& rect1BBox = *collider1.coll;
-      auto& rect2BBox = *collider2.coll;
+      auto rect1BBox = collider1.physics->size;
+      auto rect2BBox = collider2.physics->size;
 
       if (
-      rect1Pos.x <= rect2Pos.x + rect2BBox.width &&
-      rect1Pos.x + rect1BBox.width >= rect2Pos.x &&
-      rect1Pos.y <= rect2Pos.y + rect2BBox.height &&
-      rect1BBox.height + rect1Pos.y >= rect2Pos.y
+        rect1Pos.x <= rect2Pos.x + rect2BBox.x &&
+        rect1Pos.x + rect1BBox.x >= rect2Pos.x &&
+        rect1Pos.y <= rect2Pos.y + rect2BBox.y &&
+        rect1BBox.y + rect1Pos.y >= rect2Pos.y
       )
 			{
           return true;
@@ -69,29 +95,112 @@ namespace game
       }
   }
 
+  bool CollisionSys::rayVsEntity(const FVmath::Point2D rayOrigin, const FVmath::Point2D rayDirection, expandedTarget& target,Entity& dynamicEntity)
+  {
+		dynamicEntity.coll->contactPoint = { 0,0 };
+		dynamicEntity.coll->contactNormal = { 0,0 };
+
+    // Cache division
+		FVmath::Point2D invertedDirection = {(1.0f/rayDirection.x),(1.0f/rayDirection.y)};
+
+    FVmath::Point2D nearHit = (target.pos-rayOrigin)*invertedDirection;
+    FVmath::Point2D farHit = (target.pos+target.size-rayOrigin)*invertedDirection;
+
+    //Check if there are 0
+    if (std::isnan(farHit.y) || std::isnan(farHit.x)) return false;
+		if (std::isnan(nearHit.y) || std::isnan(nearHit.x)) return false;
+
+		// Sort distances
+		if (nearHit.x > farHit.x) std::swap(nearHit.x, farHit.x);
+		if (nearHit.y > farHit.y) std::swap(nearHit.y, farHit.y);
+
+    // Early rejection		
+		if (nearHit.x > farHit.y || nearHit.y > farHit.x) return false;
+
+    // Closest 'time' will be the first contact
+		dynamicEntity.coll->contactTime = std::max(nearHit.x, nearHit.y);
+
+		// Furthest 'time' is contact on opposite side of target
+		float farTimehit = std::min(farHit.x, farHit.y);
+
+		// Reject if ray direction is pointing away from object
+		if (farTimehit < 0)
+			return false;
+
+		//Contact point of collision from parametric line equation, its inverted due to being a noob
+		dynamicEntity.coll->contactPoint = (rayDirection * dynamicEntity.coll->contactTime) + rayOrigin  ;
+
+		if (nearHit.x > nearHit.y)
+			if (invertedDirection.x < 0)
+				dynamicEntity.coll->contactNormal = { 1, 0 };
+			else
+				dynamicEntity.coll->contactNormal = { -1, 0 };
+		else if (nearHit.x < nearHit.y)
+			if (invertedDirection.y < 0)
+				dynamicEntity.coll->contactNormal = { 0, 1 };
+			else
+      {
+				dynamicEntity.coll->contactNormal = { 0, -1 };
+      }
+
+		// Note if nearHit == farHit, collision is principly in a diagonal
+		// so pointless to resolve. By returning a CN={0,0} even though its
+		// considered a hit, the resolver wont change anything.
+		return true;
+  }
+
+  bool CollisionSys::DynamicEntityVsStaticEntity(Entity& dynamicEntity, const float dt, Entity& staticEntity)
+  {
+    // Check if dynamic rectangle is actually moving - we assume rectangles are NOT in collision to start
+    if (dynamicEntity.physics->vel.x == 0 && dynamicEntity.physics->vel.y == 0)
+      return false;
+
+    // Expand target rectangle by source dimensions
+    expandedTarget expanded_target{};
+    expanded_target.pos = staticEntity.physics->pos - dynamicEntity.physics->size / 2;
+    expanded_target.size = staticEntity.physics->size + dynamicEntity.physics->size;
+
+    if (rayVsEntity(dynamicEntity.physics->pos + dynamicEntity.physics->size / 2, dynamicEntity.physics->vel * dt, expanded_target,dynamicEntity))
+      return (dynamicEntity.coll->contactTime >= 0.0f && dynamicEntity.coll->contactTime < 1.0f);
+    else
+      return false;
+  }
+
+  bool CollisionSys::ResolveDynamicEntityVsEntity(Entity& dynamicEntity, Entity& staticEntity, const float dt)
+  {
+
+			if (DynamicEntityVsStaticEntity(dynamicEntity, dt, staticEntity))
+			{
+				dynamicEntity.physics->vel += dynamicEntity.coll->contactNormal * FVmath::Point2D{std::abs(dynamicEntity.physics->vel.x), std::abs(dynamicEntity.physics->vel.y)} * (1 - dynamicEntity.coll->contactTime);
+				return true;
+			}
+
+			return false;
+  }
+
    void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
 
-    // sf::Sprite sprite1 = ent1.render->Sprite;
-    // sf::Sprite sprite2 = ent2.render->Sprite;
+    sf::Sprite sprite1 = ent1.render->Sprite;
+    sf::Sprite sprite2 = ent2.render->Sprite;
 
-    // sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
-    // sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
+    sf::FloatRect sprite1Bbox = sprite1.getGlobalBounds();
+    sf::FloatRect sprite2Bbox = sprite2.getGlobalBounds();
 
-    // sf::Vector2f sprite1POS = sprite1.getPosition();
-    // sf::Vector2f sprite2POS = sprite2.getPosition();
+    sf::Vector2f sprite1POS = sprite1.getPosition();
+    sf::Vector2f sprite2POS = sprite2.getPosition();
 
     FVmath::Point2D ent1POS = ent1.physics->pos;
     FVmath::Point2D ent2POS = ent2.physics->pos;
 
 
-    sf::Vector2f s1_HalfSize = {ent1.coll->height /2.0f , ent1.coll->width / 2.0f};
-    sf::Vector2f s2_HalfSize = {ent2.coll->height /2.0f , ent2.coll->width / 2.0f};
+    sf::Vector2f s1_HalfSize = {sprite1Bbox.height /2.0f , sprite1Bbox.width / 2.0f};
+    sf::Vector2f s2_HalfSize = {sprite2Bbox.height /2.0f , sprite2Bbox.height/ 2.0f};
 
-    // float deltaX = sprite2POS.x - sprite1POS.x;
-    // float deltaY = sprite2POS.y - sprite1POS.y;
+    float deltaX = sprite2POS.x - sprite1POS.x;
+    float deltaY = sprite2POS.y - sprite1POS.y;
 
-    float deltaX = ent2POS.x - ent1POS.x;
-    float deltaY = ent2POS.y - ent1POS.y;
+    // float deltaX = ent2POS.x - ent1POS.x;
+    // float deltaY = ent2POS.y - ent1POS.y;
 
     float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);

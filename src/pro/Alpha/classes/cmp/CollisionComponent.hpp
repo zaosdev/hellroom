@@ -5,8 +5,9 @@ namespace game
     
     struct CollisionComponent{
 
-        float height{};
-        float width{};
+        FVmath::Point2D contactPoint{};
+        FVmath::Point2D contactNormal{};
+        float contactTime{};
 
     };
 }
