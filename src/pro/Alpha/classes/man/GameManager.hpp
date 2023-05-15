@@ -18,6 +18,8 @@ namespace FVeng
     struct GameManager
     {
         #define PLAYER_TEXT "player_sprite"
+        #define ENEMY_A     "enemyA_sprite"
+        #define ENEMY_B     "enemyB_sprite"   
         #define MAP_TEXT    "map_sprite"
         #define HEART_TEXT  "heart_sprite"
         #define COIN_TEXT   "coin_sprite"
