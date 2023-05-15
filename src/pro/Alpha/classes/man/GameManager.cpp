@@ -145,8 +145,14 @@ namespace FVeng
                 e.physics->pos.x,
                 e.physics->pos.y
             );
+            
+            //if(petNum == 0)   //VITALIS
 
-            if(petNum == 3)
+            if(petNum == 1)     //Guardian
+            {
+                e.shield = game::ShieldComponent{.refreshTime = 4.f, .autoActive = true , .max_ActivatedTime = 2.f};
+            } 
+            else if(petNum == 2) //Sentinel
             {
                 e.weapon = game::WeaponComponent{};
             }

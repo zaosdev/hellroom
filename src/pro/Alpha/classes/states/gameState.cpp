@@ -49,8 +49,8 @@ namespace FVEng{
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
-        , petSys        { GameMan }
-        , shieldSys     { GameMan, inpRec}
+        , shieldSys     { GameMan, inpRec }
+        , petSys        { GameMan, shieldSys }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -143,8 +143,9 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
-        game::PetSys            petSys;
         game::ShieldSys         shieldSys;
+        game::PetSys            petSys;
+        
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

@@ -20,6 +20,7 @@ namespace game
                 if(not (ent.shield->active))
                 {   
                     check4Activation(ent, dt);
+                    ent.shield->activatedTime = 0;
                 }
                 else
                 {
@@ -51,7 +52,6 @@ namespace game
                 if(ent.shield->autoActive)
                 {
                     activateShield(ent, true);
-                    
                 } 
                 else
                 {
