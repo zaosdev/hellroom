@@ -9,11 +9,11 @@ namespace game
     {
     }
 
-    void AISys::perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM,  blackBoardComponent& bb, double const dt)
+    bool AISys::perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM,  blackBoardComponent& bb, double const dt)
     {
         //Check if accumulated time > cooldown
         AI->accumulatedTime += dt;
-        if(AI->accumulatedTime <= AI->perceptionTime) return;
+        if(AI->accumulatedTime <= AI->perceptionTime) return false;
             
         //Time passed: Unaccumulate time
         AI->accumulatedTime -= AI->perceptionTime;
@@ -26,6 +26,7 @@ namespace game
             if(targeted != nullptr)
             AI->targetCoord =  targeted->physics->pos;
         }
+        return true;
     }
 
     void AISys::update(blackBoardComponent bb, double const dt)
@@ -36,8 +37,9 @@ namespace game
         {
             if(ent.AI && ent.physics)
             {
+                ent.AI->timeAlive += dt;
                 FVmath::Point2D addPos;
-                perception(ent.AI, EM, bb, dt);
+                bool percep = perception(ent.AI, EM, bb, dt);
                 switch(ent.AI->behaviour)
                 {
                     case FVAI::SB::ARRIVE:
@@ -77,10 +79,31 @@ namespace game
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
                         break;
                     }
+                    case FVAI::SB::STAY:
+                    {
+                        addPos = FVAI::stay();
+                        break;
+                    }
+                    case FVAI::SB::SHOOTATTACK:
+                    {
+                        addPos = FVAI::stay();
+                        if(percep)
+                        {
+                            //Generate a bullet from the enemy to the player position
+                            gMan_.createEnemyBullet(ent.physics->pos, FVAI::SB::SEEK, gMan_.getPlayer().physics->pos);
+                        }                    
+                        break;
+                    }
                     default:break;
                 }
-                
+                if((ent.AI->maxTimeAlive != -1) && (ent.AI->timeAlive > ent.AI->maxTimeAlive)) ent.mark4destruction();
                 ent.physics->vel = addPos;
+
+                // if(ent.weapon)
+                // {
+                //     ent.weapon->direction = directionType::este; // por probar
+                //     ent.weapon->on;
+                // }
             }
 
         }  

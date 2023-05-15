@@ -1,0 +1,14 @@
+    Flags correspond to one bit in a integer number
+
+            isPercentage    = 1 << 0,  <- second number corresponds to how many shifts to the left have been done
+            isExpirable     = 1 << 1,
+            isBeneficial    = 1 << 2,
+            canStack        = 1 << 3,
+            isEntry         = 1 << 4,
+            isTick          = 1 << 5,
+            isPersistent    = 1 << 6,
+            isRemovable     = 1 << 7,
+
+    Flag example would be:
+
+        00011110 <- this would mean that the effect expires is beneficial can stack and activates on entry

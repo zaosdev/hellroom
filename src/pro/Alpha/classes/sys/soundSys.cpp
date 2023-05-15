@@ -1,94 +1,130 @@
 #include "soundSys.hpp"
-//#include "inputSys.hpp"
 #include "../facade/inputFacade.hpp"
 
 namespace game{
 
     //SoundSys::SoundSys() : isPlaying(false) {}
 
-    SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan), isPlaying(false){
+    SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan){
+        
+        isPlayingStep = false;
+        isPlayingDash = false;
+
+
+        //musicPlaying = false;
    
     }
 
 
-    void SoundSys::loadSound(const std::string& soundfile){
+    void SoundSys::loadSounds(/*const std::string& soundfile*/){
+
         
-        if(!sB.loadFromFile(soundfile)){
-            std::cout << "SOUND FILE NOT FOUND" << std::endl;
-        }
-        sound.setPitch(1.5); //provisional
-        sound.setBuffer(sB);
+        // loadSound("playerStep","../resources/SFX/16_human_walk_stone_1.wav");
+        // loadSound("playerDash","../resources/SFX/15_human_dash_1.wav");
+        if(!sBplayerStep.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
+        if(!sBplayerDash.loadFromFile("../resources/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
 
-        std::cout << "SOUND LOADED" << std::endl;
+        // sBfrs["playerStep"] = sBplayerStep;
+        // sBfrs["playerDash"] = sBplayerDash;
+
+        soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
+        soundP.setBuffer(sBplayerStep); //asigno el sonido que necesito
+        
+        soundD.setPitch(1.0);
+        soundD.setBuffer(sBplayerDash);
+
+
+        if (!music.openFromFile("../resources/MUSIC/OST-Juego.wav")) {
+            std::cout << "FAILED TO LOAD MUSIC" << std::endl;
+        
+        } 
+        else {
+            music.setVolume(50); 
+            music.setLoop(true); 
+            
+        }
+
+        
     }
 
-    void SoundSys::playSound(){
-       if(!isPlaying){
-            sound.play();
-            isPlaying = true;
-        }
-        std::cout << "PLAYING WALKING SOUND" << std::endl;
+
+    void SoundSys::playSound(sf::Sound& sound, bool& isPlaying){
+        
+            if(!isPlaying){
+               // std::cout << "PLAYING WALKING SOUND" << std::endl;
+                sound.play();
+                isPlaying = true;
+            }
+
     }
 
-    void SoundSys::stopSound(){
+    void SoundSys::stopSound(sf::Sound& sound, bool& isPlaying){
        if(isPlaying){
             sound.stop();
            isPlaying = false;
         }
     }
 
-    void SoundSys::setLoop(bool loop){
+    void SoundSys::setLoop(bool loop, sf::Sound& sound){
         sound.setLoop(loop);
     }
 
+
+
+     void SoundSys::playMusic(){
+        
+        if (!musicPlaying) {
+            std::cout << "PLAYING MUSIC" << std::endl;
+            music.play();
+            musicPlaying = true;
+        }
+    }
+
+    void SoundSys::stopMusic(){
+        
+        if (musicPlaying) {
+            music.stop();
+            musicPlaying = false;
+        }
+    }
    
 
     void SoundSys::update(/*SoundSys sfx*/){
-        //copiado de inputSys.cpp para añadir sonidos
+   
         //Movement
-        if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
-            //std::cout << "BOTON W" << std::endl;
-         
-                this->setLoop(true);
-                this->playSound();
             
-                //std::cout << "Sonandoooo" << std::endl;
-          
+        if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
+        //std::cout << "BOTON W" << std::endl;
+            
+            this->setLoop(true, soundP);
+            this->playSound(soundP, isPlayingStep); //procedo a asignar un buffer para reproducir el sonido solicitado
+  
         }
         else{
-            this->setLoop(false);
-            this->stopSound();
+            this->setLoop(false, soundP);
+            this->stopSound(soundP,  isPlayingStep);
         }  
 
 
         //Dash
-        // if(inpRec_.isKeyPressed(getKeyCode(' '))){
-        //     std::cout << "BOTON SPACE" << std::endl;
-        //     sfx.setLoop(false);
-        //     sfx.playSound();
-        // }
-        // else{
-        //     sfx.stopSound();
-        // }
+        if(inpRec_.isKeyPressed(getKeyCode(' '))){
+            //std::cout << "BOTON SPACE" << std::endl;
+            this->setLoop(false, soundD);
+            this->playSound(soundD,  isPlayingDash);
+        }
+        else{
+            this->stopSound(soundD,  isPlayingDash);
+        }
+
+
+         // Play/Stop music
+        if (inpRec_.isKeyPressed(getKeyCode('M'))) {
+            if (musicPlaying) {
+                this->stopMusic();
+            } else {
+                this->playMusic();
+            }
+        }
 
     }
 }
-
-//codigo basura
-
-// std::map<sf::Keyboard::Key, SoundSys> soundMap;
-// soundMap[sf::Keyboard::A] = SoundSys();
-// soundMap[sf::Keyboard::A].loadSound("resources/SFX/16_human_walk_stone_1.wav");
-// soundMap[sf::Keyboard::B] = SoundSys();
-// soundMap[sf::Keyboard::B].loadSound("resources/SFX/16_human_walk_stone_3.wav");
-
-
-// for (auto const& pair : soundMap) {
-//         if (sf::Keyboard::isKeyPressed(pair.first)) {
-//             pair.second.setLoop(true);
-//             pair.second.playSound();
-//         } else {
-//             pair.second.setLoop(false);
-//             pair.second.stopSound();
-//         }
-//     }

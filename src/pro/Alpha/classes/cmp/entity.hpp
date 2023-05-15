@@ -7,6 +7,14 @@
 #include "MapComponent.hpp"
 #include "SpawnerComponent.hpp"
 #include "healthComponent.hpp"
+#include "dataComponent.hpp"
+#include "rewardComponent.hpp"
+#include "effectComponent.hpp"
+#include "weaponComponent.hpp"
+#include "shieldComponent.hpp"
+#include "CollisionComponent.hpp"
+
+
 
 
 #include <optional>
@@ -23,9 +31,13 @@ namespace game
       enum class TAG : tag_type
       {
         //add new tags when needed and delete placeholder
-        Player = 0x001,
-        Enemy  = 0x010,
-        
+        Player = 1 << 0,
+        Enemy  = 1 << 1,
+        Pet    = 1 << 3,
+        Bullet = 1 << 4,
+        STATIC_COLL = 1 << 5,
+        Health = 1 << 6,
+
       };
 
       friend struct FVeng::EntityManager<Entity>;
@@ -37,6 +49,12 @@ namespace game
       std::optional<AIComponent>      AI{};
       std::optional<SpawnerComponent> Spawn{};
       std::optional<HealthComponent>  health{};
+      std::optional<DataComponent>    data{};
+      std::optional<RewardComponent>  reward{};
+      std::optional<EffectComponent>  effct{};
+      std::optional<WeaponComponent>  weapon{};
+      std::optional<ShieldComponent>  shield{};
+      std::optional<CollisionComponent>  coll{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

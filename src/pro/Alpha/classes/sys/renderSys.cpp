@@ -82,6 +82,20 @@ namespace game
                 sf::Color color(255, colorquantity, colorquantity, 255);
                 ent.render->Sprite.setColor(color);
             }
+
+            else if(ent.hasTag(game::Entity::TAG::Player))
+            {
+                if(ent.shield->active)
+                {
+                    sf::Color color(255, 215, 0, 255);
+                    ent.render->Sprite.setColor(color);
+                }
+                else
+                {
+                    sf::Color color(255, 255, 255, 255);
+                    ent.render->Sprite.setColor(color);
+                }
+            }
             
         }
 
@@ -95,7 +109,7 @@ namespace game
             
             for(auto& ent : EM)
             {
-                if(ent.map)
+                if(ent.alive() && ent.map && ent.map->mapCollider==false)
                 {
                     drawMap(*ent.map);
                     mapEnt = &ent;
@@ -109,8 +123,8 @@ namespace game
                 }
             }
 
-
-            drawUpperMap(*mapEnt->map);
+            if(mapEnt)
+                drawUpperMap(*mapEnt->map);
 
             HUD_.update();
 

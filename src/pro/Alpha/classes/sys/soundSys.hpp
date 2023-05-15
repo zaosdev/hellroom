@@ -3,11 +3,9 @@
 #include "../man/GameManager.hpp"
 #include "../man/inputManager.hpp"
 #include <SFML/Audio.hpp>
+//#include "../utils/soundLoader.hpp"
 #include <iostream>
 #include <map>
-
-
-
 
 namespace game{
 
@@ -23,26 +21,49 @@ namespace game{
             SoundSys& operator=(const SoundSys&)= delete;
             SoundSys& operator=(SoundSys&&)= delete;
 
-            void loadSound(const std::string& soundfile);
-            void playSound();
-            void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
-            void stopSound();
+            void loadSounds(/*const std::string& soundfile*/); //cargara todos los sonidos del juego en buffers
+            //void loadSound(const std::string& skey, const std::string& soundpath);
+            void playSound(sf::Sound& sound, bool& isPlaying); 
+            void setLoop(bool loop, sf::Sound& sound); //repeticion del sonido al mantener la tecla 
+            void stopSound(sf::Sound& sound,  bool& isPlaying);
 
-            void update(/*SoundSys sfx*/); // reproducira sonidos segun la tecla pulsada
+            void playMusic();
+            void stopMusic();
+
+            void update(); // reproducira sonidos segun la tecla pulsada
+    
+            // sound por entidad --> player, enemy, bullet player, bullet enemy
+            //FVSound::soundLoader sounds;
+
+           // std::map<std::string, sf::SoundBuffer> sBfrs; 
             
-            // void asignSound();
+            // sf::SoundBuffer sBplayerStep;
+            // sf::SoundBuffer sBplayerDash;
 
-            //std::map<sf::Keyboard::Key, SoundSys> soundMap;
+
+            // sf::Sound sound;
+            // sf::Sound soundP;
+            // sf::Sound soundD;
+            // sf::Sound soundBP;
+            // sf::Sound soundBF;
             
         private: 
+            
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
 
-            sf::SoundBuffer sB;
-            sf::Sound sound;
+            sf::SoundBuffer sBplayerStep;
+            sf::SoundBuffer sBplayerDash;
 
+            //sf::Sound sound;
+            sf::Sound soundP;
+            sf::Sound soundD;
+            // sf::Sound soundBP;
+            // sf::Sound soundBF;
 
-            bool isPlaying;
-            std::map<sf::Keyboard::Key, SoundSys> soundMap;
+            sf::Music music;
+
+            bool isPlayingStep, isPlayingDash, musicPlaying;
+            
     };
 }

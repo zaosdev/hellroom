@@ -32,7 +32,39 @@ namespace game
                     ent.physics->vel.x *= dash_multiplier;
                     ent.physics->vel.y *= dash_multiplier; 
                 }
+
+                if(inpRec_.isKeyPressed(getKeyCode('1')))
+                {
+                    ent.weapon->especial=mejora::cruz;
+                }
+                if(inpRec_.isKeyPressed(getKeyCode('2')))
+                {
+                    ent.weapon->especial=mejora::escopeta;
+                }
+                if(inpRec_.isKeyPressed(getKeyCode('3')))
+                {
+                    ent.weapon->especial=mejora::rafaga;
+                }
             }
+
+            //bullet
+                if(inpRec_.isKeyPressed(getKeyCode('u'))){
+                    std::cout << "up" << std::endl;
+                     ent.weapon->on=true; 
+                     ent.weapon->direction=directionType::norte;
+                }    
+                if(inpRec_.isKeyPressed(getKeyCode('d'))){
+                     ent.weapon->on=true; 
+                     ent.weapon->direction=directionType::sur;
+                }     
+                if(inpRec_.isKeyPressed(getKeyCode('l'))){
+                     ent.weapon->on=true; 
+                     ent.weapon->direction=directionType::oeste;
+                }     
+                if(inpRec_.isKeyPressed(getKeyCode('r'))){
+                     ent.weapon->on=true; 
+                     ent.weapon->direction=directionType::este;
+                }   
         }
 
         

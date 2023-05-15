@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commonEffects>
+    <name effect="Healing"/>
+</commonEffects>
+<rareEffects>
+    <name effect="regen"/>
+    <name effect= "shield"/>
+    <name effect= "darkVision"/>
+    <name effect= "panic"/>
+    <name effect= "poison"/>
+    <name effect= "cadenceUp"/>
+    <name effect= "damageUp"/>
+    <name effect= "reloadUp"/>
+    <name effect= "cadenceDown"/>
+    <name effect= "maxLifeDown"/>
+    <name effect= "maxLifeUp"/>
+    <name effect= "maxBulletDown"/>
+    <name effect= "damageDown"/>
+    <name effect= "reloadDown"/>
+</rareEffects>
+<extraordinaryEffects>
+    <name effect="magnet"/>
+    <name effect="forceField"/>
+    <name effect="revive"/>
+</extraordinaryEffects>

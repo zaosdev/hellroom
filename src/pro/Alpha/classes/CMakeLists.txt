@@ -13,11 +13,20 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/savingSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/AISys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/spawnSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/weaponSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/AI.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/utils/circularIterator.cpp"   
-    "${CMAKE_CURRENT_SOURCE_DIR}/sys/healthSys.cpp"   
+    "${CMAKE_CURRENT_SOURCE_DIR}/utils/circularIterator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/utils/gameData.cpp"    
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/healthSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/rewardSys.cpp"   
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/HUDSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/collisionSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/man/stateManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/states/mainMenuState.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/petSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/shieldSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/effectSys.cpp"
+
 )
 
 #Y donde se encuentran los .h

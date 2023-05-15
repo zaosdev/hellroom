@@ -9,5 +9,7 @@ namespace game
         FVmath::Point2D prevPos;
         FVmath::Point2D vel;       //value so add to pos (pixels per second)
         float          mov_speed; //fixed value to use for calculate vel
+        FVmath::Point2D size;
+
     };
 }

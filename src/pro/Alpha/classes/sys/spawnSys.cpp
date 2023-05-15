@@ -13,7 +13,7 @@ namespace game
     {
 
         // gMan_.SpawnDummy(Pos);
-        auto enemyChoice = FVmath::calcualteRandom(2,1);
+        auto enemyChoice = FVmath::calculateRandom(1,3);
         
         switch (enemyChoice)
         {
@@ -22,6 +22,9 @@ namespace game
             break;
         case 2:
             gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),4);
+            break;
+        case 3: 
+            gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),5);
             break;
         default:
             gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
@@ -39,12 +42,12 @@ namespace game
         //CALCULATE POINT ON THE X AXIS
         auto xAxisMax = spawnInfo.SpawnOrigin.x+spawnInfo.SpawnRange.x;
 
-        auto xAxisPoint = FVmath::calcualteRandom(xAxisMax,spawnInfo.SpawnOrigin.x);
+        auto xAxisPoint = FVmath::calculateRandom(xAxisMax,spawnInfo.SpawnOrigin.x);
 
         //CALCULATE POINT ON THE Y AXIS
         auto yAxisMax = spawnInfo.SpawnOrigin.y+spawnInfo.SpawnRange.y;
 
-        auto yAxisPoint = FVmath::calcualteRandom(yAxisMax,spawnInfo.SpawnOrigin.y);
+        auto yAxisPoint = FVmath::calculateRandom(yAxisMax,spawnInfo.SpawnOrigin.y);
 
         //RETURN RESULTING POINT
         return{xAxisPoint,yAxisPoint};
@@ -63,20 +66,25 @@ namespace game
         auto ready2Spawn = [&](Entity const& e){return e.Spawn->TimerSpawn.getElapsedTime().asSeconds()>e.Spawn->minTime; };
 
         //check if it still has capacity to spawn more enemies
-        auto hasCapacity = [&](Entity const& e){return e.Spawn->capacity< e.Spawn->maxCapacity; };
+        auto hasCapacity = [&](Entity const& e){return e.Spawn->capacity < e.Spawn->maxCapacity; };
 
         for(auto& e : gMan_.getEntityManager())
         {
-            auto f = isEnemySpawner(e);
-
+            
             //std::cout << f << std::endl;
 
             if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
             {
+                
                auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
                SpawnEnemy(Pos);
                e.Spawn->capacity++;
                e.Spawn->TimerSpawn.restart();
+               if(e.Spawn->capacity == e.Spawn->maxCapacity)
+               {
+                   e.Spawn->fullCapacity=true;
+               }
+
             }
         }
     }

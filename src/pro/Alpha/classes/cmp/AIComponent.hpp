@@ -17,6 +17,8 @@ namespace game
         FVAI::PriotiryCross             priotiryCross;      //for behaviour that cross the window such as arriveRect and Crosscreen   
         FVAI::circularIterator          path;               //usar std::vector para almacenar la ruta
         double                          perceptionTime {1}; //time 2 check the world
-        double                          accumulatedTime;    //time passed to check
+        double                          accumulatedTime{0};    //time passed to check
+        double                          maxTimeAlive   {-1};//-1 indicates never dies by time
+        double                          timeAlive      {0}; 
     };
 }
