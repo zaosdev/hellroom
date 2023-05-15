@@ -37,7 +37,7 @@ namespace FVEng{
         , SPman         {}
         , phySys        { GameMan }
         , inpRec        { window_ }
-        , inpSys        { GameMan, inpRec }
+        , inpSys        { GameMan, inpRec, soundSys }
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }

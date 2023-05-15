@@ -5,8 +5,8 @@
 #define movement_speed  100
 namespace game
 {
-    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan)
-    : gMan_(gameMan), inpRec_(inpMan)
+    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan, SoundSys& soundSys)
+    : gMan_(gameMan), inpRec_(inpMan), soundSys(soundSys)
     {
     }
 

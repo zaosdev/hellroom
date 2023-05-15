@@ -21,8 +21,8 @@ namespace game{
         
         // loadSound("playerStep","../resources/SFX/16_human_walk_stone_1.wav");
         // loadSound("playerDash","../resources/SFX/15_human_dash_1.wav");
-        if(!sBplayerStep.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
-        if(!sBplayerDash.loadFromFile("../resources/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
+        if(!sBplayerStep.loadFromFile("../media/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
+        if(!sBplayerDash.loadFromFile("../media/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
 
         // sBfrs["playerStep"] = sBplayerStep;
         // sBfrs["playerDash"] = sBplayerDash;
@@ -30,16 +30,16 @@ namespace game{
         soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
         soundP.setBuffer(sBplayerStep); //asigno el sonido que necesito
         
-        soundD.setPitch(1.0);
+        soundD.setPitch(1.5);
         soundD.setBuffer(sBplayerDash);
 
 
-        if (!music.openFromFile("../resources/MUSIC/OST-Juego.wav")) {
+        if (!music.openFromFile("../media/MUSIC/OST-Juego.wav")) {
             std::cout << "FAILED TO LOAD MUSIC" << std::endl;
         
         } 
         else {
-            music.setVolume(50); 
+            music.setVolume(25); 
             music.setLoop(true); 
             
         }
