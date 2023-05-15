@@ -28,32 +28,35 @@ namespace game
             if(e.weapon && e.physics && e.weapon->on){
                 std::cout << "entra" << std::endl;
                 auto& pos = e.physics->pos;
-                if(e.weapon->especial!=mejora::normal){
+                if(e.weapon->current!=mejora::normal){
                     auto current_time = std::chrono::steady_clock::now();
                     auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - tiempo_comienzo_1).count();
                     if (elapsed_time >= 10) { //<- segundo que dura un tipo d disparo especial
+                        e.weapon->current=mejora::normal;
                         e.weapon->especial=mejora::normal;
                         elapsed_time = 0;
                     }
                 }
                 else{
                     //poner AQUI v condicion para activar disparos en cruz
-                    if(int(pos.x)>20 && int(pos.x)<100 && int(pos.y)<100 && int(pos.y)>20){
-                        e.weapon->especial=mejora::cruz;
+                    if(e.weapon->especial==mejora::cruz){
+                        e.weapon->current=mejora::cruz;
                         tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
                     }
                     //poner AQUI v condicion para activar disparos de escopeta
-                    else if(int(pos.x)>200 && int(pos.x)<300 && int(pos.y)<300 && int(pos.y)>200){
-                        e.weapon->especial=mejora::escopeta;
+                    else if(e.weapon->especial==mejora::escopeta){
+                        e.weapon->current=mejora::escopeta;
+
                         tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
                     }
                     //poner AQUI v condicion para activar disparos de rafaga
-                    else if(int(pos.x)>100 && int(pos.x)<200 && int(pos.y)<200 && int(pos.y)>100){
-                        e.weapon->especial=mejora::rafaga;
+                    else if(e.weapon->especial==mejora::rafaga){
+                        e.weapon->current=mejora::rafaga;
+
                         tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
                     }
                     else{
-                        e.weapon->especial=mejora::normal;
+                        e.weapon->current=mejora::normal;
                     }
                 }
 
