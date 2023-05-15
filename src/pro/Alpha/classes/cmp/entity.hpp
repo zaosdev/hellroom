@@ -28,9 +28,10 @@ namespace game
       enum class TAG : tag_type
       {
         //add new tags when needed and delete placeholder
-        Player = 0x001,
-        Enemy  = 0x010,
-        Pet    = 0x100
+        Player = 0x0001,
+        Enemy  = 0x0010,
+        Pet    = 0x0100,
+        Bullet = 0x1000
       };
 
       friend struct FVeng::EntityManager<Entity>;

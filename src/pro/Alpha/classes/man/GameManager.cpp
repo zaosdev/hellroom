@@ -229,6 +229,8 @@ namespace FVeng
                 e.physics->pos.x,
                 e.physics->pos.y
             );
+
+            e.addTag(game::Entity::TAG::Bullet);
             
         }
 
