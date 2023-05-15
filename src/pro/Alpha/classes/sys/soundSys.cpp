@@ -60,19 +60,12 @@ namespace game{
 
     void SoundSys::playSound(sf::Sound& sound, bool& isPlaying){
         
-        //  if(sBfrs.count(skey)>0){
-        //      sound.setBuffer(sBfrs[skey])
-
-            
-
             if(!isPlaying){
-                std::cout << "PLAYING WALKING SOUND" << std::endl;
+               // std::cout << "PLAYING WALKING SOUND" << std::endl;
                 sound.play();
                 isPlaying = true;
             }
-        
-            
-        
+
     }
 
     void SoundSys::stopSound(sf::Sound& sound, bool& isPlaying){
@@ -94,21 +87,10 @@ namespace game{
             
         if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
         //std::cout << "BOTON W" << std::endl;
-        
-        //sound.setPitch(1.5); //provisional
-            
-            //  soundP.setBuffer(sB);
-            // sound.setPitch(1.5);
-            // sound.setBuffer(sBfrs["playerStep"]);
             
             this->setLoop(true, soundP);
             this->playSound(soundP, isPlayingStep); //procedo a asignar un buffer para reproducir el sonido solicitado
-            
-            //this->playSound();
-
-            
-            //std::cout << "Sonandoooo" << std::endl;
-        
+  
         }
         else{
             this->setLoop(false, soundP);
@@ -118,7 +100,7 @@ namespace game{
 
         //Dash
         if(inpRec_.isKeyPressed(getKeyCode(' '))){
-            std::cout << "BOTON SPACE" << std::endl;
+            //std::cout << "BOTON SPACE" << std::endl;
             this->setLoop(false, soundD);
             this->playSound(soundD,  isPlayingDash);
         }

@@ -7,9 +7,6 @@
 #include <iostream>
 #include <map>
 
-
-
-
 namespace game{
 
     struct SoundSys {
