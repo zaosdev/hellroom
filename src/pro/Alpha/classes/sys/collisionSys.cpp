@@ -121,6 +121,7 @@ namespace game
         //COLISION DEL ENEMIGO CON EL PLAYER
         if (DynamicEntityVsStaticEntity(*enemy, dt, player))
         {
+          player.health->negativeAffection = 1;
           collInstance.push_back({&player, enemy->coll->contactTime });
         }
 
