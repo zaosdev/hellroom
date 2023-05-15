@@ -321,7 +321,8 @@ namespace FVeng
 
             e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
 
-            SpawnerAllSpawned.push_back(&e.Spawn->fullCapacity);
+            if(e.Spawn->SpawnInfo.type==tXMLeng::SpawnerType::EnemySpawner)
+                SpawnersID.push_back(e.id());
         }
 
         void  GameManager::deleteMap()
@@ -352,9 +353,10 @@ namespace FVeng
             }
             else
             {
-                for(auto* capcity : SpawnerAllSpawned)
+                for(auto id : SpawnersID)
                 {
-                    if(!*capcity)
+                    auto* ent =EM_.getEntityByID(id);
+                    if(ent && !ent->Spawn->fullCapacity)
                     {
                         goto label;
                     }

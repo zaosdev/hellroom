@@ -68,7 +68,8 @@ namespace FVeng
         game::Entity& getPlayer();
         
 
-        std::vector<bool*> SpawnerAllSpawned{}; 
+        std::vector<game::Entity::id_type> SpawnersID{}; 
+         
         
 
         private:

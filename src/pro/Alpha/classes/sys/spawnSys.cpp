@@ -66,7 +66,7 @@ namespace game
         auto ready2Spawn = [&](Entity const& e){return e.Spawn->TimerSpawn.getElapsedTime().asSeconds()>e.Spawn->minTime; };
 
         //check if it still has capacity to spawn more enemies
-        auto hasCapacity = [&](Entity const& e){return e.Spawn->capacity< e.Spawn->maxCapacity; };
+        auto hasCapacity = [&](Entity const& e){return e.Spawn->capacity < e.Spawn->maxCapacity; };
 
         for(auto& e : gMan_.getEntityManager())
         {
