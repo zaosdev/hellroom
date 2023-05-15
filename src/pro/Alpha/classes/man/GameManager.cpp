@@ -530,7 +530,7 @@ float a = 3;
 
         }
 
-        void GameManager::createHealth(FVmath::Point2Di Pos)
+        void GameManager::createHealth(FVmath::Point2D Pos)
         {
             auto& e = EM_.createEntity();
 

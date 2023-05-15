@@ -67,7 +67,10 @@ namespace game
                 else if (hc->currentLife <= 0)
                 {
                     if(ent.hasTag(game::Entity::TAG::Player)) {std::cout << "Player is dead, state machine change to new state" << std::endl;}
-                    else ent.mark4destruction();
+                    else {
+                        gMan_.createHealth(ent.physics->pos);
+                        ent.mark4destruction();
+                    }
                 }    
             }
         }

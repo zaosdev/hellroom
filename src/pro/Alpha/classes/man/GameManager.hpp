@@ -53,7 +53,7 @@ namespace FVeng
         void createEnemyShoot (FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
         void changeMap();
-        void createHealth(FVmath::Point2Di Pos);
+        void createHealth(FVmath::Point2D Pos);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);

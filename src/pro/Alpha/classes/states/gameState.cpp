@@ -18,6 +18,8 @@
 #include "../classes/sys/weaponSys.hpp"
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
+#include "../classes/sys/effectSys.hpp"
+
 
 #include "../classes/man/stateManager.hpp"
 
@@ -41,6 +43,7 @@ namespace FVEng{
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
+        , efctSys       { GameMan }
         , soundSys      { GameMan, inpRec }
         , achSys        { GameMan }
         , saveSys       { GameMan }
@@ -102,6 +105,8 @@ namespace FVEng{
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
                     spwnSys.update();
 
+                    efctSys.update(dt);
+
                     soundSys.update();
 
                     healthSys.update(dt);
@@ -137,6 +142,7 @@ namespace FVEng{
         game::AISys             AISys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
+        game::effctSys         efctSys;
         game::SoundSys          soundSys;
         game::AchievementSys    achSys;
         game::SavingSys         saveSys;
