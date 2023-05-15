@@ -273,7 +273,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
+            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);           
 
             e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
@@ -286,6 +286,8 @@ namespace FVeng
 
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
+
+            e.render->Sprite.setScale(0.2,0.2);
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         
