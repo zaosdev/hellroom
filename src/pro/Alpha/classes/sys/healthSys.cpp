@@ -66,10 +66,9 @@ namespace game
                 if(hc->currentLife > hc->maxLife) hc->currentLife = hc->maxLife;
                 else if (hc->currentLife <= 0)
                 {
-                    if(ent.hasTag(game::Entity::TAG::Player) &&  not (ent.hasTag(game::Entity::TAG::Bullet)) 
+                    if(ent.hasTag(game::Entity::TAG::Player) &&  not (ent.hasTag(game::Entity::TAG::Bullet)))
                     {
                         std::cout << "Player is dead, state machine change to new state" << std::endl;
- 
                     }
                     else 
                     {
