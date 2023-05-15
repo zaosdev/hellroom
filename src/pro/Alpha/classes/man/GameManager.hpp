@@ -50,6 +50,8 @@ namespace FVeng
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createEnemyShoot (FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
+        void changeMap();
+
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createSpawner(tXMLeng::Spawner& spawner);
@@ -82,6 +84,7 @@ namespace FVeng
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         bool allSpawned{false};
+        game::Entity::id_type mapID_{};
         
        
 

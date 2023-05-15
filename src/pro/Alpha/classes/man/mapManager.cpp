@@ -140,6 +140,15 @@ namespace tXMLeng
 
     }
 
+    void   mapManager::clearMap()
+    {
+        map_.colliderLayer.clear();
+        map_.tileMap.clear();
+        SpawnerInfo_.clear();
+        map_ = TileMap{};
+    }
+
+
     int  mapManager::getActiveLayer() const
     {
         return map_.activeLayer;

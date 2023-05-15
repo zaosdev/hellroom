@@ -59,6 +59,7 @@ namespace tXMLeng
         void  obtainMapInfo(XMLElem& map);
         void  InitMap(const char * filePath);
         void  setActiveLayer(int newLayer);
+        void  clearMap();
         int   getActiveLayer() const;
         const std::string getTexturePath() const;
         const FVmath::Point2Di getMapSize() const;

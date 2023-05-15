@@ -183,6 +183,24 @@ namespace FVeng
         void GameManager::createMap()
         {
             auto& e = EM_.createEntity();
+            mapID_ = e.id();
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
+
+            e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
+            //mapMan.setActiveLayer(-1);         
+            e.map->FVSprite.initVertexArray(mapMan.getMapSize(), mapMan.getCurrentLayer(), mapMan.getTileSize());
+
+            for(auto posColl : mapMan.getColliderData())
+            {
+                createMapCollider(posColl);
+            }
+        }
+
+        void GameManager::changeMap()
+        {
+            auto& e = *EM_.getEntityByID(mapID_);
+
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
             e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
 
@@ -329,7 +347,7 @@ namespace FVeng
         {
             for(auto& ent :  EM_)
             {
-                if(ent.map)
+                if(ent.map && ent.hasTag(game::Entity::TAG::STATIC_COLL))
                 {
                     ent.mark4destruction();
                 }
@@ -348,8 +366,21 @@ namespace FVeng
                     }
                 }
 
+                allSpawned=false;
+                for(auto id : SpawnersID)
+                {
+                    auto* ent =EM_.getEntityByID(id);
+                    if(ent)
+                    {
+                        ent->mark4destruction();
+                    }
+                }
+                SpawnersID.clear();
                 deleteMap();
-                //LoadNewMap();
+                mapMan.clearMap();
+                mapMan.InitMap("../media/Mapa2.tmx");
+                changeMap();
+                createAllSpawner();
             }
             else
             {
