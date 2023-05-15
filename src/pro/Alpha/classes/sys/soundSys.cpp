@@ -35,14 +35,19 @@ namespace game{
 
          if (buffer.loadFromFile(soundpath)) {
             sBfrs[skey] = buffer;
+            
+            soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
+            soundP.setBuffer(sBfrs["playerStep"]); //asigno el sonido que necesito
         }
 
     }
 
-    void SoundSys::playSound(){
+    void SoundSys::playSound(sf::Sound& sound){
         
         //  if(sBfrs.count(skey)>0){
         //      sound.setBuffer(sBfrs[skey])
+
+            
 
             if(!isPlaying){
                 std::cout << "PLAYING WALKING SOUND" << std::endl;
@@ -54,14 +59,14 @@ namespace game{
         
     }
 
-    void SoundSys::stopSound(){
+    void SoundSys::stopSound(sf::Sound& sound){
        if(isPlaying){
             sound.stop();
            isPlaying = false;
         }
     }
 
-    void SoundSys::setLoop(bool loop){
+    void SoundSys::setLoop(bool loop, sf::Sound& sound){
         sound.setLoop(loop);
     }
 
@@ -77,11 +82,11 @@ namespace game{
             //sound.setPitch(1.5); //provisional
                 
               //  soundP.setBuffer(sB);
-                sound.setPitch(1.5);
-                sound.setBuffer(sBfrs["playerStep"]);
+                // sound.setPitch(1.5);
+                // sound.setBuffer(sBfrs["playerStep"]);
                
-                this->setLoop(true);
-                this->playSound();
+                this->setLoop(true, soundP);
+                this->playSound(soundP); //procedo a asignar un buffer para reproducir el sonido solicitado
                 
                 //this->playSound();
 
@@ -90,8 +95,8 @@ namespace game{
           
         }
         else{
-            this->setLoop(false);
-            this->stopSound();
+            this->setLoop(false, soundP);
+            this->stopSound(soundP);
         }  
 
 

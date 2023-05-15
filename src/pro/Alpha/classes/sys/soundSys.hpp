@@ -26,18 +26,19 @@ namespace game{
 
             void loadSounds(/*const std::string& soundfile*/); //cargara todos los sonidos del juego en buffers
             void loadSound(const std::string& skey, const std::string& soundpath);
-            void playSound(); 
-            void setLoop(bool loop); //repeticion del sonido al mantener la tecla 
-            void stopSound();
+            void playSound(sf::Sound& sound); 
+            void setLoop(bool loop, sf::Sound& sound); //repeticion del sonido al mantener la tecla 
+            void stopSound(sf::Sound& sound);
 
             void update(); // reproducira sonidos segun la tecla pulsada
     
             // sound por entidad --> player, enemy, bullet player, bullet enemy
             //FVSound::soundLoader sounds;
             sf::Sound sound;
-            // sf::Sound soundE;
-            // sf::Sound soundBP;
-            // sf::Sound soundBF;
+            sf::Sound soundP;
+            sf::Sound soundE;
+            sf::Sound soundBP;
+            sf::Sound soundBF;
             
         private: 
             std::map<std::string, sf::SoundBuffer> sBfrs; 

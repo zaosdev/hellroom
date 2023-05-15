@@ -70,7 +70,7 @@ namespace FVeng
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         
-        FVSound::soundLoader SoundL_{};
+       
 
 
 
