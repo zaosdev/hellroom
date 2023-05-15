@@ -320,6 +320,8 @@ namespace FVeng
             auto& e = EM_.createEntity();
 
             e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
+
+            SpawnerAllSpawned.push_back(&e.Spawn->fullCapacity);
         }
 
         void  GameManager::deleteMap()
@@ -335,19 +337,34 @@ namespace FVeng
 
         void GameManager::update()
         {
-            for(auto& ent : EM_)
+            if(allSpawned)
             {
-                if(ent.hasTag(game::Entity::TAG::Enemy))
+                for(auto& ent : EM_)
                 {
-                    return ;
+                    if(ent.hasTag(game::Entity::TAG::Enemy))
+                    {
+                        return ;
+                    }
                 }
+
+                deleteMap();
+                //LoadNewMap();
             }
+            else
+            {
+                for(auto* capcity : SpawnerAllSpawned)
+                {
+                    if(!*capcity)
+                    {
+                        goto label;
+                    }
+                }
+                allSpawned=true;
+            }
+label:
+float a = 3;
 
-            deleteMap();
-            //LoadNewMap();
         }
-
-
 
         //Loads next layer info in the Sprite, to change layer being drawn
         void GameManager::setRenderNextLayer(game::MapComponent& map)

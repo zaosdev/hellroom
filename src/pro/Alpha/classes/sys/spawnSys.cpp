@@ -70,16 +70,21 @@ namespace game
 
         for(auto& e : gMan_.getEntityManager())
         {
-            auto f = isEnemySpawner(e);
-
+            
             //std::cout << f << std::endl;
 
             if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
             {
+                
                auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
                SpawnEnemy(Pos);
                e.Spawn->capacity++;
                e.Spawn->TimerSpawn.restart();
+               if(e.Spawn->capacity == e.Spawn->maxCapacity)
+               {
+                   e.Spawn->fullCapacity=true;
+               }
+
             }
         }
     }

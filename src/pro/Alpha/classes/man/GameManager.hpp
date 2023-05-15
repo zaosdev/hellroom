@@ -68,6 +68,7 @@ namespace FVeng
         game::Entity& getPlayer();
         
 
+        std::vector<bool*> SpawnerAllSpawned{}; 
         
 
         private:
@@ -79,6 +80,7 @@ namespace FVeng
 
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
+        bool allSpawned{false};
         
        
 

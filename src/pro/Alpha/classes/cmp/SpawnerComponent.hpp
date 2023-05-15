@@ -10,6 +10,7 @@ namespace game
         float minTime{5};
         size_t capacity{0};
         size_t maxCapacity{5};
+        bool fullCapacity{false};
 
     };
 }
