@@ -209,7 +209,7 @@ namespace FVeng
 
            
 
-            e.AI  = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
+            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 

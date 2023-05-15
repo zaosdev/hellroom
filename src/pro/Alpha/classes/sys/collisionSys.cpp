@@ -41,7 +41,6 @@ namespace game
             if (DynamicEntityVsStaticEntity(player, dt, ent))
             {
               collInstance.push_back({ &ent, player.coll->contactTime });
-              ent.physics->vel = {0,0};
             }
           }
           else 
@@ -90,6 +89,10 @@ namespace game
           {
             collInstance.push_back({wallColl, enemy->coll->contactTime });
           }
+        }
+        if (DynamicEntityVsStaticEntity(*enemy, dt, player))
+        {
+          collInstance.push_back({&player, enemy->coll->contactTime });
         }
         if(!collInstance.empty())
         {

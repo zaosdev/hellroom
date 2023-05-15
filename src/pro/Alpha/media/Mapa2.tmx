@@ -4823,22 +4823,25 @@
   </layer>
  </group>
  <objectgroup id="4" name="spawner">
-  <object id="1" x="56" y="69" width="48" height="48">
+  <properties>
+   <property name="type" type="int" value="0"/>
+  </properties>
+  <object id="1" x="84.2085" y="92.2305" width="48" height="48">
    <properties>
     <property name="type" type="int" value="1"/>
    </properties>
   </object>
-  <object id="4" x="538" y="69" width="48" height="48">
+  <object id="4" x="464.99" y="85.5932" width="48" height="48">
    <properties>
     <property name="type" type="int" value="1"/>
    </properties>
   </object>
-  <object id="5" x="54" y="375" width="48" height="48">
+  <object id="5" x="70.5932" y="330.198" width="48" height="48">
    <properties>
     <property name="type" type="int" value="1"/>
    </properties>
   </object>
-  <object id="6" x="538" y="376" width="48" height="48">
+  <object id="6" x="464.99" y="327.88" width="48" height="48">
    <properties>
     <property name="type" type="int" value="1"/>
    </properties>
