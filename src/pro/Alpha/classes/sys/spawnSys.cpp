@@ -13,7 +13,7 @@ namespace game
     {
 
         // gMan_.SpawnDummy(Pos);
-        auto enemyChoice = FVmath::calculateRandom(1,3);
+        auto enemyChoice = FVmath::calculateRandom(3,1);
         
         switch (enemyChoice)
         {
