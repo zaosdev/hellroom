@@ -21,6 +21,7 @@
 
 #include "../classes/man/stateManager.hpp"
 
+
 #include "../utils/circularIterator.hpp"
 #include "../cmp/blackBoardComponent.hpp"
 
@@ -69,7 +70,7 @@ namespace FVEng{
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
-            //soundSys.loadSound();
+            soundSys.loadSounds();
         }
 
         void executeState() override
@@ -99,7 +100,7 @@ namespace FVEng{
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
                     spwnSys.update();
 
-                    //soundSys.update();
+                    soundSys.update();
 
                     healthSys.update(dt);
 
