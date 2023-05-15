@@ -32,6 +32,19 @@ namespace game
                     ent.physics->vel.x *= dash_multiplier;
                     ent.physics->vel.y *= dash_multiplier; 
                 }
+
+                if(inpRec_.isKeyPressed(getKeyCode('1')))
+                {
+                    ent.weapon->especial=mejora::cruz;
+                }
+                if(inpRec_.isKeyPressed(getKeyCode('2')))
+                {
+                    ent.weapon->especial=mejora::escopeta;
+                }
+                if(inpRec_.isKeyPressed(getKeyCode('3')))
+                {
+                    ent.weapon->especial=mejora::rafaga;
+                }
             }
 
             //bullet
