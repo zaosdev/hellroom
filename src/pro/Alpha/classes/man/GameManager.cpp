@@ -52,7 +52,7 @@ namespace FVeng
             LoadAllTextures();
             createMap();
             createAllSpawner();
-            auto& player = createPlayer({100,100});
+            auto& player = createPlayer({320,240});
             bb_.targetID = player.id();
 
         }
@@ -63,7 +63,7 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
+
 
             e.input  = game::InputComponent{};
 
@@ -79,6 +79,8 @@ namespace FVeng
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
             initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -120,10 +122,10 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
-
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
+            
+            initEntityRender(e, {0,0}, sf::IntRect(0 * e.physics->size.x, 0 * e.physics->size.y, e.physics->size.x, e.physics->size.y));
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -154,7 +156,7 @@ namespace FVeng
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
 
             e.render->Sprite.move(
@@ -218,7 +220,7 @@ namespace FVeng
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
 
             e.render->Sprite.move(

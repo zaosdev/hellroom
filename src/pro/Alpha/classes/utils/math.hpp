@@ -115,8 +115,8 @@ namespace FVmath
         Point2Dt operator-(const Point2Dt& rhs)
         {
             Point2Dt res;
-            res.x = x+rhs.x;
-            res.y=  y+rhs.y;
+            res.x = x-rhs.x;
+            res.y=  y-rhs.y;
 
             return res;
         }
@@ -125,8 +125,8 @@ namespace FVmath
         Point2Dt operator-(Point2Dt&& rhs)
         {
             Point2Dt res;
-            res.x = x+rhs.x;
-            res.y=  y+rhs.y;
+            res.x = x-rhs.x;
+            res.y=  y-rhs.y;
 
             return res;
         }

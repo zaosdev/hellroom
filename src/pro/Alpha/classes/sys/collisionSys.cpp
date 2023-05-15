@@ -27,6 +27,7 @@ namespace game
       //bool nomore{false};
 
       Entity& player = gMan_.getPlayer();
+      std::vector<std::pair<Entity*, float>> z{};
 
       //Entity and enemy obtention loop
       for(auto& ent : EM)
@@ -41,16 +42,18 @@ namespace game
               noOverlap(player,ent);
             }
           }
-          else if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
+          else 
+          if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
           {
             stat_coll.push_back(&ent);
-
-            //if(DynamicEntityVsStaticEntity(player,dt,ent))
-            if(checkCollision(player,ent))
-            {
-              ResolveDynamicEntityVsEntity(player,ent,dt);
-              player.physics->pos+=player.physics->vel*dt;
-            }
+            		// Work out collision point, add it to vector along with rect ID
+              // if(checkCollision(player,ent))
+              // {
+                if (DynamicEntityVsStaticEntity(player, dt, ent))
+                {
+                  z.push_back({ &ent, player.coll->contactTime });
+                }
+              // }
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
@@ -60,16 +63,50 @@ namespace game
         }
       }
 
-      // for(auto* enemy : enemies)
-      // {
-      //   for(auto* wallColl : stat_coll)
-      //   {
-      //     if(checkCollision(*wallColl,*enemy))
-      //     {
-      //       noOverlap(*enemy,*wallColl);
-      //     }
-      //   }
-      // }
+//////////////////////////////////
+    if(!z.empty())
+    {
+      // Do the sort
+      std::sort(z.begin(), z.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
+        {
+          return a.second < b.second;
+        });
+
+      for (auto j : z)
+      {
+        ResolveDynamicEntityVsEntity(player,*j.first,dt);
+      }
+    }
+    player.physics->pos+=player.physics->vel*dt;
+
+    // z.clear();
+
+      for(auto* enemy : enemies)
+      {
+        for(auto* wallColl : stat_coll)
+        {
+          if (DynamicEntityVsStaticEntity(*enemy, dt, *wallColl))
+          {
+            z.push_back({wallColl, enemy->coll->contactTime });
+          }
+        }
+        if(!z.empty())
+        {
+          // Do the sort
+          std::sort(z.begin(), z.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
+            {
+              return a.second < b.second;
+            });
+
+          for (auto j : z)
+          {
+            ResolveDynamicEntityVsEntity(*enemy,*j.first,dt);
+          }
+        }
+        z.clear();
+        enemy->physics->pos+=enemy->physics->vel*dt;
+      }
+
     }
 
     bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
@@ -80,11 +117,16 @@ namespace game
       auto rect1BBox = collider1.physics->size;
       auto rect2BBox = collider2.physics->size;
 
+      // Expand target rectangle by source dimensions
+      expandedTarget expanded_target{};
+      expanded_target.pos = collider2.physics->pos - collider1.physics->size / 2;
+      expanded_target.size = collider2.physics->size + collider1.physics->size;
+
       if (
-        rect1Pos.x <= rect2Pos.x + rect2BBox.x &&
-        rect1Pos.x + rect1BBox.x >= rect2Pos.x &&
-        rect1Pos.y <= rect2Pos.y + rect2BBox.y &&
-        rect1BBox.y + rect1Pos.y >= rect2Pos.y
+        rect1Pos.x <= expanded_target.pos.x + expanded_target.size.x &&
+        rect1Pos.x + rect1BBox.x >= expanded_target.pos.x &&
+        rect1Pos.y <= expanded_target.pos.y + expanded_target.size.y &&
+        rect1BBox.y + rect1Pos.y >= expanded_target.pos.y
       )
 			{
           return true;
@@ -114,7 +156,7 @@ namespace game
 		if (nearHit.x > farHit.x) std::swap(nearHit.x, farHit.x);
 		if (nearHit.y > farHit.y) std::swap(nearHit.y, farHit.y);
 
-    // Early rejection		
+    // // Early rejection		
 		if (nearHit.x > farHit.y || nearHit.y > farHit.x) return false;
 
     // Closest 'time' will be the first contact
@@ -136,12 +178,15 @@ namespace game
 			else
 				dynamicEntity.coll->contactNormal = { -1, 0 };
 		else if (nearHit.x < nearHit.y)
+    {
 			if (invertedDirection.y < 0)
 				dynamicEntity.coll->contactNormal = { 0, 1 };
 			else
       {
 				dynamicEntity.coll->contactNormal = { 0, -1 };
       }
+    }
+
 
 		// Note if nearHit == farHit, collision is principly in a diagonal
 		// so pointless to resolve. By returning a CN={0,0} even though its
