@@ -30,6 +30,9 @@ namespace game{
             void setLoop(bool loop, sf::Sound& sound); //repeticion del sonido al mantener la tecla 
             void stopSound(sf::Sound& sound,  bool& isPlaying);
 
+            void playMusic();
+            void stopMusic();
+
             void update(); // reproducira sonidos segun la tecla pulsada
     
             // sound por entidad --> player, enemy, bullet player, bullet enemy
@@ -37,21 +40,33 @@ namespace game{
 
            // std::map<std::string, sf::SoundBuffer> sBfrs; 
             
-            sf::SoundBuffer sBplayerStep;
-            sf::SoundBuffer sBplayerDash;
+            // sf::SoundBuffer sBplayerStep;
+            // sf::SoundBuffer sBplayerDash;
 
 
-            sf::Sound sound;
-            sf::Sound soundP;
-            sf::Sound soundD;
-            sf::Sound soundBP;
-            sf::Sound soundBF;
+            // sf::Sound sound;
+            // sf::Sound soundP;
+            // sf::Sound soundD;
+            // sf::Sound soundBP;
+            // sf::Sound soundBF;
             
         private: 
             
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
-            bool isPlayingStep, isPlayingDash;
+
+            sf::SoundBuffer sBplayerStep;
+            sf::SoundBuffer sBplayerDash;
+
+            //sf::Sound sound;
+            sf::Sound soundP;
+            sf::Sound soundD;
+            // sf::Sound soundBP;
+            // sf::Sound soundBF;
+
+            sf::Music music;
+
+            bool isPlayingStep, isPlayingDash, musicPlaying;
             
     };
 }

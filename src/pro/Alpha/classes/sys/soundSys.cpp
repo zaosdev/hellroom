@@ -9,6 +9,9 @@ namespace game{
         
         isPlayingStep = false;
         isPlayingDash = false;
+
+
+        //musicPlaying = false;
    
     }
 
@@ -31,32 +34,19 @@ namespace game{
         soundD.setBuffer(sBplayerDash);
 
 
-        // sf::SoundBuffer sB;
+        if (!music.openFromFile("../resources/MUSIC/OST-Juego.wav")) {
+            std::cout << "FAILED TO LOAD MUSIC" << std::endl;
         
-        // if(!sB.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){
-        //     std::cout << "SOUND FILE NOT FOUND" << std::endl;
-        // }
-        // else std::cout << "SOUND LOADED" << std::endl;
-        // soundP.setPitch(1.5); //provisional
-        // soundP.setBuffer(sB);
-
+        } 
+        else {
+            music.setVolume(50); 
+            music.setLoop(true); 
+            
+        }
 
         
     }
 
-    // void SoundSys::loadSound(const std::string& skey, const std::string& soundpath){
-
-    //     sf::SoundBuffer buffer;
-
-    //      if (buffer.loadFromFile(soundpath)) {
-    //         sBfrs[skey] = buffer;
-            
-    //         soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
-    //         soundP.setBuffer(sBfrs["playerStep"]); //asigno el sonido que necesito
-    //         soundD.setBuffer(sBfrs["playerDash"]);
-    //     }
-
-    // }
 
     void SoundSys::playSound(sf::Sound& sound, bool& isPlaying){
         
@@ -86,6 +76,24 @@ namespace game{
         sound.setLoop(loop);
     }
 
+
+
+     void SoundSys::playMusic(){
+        
+        if (!musicPlaying) {
+            std::cout << "PLAYING MUSIC" << std::endl;
+            music.play();
+            musicPlaying = true;
+        }
+    }
+
+    void SoundSys::stopMusic(){
+        
+        if (musicPlaying) {
+            music.stop();
+            musicPlaying = false;
+        }
+    }
    
 
     void SoundSys::update(/*SoundSys sfx*/){
@@ -124,6 +132,16 @@ namespace game{
         }
         else{
             this->stopSound(soundD,  isPlayingDash);
+        }
+
+
+         // Play/Stop music
+        if (inpRec_.isKeyPressed(getKeyCode('M'))) {
+            if (musicPlaying) {
+                this->stopMusic();
+            } else {
+                this->playMusic();
+            }
         }
 
     }
