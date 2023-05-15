@@ -322,6 +322,33 @@ namespace FVeng
             e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
         }
 
+        void  GameManager::deleteMap()
+        {
+            for(auto& ent :  EM_)
+            {
+                if(ent.map)
+                {
+                    ent.mark4destruction();
+                }
+            }
+        }
+
+        void GameManager::update()
+        {
+            for(auto& ent : EM_)
+            {
+                if(ent.hasTag(game::Entity::TAG::Enemy))
+                {
+                    return ;
+                }
+            }
+
+            deleteMap();
+            //LoadNewMap();
+        }
+
+
+
         //Loads next layer info in the Sprite, to change layer being drawn
         void GameManager::setRenderNextLayer(game::MapComponent& map)
         {

@@ -84,6 +84,8 @@ namespace FVEng{
                 {
                     double dt = updateClock.restart().asSeconds();
 
+                    GameMan.update();
+
                     inpRec.update();
                     inpSys.update();
 
@@ -95,7 +97,7 @@ namespace FVEng{
 
                     shieldSys.update(dt);
 
-                collisionSys.update(dt);
+                    collisionSys.update(dt);
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
                     spwnSys.update();

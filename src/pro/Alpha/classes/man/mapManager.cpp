@@ -32,7 +32,6 @@ namespace tXMLeng
         }
     }
 
-
     void mapManager::GenerateSpawners(XMLElem& map)
     {
         XMLElem spawners = map.FirstChildNamed("objectgroup").FirstChildNamed("object");

@@ -59,6 +59,8 @@ namespace FVeng
         void LoadAllTextures();
         void initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect);
         void SpawnDummy(FVmath::Point2Di Pos);
+        void deleteMap();
+        void update();
 
         FVeng::EntityManager<game::Entity>& getEntityManager();
         game::blackBoardComponent& getBB();
