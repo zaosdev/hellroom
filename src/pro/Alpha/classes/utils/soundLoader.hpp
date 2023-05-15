@@ -9,9 +9,12 @@ namespace FVSound{
         public:
             soundLoader(){
                 //carga de sonidos en buffers
-                sBplayerStep.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav");
-                sBplayerDash.loadFromFile("../resources/SFX/15_human_dash_1.wav");
-
+                if(!sBplayerStep.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){
+                   // std::cout << "FAILED TO LOUD SOUND: STEPS" <<  std::endl;
+                }
+                if(!sBplayerDash.loadFromFile("../resources/SFX/15_human_dash_1.wav")){
+                   // std::cout << "FAILED TO LOUD SOUND: DASH" <<  std::endl;
+                }
                 
                 //agregar buffers al mapa
                 sBfrs["playerStep"] = sBplayerStep;

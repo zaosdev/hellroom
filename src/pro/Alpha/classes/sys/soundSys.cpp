@@ -1,5 +1,4 @@
 #include "soundSys.hpp"
-//#include "inputSys.hpp"
 #include "../facade/inputFacade.hpp"
 
 namespace game{
@@ -13,36 +12,57 @@ namespace game{
 
     void SoundSys::loadSounds(/*const std::string& soundfile*/){
 
-        sf::SoundBuffer sB;
         
-        if(!sB.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){
-            std::cout << "SOUND FILE NOT FOUND" << std::endl;
-        }
-        else std::cout << "SOUND LOADED" << std::endl;
-        soundP.setPitch(1.5); //provisional
-        soundP.setBuffer(sB);
+        loadSound("playerStep","../resources/SFX/16_human_walk_stone_1.wav");
+        loadSound("playerDash","../resources/SFX/15_human_dash_1.wav");
+
+        // sf::SoundBuffer sB;
+        
+        // if(!sB.loadFromFile("../resources/SFX/16_human_walk_stone_1.wav")){
+        //     std::cout << "SOUND FILE NOT FOUND" << std::endl;
+        // }
+        // else std::cout << "SOUND LOADED" << std::endl;
+        // soundP.setPitch(1.5); //provisional
+        // soundP.setBuffer(sB);
 
 
         
     }
 
-    void SoundSys::playSound(){
-       if(!isPlaying){
-            soundP.play();
-            isPlaying = true;
+    void SoundSys::loadSound(const std::string& skey, const std::string& soundpath){
+
+        sf::SoundBuffer buffer;
+
+         if (buffer.loadFromFile(soundpath)) {
+            sBfrs[skey] = buffer;
         }
-        //std::cout << "PLAYING WALKING SOUND" << std::endl;
+
+    }
+
+    void SoundSys::playSound(){
+        
+        //  if(sBfrs.count(skey)>0){
+        //      sound.setBuffer(sBfrs[skey])
+
+            if(!isPlaying){
+                std::cout << "PLAYING WALKING SOUND" << std::endl;
+                sound.play();
+                isPlaying = true;
+            }
+        
+            
+        
     }
 
     void SoundSys::stopSound(){
        if(isPlaying){
-            soundP.stop();
+            sound.stop();
            isPlaying = false;
         }
     }
 
     void SoundSys::setLoop(bool loop){
-        soundP.setLoop(loop);
+        sound.setLoop(loop);
     }
 
    
@@ -53,11 +73,19 @@ namespace game{
             
             if(inpRec_.isKeyPressed(getKeyCode('W')) || inpRec_.isKeyPressed(getKeyCode('A')) || inpRec_.isKeyPressed(getKeyCode('S')) || inpRec_.isKeyPressed(getKeyCode('D'))) {
             //std::cout << "BOTON W" << std::endl;
-                soundP.setPitch(1.5); //provisional
+            
+            //sound.setPitch(1.5); //provisional
+                
               //  soundP.setBuffer(sB);
+                sound.setPitch(1.5);
+                sound.setBuffer(sBfrs["playerStep"]);
+               
                 this->setLoop(true);
                 this->playSound();
-            
+                
+                //this->playSound();
+
+                
                 //std::cout << "Sonandoooo" << std::endl;
           
         }
