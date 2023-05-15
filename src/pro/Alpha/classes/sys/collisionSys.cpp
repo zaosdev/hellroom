@@ -27,7 +27,8 @@ namespace game
       //bool nomore{false};
 
       Entity& player = gMan_.getPlayer();
-      std::vector<std::pair<Entity*, float>> z{};
+      std::vector<std::pair<Entity*, float>> collInstance{};
+
 
       //Entity and enemy obtention loop
       for(auto& ent : EM)
@@ -37,9 +38,10 @@ namespace game
           if(ent.hasTag(game::Entity::TAG::Enemy))
           {
             enemies.push_back(&ent);
-            if(player.render->Sprite.getGlobalBounds().intersects(ent.render->Sprite.getGlobalBounds()))
+            if (DynamicEntityVsStaticEntity(player, dt, ent))
             {
-              noOverlap(player,ent);
+              collInstance.push_back({ &ent, player.coll->contactTime });
+              ent.physics->vel = {0,0};
             }
           }
           else 
@@ -51,7 +53,7 @@ namespace game
               // {
                 if (DynamicEntityVsStaticEntity(player, dt, ent))
                 {
-                  z.push_back({ &ent, player.coll->contactTime });
+                  collInstance.push_back({ &ent, player.coll->contactTime });
                 }
               // }
           }
@@ -64,22 +66,21 @@ namespace game
       }
 
 //////////////////////////////////
-    if(!z.empty())
+    if(!collInstance.empty())
     {
       // Do the sort
-      std::sort(z.begin(), z.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
+      std::sort(collInstance.begin(), collInstance.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
         {
           return a.second < b.second;
         });
 
-      for (auto j : z)
+      for (auto j : collInstance)
       {
         ResolveDynamicEntityVsEntity(player,*j.first,dt);
       }
     }
     player.physics->pos+=player.physics->vel*dt;
-
-    // z.clear();
+    // collInstance.clear();
 
       for(auto* enemy : enemies)
       {
@@ -87,26 +88,25 @@ namespace game
         {
           if (DynamicEntityVsStaticEntity(*enemy, dt, *wallColl))
           {
-            z.push_back({wallColl, enemy->coll->contactTime });
+            collInstance.push_back({wallColl, enemy->coll->contactTime });
           }
         }
-        if(!z.empty())
+        if(!collInstance.empty())
         {
           // Do the sort
-          std::sort(z.begin(), z.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
+          std::sort(collInstance.begin(), collInstance.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
             {
               return a.second < b.second;
             });
 
-          for (auto j : z)
+          for (auto j : collInstance)
           {
             ResolveDynamicEntityVsEntity(*enemy,*j.first,dt);
           }
         }
-        z.clear();
+        collInstance.clear();
         enemy->physics->pos+=enemy->physics->vel*dt;
       }
-
     }
 
     bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
