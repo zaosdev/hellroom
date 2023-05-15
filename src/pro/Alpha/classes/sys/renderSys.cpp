@@ -14,10 +14,10 @@ namespace game
           HUD_ (hud)
         {
         }
-        RenderSys::~RenderSys()
-        {
-            if(window_.isOpen()) window_.close();
-        }
+        // RenderSys::~RenderSys()
+        // {
+        //     if(window_.isOpen()) window_.close();
+        // }
 
         void RenderSys::iniRenderSys()
         {

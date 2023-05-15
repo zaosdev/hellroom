@@ -3,9 +3,8 @@
 
 namespace game
 {
-    HealthSys::HealthSys(FVeng::GameManager& gameMan, FVEng::StateMachine& stateMachine)
+    HealthSys::HealthSys(FVeng::GameManager& gameMan)
     : gMan_(gameMan)
-    , SM_  (stateMachine)
     {
     }
 
@@ -49,8 +48,8 @@ namespace game
             {
                 auto& hc = ent.health;
 
-                hc->negativeAffection = 2;
-               // hc->positiveAffection = 1;
+                //hc->negativeAffection = 20;
+                //hc->positiveAffection = 1;
                 //if inmortality time didnt pass, damage will be discarded, else apply both effects
                 if(hc->isInmortal)
                 {
@@ -70,7 +69,7 @@ namespace game
                     if(ent.hasTag(game::Entity::TAG::Player)) 
                     {
                         std::cout << "Player is dead, state machine change to new state" << std::endl;
-                        SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
+ 
                     }
                     else ent.mark4destruction();
                 }    
