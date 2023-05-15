@@ -19,8 +19,13 @@ namespace game{
     void SoundSys::loadSounds(/*const std::string& soundfile*/){
 
         
+<<<<<<< HEAD
         // loadSound("playerStep","../resources/SFX/16_human_walk_stone_1.wav");
         // loadSound("playerDash","../resources/SFX/15_human_dash_1.wav");
+=======
+        // loadSound("playerStep","../media/SFX/16_human_walk_stone_1.wav");
+        // loadSound("playerDash","../media/SFX/15_human_dash_1.wav");
+>>>>>>> main
         if(!sBplayerStep.loadFromFile("../media/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
         if(!sBplayerDash.loadFromFile("../media/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
 
