@@ -273,7 +273,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);           
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
 
             e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
@@ -287,7 +287,7 @@ namespace FVeng
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
 
-            e.render->Sprite.setScale(0.2,0.2);
+            e.render->Sprite.setScale(2,2);
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         
@@ -496,6 +496,7 @@ float a = 3;
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
 
+            e.render->Sprite.setScale(2,2);
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
@@ -518,7 +519,7 @@ float a = 3;
             std::cout << "Spawn DUMMY" << std::endl;
 
             auto& e = EM_.createEntity();
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);
                         FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
 
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };
@@ -528,6 +529,8 @@ float a = 3;
                 e.physics->pos.x,
                 e.physics->pos.y
             );    
+
+            e.render->Sprite.setScale(0.5,0.5);
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
