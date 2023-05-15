@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<effectList>
+    <Healing>
+        <maxValue      value ="20"/>
+        <minValue      value ="15"/>
+        <variable      value ="health"/>
+        <flags         value ="10100"/>
+        <description   value ="recovers health by +%d amount"/>
+    </Healing>
+</effectList>

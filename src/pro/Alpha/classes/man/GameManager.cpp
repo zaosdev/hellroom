@@ -530,6 +530,31 @@ float a = 3;
 
         }
 
+        void GameManager::createHealth(FVmath::Point2D Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(HEART_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
+
+            initEntityRender(e, {0,0},sf::IntRect(0,0,38,30));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.effct = game::EffectComponent{};
+
+            e.effct->effects.push_back(effMan.createEffectNamed("Healing"));
+
+            e.addTag(game::Entity::TAG::Health);
+        }
+
+
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
         {
             auto& e     = EM_.createEntity();

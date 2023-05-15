@@ -10,6 +10,8 @@
 #include "entityManager.hpp"
 #include "SpriteManager.hpp"
 #include "mapManager.hpp"
+#include "effectManager.hpp"
+
 
 
 
@@ -51,7 +53,7 @@ namespace FVeng
         void createEnemyShoot (FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createMap();
         void changeMap();
-
+        void createHealth(FVmath::Point2D Pos);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
@@ -71,26 +73,20 @@ namespace FVeng
         tXMLeng::mapManager& getMapManager();
         game::Entity& getPlayer();
         
-
         std::vector<game::Entity::id_type> SpawnersID{}; 
          
-        
-
         private:
 
         sf::RenderWindow& window_;
         //create Sprite manager
         SFMLeng::SpriteManager SPman{};
         tXMLeng::mapManager mapMan{};
+        FV_factory::effectsFactory effMan{};
 
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         bool allSpawned{false};
         game::Entity::id_type mapID_{};
-        
-       
-
-
-
+           
     };
 }
