@@ -14,7 +14,8 @@ namespace FVAI
         PURSUE,
         FLEE,
         CROSSCREEN,
-        FOLLOWPATH
+        FOLLOWPATH,
+        SHOOTATTACK
     };
 
     enum class PriotiryCross

@@ -15,7 +15,7 @@ namespace game
         AISys& operator=(AISys&&)= delete;
 
         void update(blackBoardComponent bb, double dt);
-        void perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM, blackBoardComponent& bb, double const dt);
+        bool perception(std::optional<game::AIComponent>& AI, FVeng::EntityManager<game::Entity>& EM, blackBoardComponent& bb, double const dt);
 
         private:
             FVeng::GameManager& gMan_;

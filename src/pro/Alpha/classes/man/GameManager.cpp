@@ -269,15 +269,13 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
 
-            e.weapon    = game::WeaponComponent {};              
-
-            e.AI        = game::AIComponent      { .targetCoord{targetCoord}, .behaviour =FVAI::SB::STAY, .targetID=targetID, .perceptionTime=perceptionTime};         
+            e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
-            e.render    = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+            e.render    = game::RenderComponent     { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            e.reward    = game::RewardComponent    {.min_reward = 2, .max_reward = 4};
+            e.reward    = game::RewardComponent     {.min_reward = 2, .max_reward = 4};
 
             float life = 50;
             e.health    = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
@@ -321,6 +319,34 @@ namespace FVeng
             //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
             e.addTag(game::Entity::TAG::Player);
+        }
+
+        void GameManager::createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 15, 0 * 15, 15, 15));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(0),float(0)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.setColor(sf::Color(200, 0, 0, 255));
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 4, .arrivalRadius = 1};
+
+            e.AI->targetCoord = targetCoord;
+            e.AI->behaviour   = sb;
+
+            //Set player bullet
+            e.addTag(game::Entity::TAG::Bullet);
+            e.addTag(game::Entity::TAG::Enemy);
         }
 
         //Create all spawners on the current map
