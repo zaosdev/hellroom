@@ -2,15 +2,13 @@
 
 #include "../man/GameManager.hpp"
 #include "../cmp/blackBoardComponent.hpp"
-#include "../man/stateManager.hpp"
-#include "../states/gameOverState.hpp"
 // #include "../states/state.hpp"
 
 namespace game
 {
     struct HealthSys
     {
-        HealthSys(FVeng::GameManager& gameMan, FVEng::StateMachine& stateMachine);
+        HealthSys(FVeng::GameManager& gameMan);
 
         HealthSys (const HealthSys&) = delete;
         HealthSys (HealthSys&&) = delete;
@@ -26,6 +24,5 @@ namespace game
 
         private:
             FVeng::GameManager&  gMan_;
-            FVEng::StateMachine& SM_;
     };
 }

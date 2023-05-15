@@ -6,6 +6,8 @@
 #include "../classes/man/stateManager.hpp"
 //#include "../states/mainMenuState.hpp" dependencia circular
 #include "../utils/gameData.hpp"
+#include "../states/storeState.hpp"
+
 
 namespace FVEng{
     class gameOverState : public State {
@@ -86,7 +88,8 @@ namespace FVEng{
             if(scapePressed_)
             {
                 //end game
-                SM_.RemoveState();
+                // SM_.RemoveState();
+                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
             }
             //once handled, restart values
             scapePressed_ = false;

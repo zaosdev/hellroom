@@ -3,9 +3,8 @@
 
 namespace game
 {
-    HealthSys::HealthSys(FVeng::GameManager& gameMan, FVEng::StateMachine& stateMachine)
+    HealthSys::HealthSys(FVeng::GameManager& gameMan)
     : gMan_(gameMan)
-    , SM_  (stateMachine)
     {
     }
 
@@ -70,7 +69,7 @@ namespace game
                     if(ent.hasTag(game::Entity::TAG::Player) &&  not (ent.hasTag(game::Entity::TAG::Bullet)) 
                     {
                         std::cout << "Player is dead, state machine change to new state" << std::endl;
-                        SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
+ 
                     }
                     else 
                     {

@@ -35,10 +35,10 @@ namespace game
         restartTime();
     }
 
-    HUDSys::~HUDSys()
-    {
-        if(window_.isOpen()) window_.close();
-    }
+    // HUDSys::~HUDSys()
+    // {
+    //     if(window_.isOpen()) window_.close();
+    // }
 
     void HUDSys::restartTime()
     {
