@@ -95,7 +95,7 @@ namespace FVEng{
 
                     shieldSys.update(dt);
 
-                    collisionSys.update();
+                collisionSys.update(dt);
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
                     spwnSys.update();

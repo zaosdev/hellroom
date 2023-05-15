@@ -26,7 +26,8 @@ namespace game
                 //Save the last position
                 ent.physics->prevPos = ent.physics->pos;
                 //Update the new position
-                ent.physics->pos    += ent.physics->vel * dt;
+                //collSys.update(dt);
+                //ent.physics->pos+= ent.physics->vel * dt;
             }
 
         }        

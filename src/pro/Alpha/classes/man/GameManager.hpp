@@ -4,7 +4,7 @@
 #include "../cmp/blackBoardComponent.hpp"
 #include "../utils/AI.hpp"
 #include "../utils/random.hpp"
-
+#include "../utils/gameData.hpp"
 
 
 #include "entityManager.hpp"
@@ -44,6 +44,8 @@ namespace FVeng
         game::Entity& createCoin    ();
         game::Entity& createClock   ();
         game::Entity& createShield  ();
+        game::Entity& createMapCollider(FVmath::Point2Di Pos);
+
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
         void createEnemyShoot (FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
