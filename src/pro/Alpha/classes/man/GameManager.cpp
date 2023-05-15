@@ -153,7 +153,7 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
+            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -217,7 +217,7 @@ namespace FVeng
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 0 * 75, 75, 75));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -251,7 +251,7 @@ namespace FVeng
 
             auto row = FVmath::calcualteRandom(3,1);
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(row * 75, 1 * 75, 75, 75));
+            initEntityRender(e,{0,0},sf::IntRect(row * 75, 1 * 75, 75, 75));
 
 
         }
@@ -273,7 +273,7 @@ namespace FVeng
             //Y creo el spritesheet a partir de la imagen anterior
             SPman.assignTexture(entity.render->Sprite,entity.render->texIndex);
             //Le pongo el centroide donde corresponde
-            SPman.modifySpriteOrigin(entity.render->Sprite, origin); //{75 / 2, 75 / 2}
+            SPman.modifySpriteOrigin(entity.render->Sprite, origin); //{0,0}
             //Cojo el sprite que me interesa por defecto del sheet
             SPman.modifyTextureRect(entity.render->Sprite, TexRect); //sf::IntRect(0 * 75, 0 * 75, 75, 75));
 
