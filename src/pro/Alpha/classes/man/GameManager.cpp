@@ -112,7 +112,6 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .mapCollider=true };
 
@@ -120,17 +119,8 @@ namespace FVeng
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
 
-            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
-
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
-            
-            initEntityRender(e, {0,0}, sf::IntRect(0 * e.physics->size.x, 0 * e.physics->size.y, e.physics->size.x, e.physics->size.y));
-
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );
 
             return e;
         }
