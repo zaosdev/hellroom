@@ -281,7 +281,7 @@ namespace FVeng
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 2 * 75, 75, 75));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -337,7 +337,7 @@ namespace FVeng
                 e.physics->pos.y
             );      
 
-            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 4, .arrivalRadius = 1};
+            e.AI     = game::AIComponent     { .targetCoord = targetCoord,.behaviour = sb, .arrivalRadius = 1 ,.maxTimeAlive = 4};
 
             e.AI->targetCoord = targetCoord;
             e.AI->behaviour   = sb;
@@ -365,7 +365,7 @@ namespace FVeng
                 e.physics->pos.y
             );      
 
-            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 1.25, .arrivalRadius = 10, .perceptionTime = 100};
+            e.AI     = game::AIComponent     { .targetCoord = targetCoord,.behaviour = sb, .arrivalRadius = 10, .perceptionTime = 100, .maxTimeAlive = 1.25};
 
             e.AI->targetCoord = targetCoord;
             e.AI->behaviour   = sb;
@@ -448,6 +448,7 @@ namespace FVeng
             }
 label:
 float a = 3;
+(void) a;
 
         }
 

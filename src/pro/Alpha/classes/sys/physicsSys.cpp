@@ -17,6 +17,8 @@ namespace game
 
      void PhysicsSys::update(double dt)
     {
+        (void) dt;
+
         auto& EM = gMan_.getEntityManager();
 
         for(auto& ent : EM)

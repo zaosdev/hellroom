@@ -35,96 +35,42 @@ namespace game
       Entity& player = gMan_.getPlayer();
       std::vector<std::pair<Entity*, float>> collInstance{};
 
-
-      //Entity and enemy obtention loop
-      for(auto& ent : EM)
+      /////////////////////////////////////////
+      //LAMBDAS
+      auto isEnemy = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
+      auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
+      auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
       {
-        if(!ent.hasTag(game::Entity::TAG::Player))
-        {
-          if(ent.hasTag(game::Entity::TAG::Enemy))
-          {
-            if(!ent.hasTag(game::Entity::TAG::Bullet))
-            {
-              enemies.push_back(&ent);
-              if (DynamicEntityVsStaticEntity(player, dt, ent))
-              {
-                collInstance.push_back({ &ent, player.coll->contactTime });
-              }
-            }
-            else
-            {
-              enmyBullets.push_back(&ent);
-            }
-          }
-          else if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
-          {
-            stat_coll.push_back(&ent);
-            		// Work out collision point, add it to vector along with rect ID
-              // if(checkCollision(player,ent))
-              // {
-                if (DynamicEntityVsStaticEntity(player, dt, ent))
-                {
-                  collInstance.push_back({ &ent, player.coll->contactTime });
-                }
-              // }
-          }
-          else if(ent.hasTag(game::Entity::TAG::Health))
-          {
-            if (DynamicEntityVsStaticEntity(player, dt, ent))
-            {
-              ent.effct->affectedPartyID= player.id();
-              ent.effct->state=effectState::readyToApply;
-            }
-          }
-          //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
-          // else if()
-          // {
-
-          // }
-        }
-        else if(ent.hasTag(game::Entity::TAG::Bullet))
-        {
-          plyrBullets.push_back(&ent);
-
-        }
-      }
-
-//////////////////////////////////
-    if(!collInstance.empty())
-    {
-      // Do the sort
-      std::sort(collInstance.begin(), collInstance.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
-        {
-          return a.second < b.second;
-        });
-
-      for (auto j : collInstance)
+        entCollided.effct->affectedPartyID= entColliding.id();
+        entCollided.effct->state=effectState::readyToApply;
+      };
+      auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
-        ResolveDynamicEntityVsEntity(player,*j.first,dt);
-      }
-    }
-    player.physics->pos+=player.physics->vel*dt;
-    // collInstance.clear();
-
-      for(auto* enemy : enemies)
+        entColliding.mark4destruction();
+        entCollided.health->negativeAffection = defaultDamage;;
+      };
+      auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
-        //COLISION DEL ENEMIGO CON LOS MUROS
-        for(auto* wallColl : stat_coll)
+        if(storage)
+          storage->push_back(&entColliding);
+        if (DynamicEntityVsStaticEntity(entCollided, dt, entColliding))
         {
-          if (DynamicEntityVsStaticEntity(*enemy, dt, *wallColl))
-          {
-            collInstance.push_back({wallColl, enemy->coll->contactTime });
-            if(!player.shield->active)
-              player.health->negativeAffection = defaultDamage / 2;
-          }
+          collInstance.push_back({ &entColliding, entCollided.coll->contactTime });
+          return true;
         }
-        //COLISION DEL ENEMIGO CON EL PLAYER
-        if (DynamicEntityVsStaticEntity(*enemy, dt, player))
+        else return false;
+      };
+      auto actOnCollisions = [&](Entity& entColliding, Entity&  entCollided, auto action)
+      {
+       if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
         {
-          player.health->negativeAffection = 1;
-          collInstance.push_back({&player, enemy->coll->contactTime });
+          action(entColliding,entCollided);
         }
-
+      };
+      auto resolveEntityCollisions = [&](Entity& ent)
+      {
         if(!collInstance.empty())
         {
           // Do the sort
@@ -135,37 +81,88 @@ namespace game
 
           for (auto j : collInstance)
           {
-            ResolveDynamicEntityVsEntity(*enemy,*j.first,dt);
+            ResolveDynamicEntityVsEntity(ent,*j.first,dt);
           }
         }
-        collInstance.clear();
-        enemy->physics->pos+=enemy->physics->vel*dt;
+        ent.physics->pos+=ent.physics->vel*dt;
+      };
+      //////////////////////////////////////////
+      
+
+
+      //Entity and enemy obtention loop
+      for(auto& ent : EM)
+      {
+        //IF NEEDS TO BE MORE EFFICIENT CHANGE TO SWITCH
+        if(!ent.hasTag(game::Entity::TAG::Player))
+        {
+          if(isEnemy(ent))
+          {
+            saveCollisions(ent,player,&enemies);
+          }
+          else if(isEnemyBullet(ent))
+          {
+            saveCollisions(ent,player,&enmyBullets);
+          }
+          else if(isStaticObject(ent))
+          {
+            saveCollisions(ent,player,&stat_coll);
+          }
+          else if(isHealth(ent))
+          {
+            actOnCollisions(player,ent,pickHealth);
+          }
+          //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
+          // else if()
+          // {
+
+          // }
+
+        }
+        else if(ent.hasTag(game::Entity::TAG::Bullet))
+        {
+          plyrBullets.push_back(&ent);
+        }
+
       }
+
+    //////////////////////////////////
+    //RESEOLVE ALL COLLISIONS THE PLAYER HAS CAUSED
+    resolveEntityCollisions(player);
+    // collInstance.clear();
+
+    for(auto* enemy : enemies)
+    {
+      //ENEMY COLLISION AGAINST WALLS
+      for(auto* wallColl : stat_coll)
+      {
+        saveCollisions(*enemy,*wallColl,nullptr);
+      }
+
+      //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
+      if(saveCollisions(*enemy,player,nullptr))
+        player.health->negativeAffection = 1;
+
+      //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
+      resolveEntityCollisions(*enemy);
+      collInstance.clear();
+
+    }
     for(auto* bullet  : plyrBullets)
     {
       //COLISION DEL ENEMIGO CON LAS BALAS DEL PLAYER
       for(auto* enemy : enemies)
       {
-        if(DynamicEntityVsStaticEntity(*bullet, dt, *enemy))
-        {
-            collInstance.push_back({enemy, bullet->coll->contactTime });
-            bullet->mark4destruction();
-            enemy->health->negativeAffection = defaultDamage;
-        }
+        actOnCollisions(*bullet,*enemy,bulletHit);
       }
-
       if(bullet->alive())
-          bullet->physics->pos+=bullet->physics->vel*dt;
-    }
+        bullet->physics->pos+=bullet->physics->vel*dt;
+    } 
 
     for(auto* enmyBullet : enmyBullets)
     {
-      if(DynamicEntityVsStaticEntity(*enmyBullet, dt, player))
-        {
-            collInstance.push_back({&player, enmyBullet->coll->contactTime });
-            enmyBullet->mark4destruction();
-            player.health->negativeAffection = defaultDamage;
-        }
+      actOnCollisions(*enmyBullet,player,bulletHit);
+      
       if(enmyBullet->alive())
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
