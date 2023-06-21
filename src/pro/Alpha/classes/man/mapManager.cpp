@@ -56,9 +56,11 @@ namespace tXMLeng
 
         int tempType{};
         
-        auto Spawner_Type = spawners.FirstChildNamed("properties").FirstChildNamed("property"); 
+        auto spawner_properties = spawners.FirstChildNamed("properties");
+        
+        auto spawner_type = spawner_properties.FirstChildNamed("property"); 
 
-        Spawner_Type.queryAttribute<int*>("value", &tempType);
+        spawner_type.queryAttribute<int*>("value", &tempType);
         spawner.type = SpawnerType{tempType};
 
     }
