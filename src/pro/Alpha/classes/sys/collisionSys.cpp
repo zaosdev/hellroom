@@ -1,5 +1,5 @@
 #include "collisionSys.hpp"
-#include "../classes/man/mapManager.hpp"
+#include "../man/mapManager.hpp"
 #include <iostream>
 
 #define defaultDamage 30

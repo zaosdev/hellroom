@@ -118,7 +118,6 @@ namespace game
                 {
                     iniSprite(ent,percentTick);
                     draw(ent.render->Sprite);
-                    //draw(ent.render->FVSprite);
 
                 }
             }

@@ -53,7 +53,7 @@ namespace game
             size_t              coin_;
             size_t              clocksp_;
             size_t              shieldsp_;
-            double              accumulatedTime;    //time passed (seconds)
+            double              accumulatedTime_;    //time passed (seconds)
             double              maxTime_ = 99;
     };
 }
