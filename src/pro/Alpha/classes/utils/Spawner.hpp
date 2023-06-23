@@ -19,7 +19,7 @@ namespace tXMLeng
     enum class trigger_type
     {
         DOOR  = 1 << 0,
-        NONE    = 1 << 1,
+        NONE  = 1 << 1,
 
     };
 

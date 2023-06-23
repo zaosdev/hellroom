@@ -41,16 +41,23 @@ namespace game
       auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
       auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
       auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
+      
+      //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
       {
         entCollided.effct->affectedPartyID= entColliding.id();
         entCollided.effct->state=effectState::readyToApply;
       };
+      //function called when entity is hit by bullet
       auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+      //Function checks if entities are colliding if they are saves collision so that it may be resolved
+      //First parameter must be moving entity- the one that collides with
+      //second parameter must be static entity- the one that is collided with
+      //third prameter is pointer entity storer, in case we want to save pointer moving entity
       auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
         if(storage)
@@ -62,6 +69,10 @@ namespace game
         }
         else return false;
       };
+      //Function checks if entities are colliding if they are calls third parameter as a function that needs 2 entities as parameter
+      //First parameter must be moving entity- the one that collides with
+      //second parameter must be static entity- the one that is collided with
+      //third prameter must be lambda object that needs 2 entities as paramter and only those
       auto actOnCollisions = [&](Entity& entColliding, Entity&  entCollided, auto action)
       {
        if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
@@ -69,6 +80,7 @@ namespace game
           action(entColliding,entCollided);
         }
       };
+      //Resolve entity collisions saved on "collInstance", a collision is added every time "saveCollision" is called
       auto resolveEntityCollisions = [&](Entity& ent)
       {
         if(!collInstance.empty())
