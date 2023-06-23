@@ -171,32 +171,26 @@ namespace game
   }
 
 
-    bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
+  bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
+  {
+
+    auto collidersOverlap = [&](Entity& collider1, Entity& collider2)
     {
       auto rect1Pos = collider1.physics->pos;
-      auto rect2Pos = collider2.physics->pos;
-
       auto rect1BBox = collider1.physics->size;
-      auto rect2BBox = collider2.physics->size;
-
       // Expand target rectangle by source dimensions
       expandedTarget expanded_target{};
       expanded_target.pos = collider2.physics->pos - collider1.physics->size / 2;
       expanded_target.size = collider2.physics->size + collider1.physics->size;
 
-      if (
-        rect1Pos.x <= expanded_target.pos.x + expanded_target.size.x &&
-        rect1Pos.x + rect1BBox.x >= expanded_target.pos.x &&
-        rect1Pos.y <= expanded_target.pos.y + expanded_target.size.y &&
-        rect1BBox.y + rect1Pos.y >= expanded_target.pos.y
-      )
-			{
-          return true;
-      }
-			else
-      {
-          return false;
-      }
+      return ( rect1Pos.x <= expanded_target.pos.x + expanded_target.size.x &&
+      rect1Pos.x + rect1BBox.x >= expanded_target.pos.x &&
+      rect1Pos.y <= expanded_target.pos.y + expanded_target.size.y &&
+      rect1BBox.y + rect1Pos.y >= expanded_target.pos.y);
+    };
+
+    if (collidersOverlap(collider1,collider2)) { return true; }
+		else                                       { return false; }
   }
 
   bool CollisionSys::rayVsEntity(const FVmath::Point2D rayOrigin, const FVmath::Point2D rayDirection, expandedTarget& target,Entity& dynamicEntity)
@@ -250,7 +244,7 @@ namespace game
     }
 
 
-		// Note if nearHit == farHit, collision is principly in a diagonal
+		// Note if nearHit == farHit, collision is principaly in a diagonal
 		// so pointless to resolve. By returning a CN={0,0} even though its
 		// considered a hit, the resolver wont change anything.
 		return true;
@@ -285,7 +279,7 @@ namespace game
 			return false;
   }
 
-   void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
+  void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
 
     sf::Sprite sprite1 = ent1.render->Sprite;
     sf::Sprite sprite2 = ent2.render->Sprite;
@@ -296,7 +290,6 @@ namespace game
     sf::Vector2f sprite1POS = sprite1.getPosition();
     sf::Vector2f sprite2POS = sprite2.getPosition();
 
-    FVmath::Point2D ent1POS = ent1.physics->pos;
     FVmath::Point2D ent2POS = ent2.physics->pos;
 
 
@@ -305,9 +298,6 @@ namespace game
 
     float deltaX = sprite2POS.x - sprite1POS.x;
     float deltaY = sprite2POS.y - sprite1POS.y;
-
-    // float deltaX = ent2POS.x - ent1POS.x;
-    // float deltaY = ent2POS.y - ent1POS.y;
 
     float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
@@ -323,33 +313,24 @@ namespace game
     if(intersectX > intersectY) {
 
       if(deltaX > 0.0f){
-        // ent1.physics->pos.x = ent1POS.x + (intersectX * (1.0f /*- push*/));
-        
-        //ent2.physics->mov_speed = 0.0f;
+
         ent2.physics->pos.x = ent2POS.x + (-intersectX);
         
       }
       else{
-        // ent1.physics->pos.x = ent1POS.x +  (-intersectX * (1.0f /*- push*/));
-        //ent2.physics->mov_speed = 0.0f;
+
         ent2.physics->pos.x = ent2POS.x +  (intersectX );
         
       }
     }
     else{
       if(deltaY > 0.0f){
-      //ent1.physics->pos.y = ent1POS.y + (intersectY * (1.0f /*- push*/));
-        //ent2.physics->mov_speed = 0.0f;
 
         ent2.physics->pos.y = ent2POS.y + (-intersectY);
           
       }
 
       else{
-
-        // ent1.physics->pos.y = ent1POS.y + (-intersectY * (1.0f /*- push*/));
-  
-        //ent2.physics->mov_speed = 0.0f;
         
         ent2.physics->pos.y = ent2POS.y + (intersectY);
 

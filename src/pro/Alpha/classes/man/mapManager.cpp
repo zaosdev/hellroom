@@ -46,6 +46,20 @@ namespace tXMLeng
         }
     }
 
+    // void mapManager::GenerateDoors(XMLElem& map)
+    // {
+    //     XMLElem spawners = map.FirstChildNamed("objectgroup").FirstChildNamed("object");
+
+    //     while(spawners.isEmpty())
+    //     {
+    //         Spawner& spawner = SpawnerInfo_.emplace_back();
+
+    //         assignSpawnInfo(spawner,spawners);
+
+    //         spawners = spawners.NextSiblingNamed("object");
+    //     }
+    // }
+
     void mapManager::assignSpawnInfo(Spawner& spawner,XMLElem& spawners )
     {
 
@@ -61,7 +75,7 @@ namespace tXMLeng
         auto spawner_type = spawner_properties.FirstChildNamed("property"); 
 
         spawner_type.queryAttribute<int*>("value", &tempType);
-        spawner.type = SpawnerType{tempType};
+        spawner.type = object_type{1 << tempType};
 
     }
 
@@ -83,12 +97,9 @@ namespace tXMLeng
                         int& gid = map_.tileMap[map_.numLayers].emplace_back();
                         currentTile.queryAttribute<int*>("gid",&gid);
                         gid-=1;
-                        // std::cout << map_.tileMap[map_.numLayers].back() << "|";
-                        // std::cout << gid << "|";
 
                         currentTile = currentTile.NextSiblingNamed("tile");
                     }
-                    //std::cout << "" << std::endl;
                 }
                 map_.numLayers++;
                 layer = layer.NextSiblingNamed("layer");
@@ -121,11 +132,8 @@ namespace tXMLeng
                     posColl.y = y*map_.tileSize.y;
                 }
 
-                // std::cout << map_.tileMap[map_.numLayers].back() << "|";
-                // std::cout << gid << "|";
                 currentTile = currentTile.NextSiblingNamed("tile");
             }
-            //std::cout << "" << std::endl;
         }
     }
 
@@ -138,11 +146,9 @@ namespace tXMLeng
         map.queryAttribute<int*>("tileheight", &map_.tileSize.y);
         map.queryAttribute<int*>("maxBaseLayer", &map_.maxBaseLayer);
 
-
-
     }
 
-    void   mapManager::clearMap()
+    void mapManager::clearMap()
     {
         map_.colliderLayer.clear();
         map_.tileMap.clear();
@@ -163,8 +169,6 @@ namespace tXMLeng
 
         const char* tsxPath;
 
-
-        
         tsxElement.queryAttribute<const char**>("source",&tsxPath);
 
         XMLReader tempDoc{};
@@ -216,7 +220,6 @@ namespace tXMLeng
     {
         return map_.colliderLayer;
     }
-
 
     const int& mapManager::getMaxBaseLayer() const
     {
