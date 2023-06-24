@@ -37,11 +37,11 @@ namespace game
 
       /////////////////////////////////////////
       //LAMBDAS
-      auto isEnemy = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
-      auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
-      auto isDoor = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isEnemy          = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isEnemyBullet    = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isStaticObject   = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
+      auto isHealth         = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
+      auto isDoor           = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
 
       
       //function called when user collides with heart
@@ -50,12 +50,14 @@ namespace game
         entCollided.effct->affectedPartyID= entColliding.id();
         entCollided.effct->state=effectState::readyToApply;
       };
+
       //function called when entity is hit by bullet
       auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+      
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
         (void)entColliding;
