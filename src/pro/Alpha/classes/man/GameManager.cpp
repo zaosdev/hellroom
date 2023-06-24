@@ -486,6 +486,7 @@ namespace FVeng
                 mapMan.InitMap("../media/Mapa2.tmx");
                 changeMap();
                 createAllSpawner();
+                change_level=false;
             }
 
 
