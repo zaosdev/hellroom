@@ -16,25 +16,18 @@ namespace tXMLeng
 
     };
 
-    enum class trigger_type
-    {
-        DOOR  = 1 << 0,
-        NONE  = 1 << 1,
-
-    };
-
     struct Spawner
     {
-        game::enemy_type enemy_spawned{game::enemy_type::NONE};
+        game::enemy_type enemy_spawned{game::enemy_type::NO_TYPE};
         object_type type {object_type::ENEMY};
         FVmath::Point2Di SpawnOrigin{};  //top-left-most point of the spawner 
         FVmath::Point2Di SpawnRange{};   //first value is its width, second value its height
     };
 
-    struct TriggerInfo
+    struct DoorInfo
     {
         FVmath::Point2Di pos{};
         FVmath::Point2Di size{};
-        trigger_type type {trigger_type::NONE};
+        std::string next_level_path{""};
     };
 }

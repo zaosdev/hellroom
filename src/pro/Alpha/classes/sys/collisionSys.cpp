@@ -41,6 +41,8 @@ namespace game
       auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
       auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
       auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
+      auto isDoor = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
+
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
@@ -53,6 +55,12 @@ namespace game
       {
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
+      };
+      auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        (void)entColliding;
+        gMan_.change_level=true;
+        gMan_.nextLevel = entCollided.map->nextLevel;
       };
       //Function checks if entities are colliding if they are saves collision so that it may be resolved
       //First parameter must be moving entity- the one that collides with
@@ -123,6 +131,10 @@ namespace game
           else if(isHealth(ent))
           {
             actOnCollisions(player,ent,pickHealth);
+          }
+          else if(isDoor(ent))
+          {
+            actOnCollisions(player,ent,changeLevel);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()

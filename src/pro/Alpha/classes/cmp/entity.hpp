@@ -37,6 +37,7 @@ namespace game
         Bullet = 1 << 4,
         STATIC_COLL = 1 << 5,
         Health = 1 << 6,
+        DOOR = 1 << 7,
 
       };
 

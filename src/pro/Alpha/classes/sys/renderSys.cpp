@@ -109,7 +109,7 @@ namespace game
             
             for(auto& ent : EM)
             {
-                if(ent.alive() && ent.map && ent.map->mapCollider==false)
+                if(ent.alive() && ent.map && ent.map->object_type & map_object_t::MAP)
                 {
                     drawMap(*ent.map);
                     mapEnt = &ent;
