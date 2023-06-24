@@ -83,7 +83,7 @@ namespace FVEng{
         {
             for(int i = 0; i < 60; i++)
             {
-                if(i % 10== 0) 
+                if(time2newKey_ < clockMenu_.getElapsedTime().asSeconds()) 
                 {
                     RegisterKeys();
                     HandleInput();
@@ -191,6 +191,13 @@ namespace FVEng{
                 }
             }
 
+            //check if any key is selected and restart the clock or return
+            if(upPressed_ || downPressed_ || enterPressed_ || scapePressed_)
+            {
+                clockMenu_.restart();
+            }
+            else return;
+
             //act to registered key events
             if(upPressed_)
             {
@@ -212,7 +219,7 @@ namespace FVEng{
             }
             if(scapePressed_)
             {
-                //remove this state ( main menu is behind this and not deleted)
+                //remove this state ( main menu is below this and not deleted)
                 SM_.RemoveState();
             }
             //once handled, restart values
@@ -239,7 +246,7 @@ namespace FVEng{
 
         void buyOrSelectPet(int selectedItemIndex, int cost)
         {
-            std::cout << "Buying or selecting pet 1..." << std::endl;
+            std::cout << "Buying or selecting pet " << selectedItemIndex << std::endl;
             if(selectedPet_ == selectedItemIndex) return;
             if(boughtPets_[selectedItemIndex] == false)
             {
@@ -344,6 +351,9 @@ namespace FVEng{
         sf::Sprite          coinprite_;
         sf::Texture         pet1Texture_, pet2Texture_, pet3Texture_;
         sf::Sprite          pets_[MAX_NUMBER_OF_ITEMS];
+
+        float               time2newKey_        {.3f};
+        sf::Clock           clockMenu_          {};
 
         sf::RenderWindow&   window_;
         int selectedItemIndex = 0;
