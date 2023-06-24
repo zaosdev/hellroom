@@ -11,7 +11,7 @@ namespace game
         PURSUE = 1 << 0,
         SHOOT  = 1 << 1,
         ARRIVE = 1 << 2,
-        NONE   = 1 << 3,
+        NO_TYPE   = 1 << 3,
     };
 
     struct AIComponent
@@ -28,6 +28,6 @@ namespace game
         double                          accumulatedTime{0};    //time passed to check
         double                          maxTimeAlive   {-1};//-1 indicates never dies by time
         double                          timeAlive      {0};
-        enemy_type                      type{enemy_type::NONE}; 
+        enemy_type                      type{enemy_type::NO_TYPE}; 
     };
 }

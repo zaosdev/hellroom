@@ -59,13 +59,15 @@ namespace FVeng
         void createMap();
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
-        void createDoor(tXMLeng::TriggerInfo trigger);
+        void createDoor(tXMLeng::DoorInfo door);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
+        void createAllDoors();
+
         void setRenderNextLayer(game::MapComponent& map);
         void resetMap(game::MapComponent& map);
         void LoadAllTextures();
@@ -80,7 +82,10 @@ namespace FVeng
         game::Entity& getPlayer();
         
         std::vector<game::Entity::id_type> SpawnersID{}; 
-         
+        bool change_level{false};
+        std::string nextLevel{""};
+
+
         private:
 
         sf::RenderWindow& window_;
@@ -91,7 +96,7 @@ namespace FVeng
 
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
-        bool allSpawned{false};
+        // bool allSpawned{false};
         game::Entity::id_type mapID_{};
            
     };

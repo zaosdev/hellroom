@@ -60,24 +60,36 @@ namespace tXMLeng
         void  InitMap(const char * filePath);
         void  setActiveLayer(int newLayer);
         void  clearMap();
+
+
+        void  GenerateObjects(XMLElem& objectsParent);
+        //SHOULD USE TEMPLATE AND ONLY 1 GENERATE FUNCTION; DO IF SURPLUS TIME
+        void  GenerateSpawners(XMLElem& spawners);
+        void  GenerateDoors(XMLElem& doors);
+        void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
+        void  assignDoorInfo(DoorInfo& door,XMLElem& doors );
+        //////////
+
+        //GETTERS
+        const int& getMaxBaseLayer() const;
+        int   getTotalLayerCount() const;
         int   getActiveLayer() const;
         const std::string getTexturePath() const;
         const FVmath::Point2Di getMapSize() const;
         const FVmath::Point2Di getTileSize() const;
         const std::vector<int>& getCurrentLayer() const;
         const std::vector<FVmath::Point2Di>& getColliderData() const;
+        std::vector<Spawner>& getSpawners() ;
+        std::vector<DoorInfo>& getDoors() ;
 
-        const int& getMaxBaseLayer() const;
-        int   getTotalLayerCount() const;
-        void  GenerateSpawners(XMLElem& spawners);
-        void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
-        std::vector<Spawner>& getSpawners();
 
         private:
 
         TileMap map_{};
         TileSet tile_{};
-        std::vector<Spawner> SpawnerInfo_{};
+        std::vector<Spawner> SpawnersInfo_{};
+        std::vector<DoorInfo> DoorsInfo_{};
+
 
         XMLReader xmlDoc_{};
 

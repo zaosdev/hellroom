@@ -1,5 +1,5 @@
 #include "mapManager.hpp"
-
+#include <cassert>
 
 
 namespace tXMLeng
@@ -13,7 +13,7 @@ namespace tXMLeng
 
         xmlDoc_.printError();
 
-        if (mapElement.isEmpty()) 
+        if (!mapElement.isEmpty()) 
         {
             obtainMapInfo(mapElement);
 
@@ -23,7 +23,7 @@ namespace tXMLeng
 
             loadColliders(mapElement);
 
-            GenerateSpawners(mapElement);
+            GenerateObjects(mapElement);
 
         } 
         else 
@@ -32,33 +32,29 @@ namespace tXMLeng
         }
     }
 
-    void mapManager::GenerateSpawners(XMLElem& map)
+    void mapManager::GenerateObjects(XMLElem& map)
     {
-        XMLElem spawners = map.FirstChildNamed("objectgroup").FirstChildNamed("object");
-
-        while(spawners.isEmpty())
-        {
-            Spawner& spawner = SpawnerInfo_.emplace_back();
-
-            assignSpawnInfo(spawner,spawners);
-
-            spawners = spawners.NextSiblingNamed("object");
-        }
+        XMLElem spawners = map.FindFirstChildwithName("objectgroup","spawner");
+        assert(not spawners.isEmpty() && "There must be an spawner object group even if empty");
+        GenerateSpawners(spawners);
+        XMLElem doors = map.FindFirstChildwithName("objectgroup","door");
+        assert(not doors.isEmpty() && "There must be a door object group even if empty");
+        GenerateDoors(doors);
     }
 
-    // void mapManager::GenerateDoors(XMLElem& map)
-    // {
-    //     XMLElem spawners = map.FirstChildNamed("objectgroup").FirstChildNamed("object");
+    void mapManager::GenerateSpawners(XMLElem& spawners)
+    {
+        XMLElem spawner = spawners.FirstChildNamed("object");
 
-    //     while(spawners.isEmpty())
-    //     {
-    //         Spawner& spawner = SpawnerInfo_.emplace_back();
+        while(!spawner.isEmpty())
+        {
+            Spawner& spawnerInfo = SpawnersInfo_.emplace_back();
 
-    //         assignSpawnInfo(spawner,spawners);
+            assignSpawnInfo(spawnerInfo,spawner);
 
-    //         spawners = spawners.NextSiblingNamed("object");
-    //     }
-    // }
+            spawner = spawner.NextSiblingNamed("object");
+        }
+    }
 
     void mapManager::assignSpawnInfo(Spawner& spawner,XMLElem& spawners )
     {
@@ -79,12 +75,44 @@ namespace tXMLeng
 
     }
 
+    void mapManager::GenerateDoors(XMLElem& doors)
+    {
+        XMLElem door = doors.FirstChildNamed("object");
+
+        while(!door.isEmpty())
+        {
+            DoorInfo& doorInfo = DoorsInfo_.emplace_back();
+
+            assignDoorInfo(doorInfo,door);
+
+            door= door.NextSiblingNamed("object");
+        }
+    }
+
+    void mapManager::assignDoorInfo(DoorInfo& door,XMLElem& doors )
+    {
+
+       doors.queryAttribute<int*>("x", &door.pos.x);
+       doors.queryAttribute<int*>("y", &door.pos.y);
+       doors.queryAttribute<int*>("width", &door.size.x);
+       doors.queryAttribute<int*>("height", &door.size.y);
+
+        const char* temp_next_level{};
+        
+        auto door_properties =doors.FirstChildNamed("properties");
+        
+        auto next_level = door_properties.FirstChildNamed("property"); 
+
+        next_level.queryAttribute<const char**>("value", &temp_next_level);
+        door.next_level_path = temp_next_level;
+    }
+
     void mapManager::loadMap(XMLElem& map)
     {
             
             XMLElem layer = map.FirstChildNamed("group").FirstChildNamed("layer");
 
-            while(layer.isEmpty())
+            while(!layer.isEmpty())
             {
                 map_.tileMap.emplace_back();
                 map_.tileMap[map_.numLayers].reserve(map_.mapSize.y*map_.mapSize.x);
@@ -152,7 +180,8 @@ namespace tXMLeng
     {
         map_.colliderLayer.clear();
         map_.tileMap.clear();
-        SpawnerInfo_.clear();
+        SpawnersInfo_.clear();
+        DoorsInfo_.clear();
         map_ = TileMap{};
     }
 
@@ -231,9 +260,16 @@ namespace tXMLeng
         return map_.tileMap.size();
     }
 
-    std::vector<Spawner>& mapManager::getSpawners()
+    //LOOK WHY THIS METHOD CANT BE CONST
+    std::vector<Spawner>& mapManager::getSpawners() 
     {
-        return SpawnerInfo_;
+        return SpawnersInfo_;
+    }
+
+    //LOOK WHY THIS METHOD CANT BE CONST
+    std::vector<DoorInfo>& mapManager::getDoors() 
+    {
+        return DoorsInfo_;
     }
 
 }

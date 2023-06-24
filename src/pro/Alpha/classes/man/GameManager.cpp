@@ -53,7 +53,7 @@ namespace FVeng
 
         void GameManager::initLevel()
         {
-            mapMan.InitMap("../media/Mapa2.tmx");
+            mapMan.InitMap("../media/Mapa_door.tmx");
         }
 
         void GameManager::LoadAllTextures()
@@ -78,6 +78,7 @@ namespace FVeng
             LoadAllTextures();
             createMap();
             createAllSpawner();
+            createAllDoors();
             auto& player = createPlayer({320,240});
             if(FVData::getSelectedPet() != -1)
             {
@@ -193,7 +194,7 @@ namespace FVeng
             auto& e = EM_.createEntity();
             mapID_ = e.id();
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .object_type= game::map_object_t::MAP};
 
             e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
             //mapMan.setActiveLayer(-1);         
@@ -210,7 +211,7 @@ namespace FVeng
             auto& e = *EM_.getEntityByID(mapID_);
 
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .object_type= game::map_object_t::MAP };
 
             e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
             //mapMan.setActiveLayer(-1);         
@@ -226,7 +227,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .mapCollider=true };
+            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
 
             e.coll = game::CollisionComponent{};           
 
@@ -396,6 +397,13 @@ namespace FVeng
             
         }
 
+        //Create all doors on the current map
+        void GameManager::createAllDoors()
+        {
+            for(auto& door : mapMan.getDoors())
+                createDoor(door);
+        }
+
         //Creates a concrete instance of a Spawner
         void GameManager::createSpawner(tXMLeng::Spawner& spawner)
         {
@@ -420,17 +428,50 @@ namespace FVeng
 
         void GameManager::update()
         {
-            if(allSpawned)
-            {
-                for(auto& ent : EM_)
-                {
-                    if(ent.hasTag(game::Entity::TAG::Enemy))
-                    {
-                        return ;
-                    }
-                }
+//             if(allSpawned)
+//             {
+//                 for(auto& ent : EM_)
+//                 {
+//                     if(ent.hasTag(game::Entity::TAG::Enemy))
+//                     {
+//                         return ;
+//                     }
+//                 }
 
-                allSpawned=false;
+//                 allSpawned=false;
+//                 for(auto id : SpawnersID)
+//                 {
+//                     auto* ent =EM_.getEntityByID(id);
+//                     if(ent)
+//                     {
+//                         ent->mark4destruction();
+//                     }
+//                 }
+//                 SpawnersID.clear();
+//                 deleteMap();
+//                 mapMan.clearMap();
+//                 mapMan.InitMap("../media/Mapa2.tmx");
+//                 changeMap();
+//                 createAllSpawner();
+//             }
+//             else
+//             {
+//                 for(auto id : SpawnersID)
+//                 {
+//                     auto* ent =EM_.getEntityByID(id);
+//                     if(ent && !ent->Spawn->fullCapacity)
+//                     {
+//                         goto label;
+//                     }
+//                 }
+//                 allSpawned=true;
+//             }
+// label:
+// float a = 3;
+// (void) a;
+
+            if(change_level)
+            {
                 for(auto id : SpawnersID)
                 {
                     auto* ent =EM_.getEntityByID(id);
@@ -445,22 +486,9 @@ namespace FVeng
                 mapMan.InitMap("../media/Mapa2.tmx");
                 changeMap();
                 createAllSpawner();
+                change_level=false;
             }
-            else
-            {
-                for(auto id : SpawnersID)
-                {
-                    auto* ent =EM_.getEntityByID(id);
-                    if(ent && !ent->Spawn->fullCapacity)
-                    {
-                        goto label;
-                    }
-                }
-                allSpawned=true;
-            }
-label:
-float a = 3;
-(void) a;
+
 
         }
 
@@ -567,24 +595,28 @@ float a = 3;
             e.addTag(game::Entity::TAG::Health);
         }
 
-        void GameManager::createDoor(tXMLeng::TriggerInfo trigger)
+        void GameManager::createDoor(tXMLeng::DoorInfo door)
         {
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
 
-            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(trigger.pos.x),int(trigger.pos.y)}};
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(door.pos.x),int(door.pos.y)}};
 
-            initEntityRender(e, {0,0},sf::IntRect(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,trigger.size.x,trigger.size.y));
+            initEntityRender(e, {0,0},sf::IntRect(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,door.size.x,door.size.y));
 
-            e.physics = game::PhysicsComponent{ .pos{float(trigger.pos.x),float(trigger.pos.y)}, .prevPos{float(trigger.pos.x),float(trigger.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{float(door.pos.x),float(door.pos.y)}, .prevPos{float(door.pos.x),float(door.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
                 e.physics->pos.y
             );      
 
-            //e.addTag(game::Entity::TAG::Health);
+            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::DOOR, .nextLevel = door.next_level_path};
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::DOOR);
         }
 
 
