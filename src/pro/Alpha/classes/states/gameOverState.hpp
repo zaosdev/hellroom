@@ -32,7 +32,7 @@ namespace FVEng{
         {
             for(int i = 0; i < 60; i++)
             {
-                if(i % 10== 0) 
+                if(timePassed_ > time2newKey_) 
                 {
                     RegisterKeys();
                     HandleInput();
@@ -107,8 +107,10 @@ namespace FVEng{
     
 
     private:
-        sf::Texture         backgroundTexture_;
-        sf::Sprite          backgroundSprite_;
+        sf::Texture         backgroundTexture_  {};
+        sf::Sprite          backgroundSprite_   {};
+        float               time2newKey_        {};
+        float               timePassed_         {};
 
         sf::RenderWindow&   window_;
 
