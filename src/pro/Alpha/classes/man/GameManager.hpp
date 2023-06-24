@@ -68,12 +68,14 @@ namespace FVeng
         void createAllSpawner();
         void createAllDoors();
 
+        void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);
         void resetMap(game::MapComponent& map);
         void LoadAllTextures();
-        void initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect);
+        void LoadLevel();
+        void initEntityRender(game::Entity& entity, FVmath::Point2D origin, SFMLeng::SpriteManager::rect_i_type rect);
         void SpawnDummy(FVmath::Point2Di Pos);
-        void deleteMap();
+        void deleteKillable();
         void update();
 
         FVeng::EntityManager<game::Entity>& getEntityManager();
@@ -83,21 +85,23 @@ namespace FVeng
         
         std::vector<game::Entity::id_type> SpawnersID{}; 
         bool change_level{false};
-        std::string nextLevel{""};
+        std::string nextLevel{"../media/Mapa_door.tmx"};
 
 
         private:
+        SFMLeng::SpriteManager SPman{15};
 
         sf::RenderWindow& window_;
         //create Sprite manager
-        SFMLeng::SpriteManager SPman{};
         tXMLeng::mapManager mapMan{};
         FV_factory::effectsFactory effMan{};
 
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
         // bool allSpawned{false};
-        game::Entity::id_type mapID_{};
+        game::Entity::id_type mapID_{0};
+        game::Entity::id_type playerID_{0};
+
            
     };
 }

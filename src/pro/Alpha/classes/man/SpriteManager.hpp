@@ -27,8 +27,7 @@ namespace SFMLeng
         using rect_i_type = sf::IntRect;
 
 
-        SpriteManager();
-
+        SpriteManager(size_t textureCount);
         SpriteManager (const SpriteManager&) = delete;
         SpriteManager (SpriteManager&&) = delete;
         SpriteManager& operator=(const SpriteManager&)= delete;

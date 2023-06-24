@@ -37,11 +37,11 @@ namespace game
 
       /////////////////////////////////////////
       //LAMBDAS
-      auto isEnemy          = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isEnemyBullet    = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isStaticObject   = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
-      auto isHealth         = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
-      auto isDoor           = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isEnemy          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isEnemyBullet    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isStaticObject   = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
+      auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
+      auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
 
       
       //function called when user collides with heart
@@ -64,10 +64,10 @@ namespace game
         gMan_.change_level=true;
         gMan_.nextLevel = entCollided.map->nextLevel;
       };
-      //Function checks if entities are colliding if they are saves collision so that it may be resolved
+      //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
       //First parameter must be moving entity- the one that collides with
       //second parameter must be static entity- the one that is collided with
-      //third prameter is pointer entity storer, in case we want to save pointer moving entity
+      //third prameter is pointer entity storer, in case we want to keep pointer to moving entity
       auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
         if(storage)
@@ -79,7 +79,7 @@ namespace game
         }
         else return false;
       };
-      //Function checks if entities are colliding if they are calls third parameter as a function that needs 2 entities as parameter
+      //Function checks if entities are colliding, if they are calls third parameter as a function that needs 2 entities as parameter
       //First parameter must be moving entity- the one that collides with
       //second parameter must be static entity- the one that is collided with
       //third prameter must be lambda object that needs 2 entities as paramter and only those
@@ -329,7 +329,6 @@ namespace game
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
 
     playerCollision(intersectX, intersectY, deltaX, deltaY, ent2, ent2POS);
-    //shieldCollision(intersectX, intersectY, deltaX, deltaY, ent1, ent2POS, ent2, ent2POS);
     
   }
 

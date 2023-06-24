@@ -6,7 +6,7 @@
 
 namespace tXMLeng
 {
-    enum class object_type
+    enum object_type
     {
         PLAYER  = 1 << 0,
         ENEMY   = 1 << 1,

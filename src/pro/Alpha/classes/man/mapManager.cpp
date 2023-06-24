@@ -68,10 +68,19 @@ namespace tXMLeng
         
         auto spawner_properties = spawners.FirstChildNamed("properties");
         
-        auto spawner_type = spawner_properties.FirstChildNamed("property"); 
+        auto spawner_type = spawner_properties.FindFirstChildwithName("property","type"); 
 
         spawner_type.queryAttribute<int*>("value", &tempType);
-        spawner.type = object_type{1 << tempType};
+        spawner.type = tXMLeng::object_type(1 << tempType);
+
+        if(spawner.type & tXMLeng::object_type::ENEMY)
+        {
+            
+            auto enemy_type = spawner_properties.FindFirstChildwithName("property","enemy"); 
+        
+            enemy_type.queryAttribute<int*>("value", &tempType);
+            spawner.enemy_spawned = game::enemy_type(1 << tempType);
+        }
 
     }
 
