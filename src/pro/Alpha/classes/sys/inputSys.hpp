@@ -1,6 +1,7 @@
 #pragma once
 #include "../man/GameManager.hpp"
 #include "../man/inputManager.hpp"
+#include "../sys/soundSys.hpp"
 #include <iostream>
 
 namespace game
@@ -8,7 +9,7 @@ namespace game
 
     struct InputSys
     {
-        InputSys(FVeng::GameManager& gameMan, InputManager& intpRec);
+        InputSys(FVeng::GameManager& gameMan, InputManager& intpRec, SoundSys& soundSys);
 
         InputSys (const InputSys&) = delete;
         InputSys (InputSys&&) = delete;
@@ -20,6 +21,7 @@ namespace game
         private:
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
+            SoundSys&           soundSys;
     };
 
 }

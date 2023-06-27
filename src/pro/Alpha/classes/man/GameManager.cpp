@@ -2,7 +2,9 @@
 #include "cmp/CollisionComponent.hpp"
 #include "utils/gameData.hpp"
 
-#define PLAYER_SPRITE_PATH  "../resources/sprites.png"
+#define PLAYER_SPRITE_PATH  "../media/player_enemy/player.png"
+#define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
+#define ENEMYB_SPRITE_PATH  "../media/player_enemy/enemy_botaV.png"
 #define HEARTH_PATH         "../media/HUD/heart.png"
 #define COIN_PATH           "../media/HUD/coin.png"
 #define CLOCK_PATH          "../media/HUD/clock.png"
@@ -53,6 +55,8 @@ namespace FVeng
         void GameManager::LoadAllTextures()
         {
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
+            SPman.loadTexture(ENEMYA_SPRITE_PATH, ENEMY_A);
+            SPman.loadTexture(ENEMYB_SPRITE_PATH, ENEMY_B);
             SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
             SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
@@ -108,9 +112,11 @@ namespace FVeng
 
             e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 75, 75));
+            e.render->Sprite.setScale(2.5,2.75);
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 32, 0 *32,32,32));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -233,7 +239,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(ENEMY_B);
 
             e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
@@ -249,7 +255,7 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 1 * 75, 75, 75));  
+            initEntityRender(e,{0,0},sf::IntRect(0 * 62, 0 * 62, 62, 62));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -267,7 +273,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
+            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);           
 
             e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
@@ -280,6 +286,8 @@ namespace FVeng
 
             //add tag enemy
             e.addTag(game::Entity::TAG::Enemy); 
+
+            e.render->Sprite.setScale(0.2,0.2);
 
             initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
         

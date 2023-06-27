@@ -9,7 +9,7 @@ namespace game{
         
         isPlayingStep = false;
         isPlayingDash = false;
-
+        isPlayingPB   = false;
 
         //musicPlaying = false;
    
@@ -23,15 +23,19 @@ namespace game{
         // loadSound("playerDash","../media/SFX/15_human_dash_1.wav");
         if(!sBplayerStep.loadFromFile("../media/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
         if(!sBplayerDash.loadFromFile("../media/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
-
+        if(!sBplayerBullet.loadFromFile("../media/SFX/Laser_Shoot2.wav")){std::cout << "FAILED TO LOAD PLAYERBULLET" << std::endl;}
         // sBfrs["playerStep"] = sBplayerStep;
         // sBfrs["playerDash"] = sBplayerDash;
 
         soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
         soundP.setBuffer(sBplayerStep); //asigno el sonido que necesito
         
-        soundD.setPitch(1.0);
+        soundD.setPitch(1.5);
+        soundPbullet.setVolume(50);
         soundD.setBuffer(sBplayerDash);
+
+        soundPbullet.setVolume(30);
+        soundPbullet.setBuffer(sBplayerBullet);
 
 
         if (!music.openFromFile("../media/MUSIC/OST-Juego.wav")) {
@@ -39,7 +43,7 @@ namespace game{
         
         } 
         else {
-            music.setVolume(50); 
+            music.setVolume(25); 
             music.setLoop(true); 
             
         }
