@@ -2,6 +2,8 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <iostream>
+
 
 #define FONT_PATH "../media/font/Retro_Gaming.ttf"
 
@@ -42,7 +44,7 @@ namespace game
 
     void HUDSys::restartTime()
     {
-        accumulatedTime = 0;
+        accumulatedTime_ = 0;
         clock_.restart();
     }
 
@@ -151,18 +153,18 @@ namespace game
         auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==clocksp_;});
         auto& trueClock = *it.base();
 
-        //Position the coin
+        //Position the clock
         trueClock.render->Sprite.setPosition(
             600
         ,   0
         );
 
         //Add time to counter and restart clock
-        accumulatedTime += clock_.getElapsedTime().asSeconds();
+        accumulatedTime_ += clock_.getElapsedTime().asSeconds();
         clock_.restart();
 
         //Set the string to show
-        timeText_.setString(std::to_string(int(maxTime_ - accumulatedTime)));  // int cast to avoid showing decimals
+        timeText_.setString(std::to_string(int(maxTime_ - accumulatedTime_)));  // int cast to avoid showing decimals
 
         //Draw
         window_.draw(timeText_);
@@ -187,7 +189,6 @@ namespace game
 
         //Position the text
         coinText_.setString(std::to_string(coins)); 
-
     
         //Draw sprite and coin text
         window_.draw(trueCoin.render->Sprite);
@@ -196,6 +197,9 @@ namespace game
 
     void HUDSys::update()
     {   
+
+        player_ = &gMan_.getPlayer();
+
         //Render player's life
         auto lastPos = renderHearts();
 
@@ -207,6 +211,8 @@ namespace game
 
         //Render the time passed
         renderTimer();
+
+
     }
 
 }

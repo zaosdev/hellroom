@@ -60,7 +60,7 @@ namespace game
         auto valid = [](Entity const& e){ return e.alive() && e.Spawn;};
 
         //check if the spawner it's for enemies
-        auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::SpawnerType::EnemySpawner; };
+        auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::object_type::ENEMY; };
 
         //check if it's ready for spawning
         auto ready2Spawn = [&](Entity const& e){return e.Spawn->TimerSpawn.getElapsedTime().asSeconds()>e.Spawn->minTime; };
@@ -84,7 +84,6 @@ namespace game
                {
                    e.Spawn->fullCapacity=true;
                }
-
             }
         }
     }

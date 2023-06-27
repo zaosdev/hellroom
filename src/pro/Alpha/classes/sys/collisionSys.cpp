@@ -1,5 +1,5 @@
 #include "collisionSys.hpp"
-#include "../classes/man/mapManager.hpp"
+#include "../man/mapManager.hpp"
 #include <iostream>
 
 #define defaultDamage 30
@@ -35,96 +35,62 @@ namespace game
       Entity& player = gMan_.getPlayer();
       std::vector<std::pair<Entity*, float>> collInstance{};
 
+      /////////////////////////////////////////
+      //LAMBDAS
+      auto isEnemy = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
+      auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
+      auto isDoor = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
 
-      //Entity and enemy obtention loop
-      for(auto& ent : EM)
+      
+      //function called when user collides with heart
+      auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
       {
-        if(!ent.hasTag(game::Entity::TAG::Player))
-        {
-          if(ent.hasTag(game::Entity::TAG::Enemy))
-          {
-            if(!ent.hasTag(game::Entity::TAG::Bullet))
-            {
-              enemies.push_back(&ent);
-              if (DynamicEntityVsStaticEntity(player, dt, ent))
-              {
-                collInstance.push_back({ &ent, player.coll->contactTime });
-              }
-            }
-            else
-            {
-              enmyBullets.push_back(&ent);
-            }
-          }
-          else if(ent.hasTag(game::Entity::TAG::STATIC_COLL))
-          {
-            stat_coll.push_back(&ent);
-            		// Work out collision point, add it to vector along with rect ID
-              // if(checkCollision(player,ent))
-              // {
-                if (DynamicEntityVsStaticEntity(player, dt, ent))
-                {
-                  collInstance.push_back({ &ent, player.coll->contactTime });
-                }
-              // }
-          }
-          else if(ent.hasTag(game::Entity::TAG::Health))
-          {
-            if (DynamicEntityVsStaticEntity(player, dt, ent))
-            {
-              ent.effct->affectedPartyID= player.id();
-              ent.effct->state=effectState::readyToApply;
-            }
-          }
-          //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
-          // else if()
-          // {
-
-          // }
-        }
-        else if(ent.hasTag(game::Entity::TAG::Bullet))
-        {
-          plyrBullets.push_back(&ent);
-
-        }
-      }
-
-//////////////////////////////////
-    if(!collInstance.empty())
-    {
-      // Do the sort
-      std::sort(collInstance.begin(), collInstance.end(), [](const std::pair<Entity*, float>& a, const std::pair<Entity*, float>& b)
-        {
-          return a.second < b.second;
-        });
-
-      for (auto j : collInstance)
+        entCollided.effct->affectedPartyID= entColliding.id();
+        entCollided.effct->state=effectState::readyToApply;
+      };
+      //function called when entity is hit by bullet
+      auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
-        ResolveDynamicEntityVsEntity(player,*j.first,dt);
-      }
-    }
-    player.physics->pos+=player.physics->vel*dt;
-    // collInstance.clear();
-
-      for(auto* enemy : enemies)
+        entColliding.mark4destruction();
+        entCollided.health->negativeAffection = defaultDamage;;
+      };
+      auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
-        //COLISION DEL ENEMIGO CON LOS MUROS
-        for(auto* wallColl : stat_coll)
+        (void)entColliding;
+        gMan_.change_level=true;
+        gMan_.nextLevel = entCollided.map->nextLevel;
+      };
+      //Function checks if entities are colliding if they are saves collision so that it may be resolved
+      //First parameter must be moving entity- the one that collides with
+      //second parameter must be static entity- the one that is collided with
+      //third prameter is pointer entity storer, in case we want to save pointer moving entity
+      auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
+      {
+        if(storage)
+          storage->push_back(&entColliding);
+        if (DynamicEntityVsStaticEntity(entCollided, dt, entColliding))
         {
-          if (DynamicEntityVsStaticEntity(*enemy, dt, *wallColl))
-          {
-            collInstance.push_back({wallColl, enemy->coll->contactTime });
-            if(!player.shield->active)
-              player.health->negativeAffection = defaultDamage / 2;
-          }
+          collInstance.push_back({ &entColliding, entCollided.coll->contactTime });
+          return true;
         }
-        //COLISION DEL ENEMIGO CON EL PLAYER
-        if (DynamicEntityVsStaticEntity(*enemy, dt, player))
+        else return false;
+      };
+      //Function checks if entities are colliding if they are calls third parameter as a function that needs 2 entities as parameter
+      //First parameter must be moving entity- the one that collides with
+      //second parameter must be static entity- the one that is collided with
+      //third prameter must be lambda object that needs 2 entities as paramter and only those
+      auto actOnCollisions = [&](Entity& entColliding, Entity&  entCollided, auto action)
+      {
+       if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
         {
-          player.health->negativeAffection = 1;
-          collInstance.push_back({&player, enemy->coll->contactTime });
+          action(entColliding,entCollided);
         }
-
+      };
+      //Resolve entity collisions saved on "collInstance", a collision is added every time "saveCollision" is called
+      auto resolveEntityCollisions = [&](Entity& ent)
+      {
         if(!collInstance.empty())
         {
           // Do the sort
@@ -135,37 +101,92 @@ namespace game
 
           for (auto j : collInstance)
           {
-            ResolveDynamicEntityVsEntity(*enemy,*j.first,dt);
+            ResolveDynamicEntityVsEntity(ent,*j.first,dt);
           }
         }
-        collInstance.clear();
-        enemy->physics->pos+=enemy->physics->vel*dt;
+        ent.physics->pos+=ent.physics->vel*dt;
+      };
+      //////////////////////////////////////////
+      
+
+
+      //Entity and enemy obtention loop
+      for(auto& ent : EM)
+      {
+        //IF NEEDS TO BE MORE EFFICIENT CHANGE TO SWITCH
+        if(!ent.hasTag(game::Entity::TAG::Player))
+        {
+          if(isEnemy(ent))
+          {
+            saveCollisions(ent,player,&enemies);
+          }
+          else if(isEnemyBullet(ent))
+          {
+            saveCollisions(ent,player,&enmyBullets);
+          }
+          else if(isStaticObject(ent))
+          {
+            saveCollisions(ent,player,&stat_coll);
+          }
+          else if(isHealth(ent))
+          {
+            actOnCollisions(player,ent,pickHealth);
+          }
+          else if(isDoor(ent))
+          {
+            actOnCollisions(player,ent,changeLevel);
+          }
+          //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
+          // else if()
+          // {
+
+          // }
+
+        }
+        else if(ent.hasTag(game::Entity::TAG::Bullet))
+        {
+          plyrBullets.push_back(&ent);
+        }
+
       }
+
+    //////////////////////////////////
+    //RESEOLVE ALL COLLISIONS THE PLAYER HAS CAUSED
+    resolveEntityCollisions(player);
+    // collInstance.clear();
+
+    for(auto* enemy : enemies)
+    {
+      //ENEMY COLLISION AGAINST WALLS
+      for(auto* wallColl : stat_coll)
+      {
+        saveCollisions(*enemy,*wallColl,nullptr);
+      }
+
+      //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
+      if(saveCollisions(*enemy,player,nullptr))
+        player.health->negativeAffection = 1;
+
+      //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
+      resolveEntityCollisions(*enemy);
+      collInstance.clear();
+
+    }
     for(auto* bullet  : plyrBullets)
     {
       //COLISION DEL ENEMIGO CON LAS BALAS DEL PLAYER
       for(auto* enemy : enemies)
       {
-        if(DynamicEntityVsStaticEntity(*bullet, dt, *enemy))
-        {
-            collInstance.push_back({enemy, bullet->coll->contactTime });
-            bullet->mark4destruction();
-            enemy->health->negativeAffection = defaultDamage;
-        }
+        actOnCollisions(*bullet,*enemy,bulletHit);
       }
-
       if(bullet->alive())
-          bullet->physics->pos+=bullet->physics->vel*dt;
-    }
+        bullet->physics->pos+=bullet->physics->vel*dt;
+    } 
 
     for(auto* enmyBullet : enmyBullets)
     {
-      if(DynamicEntityVsStaticEntity(*enmyBullet, dt, player))
-        {
-            collInstance.push_back({&player, enmyBullet->coll->contactTime });
-            enmyBullet->mark4destruction();
-            player.health->negativeAffection = defaultDamage;
-        }
+      actOnCollisions(*enmyBullet,player,bulletHit);
+      
       if(enmyBullet->alive())
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
@@ -174,32 +195,26 @@ namespace game
   }
 
 
-    bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
+  bool CollisionSys::checkCollision(Entity& collider1, Entity& collider2)
+  {
+
+    auto collidersOverlap = [&](Entity& collider1, Entity& collider2)
     {
       auto rect1Pos = collider1.physics->pos;
-      auto rect2Pos = collider2.physics->pos;
-
       auto rect1BBox = collider1.physics->size;
-      auto rect2BBox = collider2.physics->size;
-
       // Expand target rectangle by source dimensions
       expandedTarget expanded_target{};
       expanded_target.pos = collider2.physics->pos - collider1.physics->size / 2;
       expanded_target.size = collider2.physics->size + collider1.physics->size;
 
-      if (
-        rect1Pos.x <= expanded_target.pos.x + expanded_target.size.x &&
-        rect1Pos.x + rect1BBox.x >= expanded_target.pos.x &&
-        rect1Pos.y <= expanded_target.pos.y + expanded_target.size.y &&
-        rect1BBox.y + rect1Pos.y >= expanded_target.pos.y
-      )
-			{
-          return true;
-      }
-			else
-      {
-          return false;
-      }
+      return ( rect1Pos.x <= expanded_target.pos.x + expanded_target.size.x &&
+      rect1Pos.x + rect1BBox.x >= expanded_target.pos.x &&
+      rect1Pos.y <= expanded_target.pos.y + expanded_target.size.y &&
+      rect1BBox.y + rect1Pos.y >= expanded_target.pos.y);
+    };
+
+    if (collidersOverlap(collider1,collider2)) { return true; }
+		else                                       { return false; }
   }
 
   bool CollisionSys::rayVsEntity(const FVmath::Point2D rayOrigin, const FVmath::Point2D rayDirection, expandedTarget& target,Entity& dynamicEntity)
@@ -253,7 +268,7 @@ namespace game
     }
 
 
-		// Note if nearHit == farHit, collision is principly in a diagonal
+		// Note if nearHit == farHit, collision is principaly in a diagonal
 		// so pointless to resolve. By returning a CN={0,0} even though its
 		// considered a hit, the resolver wont change anything.
 		return true;
@@ -288,7 +303,7 @@ namespace game
 			return false;
   }
 
-   void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
+  void CollisionSys::noOverlap(Entity& ent1, Entity& ent2){
 
     sf::Sprite sprite1 = ent1.render->Sprite;
     sf::Sprite sprite2 = ent2.render->Sprite;
@@ -299,7 +314,6 @@ namespace game
     sf::Vector2f sprite1POS = sprite1.getPosition();
     sf::Vector2f sprite2POS = sprite2.getPosition();
 
-    FVmath::Point2D ent1POS = ent1.physics->pos;
     FVmath::Point2D ent2POS = ent2.physics->pos;
 
 
@@ -308,9 +322,6 @@ namespace game
 
     float deltaX = sprite2POS.x - sprite1POS.x;
     float deltaY = sprite2POS.y - sprite1POS.y;
-
-    // float deltaX = ent2POS.x - ent1POS.x;
-    // float deltaY = ent2POS.y - ent1POS.y;
 
     float intersectX = std::abs(deltaX) - (s2_HalfSize.x + s1_HalfSize.x);
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
@@ -326,33 +337,24 @@ namespace game
     if(intersectX > intersectY) {
 
       if(deltaX > 0.0f){
-        // ent1.physics->pos.x = ent1POS.x + (intersectX * (1.0f /*- push*/));
-        
-        //ent2.physics->mov_speed = 0.0f;
+
         ent2.physics->pos.x = ent2POS.x + (-intersectX);
         
       }
       else{
-        // ent1.physics->pos.x = ent1POS.x +  (-intersectX * (1.0f /*- push*/));
-        //ent2.physics->mov_speed = 0.0f;
+
         ent2.physics->pos.x = ent2POS.x +  (intersectX );
         
       }
     }
     else{
       if(deltaY > 0.0f){
-      //ent1.physics->pos.y = ent1POS.y + (intersectY * (1.0f /*- push*/));
-        //ent2.physics->mov_speed = 0.0f;
 
         ent2.physics->pos.y = ent2POS.y + (-intersectY);
           
       }
 
       else{
-
-        // ent1.physics->pos.y = ent1POS.y + (-intersectY * (1.0f /*- push*/));
-  
-        //ent2.physics->mov_speed = 0.0f;
         
         ent2.physics->pos.y = ent2POS.y + (intersectY);
 

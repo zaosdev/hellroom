@@ -31,7 +31,8 @@ namespace game
                 if(e.weapon->current!=mejora::normal){
                     auto current_time = std::chrono::steady_clock::now();
                     auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - tiempo_comienzo_1).count();
-                    if (elapsed_time >= 10) { //<- segundo que dura un tipo d disparo especial
+                    if (elapsed_time >= 10) //<- segundo que dura un tipo d disparo especial
+                    {                       
                         e.weapon->current=mejora::normal;
                         e.weapon->especial=mejora::normal;
                         elapsed_time = 0;

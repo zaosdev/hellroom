@@ -24,6 +24,30 @@ namespace FVeng
             return temp;
         }
 
+        [[nodiscard]] xmlElement_facade FindFirstChildwithName(const char* childName,const char* attValue )
+        {
+            xmlElement_facade temp{};
+            temp.XMLE = XMLE->FirstChildElement(childName);
+
+            bool found{false};
+
+            while(!found || (!found && !temp.isEmpty()))  
+            {
+                const char * tempValue{};
+                temp.XMLE->QueryStringAttribute("name", &tempValue);
+                if(std::strcmp(tempValue,attValue)==0)
+                {
+                    found=true;
+                }
+                else
+                {
+                    temp = temp.NextSiblingNamed(childName);
+                }
+            }
+
+            return temp;
+        }
+
         template<typename T>
         void queryAttribute(const char* attName, T attribute) 
         {
@@ -50,8 +74,8 @@ namespace FVeng
 
         [[nodiscard]] bool isEmpty() noexcept
         {
-            if(XMLE) return true;
-            else return false;
+            if(XMLE) return false;
+            else return true;
         }
 
         private:

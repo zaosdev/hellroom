@@ -194,7 +194,7 @@ namespace game
                 auto isEntry = [](effect_utils::effectType& effct){return effct.Flags & effect_utils::effectFlags::isEntry;};
                 auto isExpirable = [](effect_utils::effectType& effct){return effct.Flags & effect_utils::effectFlags::isExpirable ;};
                 auto isExpired = [](effect_utils::effectType& effct){return  effct.expireTime<=0;};
-                auto isTick = [](effect_utils::effectType& effct){return effct.Flags & effect_utils::effectFlags::isTick ;};
+                //auto isTick = [](effect_utils::effectType& effct){return effct.Flags & effect_utils::effectFlags::isTick ;};
 
             ///////////////////
 

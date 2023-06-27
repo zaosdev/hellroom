@@ -2,16 +2,20 @@
 #include "cmp/CollisionComponent.hpp"
 #include "utils/gameData.hpp"
 
-#define PLAYER_SPRITE_PATH  "../media/player_enemy/player.png"
+
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
 #define ENEMYB_SPRITE_PATH  "../media/player_enemy/enemy_botaV.png"
-#define HEARTH_PATH         "../media/HUD/heart.png"
-#define COIN_PATH           "../media/HUD/coin.png"
-#define CLOCK_PATH          "../media/HUD/clock.png"
-#define SHIELD_SP_PATH      "../media/HUD/shield.png"
-#define PET1_SP_PATH        "../media/pets/vitalis.png"
-#define PET2_SP_PATH        "../media/pets/guardian.png"
-#define PET3_SP_PATH        "../media/pets/sentinel.png"
+
+static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player.png"};
+static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
+static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
+static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
+static constexpr const char* SHIELD_SP_PATH     { "../media/HUD/shield.png"};
+static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
+static constexpr const char* PET2_SP_PATH       { "../media/pets/guardian.png"};
+static constexpr const char* PET3_SP_PATH       { "../media/pets/sentinel.png"};
+static constexpr const char* BULLET_PATH        { "../media/bullet.png"};
+
 
 
 namespace FVeng
@@ -49,7 +53,7 @@ namespace FVeng
 
         void GameManager::initLevel()
         {
-            mapMan.InitMap("../media/Mapa2.tmx");
+            mapMan.InitMap("../media/Mapa_door.tmx");
         }
 
         void GameManager::LoadAllTextures()
@@ -61,7 +65,7 @@ namespace FVeng
             SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
-            SPman.loadTexture("../media/bullet.png", BULLET_TEXT);
+            SPman.loadTexture(BULLET_PATH, BULLET_TEXT);
             SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
@@ -74,6 +78,7 @@ namespace FVeng
             LoadAllTextures();
             createMap();
             createAllSpawner();
+            createAllDoors();
             auto& player = createPlayer({320,240});
             if(FVData::getSelectedPet() != -1)
             {
@@ -189,7 +194,7 @@ namespace FVeng
             auto& e = EM_.createEntity();
             mapID_ = e.id();
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .object_type= game::map_object_t::MAP};
 
             e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
             //mapMan.setActiveLayer(-1);         
@@ -206,7 +211,7 @@ namespace FVeng
             auto& e = *EM_.getEntityByID(mapID_);
 
             auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
-            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .mapCollider=false };
+            e.map = game::MapComponent { .texIndex=texIdx, .FVSprite{}, .maxLowerLayer=mapMan.getMaxBaseLayer(), .object_type= game::map_object_t::MAP };
 
             e.map->FVSprite.assignTexture(&SPman.getTextureByName(MAP_TEXT));
             //mapMan.setActiveLayer(-1);         
@@ -222,7 +227,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .mapCollider=true };
+            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
 
             e.coll = game::CollisionComponent{};           
 
@@ -289,7 +294,7 @@ namespace FVeng
 
             e.render->Sprite.setScale(0.2,0.2);
 
-            initEntityRender(e,{75 / 2, 75 / 2},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 2 * 75, 75, 75));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -345,7 +350,7 @@ namespace FVeng
                 e.physics->pos.y
             );      
 
-            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 4, .arrivalRadius = 1};
+            e.AI     = game::AIComponent     { .targetCoord = targetCoord,.behaviour = sb, .arrivalRadius = 1 ,.maxTimeAlive = 4};
 
             e.AI->targetCoord = targetCoord;
             e.AI->behaviour   = sb;
@@ -373,7 +378,7 @@ namespace FVeng
                 e.physics->pos.y
             );      
 
-            e.AI     = game::AIComponent     {.behaviour = sb, .targetCoord = targetCoord, .maxTimeAlive = 1.25, .arrivalRadius = 10, .perceptionTime = 100};
+            e.AI     = game::AIComponent     { .targetCoord = targetCoord,.behaviour = sb, .arrivalRadius = 10, .perceptionTime = 100, .maxTimeAlive = 1.25};
 
             e.AI->targetCoord = targetCoord;
             e.AI->behaviour   = sb;
@@ -392,6 +397,13 @@ namespace FVeng
             
         }
 
+        //Create all doors on the current map
+        void GameManager::createAllDoors()
+        {
+            for(auto& door : mapMan.getDoors())
+                createDoor(door);
+        }
+
         //Creates a concrete instance of a Spawner
         void GameManager::createSpawner(tXMLeng::Spawner& spawner)
         {
@@ -399,7 +411,7 @@ namespace FVeng
 
             e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
 
-            if(e.Spawn->SpawnInfo.type==tXMLeng::SpawnerType::EnemySpawner)
+            if(e.Spawn->SpawnInfo.type==tXMLeng::object_type::ENEMY)
                 SpawnersID.push_back(e.id());
         }
 
@@ -416,17 +428,50 @@ namespace FVeng
 
         void GameManager::update()
         {
-            if(allSpawned)
-            {
-                for(auto& ent : EM_)
-                {
-                    if(ent.hasTag(game::Entity::TAG::Enemy))
-                    {
-                        return ;
-                    }
-                }
+//             if(allSpawned)
+//             {
+//                 for(auto& ent : EM_)
+//                 {
+//                     if(ent.hasTag(game::Entity::TAG::Enemy))
+//                     {
+//                         return ;
+//                     }
+//                 }
 
-                allSpawned=false;
+//                 allSpawned=false;
+//                 for(auto id : SpawnersID)
+//                 {
+//                     auto* ent =EM_.getEntityByID(id);
+//                     if(ent)
+//                     {
+//                         ent->mark4destruction();
+//                     }
+//                 }
+//                 SpawnersID.clear();
+//                 deleteMap();
+//                 mapMan.clearMap();
+//                 mapMan.InitMap("../media/Mapa2.tmx");
+//                 changeMap();
+//                 createAllSpawner();
+//             }
+//             else
+//             {
+//                 for(auto id : SpawnersID)
+//                 {
+//                     auto* ent =EM_.getEntityByID(id);
+//                     if(ent && !ent->Spawn->fullCapacity)
+//                     {
+//                         goto label;
+//                     }
+//                 }
+//                 allSpawned=true;
+//             }
+// label:
+// float a = 3;
+// (void) a;
+
+            if(change_level)
+            {
                 for(auto id : SpawnersID)
                 {
                     auto* ent =EM_.getEntityByID(id);
@@ -441,21 +486,9 @@ namespace FVeng
                 mapMan.InitMap("../media/Mapa2.tmx");
                 changeMap();
                 createAllSpawner();
+                change_level=false;
             }
-            else
-            {
-                for(auto id : SpawnersID)
-                {
-                    auto* ent =EM_.getEntityByID(id);
-                    if(ent && !ent->Spawn->fullCapacity)
-                    {
-                        goto label;
-                    }
-                }
-                allSpawned=true;
-            }
-label:
-float a = 3;
+
 
         }
 
@@ -560,6 +593,30 @@ float a = 3;
             e.effct->effects.push_back(effMan.createEffectNamed("Healing"));
 
             e.addTag(game::Entity::TAG::Health);
+        }
+
+        void GameManager::createDoor(tXMLeng::DoorInfo door)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(door.pos.x),int(door.pos.y)}};
+
+            initEntityRender(e, {0,0},sf::IntRect(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,door.size.x,door.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(door.pos.x),float(door.pos.y)}, .prevPos{float(door.pos.x),float(door.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::DOOR, .nextLevel = door.next_level_path};
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::DOOR);
         }
 
 
