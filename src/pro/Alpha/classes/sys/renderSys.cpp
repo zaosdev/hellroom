@@ -1,7 +1,7 @@
 #include "renderSys.hpp"
 #include "../utils/math.hpp"
 #include <cmath>
-
+#include "../define.h"
 
 
 
@@ -99,11 +99,63 @@ namespace game
             
         }
 
+        void RenderSys::setVisibleArea(double pt)
+        {
+            //create a default view to use
+            sf::View view {};
+
+            //get the real player center
+            game::Entity& player = gMan_.getPlayer();
+            auto& playerSprite   = player.render->Sprite;
+            sf::FloatRect bounds = playerSprite.getGlobalBounds();
+            float centerX = bounds.left + bounds.width / 2.0f;
+            float centerY = bounds.top + bounds.height / 2.0f;
+
+            //Get the view size according to thw window and player life
+            auto originalViewWidth  = window_.getSize().x;
+            auto originalViewHeight = window_.getSize().y;
+            auto lifeProportion = player.health->currentLife / player.health->maxLife;
+            auto viewProportion = std::max(0.5f,  lifeProportion);
+            auto viewWidth      = originalViewWidth  * viewProportion;
+            auto viewHeight     = originalViewHeight * viewProportion;
+
+            //apply the view center (player) and size 
+            view.setCenter(sf::Vector2f(centerX, centerY));
+            view.setSize(sf::Vector2f(viewWidth, viewHeight));
+            view.zoom(screenScale);
+
+            view.setViewport({0.f, 0.15f, 1.f, 1.f});
+            // activate it
+            window_.setView(view);
+        }
+
+        void RenderSys::lowLifeEffect()
+        {
+            game::Entity& player = gMan_.getPlayer();
+            auto windowWidth     = window_.getSize().x;
+            auto windowHeight    = window_.getSize().y;
+            
+            if(player.health->currentLife < 300)
+            {
+                sf::RectangleShape square {};
+                float normalizedLife = 1.0f - static_cast<float>(player.health->currentLife) / 300.0f;
+                auto transparency = std::lerp(redTransparencyMin, redTransparencyMax, normalizedLife);
+                sf::Color redWithAlpha(255, 0, 0, transparency);
+                square.setSize(sf::Vector2f(windowWidth, windowHeight));
+                square.setFillColor(redWithAlpha); // Puedes cambiar el color según tus preferencias
+                square.setPosition(0, 0);
+                window_.draw(square);
+            }
+        }
+
         void RenderSys::update(double percentTick)
         {
             auto& EM = gMan_.getEntityManager();
 
             window_.clear();
+
+            //Define and set the visible area according to the player
+            setVisibleArea(percentTick);
 
             game::Entity* mapEnt{};
             
@@ -127,6 +179,9 @@ namespace game
 
             HUD_.update();
 
+            //Set the low life effect
+            lowLifeEffect();
+            
             window_.display();    
 
         }

@@ -55,5 +55,8 @@ namespace game
             size_t              shieldsp_;
             double              accumulatedTime_;    //time passed (seconds)
             double              maxTime_ = 99;
+         //   float               viewPortTop_;
+         //   float               viewPortLeft_;
+            sf::View            view_ {};
     };
 }

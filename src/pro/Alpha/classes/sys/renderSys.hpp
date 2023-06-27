@@ -24,6 +24,8 @@ namespace game
         void draw(sf::Sprite& Sprite);
         void drawMap(MapComponent& Sprite);
         void drawUpperMap(MapComponent& Sprite);
+        void setVisibleArea(double pt);
+        void lowLifeEffect();
         //void drawFV(sfml_util::FVSprite& Sprite);
 
         void iniSprite(game::Entity& ent, double pt);
