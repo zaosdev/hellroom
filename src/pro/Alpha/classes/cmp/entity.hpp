@@ -13,6 +13,7 @@
 #include "weaponComponent.hpp"
 #include "shieldComponent.hpp"
 #include "CollisionComponent.hpp"
+#include "trapComponent.hpp"
 
 
 
@@ -57,6 +58,7 @@ namespace game
       std::optional<WeaponComponent>  weapon{};
       std::optional<ShieldComponent>  shield{};
       std::optional<CollisionComponent>  coll{};
+      std::optional<TrapComponent>  trap{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
