@@ -60,6 +60,7 @@ namespace FVeng
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
         void createDoor(tXMLeng::DoorInfo door);
+        void createCofre(FVmath::Point2D Pos, int id);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
