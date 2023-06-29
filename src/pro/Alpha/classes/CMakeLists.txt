@@ -25,6 +25,7 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/petSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/shieldSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/effectSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/cofreSys.cpp"
 
 )
 

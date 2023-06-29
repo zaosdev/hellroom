@@ -13,6 +13,7 @@
 #include "weaponComponent.hpp"
 #include "shieldComponent.hpp"
 #include "CollisionComponent.hpp"
+#include "cofreComponent.hpp"
 
 
 
@@ -39,6 +40,7 @@ namespace game
         Health = 1 << 6,
         DOOR = 1 << 7,
         KILL_ON_MAP_CHANGE = 1 << 8,
+        Cofre = 1 << 9,
 
       };
 
@@ -57,6 +59,7 @@ namespace game
       std::optional<WeaponComponent>  weapon{};
       std::optional<ShieldComponent>  shield{};
       std::optional<CollisionComponent>  coll{};
+      std::optional<CofreComponent>   cofre{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

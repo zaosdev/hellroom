@@ -58,6 +58,7 @@ namespace FVeng
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
             SPman.loadTexture(BULLET_PATH, BULLET_TEXT);
+            SPman.loadTexture("../media/chest.png", COFRE_TEXT);
             SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
@@ -325,6 +326,28 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Bullet);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
             e.addTag(game::Entity::TAG::Player);
+        }
+
+        void GameManager::createCofre(FVmath::Point2Di Pos, int id){
+
+            auto& e = EM_.createEntity();
+
+             auto texIdx = SPman.getTextureIdxByName(COFRE_TEXT);
+            //std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 40, 40));
+
+            e.cofre = game::CofreComponent{};
+            e.cofre->id = id;
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
+
+            e.addTag(game::Entity::TAG::Cofre);
+            e.coll = game::CollisionComponent{};
+
+            //Set player bullet
         }
 
         void GameManager::createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord)

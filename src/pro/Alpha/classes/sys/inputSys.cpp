@@ -75,7 +75,11 @@ namespace game
             }
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
-                
+               //cofre
+                if(inpRec_.isKeyPressed(getKeyCode('e')))
+                {
+                    ent.cofre->abrir=true;
+                } 
         }
 
         

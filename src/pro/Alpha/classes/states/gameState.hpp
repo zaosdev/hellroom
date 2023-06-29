@@ -19,6 +19,7 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
+#include "../classes/sys/cofreSys.hpp"
 
 
 #include "../man/stateManager.hpp"
@@ -51,6 +52,7 @@ namespace FVEng{
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
+        , cofreSys      { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , clock         {}
@@ -124,6 +126,8 @@ namespace FVEng{
 
                     weaponSys.update();
 
+                    cofreSys.update();
+
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
@@ -164,6 +168,7 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
+        game::CofreSys          cofreSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
         

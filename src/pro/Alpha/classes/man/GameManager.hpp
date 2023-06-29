@@ -29,6 +29,7 @@ namespace FVeng
         static constexpr const char* COIN_TEXT   = "coin_sprite";
         static constexpr const char* CLOCK_TEXT  = "clock_sprite";
         static constexpr const char* BULLET_TEXT = "bullet_sprite";
+        static constexpr const char* COFRE_TEXT  = "chest_sprite";
         static constexpr const char* PET1_TEXT   = "pet1_sprite";
         static constexpr const char* PET2_TEXT   = "pet2_sprite";
         static constexpr const char* PET3_TEXT   = "pet3_sprite";
@@ -60,7 +61,7 @@ namespace FVeng
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
         void createDoor(tXMLeng::DoorInfo door);
-        void createCofre(FVmath::Point2D Pos, int id);
+        void createCofre(FVmath::Point2Di Pos, int id);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
