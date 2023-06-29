@@ -22,7 +22,7 @@ namespace game
         if(primera_vez == false){
             FVmath::Point2Di Pos = {150,150};
             tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-            gMan_.createTrap(Pos);
+            //gMan_.createTrap(Pos);
             primera_vez = true;
             std::cout << "estado 0" << std::endl;
 
