@@ -41,7 +41,7 @@ namespace game
             HUDSys&                       HUD_;
             sf::View                   view_{};
             float          centerX{},centerY{};
-        //    float          newCenterX{},newCenterY{};
+            float          newCenterX{},newCenterY{};
 
     };
 }

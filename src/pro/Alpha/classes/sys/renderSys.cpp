@@ -23,6 +23,8 @@ namespace game
         void RenderSys::iniRenderSys()
         {
             cameraOnPlayerCenter(centerX, centerY);
+            newCenterX = centerX;
+            newCenterY = centerY;
             view_.setCenter(sf::Vector2f(centerX, centerY));
         }
 
@@ -191,7 +193,7 @@ namespace game
             centerX += cameraSpeedX;
             centerY += cameraSpeedY;
 
-             view_.setCenter(sf::Vector2f(centerX, centerY));
+            view_.setCenter(sf::Vector2f(centerX, centerY));
         }
 
 
@@ -210,12 +212,15 @@ namespace game
             //Get and apply the center of the view
             if(playerMoved())
             {
-                float newCenterX {}; float newCenterY {};
                 cameraOnPlayerCenter(newCenterX, newCenterY);
                 moveCameraOnDirection(newCenterX, newCenterY);
                 setCameraCenter(newCenterX, newCenterY);
             }
-            
+            else
+            {
+                setCameraCenter(newCenterX, newCenterY);
+            }
+
             //Get and apply the size of the view
             float viewWidth {}; float viewHeight {};
             getViewSize(viewWidth, viewHeight);
