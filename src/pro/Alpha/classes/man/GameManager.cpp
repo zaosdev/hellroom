@@ -243,7 +243,8 @@ namespace FVeng
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
             e.trap = game::TrapComponent{};
-            
+
+            e.addTag(game::Entity::TAG::TRAP);            
         }
 
         void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)

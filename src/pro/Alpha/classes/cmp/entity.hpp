@@ -40,6 +40,7 @@ namespace game
         Health = 1 << 6,
         DOOR = 1 << 7,
         KILL_ON_MAP_CHANGE = 1 << 8,
+        TRAP = 1 << 0,
 
       };
 
