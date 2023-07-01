@@ -1,6 +1,7 @@
 #include "renderSys.hpp"
 #include "../utils/math.hpp"
 #include <cmath>
+#include <numeric>
 #include "../define.h"
 
 
@@ -21,7 +22,8 @@ namespace game
 
         void RenderSys::iniRenderSys()
         {
-         
+            cameraOnPlayerCenter(centerX, centerY);
+            view_.setCenter(sf::Vector2f(centerX, centerY));
         }
 
         // template<typename T>
@@ -99,34 +101,130 @@ namespace game
             
         }
 
-        void RenderSys::setVisibleArea(double pt)
+        void RenderSys::moveCameraOnDirection(float& centerX, float& centerY) //add a little value acorrding to where you looking at
         {
-            //create a default view to use
-            sf::View view {};
+            game::Entity& player = gMan_.getPlayer();
+            auto& playerPos      = player.physics->pos;
+            auto& playerPrevPos  = player.physics->prevPos;
 
+            //lambdas definition
+            auto isMovingRight = [&playerPos, &playerPrevPos]() {
+                return playerPos.x > playerPrevPos.x;
+            };
+
+            auto isMovingLeft = [&playerPos, &playerPrevPos]() {
+                return playerPos.x < playerPrevPos.x;
+            };
+
+            auto isMovingUp = [&playerPos, &playerPrevPos]() {
+                return playerPos.y < playerPrevPos.y;
+            };
+
+            auto isMovingDown = [&playerPos, &playerPrevPos]() {
+                return playerPos.y > playerPrevPos.y;
+            };
+
+            //X Axis
+            if(isMovingRight())
+            {
+                centerX += tileSize * plusTilesOnDirection;
+            }
+            else if (isMovingLeft())
+            {
+                centerX -= tileSize * plusTilesOnDirection;
+            }
+
+            //Y Axis
+            if(isMovingUp())
+            {
+                centerY -= tileSize * plusTilesOnDirection;
+            }
+            else if(isMovingDown())
+            {
+                centerY += tileSize * plusTilesOnDirection;
+            }
+
+
+        }
+
+        void RenderSys::cameraOnPlayerCenter(float& centerX, float& centerY)
+        {
             //get the real player center
             game::Entity& player = gMan_.getPlayer();
             auto& playerSprite   = player.render->Sprite;
             sf::FloatRect bounds = playerSprite.getGlobalBounds();
-            float centerX = bounds.left + bounds.width / 2.0f;
-            float centerY = bounds.top + bounds.height / 2.0f;
+            centerX = bounds.left + bounds.width / 2.0f;
+            centerY = bounds.top + bounds.height / 2.0f;
+        }
 
+        void RenderSys::getViewSize(float& viewWidth, float& viewHeight)
+        {
             //Get the view size according to thw window and player life
+            game::Entity& player = gMan_.getPlayer();
             auto originalViewWidth  = window_.getSize().x;
             auto originalViewHeight = window_.getSize().y;
+            auto maximumHeight  =  tileSize * maxHeightTiles; //we want to see 20 tiles tall
+            auto appliedScale   =  originalViewHeight / maximumHeight; //scale in height
+            auto maximumWidth   =  originalViewWidth  / appliedScale;  //apply the same scale to avoid deformation
             auto lifeProportion = player.health->currentLife / player.health->maxLife;
             auto viewProportion = std::max(0.5f,  lifeProportion);
-            auto viewWidth      = originalViewWidth  * viewProportion;
-            auto viewHeight     = originalViewHeight * viewProportion;
+            viewWidth      = maximumWidth  * viewProportion;
+            viewHeight     = maximumHeight * viewProportion;
+        }
 
-            //apply the view center (player) and size 
-            view.setCenter(sf::Vector2f(centerX, centerY));
-            view.setSize(sf::Vector2f(viewWidth, viewHeight));
-            view.zoom(screenScale);
+        void RenderSys::setCameraCenter(float newCenterX, float newCenterY)
+        {
+            // Calculate the velocity of the camera
+            float cameraSpeedX = newCenterX - centerX;
+            float cameraSpeedY = newCenterY - centerY;
 
-            view.setViewport({0.f, 0.15f, 1.f, 1.f});
+            // If velocity is exceeded
+            float cameraSpeedMagnitude = std::sqrt(cameraSpeedX * cameraSpeedX + cameraSpeedY * cameraSpeedY);
+            if (cameraSpeedMagnitude > maxCameraSpeed) {
+                // Reduce velocity proporcionally
+                float reductionFactor = maxCameraSpeed / cameraSpeedMagnitude;
+                cameraSpeedX *= reductionFactor;
+                cameraSpeedY *= reductionFactor;
+            }
+
+            // Update
+            centerX += cameraSpeedX;
+            centerY += cameraSpeedY;
+
+             view_.setCenter(sf::Vector2f(centerX, centerY));
+        }
+
+
+        void RenderSys::setVisibleArea()
+        {
+            game::Entity& player = gMan_.getPlayer();
+            auto& playerPos      = player.physics->pos;
+            auto& playerPrevPos  = player.physics->prevPos;
+            auto playerMoved = [&playerPos, &playerPrevPos]() {
+                return  (
+                            playerPos.x != playerPrevPos.x
+                        ||  playerPos.y != playerPrevPos.y 
+                        );
+            };
+
+            //Get and apply the center of the view
+            if(playerMoved())
+            {
+                float newCenterX {}; float newCenterY {};
+                cameraOnPlayerCenter(newCenterX, newCenterY);
+                moveCameraOnDirection(newCenterX, newCenterY);
+                setCameraCenter(newCenterX, newCenterY);
+            }
+            
+            //Get and apply the size of the view
+            float viewWidth {}; float viewHeight {};
+            getViewSize(viewWidth, viewHeight);
+            view_.setSize(sf::Vector2f(viewWidth, viewHeight));
+
+            //Set the viewport
+            view_.setViewport({0.f, 0.15f, 1.f, 1.f});
             // activate it
-            window_.setView(view);
+            window_.setView(view_);
         }
 
         void RenderSys::lowLifeEffect()
@@ -155,7 +253,7 @@ namespace game
             window_.clear();
 
             //Define and set the visible area according to the player
-            setVisibleArea(percentTick);
+            setVisibleArea();
 
             game::Entity* mapEnt{};
             

@@ -20,7 +20,6 @@ namespace game
         HUDSys& operator=(const HUDSys&)= delete;
         HUDSys& operator=(HUDSys&&)= delete;
 
-        void iniRenderSys();
         void setPlayer  (Entity* player);
         void setHeartID (size_t id);
         void setCoinID  (size_t id);

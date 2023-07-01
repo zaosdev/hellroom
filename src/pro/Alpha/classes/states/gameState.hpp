@@ -74,6 +74,7 @@ namespace FVEng{
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            renSys.iniRenderSys();
         }
 
         void changeLevel()
@@ -101,7 +102,7 @@ namespace FVEng{
 
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                    spwnSys.update();
+                   // spwnSys.update();
 
                     inpRec.update();
                     inpSys.update();
