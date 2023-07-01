@@ -60,13 +60,23 @@ namespace FVeng
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
         void createDoor(tXMLeng::DoorInfo door);
+        void createRoom(tXMLeng::Room& room);
+        void instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id);
+
+
+
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
-        void createSpawner(tXMLeng::Spawner& spawner);
+
         void createAllSpawner();
         void createAllDoors();
+        void createAllRooms();
+        void createRoomTrigger(tXMLeng::room_trigger& room, game::Entity::id_type id);
+        void createRoomBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
+        void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
+
 
         void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);

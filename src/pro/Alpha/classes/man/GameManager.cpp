@@ -402,8 +402,15 @@ namespace FVeng
                 createDoor(door);
         }
 
+        //Create all rooms on the current map
+        void GameManager::createAllRooms()
+        {
+            for(auto& room : mapMan.getRooms())
+                createRoom(room);
+        }
+
         //Creates a concrete instance of a Spawner
-        void GameManager::createSpawner(tXMLeng::Spawner& spawner)
+        void GameManager::createSpawner(tXMLeng::Spawner& spawner,game::Entity::id_type id)
         {
             auto& e = EM_.createEntity();
 
@@ -433,47 +440,6 @@ namespace FVeng
 
         void GameManager::update()
         {
-//             if(allSpawned)
-//             {
-//                 for(auto& ent : EM_)
-//                 {
-//                     if(ent.hasTag(game::Entity::TAG::Enemy))
-//                     {
-//                         return ;
-//                     }
-//                 }
-
-//                 allSpawned=false;
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent)
-//                     {
-//                         ent->mark4destruction();
-//                     }
-//                 }
-//                 SpawnersID.clear();
-//                 deleteMap();
-//                 mapMan.clearMap();
-//                 mapMan.InitMap("../media/Mapa2.tmx");
-//                 changeMap();
-//                 createAllSpawner();
-//             }
-//             else
-//             {
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent && !ent->Spawn->fullCapacity)
-//                     {
-//                         goto label;
-//                     }
-//                 }
-//                 allSpawned=true;
-//             }
-// label:
-// float a = 3;
-// (void) a;
 
             if(change_level)
             {
@@ -631,6 +597,70 @@ namespace FVeng
             e.addTag(game::Entity::TAG::DOOR);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+        }
+
+        void GameManager::createRoomTrigger(tXMLeng::room_trigger& trigger, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            e.physics = game::PhysicsComponent{ .pos{float(trigger.pos.x),float(trigger.pos.y)}, .prevPos{float(trigger.pos.x),float(trigger.pos.y)},  .vel{}, .mov_speed = 0, .size{float(trigger.size.x),float(trigger.size.y)} };   
+
+            e.coll = game::CollisionComponent{};
+
+            e.Spawn = game::SpawnerComponent{ .ownerID = id};
+
+            e.addTag(game::Entity::TAG::TRIGGER);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+        }
+
+        void GameManager::createRoomBlockage(tXMLeng::room_blockage& block, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(4*mapMan.getMapSize().x,12*mapMan.getMapSize().y,block.size.x,block.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+        }
+
+        void GameManager::createRoom(tXMLeng::Room& room)
+        {
+                auto& e = EM_.createEntity();
+
+                //CREATE ROOM TRIGGER SAVE IT ID
+                createRoomTrigger(room.trigger,e.id());
+
+                e.Spawn = game::SpawnerComponent{ .roomInfo = room};
+
+
+                e.addTag(game::Entity::TAG::ROOM);
+
+                //CREATE ROOM BLOCKS AND SAVE THEIR ID
+                for(auto& block : room.blocks)
+                {
+                    createRoomBlockage(block,e.id());
+                }
+                //CREATE SPAWNERS AND SAVE THEIR ID
+                for(auto& spawn : room.spawners)
+                {
+                    createSpawner(spawn,e.id());
+                }
+            
         }
 
 

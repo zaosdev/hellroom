@@ -14,6 +14,10 @@ namespace game
         size_t capacity{0};
         size_t maxCapacity{1};
         bool fullCapacity{false};
+        bool enabled{false};
+
+        size_t ownerID{};
+        tXMLeng::Room roomInfo{};
 
     };
 }

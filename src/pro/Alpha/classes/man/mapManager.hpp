@@ -87,6 +87,8 @@ namespace tXMLeng
         const std::vector<FVmath::Point2Di>& getColliderData() const;
         std::vector<Spawner>& getSpawners() ;
         std::vector<DoorInfo>& getDoors() ;
+        std::vector<Room>& getRooms() ;
+
 
 
         private:

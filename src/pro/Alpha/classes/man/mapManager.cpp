@@ -347,5 +347,10 @@ namespace tXMLeng
         return DoorsInfo_;
     }
 
+    std::vector<Room>& mapManager::getRooms() 
+    {
+        return RoomsInfo_;
+    }
+
 }
 
