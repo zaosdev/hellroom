@@ -176,7 +176,7 @@ namespace game
         //Get the player's coins data
         int coins = player_->data->coins;
 
-        //Get the coin sprite
+        //Get the coin sprite COPIAR ESTO
         auto& EM = gMan_.getEntityManager();
         auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
         auto& trueCoin = *it.base();
@@ -193,6 +193,13 @@ namespace game
         //Draw sprite and coin text
         window_.draw(trueCoin.render->Sprite);
         window_.draw(coinText_);
+    }
+
+    void HUDSys::renderGunType(){
+        //Get the coin sprite COPIAR ESTO
+        auto& EM = gMan_.getEntityManager();
+        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
+        auto& trueCoin = *it.base();
     }
 
     void HUDSys::update()

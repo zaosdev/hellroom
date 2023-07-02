@@ -103,12 +103,12 @@ namespace FVEng{
 
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                    spwnSys.update();
+                    //spwnSys.update();
 
                     inpRec.update();
                     inpSys.update();
 
-                    AISys.update(GameMan.getBB(), dt);
+                    //AISys.update(GameMan.getBB(), dt);
 
                     phySys.update(dt);
 

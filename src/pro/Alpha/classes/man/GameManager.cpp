@@ -342,7 +342,7 @@ namespace FVeng
             e.cofre = game::CofreComponent{};
             e.cofre->id = id;
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)}, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
 
             e.addTag(game::Entity::TAG::Cofre);
             e.coll = game::CollisionComponent{};

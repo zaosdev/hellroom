@@ -42,6 +42,7 @@ namespace game
       auto isStaticObject   = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
 
       
       //function called when user collides with heart
@@ -137,6 +138,9 @@ namespace game
           else if(isDoor(ent))
           {
             actOnCollisions(player,ent,changeLevel);
+          }
+          else if(isCofre(ent)){
+            saveCollisions(ent,player,nullptr);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
