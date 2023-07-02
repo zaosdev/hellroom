@@ -19,7 +19,7 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
-
+#include "../classes/sys/animationSys.hpp"
 
 #include "../man/stateManager.hpp"
 #include "../states/gameOverState.hpp"
@@ -74,6 +74,7 @@ namespace FVEng{
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            
         }
 
         void changeLevel()
@@ -105,6 +106,7 @@ namespace FVEng{
 
                     inpRec.update();
                     inpSys.update();
+
 
                     AISys.update(GameMan.getBB(), dt);
 
@@ -155,7 +157,7 @@ namespace FVEng{
         game::AISys             AISys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
-        game::effctSys         efctSys;
+        game::effctSys          efctSys;
         game::SoundSys          soundSys;
         game::AchievementSys    achSys;
         game::SavingSys         saveSys;
@@ -166,7 +168,7 @@ namespace FVEng{
         game::WeaponSys         weaponSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
-        
+  
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;
