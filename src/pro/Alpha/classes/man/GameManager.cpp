@@ -239,7 +239,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 40, 40));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getMapSize().x,11*mapMan.getMapSize().y, 16, 16));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
             e.trap = game::TrapComponent{};

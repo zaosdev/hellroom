@@ -49,15 +49,18 @@ namespace game
                     }
                     else if(e.trap->modo==estado::tercero){
                         e.trap->modo=estado::cuarto;
+                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
                         //Cambiar imagen de la trampa
                         std::cout << "estado 3" << std::endl;
                     }
-                }
-                if(e.trap->modo==estado::cuarto){
+                    else if(e.trap->modo==estado::cuarto){
+                        e.trap->modo=estado::primero;
+                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
                     //Comprobar si el jugador esta en la posicion de la trampa, mediante un rando de esta misma. SI se encuentra, se le resta vida, se cambiara la imagen y se resetea el tiempo. 
-                    //Hacer que la tarampa este por detras del jugador, ver como se cambian las imagenes y mirar que funciona el contador.
                     std::cout << "estado 4" << std::endl;
+                    }
                 }
+                
             }
         }
 

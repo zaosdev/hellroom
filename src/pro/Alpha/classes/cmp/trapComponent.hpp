@@ -11,5 +11,6 @@ namespace game
     {
         estado modo{estado::primero};
         float delayTime {5};
+        float trapDamage {100};
     };
 }

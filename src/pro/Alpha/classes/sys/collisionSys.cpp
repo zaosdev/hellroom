@@ -54,10 +54,12 @@ namespace game
       //function called when entity is hit by trap
       auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
       {
+        if(entCollided.trap->modo==estado::cuarto){
         std::cout << "colision con la trampa" << std::endl;
 
-        entColliding.mark4destruction();
-        entCollided.health->negativeAffection = defaultDamage;;
+        entColliding.health->negativeAffection = entCollided.trap->trapDamage;
+        entCollided.trap->modo=estado::primero;
+        }
       };
 
       //function called when entity is hit by bullet
@@ -151,7 +153,7 @@ namespace game
           }
           else if(isTrap(ent))
           {
-            saveCollisions(ent,player,trapHit);
+            actOnCollisions(player,ent,trapHit);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
