@@ -9,31 +9,54 @@ namespace game
 
 
 
-    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos)
+    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice)
     {
 
         // gMan_.SpawnDummy(Pos);
-        auto enemyChoice = FVmath::calculateRandom(3,1);
+        //auto enemyChoice = FVmath::calculateRandom(3,1);
         
         switch (enemyChoice)
         {
-        case 1:
-            gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+            case game::enemy_type::ARRIVE :
+                gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
-        case 2:
-            gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
+
+            case game::enemy_type::PURSUE :
+                gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
             break;
-        case 3: 
-            gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
+
+            case game::enemy_type::SHOOT : 
+                gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
             break;
-        default:
-            gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+
+            case game::enemy_type::NO_TYPE: 
+            default:
+                gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         }
     }
-    void SpawnSys::SpawnPlayer(FVmath::Point2Di Pos)
+    void SpawnSys::SpawnPlayer()
     {
-        gMan_.createPlayer(Pos);
+        setPlayerSpawner();
+        auto& EM = gMan_.getEntityManager();
+
+        auto& e = *EM.getEntityByID(player_spawner_id_);
+
+        auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
+        
+        auto& player = gMan_.getPlayer();
+
+        player.physics->pos = FVmath::Point2D{float(Pos.x),float(Pos.y)};
+
+        e.Spawn->capacity++;
+    }
+
+    void SpawnSys::setPlayerSpawner()
+    {
+        auto& EM = gMan_.getEntityManager();
+        for(auto& e : EM)
+            if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::PLAYER)  player_spawner_id_= e.id();
+        
     }
 
     FVmath::Point2Di SpawnSys::calculateSpawnPoint(tXMLeng::Spawner& spawnInfo)
@@ -60,7 +83,7 @@ namespace game
         auto valid = [](Entity const& e){ return e.alive() && e.Spawn;};
 
         //check if the spawner it's for enemies
-        auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::SpawnerType::EnemySpawner; };
+        auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::object_type::ENEMY; };
 
         //check if it's ready for spawning
         auto ready2Spawn = [&](Entity const& e){return e.Spawn->TimerSpawn.getElapsedTime().asSeconds()>e.Spawn->minTime; };
@@ -77,15 +100,15 @@ namespace game
             {
                 
                auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
-               SpawnEnemy(Pos);
+               SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned);
                e.Spawn->capacity++;
                e.Spawn->TimerSpawn.restart();
                if(e.Spawn->capacity == e.Spawn->maxCapacity)
                {
                    e.Spawn->fullCapacity=true;
                }
-
             }
+
         }
     }
 }

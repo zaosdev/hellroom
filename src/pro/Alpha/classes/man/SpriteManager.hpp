@@ -21,9 +21,13 @@ namespace SFMLeng
 
     struct SpriteManager
     {
+        using Texture_type = sf::Texture;
+        using Sprite_type = sf::Sprite;
+        using rect_f_type = sf::FloatRect;
+        using rect_i_type = sf::IntRect;
 
-        SpriteManager();
 
+        SpriteManager(size_t textureCount);
         SpriteManager (const SpriteManager&) = delete;
         SpriteManager (SpriteManager&&) = delete;
         SpriteManager& operator=(const SpriteManager&)= delete;
@@ -31,23 +35,22 @@ namespace SFMLeng
         
         std::size_t  loadTexture(std::string texStr, const char* textName);
 
-        void assignTexture(sf::Sprite& sp, int);
+        void assignTexture(Sprite_type& sp, int);
 
-        void modifyTextureRect(sf::Sprite& sp, sf::IntRect rect);
+        void modifyTextureRect(Sprite_type& sp,rect_i_type rect);
 
-        void modifySpriteOrigin(sf::Sprite& sp,FVmath::Point2D origin);
+        void modifySpriteOrigin(Sprite_type& sp,FVmath::Point2D origin);
 
-        sf::Texture& getTextureByName(const char*);
+        Texture_type& getTextureByName(const char*);
 
         int getTextureIdxByName(const char*);
 
-        //void getboundingBox(sf::Sprite& sp);
-        sf::FloatRect bbox;
-        std::vector<sf::FloatRect> bboxes;
+        // rect_f_type bbox;
+        // std::vector<rect_f_type> bboxes;
 
         private:
 
-         std::vector<sf::Texture> vecTex_;
+         std::vector<Texture_type> vecTex_;
          std::unordered_map<const char*, int> TextureIndexList_;
 
     };

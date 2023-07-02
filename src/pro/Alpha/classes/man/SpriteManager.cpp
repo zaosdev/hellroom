@@ -4,7 +4,10 @@
 namespace SFMLeng
 {
 
-    SpriteManager::SpriteManager() = default;
+    SpriteManager::SpriteManager(size_t textureCount)
+    {
+        vecTex_.reserve(textureCount);
+    }
 
 
     void SpriteManager::assignTexture(sf::Sprite& sp, int idx)

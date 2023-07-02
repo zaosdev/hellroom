@@ -37,6 +37,7 @@ namespace game
         //void collisionDetect(const std::vector<sf::FloatRect>& bboxes); //comprueba colisiones y realiza las acciones necesarias
         //void colliding();
         
+        //void actOnCollision(auto action);
         void noOverlap(Entity& sprite1, Entity& sprite2);
         void playerCollision(float intersectX, float intersectY,  float deltaX,  float deltaY, Entity& ent2, FVmath::Point2D ent2POS );
         //void shieldCollision(float intersectX, float intersectY,  float deltaX,  float deltaY, Entity& ent1, FVmath::Point2D ent1POS, Entity& ent2, FVmath::Point2D ent2POS );

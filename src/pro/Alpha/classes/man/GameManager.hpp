@@ -19,18 +19,21 @@ namespace FVeng
 {
     struct GameManager
     {
-        #define PLAYER_TEXT "player_sprite"
+
         #define ENEMY_A     "enemyA_sprite"
         #define ENEMY_B     "enemyB_sprite"   
-        #define MAP_TEXT    "map_sprite"
-        #define HEART_TEXT  "heart_sprite"
-        #define COIN_TEXT   "coin_sprite"
-        #define CLOCK_TEXT  "clock_sprite"
-        #define BULLET_TEXT "bullet_sprite"
-        #define PET1_TEXT   "pet1_sprite"
-        #define PET2_TEXT   "pet2_sprite"
-        #define PET3_TEXT   "pet3_sprite"
-        #define SHIELD_TEXT "shield_sprite"
+
+        static constexpr const char* PLAYER_TEXT = "player_sprite";
+        static constexpr const char* MAP_TEXT    = "map_sprite";
+        static constexpr const char* HEART_TEXT  = "heart_sprite";
+        static constexpr const char* COIN_TEXT   = "coin_sprite";
+        static constexpr const char* CLOCK_TEXT  = "clock_sprite";
+        static constexpr const char* BULLET_TEXT = "bullet_sprite";
+        static constexpr const char* PET1_TEXT   = "pet1_sprite";
+        static constexpr const char* PET2_TEXT   = "pet2_sprite";
+        static constexpr const char* PET3_TEXT   = "pet3_sprite";
+        static constexpr const char* SHIELD_TEXT = "shield_sprite";
+
 
         GameManager(sf::RenderWindow& window);
 
@@ -56,18 +59,23 @@ namespace FVeng
         void createMap();
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
+        void createDoor(tXMLeng::DoorInfo door);
 
         void createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel);
         void createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
+        void createAllDoors();
+
+        void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);
         void resetMap(game::MapComponent& map);
         void LoadAllTextures();
-        void initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect);
+        void LoadLevel();
+        void initEntityRender(game::Entity& entity, FVmath::Point2D origin, SFMLeng::SpriteManager::rect_i_type rect);
         void SpawnDummy(FVmath::Point2Di Pos);
-        void deleteMap();
+        void deleteKillable();
         void update();
 
         FVeng::EntityManager<game::Entity>& getEntityManager();
@@ -76,19 +84,24 @@ namespace FVeng
         game::Entity& getPlayer();
         
         std::vector<game::Entity::id_type> SpawnersID{}; 
-         
+        bool change_level{false};
+        std::string nextLevel{"../media/Mapa_door.tmx"};
+
+
         private:
+        SFMLeng::SpriteManager SPman{15};
 
         sf::RenderWindow& window_;
         //create Sprite manager
-        SFMLeng::SpriteManager SPman{};
         tXMLeng::mapManager mapMan{};
         FV_factory::effectsFactory effMan{};
 
         FVeng::EntityManager<game::Entity> EM_{100};
         game::blackBoardComponent bb_{} ;
-        bool allSpawned{false};
-        game::Entity::id_type mapID_{};
+        // bool allSpawned{false};
+        game::Entity::id_type mapID_{0};
+        game::Entity::id_type playerID_{0};
+
            
     };
 }

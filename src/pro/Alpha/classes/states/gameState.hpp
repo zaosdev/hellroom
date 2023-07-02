@@ -36,7 +36,6 @@ namespace FVEng{
         : window_       { window }
         , SM_           { SM }
         , GameMan       { window_ }
-        , SPman         {}
         , phySys        { GameMan }
         , inpRec        { window_ }
         , inpSys        { GameMan, inpRec, soundSys }
@@ -67,6 +66,7 @@ namespace FVEng{
             //create the player and update(needed fot the hud)
             GameMan.initGame();
             GameMan.getEntityManager().update();
+            spwnSys.SpawnPlayer();
             HudSys.setPlayer    (&GameMan.getPlayer());
             HudSys.setHeartID   (GameMan.createHeart().id());
             HudSys.setCoinID    (GameMan.createCoin().id());
@@ -76,18 +76,32 @@ namespace FVEng{
             soundSys.loadSounds();
         }
 
+        void changeLevel()
+        {
+            spwnSys.SpawnPlayer();
+            GameMan.change_level=false;
+        }
+
         void executeState() override
         {
             //Bucle del juego
             while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0) 
             {
                 //Bucle de obtención de eventos
+                GameMan.update();
+                if(GameMan.change_level)
+                {
+                    changeLevel();
+                }
                 GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
 
-                    GameMan.update();
+
+
+                    //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
+                    spwnSys.update();
 
                     inpRec.update();
                     inpSys.update();
@@ -101,9 +115,6 @@ namespace FVEng{
                     shieldSys.update(dt);
 
                     collisionSys.update(dt);
-
-                    //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-                    spwnSys.update();
 
                     efctSys.update(dt);
 
@@ -138,7 +149,6 @@ namespace FVEng{
 
 
         FVeng::GameManager      GameMan;
-        SFMLeng::SpriteManager  SPman;
         game::PhysicsSys        phySys;
         game::InputManager      inpRec;
         game::InputSys          inpSys;

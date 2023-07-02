@@ -6,6 +6,14 @@
 namespace game
 {
 
+    enum enemy_type
+    {
+        PURSUE = 1 << 0,
+        SHOOT  = 1 << 1,
+        ARRIVE = 1 << 2,
+        NO_TYPE   = 1 << 3,
+    };
+
     struct AIComponent
     {
         FVmath::Point2D                 targetCoord;        //get position for arriving
@@ -19,6 +27,7 @@ namespace game
         double                          perceptionTime {1}; //time 2 check the world
         double                          accumulatedTime{0};    //time passed to check
         double                          maxTimeAlive   {-1};//-1 indicates never dies by time
-        double                          timeAlive      {0}; 
+        double                          timeAlive      {0};
+        enemy_type                      type{enemy_type::NO_TYPE}; 
     };
 }

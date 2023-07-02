@@ -35,13 +35,15 @@ namespace FVEng{
 
             //Configurate color and position of text
             configurateMenuAccordingToWindow();
+
+            clockMenu_.restart();
         }
 
         void executeState() override
         {
             for(int i = 0; i < 60; i++)
             {
-                if(i % 10==0) 
+                if(time2newKey_ < clockMenu_.getElapsedTime().asSeconds()) 
                 {
                     RegisterKeys();
                     HandleInput();
@@ -109,6 +111,13 @@ namespace FVEng{
                 }
             }
 
+            //check if any key is selected and restart the clock or return
+            if(upPressed_ || downPressed_ || enterPressed_)
+            {
+                clockMenu_.restart();
+            }
+            else return;
+
             //act to registered key events
             if(upPressed_)
             {
@@ -129,8 +138,9 @@ namespace FVEng{
             {
                 changeStateAccordingToSelectedIndex();
             }
+            
             //once handled, restart values
-            upPressed_ = downPressed_ =  enterPressed_= false;
+            upPressed_ = downPressed_ = enterPressed_ = false;
         }
 
 
@@ -191,6 +201,8 @@ namespace FVEng{
         sf::Texture         backgroundTexture_;
         sf::Sprite          backgroundSprite_;
         sf::RenderWindow&   window_;
+        float               time2newKey_        {.3f};
+        sf::Clock           clockMenu_          {};
         int selectedItemIndex = 0;
         sf::Font font_;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];

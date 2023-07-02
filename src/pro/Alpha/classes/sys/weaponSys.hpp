@@ -23,7 +23,6 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
-            SFMLeng::SpriteManager SPman{};
             //game::RenderSys renSys{gMan_};
     };
 }
