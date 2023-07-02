@@ -53,6 +53,7 @@ namespace FVEng{
         , weaponSys     { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
+        , animSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -129,6 +130,8 @@ namespace FVEng{
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
+
+                    animSys.update(dt /*updateClock.getElapsedTime().asSeconds()*/);
                 
                 }
 
@@ -136,6 +139,7 @@ namespace FVEng{
                 // //Render game
                 float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
                 renSys.update(percentTick);
+
             }
 
             //player is dead
@@ -168,6 +172,7 @@ namespace FVEng{
         game::WeaponSys         weaponSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
+        game::animationSys      animSys;
   
         //Game clock
         sf::Clock clock;

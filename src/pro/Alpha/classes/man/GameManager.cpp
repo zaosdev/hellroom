@@ -100,6 +100,18 @@ namespace FVeng
             //create life 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
+            //create animation component
+
+            const sf::Texture* tex = e.render->Sprite.getTexture();
+            sf::Vector2u imgcount {9,4};
+
+            ////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTANTE
+            //recupero id de textura con el texID, se lo paso al componente y en animationSys partiendo del id recupero la textura, calculo valores de uvRect en el update
+
+            e.anim = game::animationComponent { .texture = tex, .imageCount = imgcount , .uvRect.width = static_cast<int>(tex->getSize().x/float(imgcount.x)), .uvRect.height = static_cast<int>(tex->getSize().y/float(imgcount.y)), .row = 1};
+
+
+
             //create data component
             int coins = FVData::getCoins();
 

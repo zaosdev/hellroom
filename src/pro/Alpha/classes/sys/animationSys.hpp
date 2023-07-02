@@ -10,24 +10,27 @@ namespace game {
 
         //public:
 
-        animationSys(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
+        animationSys(FVeng::GameManager& gameMan);
 
-        // animationSys (const animationSys&) = delete;
-        // animationSys (animationSys&&) = delete;
-        // animationSys& operator=(const animationSys&)= delete;
-        // animationSys& operator=(animationSys&&)= delete;
+        animationSys (const animationSys&) = delete;
+        animationSys (animationSys&&) = delete;
+        animationSys& operator=(const animationSys&)= delete;
+        animationSys& operator=(animationSys&&)= delete;
 
 
-        void update(int row, float deltaTime);
+        void update(float deltaTime);
 
-        sf::IntRect uvRect;
+        // sf::IntRect uvRect;
+
+        // private:
+        // sf::Vector2u imageCount;
+        // sf::Vector2u currentImage;
+
+        // float totalTime;
+        // float switchTime;
 
         private:
-        sf::Vector2u imageCount;
-        sf::Vector2u currentImage;
-
-        float totalTime;
-        float switchTime;
+            FVeng::GameManager& gMan_;
 
        
 
