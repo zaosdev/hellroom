@@ -452,6 +452,25 @@ namespace FVeng
             }
         }
 
+        void GameManager::roomDelete(game::Entity::id_type room_id)
+        {
+            auto isRoom = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::ROOM) && e.id()==room_id;};
+            auto isRoomTrigger = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::TRIGGER) && e.Spawn->ownerID==room_id;};
+            auto isRoomBlockage = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::STATIC_COLL) ;};
+            auto isRoomSpawner = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::SPAWNER) && e.Spawn->ownerID==room_id;};
+
+            auto isRoomObject = [&](game::Entity& e){return (isRoom(e) || isRoomTrigger(e) || isRoomBlockage(e) || isRoomSpawner(e));};
+
+            for(auto& ent : EM_)
+            {
+                if(ent.hasTag(game::Entity::TAG::KILL_ON_ROOM_DELETE) && isRoomObject(ent))
+                {
+                    ent.mark4destruction();
+                }
+            }
+        }
+
+
         void GameManager::update()
         {
             if(change_level)

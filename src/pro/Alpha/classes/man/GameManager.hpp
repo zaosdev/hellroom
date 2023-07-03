@@ -86,6 +86,8 @@ namespace FVeng
         void initEntityRender(game::Entity& entity, FVmath::Point2D origin, SFMLeng::SpriteManager::rect_i_type rect);
         void SpawnDummy(FVmath::Point2Di Pos);
         void deleteKillable();
+        void roomDelete(game::Entity::id_type);
+
         void update();
 
         FVeng::EntityManager<game::Entity>& getEntityManager();

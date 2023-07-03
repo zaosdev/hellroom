@@ -39,9 +39,11 @@ namespace game
             if(isRoomTriggered(e))
             {
                 if(not RoomInitialized(e))  { enableRoom(e); }
-                else                        { if(isRoomCompleted(e)) deleteRoom_=true; }
+                else                        { if(isRoomCompleted(e)) deleteRoom_=true; room2Delete_=e.id(); }
             }
 
         }
+
+        if(deleteRoom_) { gMan_.roomDelete(room2Delete_); }
     }
 }
