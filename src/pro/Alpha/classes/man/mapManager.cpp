@@ -55,7 +55,7 @@ namespace tXMLeng
         {
             GenerateRoom(currentRoom);
 
-            currentRoom.NextSiblingNamed("group");
+            currentRoom = currentRoom.NextSiblingNamed("group");
         }
         
     }
@@ -102,7 +102,7 @@ namespace tXMLeng
        		wall.queryAttribute<int*>("width", &wallInfo.size.x);
        		wall.queryAttribute<int*>("height", &wallInfo.size.y);
 
-			wall.NextSiblingNamed("object");
+			wall = wall.NextSiblingNamed("object");
 		}
 		
 

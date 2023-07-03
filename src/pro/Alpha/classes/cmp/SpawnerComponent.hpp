@@ -17,7 +17,6 @@ namespace game
         bool enabled{false};
 
         size_t ownerID{};
-        tXMLeng::Room roomInfo{};
 
     };
 }

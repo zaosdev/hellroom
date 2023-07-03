@@ -80,7 +80,7 @@ namespace game
     void SpawnSys::update()
     {
         //check if it's a valid entity
-        auto valid = [](Entity const& e){ return e.alive() && e.Spawn;};
+        auto valid = [](Entity const& e){ return e.alive() && e.Spawn && e.hasTag(game::Entity::TAG::SPAWNER);};
 
         //check if the spawner it's for enemies
         auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::object_type::ENEMY; };

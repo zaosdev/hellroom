@@ -83,7 +83,7 @@ namespace FVeng
             setPlayerID(e.id());
             bb_.targetID = e.id();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
             // Lo dispongo en el centro de la pantalla
 
             e.input  = game::InputComponent{};
@@ -109,7 +109,7 @@ namespace FVeng
 
             e.render->Sprite.setScale(2.5,2.75);
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 32, 0 *32,32,32));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(128, 112,16,16));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
 
@@ -217,14 +217,27 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
+            //auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
 
             e.coll = game::CollisionComponent{};           
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
 
+            // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            // initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
+
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
+
+            // e.render->Sprite.move(
+            //     e.physics->pos.x,
+            //     e.physics->pos.y
+            // );
+
 
             return e;
         }
@@ -389,9 +402,8 @@ namespace FVeng
         //Create all spawners on the current map
         void GameManager::createAllSpawner()
         {
-
             for(auto& spawner : mapMan.getSpawners())
-                createSpawner(spawner);
+                createSpawner(spawner,0);
             
         }
 
@@ -423,6 +435,7 @@ namespace FVeng
                 e.Spawn->minTime=0;
             }
 
+            e.addTag(game::Entity::TAG::SPAWNER);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
         }
@@ -440,7 +453,6 @@ namespace FVeng
 
         void GameManager::update()
         {
-
             if(change_level)
             {
                 deleteKillable();
@@ -464,6 +476,8 @@ namespace FVeng
 
             createAllSpawner();
             createAllDoors();
+            createAllRooms();
+
 
         }
 
@@ -640,29 +654,29 @@ namespace FVeng
 
         void GameManager::createRoom(tXMLeng::Room& room)
         {
-                auto& e = EM_.createEntity();
+            auto& e = EM_.createEntity();
 
-                //CREATE ROOM TRIGGER SAVE IT ID
-                createRoomTrigger(room.trigger,e.id());
+            //CREATE ROOM TRIGGER SAVE IT ID
+            createRoomTrigger(room.trigger,e.id());
 
-                e.Spawn = game::SpawnerComponent{ .roomInfo = room};
+            e.room = game::RoomComponent{ .roomInfo = room};
 
-
-                e.addTag(game::Entity::TAG::ROOM);
-
-                //CREATE ROOM BLOCKS AND SAVE THEIR ID
-                for(auto& block : room.blocks)
-                {
-                    createRoomBlockage(block,e.id());
-                }
-                //CREATE SPAWNERS AND SAVE THEIR ID
-                for(auto& spawn : room.spawners)
-                {
-                    createSpawner(spawn,e.id());
-                }
-            
+            e.addTag(game::Entity::TAG::ROOM);            
         }
 
+        void GameManager::instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id)
+        {
+            //CREATE ROOM BLOCKS AND SAVE THEIR ID
+            for(auto& block : room.blocks)
+            {
+                createRoomBlockage(block,id);
+            }
+            //CREATE SPAWNERS AND SAVE THEIR ID
+            for(auto& spawn : room.spawners)
+            {
+                createSpawner(spawn,id);
+            }
+        }
 
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
         {

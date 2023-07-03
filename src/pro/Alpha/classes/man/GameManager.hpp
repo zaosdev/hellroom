@@ -95,7 +95,7 @@ namespace FVeng
         
         std::vector<game::Entity::id_type> SpawnersID{}; 
         bool change_level{false};
-        std::string nextLevel{"../media/Mapa_door.tmx"};
+        std::string nextLevel{"../media/level1.tmx"};
 
 
         private:

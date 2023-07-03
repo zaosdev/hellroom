@@ -71,10 +71,10 @@ namespace game
       auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
         if(storage)
-          storage->push_back(&entColliding);
-        if (DynamicEntityVsStaticEntity(entCollided, dt, entColliding))
+          storage->push_back(&entCollided);
+        if (DynamicEntityVsStaticEntity(entColliding, dt, entCollided ))
         {
-          collInstance.push_back({ &entColliding, entCollided.coll->contactTime });
+          collInstance.push_back({ &entCollided, entCollided.coll->contactTime });
           return true;
         }
         else return false;
@@ -120,15 +120,15 @@ namespace game
         {
           if(isEnemy(ent))
           {
-            saveCollisions(ent,player,&enemies);
+            saveCollisions(player,ent,&enemies);
           }
           else if(isEnemyBullet(ent))
           {
-            saveCollisions(ent,player,&enmyBullets);
+            saveCollisions(player,ent,&enmyBullets);
           }
           else if(isStaticObject(ent))
           {
-            saveCollisions(ent,player,&stat_coll);
+            saveCollisions(player,ent,&stat_coll);
           }
           else if(isHealth(ent))
           {
