@@ -97,7 +97,7 @@ namespace game
                     case FVAI::SB::PATHFINDING:
                     {
                         //creates a path to the point and then uses followpath to run over the points
-                        ent.AI->path = FVAI::findPathAStar();
+                       // ent.AI->path = FVAI::findPathAStar();
                     }
                     default:break;
                 }

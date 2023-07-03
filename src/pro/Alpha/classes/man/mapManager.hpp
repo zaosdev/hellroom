@@ -89,6 +89,7 @@ namespace tXMLeng
         TileSet tile_{};
         std::vector<Spawner> SpawnersInfo_{};
         std::vector<DoorInfo> DoorsInfo_{};
+        std::vector<std::vector<int>> mapRepresentation_ {};
 
 
         XMLReader xmlDoc_{};
