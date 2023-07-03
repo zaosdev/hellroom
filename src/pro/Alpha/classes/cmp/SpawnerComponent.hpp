@@ -10,7 +10,7 @@ namespace game
     {
         tXMLeng::Spawner SpawnInfo{};
         sf::Clock TimerSpawn{};
-        float minTime{1};
+        float minTime{0.3};
         size_t capacity{0};
         size_t maxCapacity{1};
         bool fullCapacity{false};

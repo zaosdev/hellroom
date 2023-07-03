@@ -621,7 +621,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(door.pos.x),int(door.pos.y)}};
 
-            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,door.size.x,door.size.y));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,14*mapMan.getTileSize().y,door.size.x,door.size.y));
 
             e.physics = game::PhysicsComponent{ .pos{float(door.pos.x),float(door.pos.y)}, .prevPos{float(door.pos.x),float(door.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -664,7 +664,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
 
-            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(4*mapMan.getMapSize().x,12*mapMan.getMapSize().y,block.size.x,block.size.y));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(4*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
 
             e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 

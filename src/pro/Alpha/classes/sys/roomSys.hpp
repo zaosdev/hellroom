@@ -27,7 +27,5 @@ namespace game
             FVeng::GameManager& gMan_;
             bool deleteRoom_{false};
             game::Entity::id_type room2Delete_{0};
-
-
     };
 }
