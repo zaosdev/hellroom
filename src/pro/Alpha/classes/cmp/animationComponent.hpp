@@ -10,7 +10,9 @@ namespace game{
 
     struct animationComponent{
 
-        const sf::Texture* texture {}; //por si las moscas
+        //const sf::Texture* texture {}; //por si las moscas
+
+        size_t idTex {};
 
         sf::Vector2u imageCount {}; //total de imagenes
         sf::Vector2u currentImage {0,0}; //imagen actual        

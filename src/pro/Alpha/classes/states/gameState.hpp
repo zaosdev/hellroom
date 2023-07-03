@@ -75,6 +75,8 @@ namespace FVEng{
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            animSys.setTexureID (GameMan.getPlayer().id()); 
+            //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             
         }
 

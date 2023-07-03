@@ -20,6 +20,8 @@ namespace game {
 
         void update(float deltaTime);
 
+        void setTexureID(size_t id);
+
         // sf::IntRect uvRect;
 
         // private:
@@ -31,6 +33,7 @@ namespace game {
 
         private:
             FVeng::GameManager& gMan_;
+            size_t  texId_;
 
        
 

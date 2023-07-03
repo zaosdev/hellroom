@@ -16,20 +16,32 @@ namespace game{
 
     }
 
+    void animationSys::setTexureID(size_t id){
+        texId_ = id;
+    }
 
     void animationSys::update(float deltaTime){
 
         auto& EM = gMan_.getEntityManager();
 
-           for(auto& ent : EM)
-        {
+        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==texId_;});
+        auto& tex = *it.base(); //devuelve la textura, comprobar si devuelve sprite
+
+        auto texX = tex.render->Sprite.getTexture()->getSize().x;
+        auto texY = tex.render->Sprite.getTexture()->getSize().y;
+
+
+        for(auto& ent : EM){
             if(ent.anim && ent.render)
             {
                 //recuperar textura en vez de guardar AQUI
-                
-
+    
                 auto& anim = ent.anim;
-                anim->currentImage.y = anim->row;
+
+                anim->uvRect.width = texX/float(anim->imageCount.x);
+                anim->uvRect.height = texX/float(anim->imageCount.y);
+
+                anim->currentImage.y = 0/*anim->row*/;
                 anim->totalTime += deltaTime;
 
                 if(anim->totalTime >= anim->switchTime){
