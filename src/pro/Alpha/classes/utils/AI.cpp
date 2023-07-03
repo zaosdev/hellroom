@@ -72,3 +72,87 @@ FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path,
     if(addPos == FVmath::Point2D{}) path.getNext();
     return addPos;
 }
+
+
+std::vector<FVAI::PathNode*> FVAI::findPathAStar(sf::Vector2i start, sf::Vector2i goal, const std::vector<std::vector<int>>& map)
+{
+    const int mapWidth = map.size();
+    const int mapHeight = map[0].size();
+
+    const std::vector<sf::Vector2i> directions = {
+        {0, -1},  // Up
+        {0, 1},   // Down
+        {-1, 0},  // Left
+        {1, 0},   // Right
+        // {-1, -1}, // Diagonal top left
+        // {-1, 1},  // Diagonal bottom left
+        // {1, -1},  // Diagonal top right
+        // {1, 1}    // Diagonal bottom right
+    };
+
+    //Sort the nodes accoding to compareElements function (the less value, the first)
+    std::priority_queue<FVAI::PathNode*, std::vector<FVAI::PathNode*>, CompareNodes> openList; //nodes to explore
+    std::vector<FVAI::PathNode*> closedList;                                         //explored nodes
+
+    FVAI::PathNode* startNode = new FVAI::PathNode(start.x, start.y, 0.f, 0.f, nullptr);
+    openList.push(startNode);                                              //add the start node to the open list
+
+    while (!openList.empty())                                              //will theres a possible path
+    {
+        FVAI::PathNode* currentNode = openList.top();                                //node to check is the first (ordered in priority queue)
+        openList.pop();                                                    //eliminate the current element from the openlist             
+
+        if (currentNode->x == goal.x && currentNode->y == goal.y)          //if the end node is found, return the path
+        {
+            std::vector<FVAI::PathNode*> path;
+            FVAI::PathNode* pathNode = currentNode;
+            while (pathNode != nullptr)                                    //whiles theres parents of the node, add to the path
+            {
+                path.push_back(pathNode);
+                pathNode = pathNode->parent;
+            }
+            return path;
+        }
+
+        closedList.push_back(currentNode);                                //add the current node to the closed list
+
+        for (const auto& direction : directions)                          //check on every direction
+        {
+            int nextX = currentNode->x + direction.x;
+            int nextY = currentNode->y + direction.y;
+
+            if 
+            (     
+                  nextX >= 0                    //valid in x       
+            &&    nextX < mapWidth              //
+            &&    nextY >= 0                    //valid in y
+            &&    nextY < mapHeight             //
+            &&    map[nextX][nextY] == 0        //can pass through ( valid node )
+            )
+            {
+                //diagonal movements would cost 15, normal movements (WASD) cost 10
+                float g = currentNode->g + std::sqrt(static_cast<float>(direction.x * direction.x + direction.y * direction.y))    * 10; 
+                float h = std::sqrt(static_cast<float>((nextX - goal.x) * (nextX - goal.x) + (nextY - goal.y) * (nextY - goal.y))) * 10; 
+
+                FVAI::PathNode* nextNode = new FVAI::PathNode(nextX, nextY, g, h, currentNode);
+
+                bool skipNode = false;
+                for (const auto& node : closedList) //check if the node is on the closed list to skip it
+                {
+                    if (node->x == nextNode->x && node->y == nextNode->y)
+                    {
+                        skipNode = true;
+                        break;
+                    }
+                }
+
+                if (!skipNode)  //if the node is not skipped, add to the open list
+                {
+                    openList.push(nextNode);
+                }
+            }
+        }
+    }
+
+    return std::vector<FVAI::PathNode*>(); //if theres no nodes left to check, return an empty path
+}

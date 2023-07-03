@@ -94,6 +94,11 @@ namespace game
                         }                    
                         break;
                     }
+                    case FVAI::SB::PATHFINDING:
+                    {
+                        //creates a path to the point and then uses followpath to run over the points
+                        ent.AI->path = FVAI::findPathAStar();
+                    }
                     default:break;
                 }
                 if((ent.AI->maxTimeAlive != -1) && (ent.AI->timeAlive > ent.AI->maxTimeAlive)) ent.mark4destruction();
