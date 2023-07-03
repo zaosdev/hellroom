@@ -437,6 +437,7 @@ namespace FVeng
 
             e.addTag(game::Entity::TAG::SPAWNER);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
 
         }
 
@@ -625,6 +626,8 @@ namespace FVeng
 
             e.addTag(game::Entity::TAG::TRIGGER);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
 
         }
 
@@ -649,6 +652,7 @@ namespace FVeng
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
 
         }
 
@@ -661,7 +665,10 @@ namespace FVeng
 
             e.room = game::RoomComponent{ .roomInfo = room};
 
-            e.addTag(game::Entity::TAG::ROOM);            
+            e.addTag(game::Entity::TAG::ROOM); 
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+                     
         }
 
         void GameManager::instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id)

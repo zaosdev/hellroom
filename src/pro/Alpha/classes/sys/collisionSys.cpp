@@ -42,6 +42,8 @@ namespace game
       auto isStaticObject   = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
+
 
       
       //function called when user collides with heart
@@ -49,6 +51,17 @@ namespace game
       {
         entCollided.effct->affectedPartyID= entColliding.id();
         entCollided.effct->state=effectState::readyToApply;
+      };
+
+      //function called when user collides triggers room activation
+      auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
+      {
+        auto* room = EM.getEntityByID(entCollided.Spawn->ownerID);
+        if(room->room->enabled!=true)
+        {
+          room->room->enabled=true;
+        }
+
       };
 
       //function called when entity is hit by bullet
@@ -137,6 +150,10 @@ namespace game
           else if(isDoor(ent))
           {
             actOnCollisions(player,ent,changeLevel);
+          }
+          else if(isRoomTrigger(ent))
+          {
+            actOnCollisions(player,ent,enableRoom);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()

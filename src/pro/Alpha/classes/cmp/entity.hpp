@@ -44,6 +44,8 @@ namespace game
         TRIGGER = 1 << 9,
         ROOM = 1 << 10,
         SPAWNER = 1 << 11,
+        KILL_ON_ROOM_DELETE = 1 << 12,
+
 
 
 
