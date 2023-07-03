@@ -54,8 +54,10 @@ namespace game
       };
 
       //function called when user collides triggers room activation
-      auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
+      auto enableRoom = [&](Entity& entColliding,Entity&  entCollided)
       {
+        (void)entColliding;
+
         auto* room = EM.getEntityByID(entCollided.Spawn->ownerID);
         if(room->room->enabled!=true)
         {

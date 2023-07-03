@@ -11,7 +11,7 @@ namespace game
         tXMLeng::Room roomInfo{};
         bool enabled{false};
         bool initialized{false};
-        std::vector<game::Entity::id_type> room_enemies{};
+        std::vector<size_t> room_enemies{};
 
     };
 }

@@ -10,13 +10,17 @@ namespace game
     void RoomSys::enableRoom(Entity& e)
     {
         gMan_.instantiateRoom(e.room->roomInfo,e.id());
+        e.room->initialized=true;
     }
 
     bool RoomSys::isRoomCompleted(game::Entity& room)
     {
+        if(room.room->room_enemies.empty()){ return false;}
+
         for (auto id : room.room->room_enemies)
         {
-            if(gMan_.getEntityManager().getEntityByID(id)->alive()) return false;
+            auto* enemy = gMan_.getEntityManager().getEntityByID(id);
+            if(enemy && enemy->alive()) return false;
         }
 
         return true;
@@ -44,6 +48,6 @@ namespace game
 
         }
 
-        if(deleteRoom_) { gMan_.roomDelete(room2Delete_); }
+        if(deleteRoom_) { gMan_.roomDelete(room2Delete_); deleteRoom_=false;}
     }
 }

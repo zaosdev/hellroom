@@ -243,7 +243,7 @@ namespace FVeng
         }
 
 
-        void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -276,10 +276,12 @@ namespace FVeng
                 e.physics->pos.y
             );
 
-            e.coll = game::CollisionComponent{};           
+            e.coll = game::CollisionComponent{};      
+
+            return e.id();     
         }
 
-        void GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -312,6 +314,8 @@ namespace FVeng
             );
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
 
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
@@ -426,7 +430,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
+            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}, .ownerID = id};
 
             if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::ENEMY)
                 SpawnersID.push_back(e.id());
@@ -518,7 +522,7 @@ namespace FVeng
         }
 
 
-        void GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -555,6 +559,8 @@ namespace FVeng
             );    
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
 
         void GameManager::SpawnDummy(FVmath::Point2Di Pos)
