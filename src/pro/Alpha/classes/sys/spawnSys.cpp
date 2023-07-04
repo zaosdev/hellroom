@@ -9,7 +9,7 @@ namespace game
 
 
 
-    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice)
+    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice, size_t& enemyID)
     {
 
         // gMan_.SpawnDummy(Pos);
@@ -18,20 +18,20 @@ namespace game
         switch (enemyChoice)
         {
             case game::enemy_type::ARRIVE :
-                gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
 
             case game::enemy_type::PURSUE :
-                gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
+             enemyID = gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
             break;
 
             case game::enemy_type::SHOOT : 
-                gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
+             enemyID = gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
             break;
 
             case game::enemy_type::NO_TYPE: 
             default:
-                gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         }
     }
@@ -77,10 +77,20 @@ namespace game
 
     }
 
+    void SpawnSys::setEnemyRoom(size_t roomID,size_t enemyID)
+    {
+       auto& EM = gMan_.getEntityManager();
+
+       auto& room = *EM.getEntityByID(roomID);
+
+       room.room->room_enemies.emplace_back(enemyID);
+    }
+
+
     void SpawnSys::update()
     {
         //check if it's a valid entity
-        auto valid = [](Entity const& e){ return e.alive() && e.Spawn;};
+        auto valid = [](Entity const& e){ return e.alive() && e.Spawn && e.hasTag(game::Entity::TAG::SPAWNER);};
 
         //check if the spawner it's for enemies
         auto isEnemySpawner = [&](Entity const& e){return valid(e) && e.Spawn->SpawnInfo.type == tXMLeng::object_type::ENEMY; };
@@ -100,7 +110,9 @@ namespace game
             {
                 
                auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
-               SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned);
+               size_t tempID{};
+               SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
+               if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
                e.Spawn->capacity++;
                e.Spawn->TimerSpawn.restart();
                if(e.Spawn->capacity == e.Spawn->maxCapacity)

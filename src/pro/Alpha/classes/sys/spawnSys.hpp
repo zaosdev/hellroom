@@ -20,7 +20,9 @@ namespace game
         void iniSpawnSys();
 
         void setPlayerSpawner();
-        void SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice);
+        void setEnemyRoom(size_t roomID,size_t enemyID);
+
+        void SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice, size_t& enemyID);
         void SpawnPlayer();
         FVmath::Point2Di calculateSpawnPoint(tXMLeng::Spawner& spawnInfo);
 

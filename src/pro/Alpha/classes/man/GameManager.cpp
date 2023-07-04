@@ -83,7 +83,7 @@ namespace FVeng
             setPlayerID(e.id());
             bb_.targetID = e.id();
 
-            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
             // Lo dispongo en el centro de la pantalla
 
             e.input  = game::InputComponent{};
@@ -109,7 +109,7 @@ namespace FVeng
 
             e.render->Sprite.setScale(2.5,2.75);
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 32, 0 *32,32,32));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(128, 112,16,16));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
 
@@ -217,20 +217,33 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
+            //auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
 
             e.coll = game::CollisionComponent{};           
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
 
+            // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            // initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
+
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
+
+            // e.render->Sprite.move(
+            //     e.physics->pos.x,
+            //     e.physics->pos.y
+            // );
+
 
             return e;
         }
 
 
-        void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -263,10 +276,12 @@ namespace FVeng
                 e.physics->pos.y
             );
 
-            e.coll = game::CollisionComponent{};           
+            e.coll = game::CollisionComponent{};      
+
+            return e.id();     
         }
 
-        void GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -299,6 +314,8 @@ namespace FVeng
             );
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
 
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
@@ -389,9 +406,8 @@ namespace FVeng
         //Create all spawners on the current map
         void GameManager::createAllSpawner()
         {
-
             for(auto& spawner : mapMan.getSpawners())
-                createSpawner(spawner);
+                createSpawner(spawner,0);
             
         }
 
@@ -402,12 +418,19 @@ namespace FVeng
                 createDoor(door);
         }
 
+        //Create all rooms on the current map
+        void GameManager::createAllRooms()
+        {
+            for(auto& room : mapMan.getRooms())
+                createRoom(room);
+        }
+
         //Creates a concrete instance of a Spawner
-        void GameManager::createSpawner(tXMLeng::Spawner& spawner)
+        void GameManager::createSpawner(tXMLeng::Spawner& spawner,game::Entity::id_type id)
         {
             auto& e = EM_.createEntity();
 
-            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
+            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}, .ownerID = id};
 
             if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::ENEMY)
                 SpawnersID.push_back(e.id());
@@ -416,7 +439,9 @@ namespace FVeng
                 e.Spawn->minTime=0;
             }
 
+            e.addTag(game::Entity::TAG::SPAWNER);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
 
         }
 
@@ -431,50 +456,27 @@ namespace FVeng
             }
         }
 
+        void GameManager::roomDelete(game::Entity::id_type room_id)
+        {
+            auto isRoom = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::ROOM) && e.id()==room_id;};
+            auto isRoomTrigger = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::TRIGGER) && e.Spawn->ownerID==room_id;};
+            auto isRoomBlockage = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::STATIC_COLL) ;};
+            auto isRoomSpawner = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::SPAWNER) && e.Spawn->ownerID==room_id;};
+
+            auto isRoomObject = [&](game::Entity& e){return (isRoom(e) || isRoomTrigger(e) || isRoomBlockage(e) || isRoomSpawner(e));};
+
+            for(auto& ent : EM_)
+            {
+                if(ent.hasTag(game::Entity::TAG::KILL_ON_ROOM_DELETE) && isRoomObject(ent))
+                {
+                    ent.mark4destruction();
+                }
+            }
+        }
+
+
         void GameManager::update()
         {
-//             if(allSpawned)
-//             {
-//                 for(auto& ent : EM_)
-//                 {
-//                     if(ent.hasTag(game::Entity::TAG::Enemy))
-//                     {
-//                         return ;
-//                     }
-//                 }
-
-//                 allSpawned=false;
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent)
-//                     {
-//                         ent->mark4destruction();
-//                     }
-//                 }
-//                 SpawnersID.clear();
-//                 deleteMap();
-//                 mapMan.clearMap();
-//                 mapMan.InitMap("../media/Mapa2.tmx");
-//                 changeMap();
-//                 createAllSpawner();
-//             }
-//             else
-//             {
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent && !ent->Spawn->fullCapacity)
-//                     {
-//                         goto label;
-//                     }
-//                 }
-//                 allSpawned=true;
-//             }
-// label:
-// float a = 3;
-// (void) a;
-
             if(change_level)
             {
                 deleteKillable();
@@ -498,6 +500,8 @@ namespace FVeng
 
             createAllSpawner();
             createAllDoors();
+            createAllRooms();
+
 
         }
 
@@ -518,7 +522,7 @@ namespace FVeng
         }
 
 
-        void GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
@@ -555,6 +559,8 @@ namespace FVeng
             );    
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
 
         void GameManager::SpawnDummy(FVmath::Point2Di Pos)
@@ -615,7 +621,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(door.pos.x),int(door.pos.y)}};
 
-            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,door.size.x,door.size.y));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,14*mapMan.getTileSize().y,door.size.x,door.size.y));
 
             e.physics = game::PhysicsComponent{ .pos{float(door.pos.x),float(door.pos.y)}, .prevPos{float(door.pos.x),float(door.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -633,6 +639,76 @@ namespace FVeng
 
         }
 
+        void GameManager::createRoomTrigger(tXMLeng::room_trigger& trigger, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            e.physics = game::PhysicsComponent{ .pos{float(trigger.pos.x),float(trigger.pos.y)}, .prevPos{float(trigger.pos.x),float(trigger.pos.y)},  .vel{}, .mov_speed = 0, .size{float(trigger.size.x),float(trigger.size.y)} };   
+
+            e.coll = game::CollisionComponent{};
+
+            e.Spawn = game::SpawnerComponent{ .ownerID = id};
+
+            e.addTag(game::Entity::TAG::TRIGGER);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+
+        }
+
+        void GameManager::createRoomBlockage(tXMLeng::room_blockage& block, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(4*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+        }
+
+        void GameManager::createRoom(tXMLeng::Room& room)
+        {
+            auto& e = EM_.createEntity();
+
+            //CREATE ROOM TRIGGER SAVE IT ID
+            createRoomTrigger(room.trigger,e.id());
+
+            e.room = game::RoomComponent{ .roomInfo = room};
+
+            e.addTag(game::Entity::TAG::ROOM); 
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+                     
+        }
+
+        void GameManager::instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id)
+        {
+            //CREATE ROOM BLOCKS AND SAVE THEIR ID
+            for(auto& block : room.blocks)
+            {
+                createRoomBlockage(block,id);
+            }
+            //CREATE SPAWNERS AND SAVE THEIR ID
+            for(auto& spawn : room.spawners)
+            {
+                createSpawner(spawn,id);
+            }
+        }
 
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
         {
