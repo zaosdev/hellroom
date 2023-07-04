@@ -27,6 +27,9 @@ namespace FVeng
         static constexpr const char* MAP_TEXT    = "map_sprite";
         static constexpr const char* HEART_TEXT  = "heart_sprite";
         static constexpr const char* COIN_TEXT   = "coin_sprite";
+
+        static constexpr const char* GUN_CRUZ_PATH = "gun_cruz_sprite";
+
         static constexpr const char* CLOCK_TEXT  = "clock_sprite";
         static constexpr const char* BULLET_TEXT = "bullet_sprite";
         static constexpr const char* COFRE_TEXT  = "chest_sprite";

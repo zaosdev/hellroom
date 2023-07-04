@@ -9,6 +9,9 @@
 static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player.png"};
 static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
 static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
+
+static constexpr const char* GUN_CRUZ_PATH          { "../media/HUD/gun-cruz.png"};
+
 static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
 static constexpr const char* SHIELD_SP_PATH     { "../media/HUD/shield.png"};
 static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};

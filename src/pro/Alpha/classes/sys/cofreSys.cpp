@@ -58,17 +58,17 @@ namespace game
                     if(esp==0){
                         //cruz
                         player.weapon->especial=mejora::cruz;
-                        std::cout << "premio cruz" << std::endl;
+                        //std::cout << "premio cruz" << std::endl;
                     }
                     else if(esp==1){
                         //escopeta
                         player.weapon->especial=mejora::escopeta;
-                        std::cout << "premio escopeta" << std::endl;
+                        //std::cout << "premio escopeta" << std::endl;
                     }
                     else if(esp==2){
                         //rafaga
                         player.weapon->especial=mejora::rafaga;
-                        std::cout << "premio rafaga" << std::endl;
+                        //std::cout << "premio rafaga" << std::endl;
                     }
 
                     e.cofre->abierto = true;

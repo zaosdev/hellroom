@@ -196,10 +196,32 @@ namespace game
     }
 
     void HUDSys::renderGunType(){
-        //Get the coin sprite COPIAR ESTO
+        //Get the gun type
         auto& EM = gMan_.getEntityManager();
-        auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
-        auto& trueCoin = *it.base();
+        std::vector<game::Entity>::iterator it;
+
+        game::Entity& player = gMan_.getPlayer();
+        auto tipo = player.weapon->especial;
+        switch(tipo){
+            case 1:
+                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
+            break;
+            case 2:
+                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
+                it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunCruz_;});
+                auto& trueGun = *it.base();
+                trueGun.render->Sprite.setPosition(
+                    100
+                ,   100
+                );
+            break;
+            case 3:
+                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
+            break;
+        }
+
+        
+        //auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
     }
 
     void HUDSys::update()
@@ -219,7 +241,8 @@ namespace game
         //Render the time passed
         renderTimer();
 
-
+        //render the type of special shot obtained
+        renderGunType();
     }
 
 }
