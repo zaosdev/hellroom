@@ -105,21 +105,40 @@ namespace game
         {
             
             //std::cout << f << std::endl;
-
-            if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
+            if(isEnemySpawner(e))
             {
-                
-               auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
-               size_t tempID{};
-               SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
-               if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
-               e.Spawn->capacity++;
-               e.Spawn->TimerSpawn.restart();
-               if(e.Spawn->capacity == e.Spawn->maxCapacity)
-               {
-                   e.Spawn->fullCapacity=true;
-               }
+                if(ready2Spawn(e))
+                {
+                    if(hasCapacity(e))
+                    {
+                        
+                    auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
+                    size_t tempID{};
+                    SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
+                    if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
+                    e.Spawn->capacity++;
+                    e.Spawn->TimerSpawn.restart();
+                    if(e.Spawn->capacity == e.Spawn->maxCapacity)
+                    {
+                        e.Spawn->fullCapacity=true;
+                    }
+                    }
+                }
             }
+            //if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
+            // {
+                
+            //    auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
+            //    size_t tempID{};
+            //    SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
+            //    if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
+            //    e.Spawn->capacity++;
+            //    e.Spawn->TimerSpawn.restart();
+            //    if(e.Spawn->capacity == e.Spawn->maxCapacity)
+            //    {
+            //        e.Spawn->fullCapacity=true;
+            //    }
+            // }
 
         }
     }

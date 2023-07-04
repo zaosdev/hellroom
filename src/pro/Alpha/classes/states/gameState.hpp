@@ -106,7 +106,7 @@ namespace FVEng{
                     roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                   // spwnSys.update();
+                    spwnSys.update();
 
                     inpRec.update();
                     inpSys.update();
