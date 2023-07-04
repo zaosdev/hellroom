@@ -83,6 +83,6 @@ namespace FVeng
             std::vector<Entity_type> new_entities_{};
             //Entities that are affected by the game loop
             std::vector<Entity_type> entities_{};
-            inline static entity_id_type nextID_ {};
+             inline static entity_id_type nextID_ {};
     };
 }

@@ -1,6 +1,6 @@
 #include "GameManager.hpp"
-#include "cmp/CollisionComponent.hpp"
-#include "utils/gameData.hpp"
+#include "../cmp/CollisionComponent.hpp"
+#include "../utils/gameData.hpp"
 
 
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
@@ -11,6 +11,8 @@ static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
 static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
 
 static constexpr const char* GUN_CRUZ_PATH          { "../media/HUD/gun-cruz.png"};
+static constexpr const char* GUN_ESCOPETA_PATH          { "../media/HUD/gun-escopeta.png"};
+static constexpr const char* GUN_RAFAGA_PATH          { "../media/HUD/gun-rafaga.png"};
 
 static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
 static constexpr const char* SHIELD_SP_PATH     { "../media/HUD/shield.png"};
@@ -66,6 +68,10 @@ namespace FVeng
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
             SPman.loadTexture(SHIELD_SP_PATH, SHIELD_TEXT);
+
+            SPman.loadTexture(GUN_CRUZ_PATH, GUN_CRUZ_TEXT);
+            SPman.loadTexture(GUN_ESCOPETA_PATH, GUN_ESCOPETA_TEXT);
+            SPman.loadTexture(GUN_RAFAGA_PATH, GUN_RAFAGA_TEXT);
         }
 
         void GameManager::initGame()
