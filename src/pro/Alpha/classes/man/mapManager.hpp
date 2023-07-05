@@ -2,7 +2,7 @@
 
 #include "../../include/tinyXML2/tinyxml2.h"
 #include "../facade/xmlFacade.hpp"
-#include "../utils/Spawner.hpp"
+#include "../utils/map_types.hpp"
 
 
 #include <vector>
@@ -63,8 +63,14 @@ namespace tXMLeng
 
 
         void  GenerateObjects(XMLElem& objectsParent);
+        void  GenerateRooms(XMLElem& objectsParent);
+
         //SHOULD USE TEMPLATE AND ONLY 1 GENERATE FUNCTION; DO IF SURPLUS TIME
-        void  GenerateSpawners(XMLElem& spawners);
+        void  GenerateRoom(XMLElem& room);
+        void  GenerateRoom_Trigger(XMLElem& room, room_trigger& trigger);
+        void  GenerateRoom_Blockage(XMLElem& room, std::vector<room_blockage>& block);
+
+        void  GenerateSpawners(XMLElem& spawners,std::vector<Spawner>& spawnerV);
         void  GenerateDoors(XMLElem& doors);
         void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
         void  assignDoorInfo(DoorInfo& door,XMLElem& doors );
@@ -81,6 +87,8 @@ namespace tXMLeng
         const std::vector<FVmath::Point2Di>& getColliderData() const;
         std::vector<Spawner>& getSpawners() ;
         std::vector<DoorInfo>& getDoors() ;
+        std::vector<Room>& getRooms() ;
+
 
 
         private:
@@ -90,6 +98,8 @@ namespace tXMLeng
         std::vector<Spawner> SpawnersInfo_{};
         std::vector<DoorInfo> DoorsInfo_{};
         std::vector<std::vector<int>> mapRepresentation_ {};
+        std::vector<Room> RoomsInfo_{};
+
 
 
         XMLReader xmlDoc_{};

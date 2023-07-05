@@ -25,6 +25,8 @@ namespace tXMLeng
 
             GenerateObjects(mapElement);
 
+            GenerateRooms(mapElement);
+
         } 
         else 
         {
@@ -36,19 +38,84 @@ namespace tXMLeng
     {
         XMLElem spawners = map.FindFirstChildwithName("objectgroup","spawner");
         assert(not spawners.isEmpty() && "There must be an spawner object group even if empty");
-        GenerateSpawners(spawners);
+        GenerateSpawners(spawners, SpawnersInfo_);
+		
         XMLElem doors = map.FindFirstChildwithName("objectgroup","door");
         assert(not doors.isEmpty() && "There must be a door object group even if empty");
         GenerateDoors(doors);
     }
 
-    void mapManager::GenerateSpawners(XMLElem& spawners)
+    void mapManager::GenerateRooms(XMLElem& map)
+    {
+        auto rooms = map.FindFirstChildwithName("group","rooms");
+
+        auto currentRoom = rooms.FirstChildNamed("group");
+
+        while (!currentRoom.isEmpty())
+        {
+            GenerateRoom(currentRoom);
+
+            currentRoom = currentRoom.NextSiblingNamed("group");
+        }
+        
+    }
+
+    void mapManager::GenerateRoom(XMLElem& room)
+    {
+        auto& roomInfo = RoomsInfo_.emplace_back();
+
+        XMLElem trigger = room.FindFirstChildwithName("objectgroup","room_trigger");
+        assert(not trigger.isEmpty() && "There must be a rooom trigger object group even if empty");
+        GenerateRoom_Trigger(trigger, roomInfo.trigger);
+
+        XMLElem blocks = room.FindFirstChildwithName("objectgroup","wall");
+        assert(not blocks.isEmpty() && "There must be a wall object group even if empty");
+        GenerateRoom_Blockage(blocks, roomInfo.blocks);
+
+
+        XMLElem spawners = room.FindFirstChildwithName("objectgroup","spawner");
+        assert(not spawners.isEmpty() && "There must be an spawner object group even if empty");
+        GenerateSpawners(spawners, roomInfo.spawners);
+
+    }
+
+    void  mapManager::GenerateRoom_Trigger(XMLElem& room, room_trigger& trigger)
+    {
+       auto triggerElem = room.FirstChildNamed("object");
+
+       triggerElem.queryAttribute<int*>("x", &trigger.pos.x);
+       triggerElem.queryAttribute<int*>("y", &trigger.pos.y);
+       triggerElem.queryAttribute<int*>("width", &trigger.size.x);
+       triggerElem.queryAttribute<int*>("height", &trigger.size.y);
+    }
+
+    void  mapManager::GenerateRoom_Blockage(XMLElem& room, std::vector<room_blockage>& blocks)
+    {
+		auto wall = room.FirstChildNamed("object");
+
+		while (!wall.isEmpty())
+		{
+			auto& wallInfo = blocks.emplace_back(); 
+
+			wall.queryAttribute<int*>("x", &wallInfo.pos.x);
+       		wall.queryAttribute<int*>("y", &wallInfo.pos.y);
+       		wall.queryAttribute<int*>("width", &wallInfo.size.x);
+       		wall.queryAttribute<int*>("height", &wallInfo.size.y);
+
+			wall = wall.NextSiblingNamed("object");
+		}
+		
+
+
+    }
+
+    void mapManager::GenerateSpawners(XMLElem& spawners, std::vector<Spawner>& spawnerV)
     {
         XMLElem spawner = spawners.FirstChildNamed("object");
 
         while(!spawner.isEmpty())
         {
-            Spawner& spawnerInfo = SpawnersInfo_.emplace_back();
+            Spawner& spawnerInfo = spawnerV.emplace_back();
 
             assignSpawnInfo(spawnerInfo,spawner);
 
@@ -158,8 +225,10 @@ namespace tXMLeng
         auto filas = map_.mapSize.y;
         auto columnas = map_.mapSize.x;
         mapRepresentation_.resize(filas, std::vector<int>(columnas, 0));    
-        XMLElem groups = map.FirstChildNamed("group");
-        XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
+        // XMLElem groups = map.FirstChildNamed("group");
+        // XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
+
+        XMLElem colliderData = map.FindFirstChildwithName("group","collData").FirstChildNamed("layer");
         map_.colliderLayer.reserve(map_.mapSize.y*map_.mapSize.x);
             
         auto currentTile = colliderData.FirstChildNamed("data").FirstChildNamed("tile") ; 
@@ -293,6 +362,11 @@ namespace tXMLeng
     std::vector<DoorInfo>& mapManager::getDoors() 
     {
         return DoorsInfo_;
+    }
+
+    std::vector<Room>& mapManager::getRooms() 
+    {
+        return RoomsInfo_;
     }
 
 }
