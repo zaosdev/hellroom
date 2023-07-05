@@ -86,7 +86,7 @@ FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path,
 
 std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map)
 {
-    
+    static int constexpr maxIterations = 150;
 
     // std::cout << "Imprimiendo mapa desde llamada de IA: "  << std::endl;
     // imprimirMapa(map);
@@ -119,6 +119,8 @@ std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath:
     int i = 0;
     while (!openList.empty())                                              //will theres a possible path
     {
+        if(i > maxIterations) break;
+
         std::cout << "Iteracion: " << ++i << std::endl;
         FVAI::PathNode* currentNode = openList.top();                                //node to check is the first (ordered in priority queue)
         openList.pop();                                                    //eliminate the current element from the openlist             
@@ -175,6 +177,5 @@ std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath:
         }
     }
     std::cout << "No path found" << std::endl;
-    std::terminate();
     return std::vector<FVAI::PathNode*>(); //if theres no nodes left to check, return an empty path
 }
