@@ -67,7 +67,7 @@ FVmath::Point2D FVAI::cross(FVAI::PriotiryCross priority, double speed)
     else                                        return {0, float(speed)};
 }
 
-FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path, double speed)
+FVmath::Point2D FVAI::followCircularPath(FVmath::Point2D origin, circularIterator& path, double speed)
 {
     auto addPos = seek(origin, path.getCurrent(), speed);
     if(addPos == FVmath::Point2D{}) path.getNext();
@@ -84,9 +84,21 @@ FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path,
         }
     }
 
-std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map)
+
+    const std::vector<FVmath::Point2Di> directions = {
+        {0, -1},  // Up
+        {0, 1},   // Down
+        {-1, 0},  // Left
+        {1, 0},   // Right
+        // {-1, -1}, // Diagonal top left
+        // {-1, 1},  // Diagonal bottom left
+        // {1, -1},  // Diagonal top right
+        // {1, 1}    // Diagonal bottom right
+    };
+
+std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int& i)
 {
-    static int constexpr maxIterations = 1000;
+    static int constexpr maxIterations = 500;
 
     // std::cout << "Imprimiendo mapa desde llamada de IA: "  << std::endl;
     // imprimirMapa(map);
@@ -116,12 +128,11 @@ std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath:
     FVAI::PathNode* startNode = new FVAI::PathNode(start.x, start.y, 0.f, 0.f, nullptr);
     openList.push(startNode);                                              //add the start node to the open list
 
-    int i = 0;
     while (!openList.empty())                                              //will theres a possible path
     {
         if(i > maxIterations) break;
-
-        std::cout << "Iteracion: " << ++i << std::endl;
+        i++;
+        //std::cout << "Iteracion: " << ++i << std::endl;
         FVAI::PathNode* currentNode = openList.top();                                //node to check is the first (ordered in priority queue)
         openList.pop();                                                    //eliminate the current element from the openlist             
 

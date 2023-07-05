@@ -19,6 +19,7 @@ namespace FVAI
         PURSUE,
         FLEE,
         CROSSCREEN,
+        FOLLOWCIRCULARPATH,
         FOLLOWPATH,
         SHOOTATTACK,
         PATHFINDING
@@ -77,12 +78,13 @@ struct CompareNodes
 };
 
 
-    FVmath::Point2D arrive                (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius, double friction, bool decreaseVelocity, double time2arrive);
-    FVmath::Point2D stay                  ();
-    FVmath::Point2D seek                  (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
-    FVmath::Point2D pursue                (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
-    FVmath::Point2D flee                  (FVmath::Point2D origin, FVmath::Point2D target, double speed);
-    FVmath::Point2D cross                 (FVAI::PriotiryCross priority, double speed);
-    FVmath::Point2D followPath            (FVmath::Point2D origin, circularIterator& path, double speed);
-    std::vector<FVAI::PathNode*> findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map);
+    FVmath::Point2D arrive                          (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius, double friction, bool decreaseVelocity, double time2arrive);
+    FVmath::Point2D stay                            ();
+    FVmath::Point2D seek                            (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
+    FVmath::Point2D pursue                          (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius);
+    FVmath::Point2D flee                            (FVmath::Point2D origin, FVmath::Point2D target, double speed);
+    FVmath::Point2D cross                           (FVAI::PriotiryCross priority, double speed);
+    FVmath::Point2D followCircularPath              (FVmath::Point2D origin, circularIterator& path, double speed);
+    FVmath::Point2D followPath                      (FVmath::Point2D origin, circularIterator& path, double speed);
+    std::vector<FVAI::PathNode> findPathAStar       (FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int& iteraciones);
 }

@@ -21,9 +21,10 @@ namespace game
         double                          friction;                       //slowing component for certain behaviours such as arrive
         uint32_t                        targetID;                       //look at the player
         double                          time2arrive    {1};             //for slowing on arrival
-        double                          arrivalRadius  {10};             //tolerance
+        double                          arrivalRadius  {10};            //tolerance
         FVAI::PriotiryCross             priotiryCross;                  //for behaviour that cross the window such as arriveRect and Crosscreen   
-        FVAI::circularIterator          path;                           //usar std::vector para almacenar la ruta
+        FVAI::circularIterator          circularPath;                   //usar std::vector para almacenar la ruta
+        std::vector<FVAI::PathNode>     linearPath     {};              //when its over jumps to the next behaviour
         double                          perceptionTime {1};             //time 2 check the world
         double                          accumulatedTime{0};             //time passed to check
         double                          maxTimeAlive   {-1};            //-1 indicates never dies by time

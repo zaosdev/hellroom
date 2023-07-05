@@ -50,8 +50,8 @@ namespace game
     //         }
     //         transposedMap.push_back(column);
     //     }
-
-        std::vector<FVAI::PathNode*> path = FVAI::findPathAStar(start, goal, map);
+        int iteraciones = 0;
+        std::vector<FVAI::PathNode> path = FVAI::findPathAStar(start, goal, map, iteraciones);
 
         while (window.isOpen())
         {
@@ -149,10 +149,14 @@ namespace game
                         addPos = FVAI::cross(ent.AI->priotiryCross, ent.physics->mov_speed);
                         break;
                     }
+                    case FVAI::SB::FOLLOWCIRCULARPATH:
+                    {
+                        addPos = FVAI::followCircularPath(ent.physics->pos, ent.AI->circularPath, ent.physics->mov_speed);
+                        break;
+                    }
                     case FVAI::SB::FOLLOWPATH:
                     {
-                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
-                        break;
+                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->linearPath, ent.physics->mov_speed);
                     }
                     case FVAI::SB::STAY:
                     {
@@ -173,12 +177,14 @@ namespace game
                     {
                         //creates a path to the point and then uses followpath to run over the points
                         //Calculate the position of the enemy in the map representation
-                        auto& pos   = ent.physics->pos;
-                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x, pos.y);
+                        auto bounds   = ent.render->Sprite.getGlobalBounds();
+                        auto& pos      = ent.physics->pos;
+                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x + bounds.width / 2, pos.y + bounds.height / 2);
                         
                         //Calculate the position of the goal in the map representation
-                        auto& playerPos  = gMan_.getPlayer().physics->pos;
-                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x, playerPos.y);
+                        auto& playerPos      = gMan_.getPlayer().physics->pos;
+                        auto playerBounds   = gMan_.getPlayer().render->Sprite.getGlobalBounds();
+                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x + playerBounds.width / 2, playerPos.y + playerBounds.height / 2);
  
                         std::cout << "Player position:  " << playerPos << std::endl;
 
@@ -187,10 +193,15 @@ namespace game
                         std::cout << "Start Grid: " << startGrid << std::endl;
 
                         //Calculate the points of the map representation to the real world
-                        auto path = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
-                        std::cout << "Salgo del pathdfingind" << std::endl;
+                        int iteraciones = 0;
+                        ent.AI->linearPath = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation(), iteraciones);
+                        std::cout << "Iteraciones: " << iteraciones << std::endl;
+                        
+                        //if(iteraciones > 400 && path != std::vector<FVAI::PathNode*> {}) mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        
+                        //ACTIVATE THE PATHFOLLOW
 
-                        mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+
                         break;
                     }
                     default:break;
