@@ -210,15 +210,20 @@ namespace tXMLeng
             }
 
     }
+
     void imprimirMapa(const std::vector<std::vector<int>>& mapRepresentation) {
-    for (const auto& fila : mapRepresentation) {
-        for (const auto& elemento : fila) {
-            std::cout << elemento << " ";
+        for (const auto& fila : mapRepresentation) {
+            for (const auto& elemento : fila) {
+                std::cout << elemento << " ";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
-    int jawa;
-}
+
+    std::vector<std::vector<int>>& mapManager::getMapGridRepresentation()
+    {
+        return mapRepresentation_;
+    }
 
     void mapManager::loadColliders(XMLElem& map)
     {

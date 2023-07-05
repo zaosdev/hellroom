@@ -1,7 +1,7 @@
 #include "GameManager.hpp"
 #include "cmp/CollisionComponent.hpp"
 #include "utils/gameData.hpp"
-
+#include "../define.h"
 
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
 #define ENEMYB_SPRITE_PATH  "../media/player_enemy/enemy_botaV.png"
@@ -249,7 +249,7 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(ENEMY_B);
 
-            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
+            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::PATHFINDING, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; //ÑÑÑÑ cambiar behaviour a arrive
 
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
@@ -279,6 +279,18 @@ namespace FVeng
             e.coll = game::CollisionComponent{};      
 
             return e.id();     
+        }
+        
+        std::vector<std::vector<int>>& GameManager::getMapGridRepresentation()
+        {
+            return mapMan.getMapGridRepresentation();
+        }
+
+        FVmath::Point2Di GameManager::worldPositionToGrid(float x, float y)
+        {
+            FVmath::Point2Di start        = {static_cast<int>(x), static_cast<int>(y)};
+            FVmath::Point2Di gridPosition = {static_cast<int>(std::trunc(start.x / tileSize)), static_cast<int>(std::trunc(start.y / tileSize))};  // * applied scale??
+            return gridPosition;
         }
 
         game::Entity::id_type GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)

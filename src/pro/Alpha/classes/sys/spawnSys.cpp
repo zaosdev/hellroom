@@ -15,25 +15,27 @@ namespace game
         // gMan_.SpawnDummy(Pos);
         //auto enemyChoice = FVmath::calculateRandom(3,1);
         
-        switch (enemyChoice)
-        {
-            case game::enemy_type::ARRIVE :
-             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
-            break;
+        // switch (enemyChoice)
+        // {
+        //     case game::enemy_type::ARRIVE :
+        //      enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+        //     break;
 
-            case game::enemy_type::PURSUE :
-             enemyID = gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
-            break;
+        //     case game::enemy_type::PURSUE :
+        //      enemyID = gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
+        //     break;
 
-            case game::enemy_type::SHOOT : 
-             enemyID = gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
-            break;
+        //     case game::enemy_type::SHOOT : 
+        //      enemyID = gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
+        //     break;
 
-            case game::enemy_type::NO_TYPE: 
-            default:
-             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
-            break;
-        }
+        //     case game::enemy_type::NO_TYPE: 
+        //     default:
+        //      enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+        //     break;
+        // }
+
+        gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
     }
     void SpawnSys::SpawnPlayer()
     {

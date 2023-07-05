@@ -87,6 +87,8 @@ namespace FVeng
         void SpawnDummy(FVmath::Point2Di Pos);
         void deleteKillable();
         void roomDelete(game::Entity::id_type);
+        std::vector<std::vector<int>>& getMapGridRepresentation();
+        FVmath::Point2Di worldPositionToGrid(float x, float y);
 
         void update();
 

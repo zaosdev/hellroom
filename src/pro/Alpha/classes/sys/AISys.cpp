@@ -1,6 +1,9 @@
 #include "AISys.hpp"
 #include "utils/AI.hpp"
 #include <iostream>
+#include "../define.h"
+
+
 
 namespace game
 {
@@ -38,7 +41,7 @@ namespace game
             if(ent.AI && ent.physics)
             {
                 ent.AI->timeAlive += dt;
-                FVmath::Point2D addPos;
+                FVmath::Point2D addPos {};
                 bool percep = perception(ent.AI, EM, bb, dt);
                 switch(ent.AI->behaviour)
                 {
@@ -97,7 +100,24 @@ namespace game
                     case FVAI::SB::PATHFINDING:
                     {
                         //creates a path to the point and then uses followpath to run over the points
-                       // ent.AI->path = FVAI::findPathAStar();
+                        //Calculate the position of the enemy in the map representation
+                        auto& pos   = ent.physics->pos;
+                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x, pos.y);
+                        
+                        //Calculate the position of the goal in the map representation
+                        auto& playerPos  = gMan_.getPlayer().physics->pos;
+                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x, playerPos.y);
+ 
+                        std::cout << "Player position:  " << playerPos << std::endl;
+
+                        std::cout << "Goal Grid:  " << goalGrid << std::endl;
+
+                        std::cout << "Start Grid: " << startGrid << std::endl;
+
+                        //Calculate the points of the map representation to the real world
+                        auto path = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        std::cout << "Salgo del pathdfingind" << std::endl;
+                        break;
                     }
                     default:break;
                 }

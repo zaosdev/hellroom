@@ -88,6 +88,7 @@ namespace tXMLeng
         std::vector<Spawner>& getSpawners() ;
         std::vector<DoorInfo>& getDoors() ;
         std::vector<Room>& getRooms() ;
+        std::vector<std::vector<int>>& getMapGridRepresentation();
 
 
 

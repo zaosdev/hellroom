@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <iostream>
+#include <assert.h>
 
 FVmath::Point2D FVAI::arrive(FVmath::Point2D origin, FVmath::Point2D target, double MaxSpeed, double arrivalRadius = 2, double friction = 0, bool decreaseVelocity = false, double time2arrive = 1)
 {
@@ -74,12 +75,30 @@ FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path,
 }
 
 
-std::vector<FVAI::PathNode*> FVAI::findPathAStar(sf::Vector2i start, sf::Vector2i goal, const std::vector<std::vector<int>>& map)
+        void imprimirMapa(const std::vector<std::vector<int>>& mapRepresentation) {
+        for (const auto& fila : mapRepresentation) {
+            for (const auto& elemento : fila) {
+                std::cout << elemento << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map)
 {
+    
+
+    // std::cout << "Imprimiendo mapa desde llamada de IA: "  << std::endl;
+    // imprimirMapa(map);
+
+    std::cout << "Tamaño del mapa: " << map.size() << " x " << map[0].size() << std::endl;
+    assert(!map.empty() && !map[0].empty()); // Assert map is not empty
+
     const int mapWidth = map.size();
     const int mapHeight = map[0].size();
+    std::cout << "Tamaño del mapa: " << map.size() << " x " << map[0].size() << std::endl;
 
-    const std::vector<sf::Vector2i> directions = {
+    const std::vector<FVmath::Point2Di> directions = {
         {0, -1},  // Up
         {0, 1},   // Down
         {-1, 0},  // Left
@@ -97,8 +116,10 @@ std::vector<FVAI::PathNode*> FVAI::findPathAStar(sf::Vector2i start, sf::Vector2
     FVAI::PathNode* startNode = new FVAI::PathNode(start.x, start.y, 0.f, 0.f, nullptr);
     openList.push(startNode);                                              //add the start node to the open list
 
+    int i = 0;
     while (!openList.empty())                                              //will theres a possible path
     {
+        std::cout << "Iteracion: " << ++i << std::endl;
         FVAI::PathNode* currentNode = openList.top();                                //node to check is the first (ordered in priority queue)
         openList.pop();                                                    //eliminate the current element from the openlist             
 
@@ -153,6 +174,7 @@ std::vector<FVAI::PathNode*> FVAI::findPathAStar(sf::Vector2i start, sf::Vector2
             }
         }
     }
-
+    std::cout << "No path found" << std::endl;
+    std::terminate();
     return std::vector<FVAI::PathNode*>(); //if theres no nodes left to check, return an empty path
 }
