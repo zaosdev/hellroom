@@ -38,17 +38,20 @@ namespace game{
     
                 auto& anim = ent.anim;
 
-                anim->uvRect.width = texX/float(anim->imageCount.x);
-                anim->uvRect.height = texX/float(anim->imageCount.y);
+                //std::cout << "CURRENT IMAGE X" << anim->currentImage.x << "CURRENT IMAGE Y" << anim->currentImage.y << std::endl;
 
-                anim->currentImage.y = 0/*anim->row*/;
+
+                anim->uvRect.width = texX/float(anim->imageCount.x);
+                anim->uvRect.height = texY/float(anim->imageCount.y);
+
+                anim->currentImage.y = anim->row;
                 anim->totalTime += deltaTime;
 
                 if(anim->totalTime >= anim->switchTime){
-                    anim->totalTime = deltaTime; 
+                    anim->totalTime -= anim->switchTime; 
                     anim->currentImage.x++;
 
-                    if(anim->currentImage.x > anim->imageCount.x){
+                    if(anim->currentImage.x >= anim->imageCount.x){
                         anim->currentImage.x = 0;
                     }
                 }

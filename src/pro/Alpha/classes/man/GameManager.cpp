@@ -102,15 +102,15 @@ namespace FVeng
 
             //create animation component
 
-            //const sf::Texture* tex = e.render->Sprite.getTexture();
-            sf::Vector2u imgcount {9,4};
+            //const sf::Texture* tex = e.render->Sprite.getTexture();cd 
+            sf::Vector2u imgcount {4,8};
 
             ////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTANTE
             //recupero id de textura con el texID, se lo paso al componente y en animationSys partiendo del id recupero la textura, calculo valores de uvRect en el update
 
             // e.anim = game::animationComponent { .idText = texIdx, .imageCount = imgcount , .uvRect.width = static_cast<int>(tex->getSize().x/float(imgcount.x)), .uvRect.height = static_cast<int>(tex->getSize().y/float(imgcount.y)), .row = 1};
 
-            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 1};
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 0};
 
 
             //create data component
@@ -120,7 +120,7 @@ namespace FVeng
 
             e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
-            e.render->Sprite.setScale(2.5,2.75);
+            e.render->Sprite.setScale(2.5, 2.75);
 
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
 

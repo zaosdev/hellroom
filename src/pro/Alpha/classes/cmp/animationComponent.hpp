@@ -15,13 +15,13 @@ namespace game{
         size_t idTex {};
 
         sf::Vector2u imageCount {}; //total de imagenes
-        sf::Vector2u currentImage {0,0}; //imagen actual        
+        sf::Vector2u currentImage {}; //imagen actual        
 
         sf::IntRect uvRect {}; //recortes de animacion
 
     
         float totalTime {0.f}; //tiempo total de animacion
-        float switchTime {0.f}; //tiempo de cambio entre sprites
+        float switchTime {0.2f}; //tiempo de cambio entre sprites
 
         int row {};
     };
