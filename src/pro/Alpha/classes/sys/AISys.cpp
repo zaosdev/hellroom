@@ -81,7 +81,7 @@ namespace game
                     {
                         tile.setFillColor(sf::Color::Black);
                     }
-                    else if (std::find_if(path.begin(), path.end(), [&](FVAI::PathNode* node) { return node->x == i && node->y == j; }) != path.end())
+                    else if (std::find_if(path.begin(), path.end(), [&](FVAI::PathNode node) { return node.x == i && node.y == j; }) != path.end())
                     {
                         tile.setFillColor(sf::Color::Blue);
                     }
@@ -96,10 +96,10 @@ namespace game
             window.display();
         }
 
-        for (auto& node : path)
-        {
-            delete node;
-        }
+        // for (auto& node : path)
+        // {
+        //     delete node;
+        // }
 
 
     }
