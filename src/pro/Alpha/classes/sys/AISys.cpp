@@ -32,6 +32,11 @@ namespace game
         return true;
     }
 
+    void mainDepruebas()
+    {
+        
+    }
+
     void AISys::update(blackBoardComponent bb, double const dt)
     {
         auto& EM = gMan_.getEntityManager();
@@ -115,8 +120,10 @@ namespace game
                         std::cout << "Start Grid: " << startGrid << std::endl;
 
                         //Calculate the points of the map representation to the real world
-                        auto path = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        auto path = FVAI::findPathAStar({startGrid.y, startGrid.x}, {goalGrid.y, goalGrid.x}, gMan_.getMapGridRepresentation());
                         std::cout << "Salgo del pathdfingind" << std::endl;
+
+                        mainDepruebas();
                         break;
                     }
                     default:break;

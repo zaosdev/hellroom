@@ -86,7 +86,7 @@ FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, circularIterator& path,
 
 std::vector<FVAI::PathNode*> FVAI::findPathAStar(FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map)
 {
-    static int constexpr maxIterations = 150;
+    static int constexpr maxIterations = 1000;
 
     // std::cout << "Imprimiendo mapa desde llamada de IA: "  << std::endl;
     // imprimirMapa(map);
