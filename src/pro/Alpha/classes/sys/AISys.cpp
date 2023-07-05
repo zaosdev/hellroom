@@ -32,9 +32,76 @@ namespace game
         return true;
     }
 
-    void mainDepruebas()
+
+    void mainDepruebas(FVmath::Point2Di start, FVmath::Point2Di goal, std::vector<std::vector<int>>& map)
     {
-        
+         sf::RenderWindow window(sf::VideoMode(800, 600), "Pathfinding A*");
+
+        sf::RectangleShape tile(sf::Vector2f(10.f, 10.f));
+        tile.setOutlineThickness(1.f);
+        tile.setOutlineColor(sf::Color::Black);
+
+    //     std::vector<std::vector<int>> transposedMap;
+
+    //     for (size_t j = 0; j < map[0].size(); ++j) {
+    //         std::vector<int> column;
+    //         for (size_t i = 0; i < map.size(); ++i) {
+    //             column.push_back(map[i][j]);
+    //         }
+    //         transposedMap.push_back(column);
+    //     }
+
+        std::vector<FVAI::PathNode*> path = FVAI::findPathAStar(start, goal, map);
+
+        while (window.isOpen())
+        {
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+
+            window.clear();
+
+            for (int i = 0; i < map.size(); ++i)
+            {
+                for (int j = 0; j < map[i].size(); ++j)
+                {
+                    tile.setPosition(i * 10.f, j * 10.f);
+                    if (i == start.x && j == start.y)
+                    {
+                        tile.setFillColor(sf::Color::Green);
+                    }
+                    else if (i == goal.x && j == goal.y)
+                    {
+                        tile.setFillColor(sf::Color::Red);
+                    }
+                    else if (map[i][j] == 1)
+                    {
+                        tile.setFillColor(sf::Color::Black);
+                    }
+                    else if (std::find_if(path.begin(), path.end(), [&](FVAI::PathNode* node) { return node->x == i && node->y == j; }) != path.end())
+                    {
+                        tile.setFillColor(sf::Color::Blue);
+                    }
+                    else
+                    {
+                        tile.setFillColor(sf::Color::White);
+                    }
+                    window.draw(tile);
+                }
+            }
+
+            window.display();
+        }
+
+        for (auto& node : path)
+        {
+            delete node;
+        }
+
+
     }
 
     void AISys::update(blackBoardComponent bb, double const dt)
@@ -120,10 +187,10 @@ namespace game
                         std::cout << "Start Grid: " << startGrid << std::endl;
 
                         //Calculate the points of the map representation to the real world
-                        auto path = FVAI::findPathAStar({startGrid.y, startGrid.x}, {goalGrid.y, goalGrid.x}, gMan_.getMapGridRepresentation());
+                        auto path = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
                         std::cout << "Salgo del pathdfingind" << std::endl;
 
-                        mainDepruebas();
+                        mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
                         break;
                     }
                     default:break;
