@@ -19,6 +19,8 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
+#include "../classes/sys/roomSys.hpp"
+
 
 
 #include "../man/stateManager.hpp"
@@ -53,6 +55,7 @@ namespace FVEng{
         , weaponSys     { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
+        , roomSys       { GameMan}
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -74,6 +77,7 @@ namespace FVEng{
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            renSys.iniRenderSys();
         }
 
         void changeLevel()
@@ -99,6 +103,7 @@ namespace FVEng{
                     double dt = updateClock.restart().asSeconds();
 
 
+                    roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
                     spwnSys.update();
@@ -166,7 +171,7 @@ namespace FVEng{
         game::WeaponSys         weaponSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
-        
+        game::RoomSys           roomSys;
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

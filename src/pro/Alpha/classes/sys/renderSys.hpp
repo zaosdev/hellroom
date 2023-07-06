@@ -6,7 +6,6 @@
 #include "HUDSys.hpp"
 
 
-
 namespace game
 {
     struct RenderSys
@@ -24,6 +23,12 @@ namespace game
         void draw(sf::Sprite& Sprite);
         void drawMap(MapComponent& Sprite);
         void drawUpperMap(MapComponent& Sprite);
+        void setVisibleArea();
+        void setCameraCenter(float newCenterX, float newCenterY);
+        void lowLifeEffect();
+        void moveCameraOnDirection(float& centerX, float& centerY);
+        void cameraOnPlayerCenter(float& centerX, float& centerY);
+        void getViewSize(float& viewWidth, float& viewHeight);
         //void drawFV(sfml_util::FVSprite& Sprite);
 
         void iniSprite(game::Entity& ent, double pt);
@@ -31,8 +36,12 @@ namespace game
        // void addHUD(HUDSys& hud);
 
         private:
-            FVeng::GameManager& gMan_;
-            sf::RenderWindow& window_;
-            HUDSys&              HUD_;
+            FVeng::GameManager&          gMan_;
+            sf::RenderWindow&          window_;
+            HUDSys&                       HUD_;
+            sf::View                   view_{};
+            float          centerX{},centerY{};
+            float          newCenterX{},newCenterY{};
+
     };
 }
