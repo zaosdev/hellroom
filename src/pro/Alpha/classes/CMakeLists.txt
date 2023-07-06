@@ -27,6 +27,7 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/shieldSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/effectSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/roomSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/animationSys.cpp"
 
 
 )

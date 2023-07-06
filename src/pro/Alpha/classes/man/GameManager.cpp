@@ -6,7 +6,7 @@
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
 #define ENEMYB_SPRITE_PATH  "../media/player_enemy/enemy_botaV.png"
 
-static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player.png"};
+static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player_sprites.png"};
 static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
 static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
 static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
@@ -83,7 +83,7 @@ namespace FVeng
             setPlayerID(e.id());
             bb_.targetID = e.id();
 
-            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
 
             e.input  = game::InputComponent{};
@@ -100,6 +100,19 @@ namespace FVeng
             //create life 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
+            //create animation component
+
+            //const sf::Texture* tex = e.render->Sprite.getTexture();cd 
+            sf::Vector2u imgcount {4,8};
+
+            ////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTANTE
+            //recupero id de textura con el texID, se lo paso al componente y en animationSys partiendo del id recupero la textura, calculo valores de uvRect en el update
+
+            // e.anim = game::animationComponent { .idText = texIdx, .imageCount = imgcount , .uvRect.width = static_cast<int>(tex->getSize().x/float(imgcount.x)), .uvRect.height = static_cast<int>(tex->getSize().y/float(imgcount.y)), .row = 1};
+
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 0};
+
+
             //create data component
             int coins = FVData::getCoins();
 
@@ -107,11 +120,13 @@ namespace FVeng
 
             e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
-           // e.render->Sprite.setScale(2.5,2.75);
+            //e.render->Sprite.setScale(2.5, 2.75);
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(128, 112,16,16));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+
+            
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -247,11 +262,17 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_B);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
             e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::PATHFINDING, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; //ÑÑÑÑ cambiar behaviour a arrive
 
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            //create animation component
+            sf::Vector2u imgcount {4,8};
+
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 7};
+
 
             e.reward = game::RewardComponent    {.min_reward = 1, .max_reward = 3};
 
@@ -265,7 +286,10 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 62, 0 * 62, 62, 62));  
+            e.render->Sprite.setScale(2.5, 2.75);
+
+    
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -297,7 +321,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);           
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
 
             e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
@@ -313,9 +337,9 @@ namespace FVeng
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
 
-            e.render->Sprite.setScale(0.2,0.2);
+            e.render->Sprite.setScale(2,2);
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(1 * 75, 2 * 75, 75, 75));
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -556,10 +580,11 @@ namespace FVeng
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
 
+            e.render->Sprite.setScale(2,2);
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(1 * 75, 0 * 75, 75, 75));
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -590,6 +615,8 @@ namespace FVeng
                 e.physics->pos.x,
                 e.physics->pos.y
             );    
+
+            e.render->Sprite.setScale(0.5,0.5);
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
