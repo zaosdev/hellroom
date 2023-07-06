@@ -122,9 +122,9 @@ namespace FVeng
 
             //e.render->Sprite.setScale(2.5, 2.75);
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
+            initEntityRender(e, {0,16}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,16));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{16,16}};
             //falsear el bounding box para que sea 16x16 en vez de 16x32
 
             
@@ -233,7 +233,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            //auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
 
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
@@ -242,17 +242,17 @@ namespace FVeng
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
 
-            // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+            e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            // initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
 
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
 
-            // e.render->Sprite.move(
-            //     e.physics->pos.x,
-            //     e.physics->pos.y
-            // );
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
 
 
             return e;
@@ -291,10 +291,10 @@ namespace FVeng
             //e.render->Sprite.setScale(2.5, 2.75);
 
     
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
 
             e.render->Sprite.move(
@@ -348,10 +348,10 @@ namespace FVeng
 
             //e.render->Sprite.setScale(2,2);
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -575,7 +575,7 @@ namespace FVeng
 
            
 
-            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PATHFINDING, .targetID=targetID, .perceptionTime=perceptionTime};   //ÑÑÑÑ      
+            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PATHFINDING, .targetID=targetID, .perceptionTime=perceptionTime};   //   
                                     
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
@@ -601,10 +601,10 @@ namespace FVeng
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
 
             e.render->Sprite.move(
