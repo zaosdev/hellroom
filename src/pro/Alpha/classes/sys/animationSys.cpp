@@ -59,41 +59,41 @@ namespace game{
                 }
 
                 //asignacion de sprite a dibujar
-                anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
                 anim->uvRect.top = anim->currentImage.y * anim->uvRect.height;
 
                 //segun la direccion a la que me muevo el sprite cambiara de orientacion izq der
-                //if(ent.physics->vel)
+                if(ent.AI->behaviour == FVAI::SB::SHOOTATTACK){
+                    if(ent.physics->pos.x > gMan_.getPlayer().physics->pos.x){
+                        anim->uvRect.left = (anim->currentImage.x + 1) * abs(anim->uvRect.width);
+                        anim->uvRect.width = -abs(anim->uvRect.width);
+                    }
+                    else{
+                        anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
+                        anim->uvRect.width = abs(anim->uvRect.width);
+                    }
+                }
+                else{
+
+                    if(ent.physics->vel.x >= 0.0f){ //derecha
+                    anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
+                    anim->uvRect.width = abs(anim->uvRect.width);
+
+                    }
+                    else if(ent.physics->vel.x <= 0.0f){ //izquierda
+                        anim->uvRect.left = (anim->currentImage.x + 1) * abs(anim->uvRect.width);
+                        anim->uvRect.width = -abs(anim->uvRect.width);
+
+                    }
+
+                }
+
+        
 
                //cambia el area de visualizacion de la textura
                 ent.render->Sprite.setTextureRect(ent.anim->uvRect);
             }
             }
 
-        
-
-           
-           
-           
-           
-           
-           
-           
-           
-           
-            // currentImage.y = row;
-            // totalTime += deltaTime;
-
-            // if(totalTime >= switchTime){
-            //     totalTime = deltaTime; 
-            //     currentImage.x++;
-
-            //     if(currentImage.x > imageCount.x){
-            //         currentImage.x = 0;
-            //     }
-            // }
-
-            // uvRect.left = currentImage.x * uvRect.width;
-            // uvRect.top = currentImage.y * uvRect.height;
+    
     }
 }

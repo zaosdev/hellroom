@@ -125,6 +125,7 @@ namespace FVeng
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+            //falsear el bounding box para que sea 16x16 en vez de 16x32
 
             
 
@@ -271,6 +272,7 @@ namespace FVeng
             //create animation component
             sf::Vector2u imgcount {4,8};
 
+           
             e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 7};
 
 
@@ -286,7 +288,7 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            e.render->Sprite.setScale(2.5, 2.75);
+            //e.render->Sprite.setScale(2.5, 2.75);
 
     
             initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
@@ -336,8 +338,15 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Enemy);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+            //create animation component
+            sf::Vector2u imgcount {4,8};
 
-            e.render->Sprite.setScale(2,2);
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 4};
+
+
+
+            //e.render->Sprite.setScale(2,2);
 
             initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
@@ -579,8 +588,16 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Enemy);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+            //create animation component
+            sf::Vector2u imgcount {4,8};
 
-            e.render->Sprite.setScale(2,2);
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 2};
+
+
+
+
+            //e.render->Sprite.setScale(2,2);
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
