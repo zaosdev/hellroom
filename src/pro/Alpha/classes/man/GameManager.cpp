@@ -233,7 +233,7 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            //auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
 
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
@@ -241,18 +241,19 @@ namespace FVeng
             e.coll = game::CollisionComponent{};           
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
-            e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+            // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
+            // initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
 
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
 
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );
+            // e.render->Sprite.move(
+            //     e.physics->pos.x,
+            //     e.physics->pos.y
+            // );
 
 
             return e;
@@ -654,6 +655,8 @@ namespace FVeng
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
 
             initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,38,30));
+
+            e.render->Sprite.scale({0.5,0.5});
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
