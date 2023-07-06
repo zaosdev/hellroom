@@ -24,7 +24,7 @@ namespace game
         double                          arrivalRadius  {10};            //tolerance
         FVAI::PriotiryCross             priotiryCross;                  //for behaviour that cross the window such as arriveRect and Crosscreen   
         FVAI::circularIterator          circularPath;                   //usar std::vector para almacenar la ruta
-        std::vector<FVAI::PathNode>     linearPath     {};              //when its over jumps to the next behaviour
+        std::vector<FVmath::Point2Di>   linearPath     {};              //when its over jumps to the next behaviour
         double                          perceptionTime {1};             //time 2 check the world
         double                          accumulatedTime{0};             //time passed to check
         double                          maxTimeAlive   {-1};            //-1 indicates never dies by time

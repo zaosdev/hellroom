@@ -9,6 +9,8 @@
 #include <cmath>
 #include <limits>
 
+
+static constexpr int defaultmaxiter  = 500;
 namespace FVAI
 {
     enum class SB
@@ -55,27 +57,27 @@ namespace FVAI
     // };
 
     struct PathNode
-{
-    int x;
-    int y;
-    float g;                // Costo acumulado desde el nodo inicial hasta este nodo
-    float h;                // Heurística estimada desde este nodo hasta el nodo objetivo
-    float f;                // Suma de g y h
-    PathNode* parent {};
-
-    PathNode(int _x, int _y, float _g, float _h, PathNode* _parent)
-        : x(_x), y(_y), g(_g), h(_h), f(_g + _h), parent(_parent)
     {
-    }
-};
+        int x;
+        int y;
+        float g;                // Costo acumulado desde el nodo inicial hasta este nodo
+        float h;                // Heurística estimada desde este nodo hasta el nodo objetivo
+        float f;                // Suma de g y h
+        PathNode* parent {};
 
-struct CompareNodes
-{
-    bool operator()(const PathNode* node1, const PathNode* node2)
+        PathNode(int _x, int _y, float _g, float _h, PathNode* _parent)
+            : x(_x), y(_y), g(_g), h(_h), f(_g + _h), parent(_parent)
+        {
+        }
+    };
+
+    struct CompareNodes
     {
-        return node1->f > node2->f;
-    }
-};
+        bool operator()(const PathNode* node1, const PathNode* node2)
+        {
+            return node1->f > node2->f;
+        }
+    };
 
 
     FVmath::Point2D arrive                          (FVmath::Point2D origin, FVmath::Point2D target, double speed, double arrivalRadius, double friction, bool decreaseVelocity, double time2arrive);
@@ -85,6 +87,6 @@ struct CompareNodes
     FVmath::Point2D flee                            (FVmath::Point2D origin, FVmath::Point2D target, double speed);
     FVmath::Point2D cross                           (FVAI::PriotiryCross priority, double speed);
     FVmath::Point2D followCircularPath              (FVmath::Point2D origin, circularIterator& path, double speed);
-    FVmath::Point2D followPath                      (FVmath::Point2D origin, std::vector<FVAI::PathNode>& path, double speed);
-    std::vector<FVAI::PathNode> findPathAStar       (FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int& iteraciones);
+    FVmath::Point2D followPath                      (FVmath::Point2D origin, std::vector<FVmath::Point2Di>& path, double speed);
+    std::vector<FVmath::Point2Di> findPathAStar     (FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int maxIteraciones = defaultmaxiter);
 }

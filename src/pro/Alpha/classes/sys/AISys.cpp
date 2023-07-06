@@ -41,17 +41,7 @@ namespace game
         tile.setOutlineThickness(1.f);
         tile.setOutlineColor(sf::Color::Black);
 
-    //     std::vector<std::vector<int>> transposedMap;
-
-    //     for (size_t j = 0; j < map[0].size(); ++j) {
-    //         std::vector<int> column;
-    //         for (size_t i = 0; i < map.size(); ++i) {
-    //             column.push_back(map[i][j]);
-    //         }
-    //         transposedMap.push_back(column);
-    //     }
-        int iteraciones = 0;
-        std::vector<FVAI::PathNode> path = FVAI::findPathAStar(start, goal, map, iteraciones);
+        std::vector<FVmath::Point2Di> path = FVAI::findPathAStar(start, goal, map);
 
         while (window.isOpen())
         {
@@ -64,9 +54,9 @@ namespace game
 
             window.clear();
 
-            for (int i = 0; i < map.size(); ++i)
+            for (int i = 0; i < static_cast<int>(map.size()); ++i)
             {
-                for (int j = 0; j < map[i].size(); ++j)
+                for (int j = 0; j < static_cast<int>(map[i].size()); ++j)
                 {
                     tile.setPosition(i * 10.f, j * 10.f);
                     if (i == start.x && j == start.y)
@@ -81,7 +71,7 @@ namespace game
                     {
                         tile.setFillColor(sf::Color::Black);
                     }
-                    else if (std::find_if(path.begin(), path.end(), [&](FVAI::PathNode node) { return node.x == i && node.y == j; }) != path.end())
+                    else if (std::find_if(path.begin(), path.end(), [&](FVmath::Point2Di node) { return node.x == i && node.y == j; }) != path.end())
                     {
                         tile.setFillColor(sf::Color::Blue);
                     }
@@ -193,11 +183,20 @@ namespace game
                         std::cout << "Start Grid: " << startGrid << std::endl;
 
                         //Calculate the points of the map representation to the real world
-                        int iteraciones = 0;
-                        ent.AI->linearPath = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation(), iteraciones);
-                        std::cout << "Iteraciones: " << iteraciones << std::endl;
+                        auto reversedGridPath = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        for()
                         
-                        //if(iteraciones > 400 && path != std::vector<FVAI::PathNode*> {}) mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        if(ent.AI->linearPath == std::vector<FVmath::Point2Di> {}) 
+                        {
+                            std::cout << "No se ha encontrado un camino" << std::endl;
+                        }
+                        else
+                        {
+                            for(auto point : ent.AI->linearPath)
+                            {
+                                std::cout << "Path is " << point << std::endl;
+                            }
+                        }//mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
                         
                         //ACTIVATE THE PATHFOLLOW
 
