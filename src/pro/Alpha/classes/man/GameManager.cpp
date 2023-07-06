@@ -125,6 +125,7 @@ namespace FVeng
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+            //falsear el bounding box para que sea 16x16 en vez de 16x32
 
             
 

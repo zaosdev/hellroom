@@ -59,11 +59,19 @@ namespace game{
                 }
 
                 //asignacion de sprite a dibujar
-                anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
                 anim->uvRect.top = anim->currentImage.y * anim->uvRect.height;
 
                 //segun la direccion a la que me muevo el sprite cambiara de orientacion izq der
-                //if(ent.physics->vel)
+                if(ent.physics->vel.x >= 0.0f){
+                    anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
+                    anim->uvRect.width = abs(anim->uvRect.width);
+
+                }
+                else if(ent.physics->vel.x <= 0.0f){
+                    anim->uvRect.left = (anim->currentImage.x + 1) * abs(anim->uvRect.width);
+                    anim->uvRect.width = -abs(anim->uvRect.width);
+
+                }
 
                //cambia el area de visualizacion de la textura
                 ent.render->Sprite.setTextureRect(ent.anim->uvRect);
