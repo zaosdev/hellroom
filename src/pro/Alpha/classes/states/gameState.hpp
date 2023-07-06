@@ -98,11 +98,11 @@ namespace FVEng{
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
+                GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
                     changeLevel();
                 }
-                GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();

@@ -55,7 +55,7 @@ namespace game
     {
         auto& EM = gMan_.getEntityManager();
         for(auto& e : EM)
-            if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::PLAYER)  player_spawner_id_= e.id();
+            if(e.alive() && e.Spawn->SpawnInfo.type & tXMLeng::object_type::PLAYER)  player_spawner_id_= e.id();
         
     }
 

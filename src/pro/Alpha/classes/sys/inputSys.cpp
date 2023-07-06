@@ -15,6 +15,9 @@ namespace game
         auto& EM = gMan_.getEntityManager();
         for(auto& ent : EM)
         {
+            if(inpRec_.isKeyPressed(getKeyCode('N')))   gMan_.change_level=true; 
+
+
             if(ent.input && ent.physics)
             {
                 ent.physics->vel = {0,0};

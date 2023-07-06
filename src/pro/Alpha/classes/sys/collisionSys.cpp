@@ -77,7 +77,6 @@ namespace game
       {
         (void)entColliding;
         gMan_.change_level=true;
-        gMan_.nextLevel = entCollided.map->nextLevel;
       };
       //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
       //First parameter must be moving entity- the one that collides with

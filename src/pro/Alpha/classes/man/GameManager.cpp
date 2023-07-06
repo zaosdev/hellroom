@@ -691,6 +691,8 @@ namespace FVeng
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::DOOR, .nextLevel = door.next_level_path};
 
+            this->nextLevel = door.next_level_path;
+
             e.coll = game::CollisionComponent{};
 
             e.addTag(game::Entity::TAG::DOOR);

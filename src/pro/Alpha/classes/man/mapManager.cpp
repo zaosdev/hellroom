@@ -284,6 +284,7 @@ namespace tXMLeng
         map_.tileMap.clear();
         SpawnersInfo_.clear();
         DoorsInfo_.clear();
+        RoomsInfo_.clear();
         map_ = TileMap{};
     }
 
