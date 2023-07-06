@@ -542,7 +542,7 @@ namespace FVeng
 
            
 
-            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
+            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PATHFINDING, .targetID=targetID, .perceptionTime=perceptionTime};   //ÑÑÑÑ      
                                     
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 

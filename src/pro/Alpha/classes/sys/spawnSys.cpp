@@ -36,7 +36,7 @@ namespace game
         // }
         static bool spawn = true;
         if(spawn == true)
-        gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+        gMan_.createEnemyPursue(Pos,{320,240},0.1,4);
         spawn = false;
     }
     void SpawnSys::SpawnPlayer()
