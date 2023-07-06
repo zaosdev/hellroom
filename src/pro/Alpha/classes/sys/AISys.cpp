@@ -147,6 +147,7 @@ namespace game
                     case FVAI::SB::FOLLOWPATH:
                     {
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->linearPath, ent.physics->mov_speed);
+                        if(addPos == FVmath::Point2D{}) ent.AI->behaviour = FVAI::SB::SEEK;
                         break;
                     }
                     case FVAI::SB::STAY:
@@ -189,16 +190,17 @@ namespace game
                         {
                             //std::cout << reversedGridPath[i] << std::endl;
                             //transform point to world position and add to the linear iterator
-                            ent.AI->linearPath.addPoint(reversedGridPath[i]);
+                            ent.AI->linearPath.addPoint(reversedGridPath[i] * tileSize);
                         }
                                             
                         if(ent.AI->linearPath.getPath().size() == 0) 
                         {
-                            std::cout << "No se ha encontrado un camino" << std::endl;//mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                            std::cout << "No se ha encontrado un camino" << std::endl; 
                         }
                         else
                         {
                             //change behaviour to follow path
+                            //mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
                             ent.AI->behaviour = FVAI::SB::FOLLOWPATH;
                         }
                         

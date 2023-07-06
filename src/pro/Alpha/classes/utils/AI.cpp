@@ -76,9 +76,21 @@ FVmath::Point2D FVAI::followCircularPath(FVmath::Point2D origin, circularIterato
 
 FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, linearIterator& path, double speed)
 {
-    auto addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed);
+    auto addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed, 5.f);
     std::cout << "addpos: " << addPos << std::endl;
-    if(addPos == FVmath::Point2D{}) path.getNext();
+    if(addPos == FVmath::Point2D{}) 
+    {   
+        if(path.getNext() == FVmath::Point2Di{-1,-1}) 
+        {
+            std::cout << "HA terminado el camino" << std::endl;
+            //std::terminate();
+        } 
+        else
+        {
+            addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed, 5.f);
+        }
+    }
+    
     return addPos;
 }
 
