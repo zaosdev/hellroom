@@ -16,6 +16,7 @@
 #include "roomComponent.hpp"
 
 
+#include "animationComponent.hpp"
 
 
 
@@ -68,7 +69,7 @@ namespace game
       std::optional<ShieldComponent>    shield{};
       std::optional<CollisionComponent> coll{};
       std::optional<RoomComponent>      room{};
-
+      std::optional<animationComponent> anim{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

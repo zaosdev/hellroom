@@ -210,10 +210,33 @@ namespace tXMLeng
             }
 
     }
-    
+
+   void imprimirMapa(const std::vector<std::vector<int>>& mapRepresentation) 
+   {
+        const size_t numRows = mapRepresentation.size();
+        const size_t numCols = mapRepresentation[0].size();
+
+        for (size_t j = 0; j < numCols; ++j) {
+            for (size_t i = 0; i < numRows; ++i) {
+                std::cout << mapRepresentation[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+
+    std::vector<std::vector<int>>& mapManager::getMapGridRepresentation()
+    {
+        return mapRepresentation_;
+    }
 
     void mapManager::loadColliders(XMLElem& map)
     {
+        auto filas = map_.mapSize.y;
+        auto columnas = map_.mapSize.x;
+        mapRepresentation_.resize(filas, std::vector<int>(columnas, 0));    
+        // XMLElem groups = map.FirstChildNamed("group");
+        // XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
 
         XMLElem colliderData = map.FindFirstChildwithName("group","collData").FirstChildNamed("layer");
         map_.colliderLayer.reserve(map_.mapSize.y*map_.mapSize.x);
@@ -233,11 +256,15 @@ namespace tXMLeng
 
                     posColl.x = x*map_.tileSize.x;
                     posColl.y = y*map_.tileSize.y;
+
+                    //Create the grid representation of the map to use the pathfinding
+                    mapRepresentation_[x][y] = 1;
                 }
 
                 currentTile = currentTile.NextSiblingNamed("tile");
             }
         }
+        imprimirMapa(mapRepresentation_);
     }
 
 

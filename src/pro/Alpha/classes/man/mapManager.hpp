@@ -88,6 +88,7 @@ namespace tXMLeng
         std::vector<Spawner>& getSpawners() ;
         std::vector<DoorInfo>& getDoors() ;
         std::vector<Room>& getRooms() ;
+        std::vector<std::vector<int>>& getMapGridRepresentation();
 
 
 
@@ -97,6 +98,7 @@ namespace tXMLeng
         TileSet tile_{};
         std::vector<Spawner> SpawnersInfo_{};
         std::vector<DoorInfo> DoorsInfo_{};
+        std::vector<std::vector<int>> mapRepresentation_ {};
         std::vector<Room> RoomsInfo_{};
 
 
