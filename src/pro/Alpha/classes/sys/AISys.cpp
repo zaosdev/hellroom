@@ -147,6 +147,7 @@ namespace game
                     case FVAI::SB::FOLLOWPATH:
                     {
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->linearPath, ent.physics->mov_speed);
+                        break;
                     }
                     case FVAI::SB::STAY:
                     {
@@ -184,19 +185,22 @@ namespace game
 
                         //Calculate the points of the map representation to the real world
                         auto reversedGridPath = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
-                        for()
-                        
-                        if(ent.AI->linearPath == std::vector<FVmath::Point2Di> {}) 
+                        for (int i = reversedGridPath.size() - 1; i >= 0; --i) 
                         {
-                            std::cout << "No se ha encontrado un camino" << std::endl;
+                            //std::cout << reversedGridPath[i] << std::endl;
+                            //transform point to world position and add to the linear iterator
+                            ent.AI->linearPath.addPoint(reversedGridPath[i]);
+                        }
+                                            
+                        if(ent.AI->linearPath.getPath().size() == 0) 
+                        {
+                            std::cout << "No se ha encontrado un camino" << std::endl;//mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
                         }
                         else
                         {
-                            for(auto point : ent.AI->linearPath)
-                            {
-                                std::cout << "Path is " << point << std::endl;
-                            }
-                        }//mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                            //change behaviour to follow path
+                            ent.AI->behaviour = FVAI::SB::FOLLOWPATH;
+                        }
                         
                         //ACTIVATE THE PATHFOLLOW
 

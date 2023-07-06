@@ -3,6 +3,7 @@
 #include "AI.hpp"
 #include "math.hpp"
 #include "circularIterator.hpp"
+#include "linearIterator.hpp"
 #include "Pathfinding.hpp"
 #include <vector>
 #include <queue>
@@ -87,6 +88,6 @@ namespace FVAI
     FVmath::Point2D flee                            (FVmath::Point2D origin, FVmath::Point2D target, double speed);
     FVmath::Point2D cross                           (FVAI::PriotiryCross priority, double speed);
     FVmath::Point2D followCircularPath              (FVmath::Point2D origin, circularIterator& path, double speed);
-    FVmath::Point2D followPath                      (FVmath::Point2D origin, std::vector<FVmath::Point2Di>& path, double speed);
+    FVmath::Point2D followPath                      (FVmath::Point2D origin, linearIterator& path, double speed);
     std::vector<FVmath::Point2Di> findPathAStar     (FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int maxIteraciones = defaultmaxiter);
 }

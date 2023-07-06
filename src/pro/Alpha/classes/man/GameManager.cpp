@@ -107,7 +107,7 @@ namespace FVeng
 
             e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
-            e.render->Sprite.setScale(2.5,2.75);
+           // e.render->Sprite.setScale(2.5,2.75);
 
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(128, 112,16,16));
 
