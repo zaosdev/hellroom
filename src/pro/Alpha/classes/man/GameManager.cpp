@@ -249,11 +249,17 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_B);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
             e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            //create animation component
+            sf::Vector2u imgcount {4,8};
+
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 7};
+
 
             e.reward = game::RewardComponent    {.min_reward = 1, .max_reward = 3};
 
@@ -267,7 +273,10 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 62, 0 * 62, 62, 62));  
+            e.render->Sprite.setScale(2.5, 2.75);
+
+    
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
@@ -578,7 +587,7 @@ namespace FVeng
             std::cout << "Spawn DUMMY" << std::endl;
 
             auto& e = EM_.createEntity();
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
                         FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
 
             e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/4 };

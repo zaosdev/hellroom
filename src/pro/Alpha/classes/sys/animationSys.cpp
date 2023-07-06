@@ -40,13 +40,15 @@ namespace game{
 
                 //std::cout << "CURRENT IMAGE X" << anim->currentImage.x << "CURRENT IMAGE Y" << anim->currentImage.y << std::endl;
 
-
+                //calculo el tamanyo de los recortes de sprite que me interesa mostrar en x e y
                 anim->uvRect.width = texX/float(anim->imageCount.x);
                 anim->uvRect.height = texY/float(anim->imageCount.y);
 
+                //indico que fila del spritesheet es la animacion que quiero mostrar
                 anim->currentImage.y = anim->row;
                 anim->totalTime += deltaTime;
 
+                //animacion de los sprites
                 if(anim->totalTime >= anim->switchTime){
                     anim->totalTime -= anim->switchTime; 
                     anim->currentImage.x++;
@@ -56,8 +58,12 @@ namespace game{
                     }
                 }
 
+                //asignacion de sprite a dibujar
                 anim->uvRect.left = anim->currentImage.x * anim->uvRect.width;
                 anim->uvRect.top = anim->currentImage.y * anim->uvRect.height;
+
+                //segun la direccion a la que me muevo el sprite cambiara de orientacion izq der
+                //if(ent.physics->vel)
 
                //cambia el area de visualizacion de la textura
                 ent.render->Sprite.setTextureRect(ent.anim->uvRect);
