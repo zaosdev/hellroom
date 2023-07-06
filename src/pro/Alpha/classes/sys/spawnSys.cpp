@@ -9,35 +9,31 @@ namespace game
 
 
 
-    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice, size_t& enemyID)
+    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyshit, size_t& enemyID)
     {
 
         // gMan_.SpawnDummy(Pos);
-        //auto enemyChoice = FVmath::calculateRandom(3,1);
+        auto enemyChoice = FVmath::calculateRandom(3,1);
         
-        // switch (enemyChoice)
-        // {
-        //     case game::enemy_type::ARRIVE :
-        //      enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
-        //     break;
+        switch (enemyChoice)
+        {
+            case game::enemy_type::ARRIVE :
+             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+            break;
 
-        //     case game::enemy_type::PURSUE :
-        //      enemyID = gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
-        //     break;
+            case game::enemy_type::PURSUE :
+             enemyID = gMan_.createEnemyPursue(Pos,{320,240},gMan_.getPlayer().id(),3);
+            break;
 
-        //     case game::enemy_type::SHOOT : 
-        //      enemyID = gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
-        //     break;
+            case game::enemy_type::SHOOT : 
+             enemyID = gMan_.createEnemyShoot(Pos,{320,240},gMan_.getPlayer().id(),4);
+            break;
 
-        //     case game::enemy_type::NO_TYPE: 
-        //     default:
-        //      enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
-        //     break;
-        // }
-        static bool spawn = true;
-        if(spawn == true)
-        gMan_.createEnemyPursue(Pos,{320,240},0.1,4);
-        spawn = false;
+            case game::enemy_type::NO_TYPE: 
+            default:
+             enemyID = gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
+            break;
+        }
     }
     void SpawnSys::SpawnPlayer()
     {
@@ -106,44 +102,20 @@ namespace game
         auto hasCapacity = [&](Entity const& e){return e.Spawn->capacity < e.Spawn->maxCapacity; };
 
         for(auto& e : gMan_.getEntityManager())
-        {
-            
-            //std::cout << f << std::endl;
-            if(isEnemySpawner(e))
-            {
-                if(ready2Spawn(e))
+        {            
+            if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
+            {        
+                auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
+                size_t tempID{};
+                SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
+                if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
+                e.Spawn->capacity++;
+                e.Spawn->TimerSpawn.restart();
+                if(e.Spawn->capacity == e.Spawn->maxCapacity)
                 {
-                    if(hasCapacity(e))
-                    {
-                        
-                    auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
-                    size_t tempID{};
-                    SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
-                    if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
-                    e.Spawn->capacity++;
-                    e.Spawn->TimerSpawn.restart();
-                    if(e.Spawn->capacity == e.Spawn->maxCapacity)
-                    {
-                        e.Spawn->fullCapacity=true;
-                    }
-                    }
+                    e.Spawn->fullCapacity=true;
                 }
             }
-            //if(isEnemySpawner(e) && ready2Spawn(e) && hasCapacity(e))
-            // {
-                
-            //    auto Pos = calculateSpawnPoint(e.Spawn->SpawnInfo);
-            //    size_t tempID{};
-            //    SpawnEnemy(Pos,e.Spawn->SpawnInfo.enemy_spawned,tempID);
-            //    if(e.Spawn->ownerID!=0)  setEnemyRoom(e.Spawn->ownerID,tempID);
-            //    e.Spawn->capacity++;
-            //    e.Spawn->TimerSpawn.restart();
-            //    if(e.Spawn->capacity == e.Spawn->maxCapacity)
-            //    {
-            //        e.Spawn->fullCapacity=true;
-            //    }
-            // }
-
         }
     }
 }
