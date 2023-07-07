@@ -15,6 +15,7 @@ static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
 static constexpr const char* PET2_SP_PATH       { "../media/pets/guardian.png"};
 static constexpr const char* PET3_SP_PATH       { "../media/pets/sentinel.png"};
 static constexpr const char* BULLET_PATH        { "../media/bullet.png"};
+static constexpr const char* TRAP_PATH          { "../media//HUD/trap.png"};
 
 
 
@@ -51,6 +52,7 @@ namespace FVeng
 
         void GameManager::LoadAllTextures()
         {
+            SPman.loadTexture(TRAP_PATH, TRAP_TEXT);
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(ENEMYA_SPRITE_PATH, ENEMY_A);
             SPman.loadTexture(ENEMYB_SPRITE_PATH, ENEMY_B);
@@ -122,9 +124,10 @@ namespace FVeng
 
             //e.render->Sprite.setScale(2.5, 2.75);
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,32));
+            initEntityRender(e, {0,16}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,16));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{16,16}};
+            //falsear el bounding box para que sea 16x16 en vez de 16x32
 
             
 
@@ -240,6 +243,7 @@ namespace FVeng
             e.coll = game::CollisionComponent{};           
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
             // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
@@ -256,7 +260,21 @@ namespace FVeng
 
             return e;
         }
+        void GameManager::createTrap(FVmath::Point2Di Pos){
 
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getTileSize().x,11*mapMan.getTileSize().y, 16, 16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
+            e.trap = game::TrapComponent{};
+
+            e.addTag(game::Entity::TAG::TRAP);            
+        }
 
         game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
@@ -272,6 +290,7 @@ namespace FVeng
             //create animation component
             sf::Vector2u imgcount {4,8};
 
+           
             e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 7};
 
 
@@ -287,13 +306,13 @@ namespace FVeng
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            e.render->Sprite.setScale(2.5, 2.75);
+            //e.render->Sprite.setScale(2.5, 2.75);
 
     
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
 
             e.render->Sprite.move(
@@ -338,13 +357,20 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Enemy);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+            //create animation component
+            sf::Vector2u imgcount {4,8};
 
-            e.render->Sprite.setScale(2,2);
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 4};
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
+
+
+            //e.render->Sprite.setScale(2,2);
+
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -367,7 +393,7 @@ namespace FVeng
 
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 75, 0 * 75, 40, 40));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+5,float(Pos.y)}, .prevPos{float(Pos.x)+5,float(Pos.y)},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -456,6 +482,12 @@ namespace FVeng
                 createDoor(door);
         }
 
+        void GameManager::createAllTraps()
+        {
+            for(auto& trap : mapMan.getTraps())
+                createTrap(trap);
+        }
+
         //Create all rooms on the current map
         void GameManager::createAllRooms()
         {
@@ -538,6 +570,7 @@ namespace FVeng
 
             createAllSpawner();
             createAllDoors();
+            createAllTraps();
             createAllRooms();
 
 
@@ -566,7 +599,6 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-           
             auto bh = FVAI::SB::PURSUE;
             e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
                                     
@@ -581,15 +613,23 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Enemy);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+            //create animation component
+            sf::Vector2u imgcount {4,8};
 
-            e.render->Sprite.setScale(2,2);
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 2};
+
+
+
+
+            //e.render->Sprite.setScale(2,2);
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
 
 
             e.render->Sprite.move(
@@ -640,6 +680,8 @@ namespace FVeng
 
             initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,38,30));
 
+            e.render->Sprite.scale({0.5,0.5});
+
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
             e.render->Sprite.move(
@@ -672,6 +714,8 @@ namespace FVeng
             );      
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::DOOR, .nextLevel = door.next_level_path};
+
+            this->nextLevel = door.next_level_path;
 
             e.coll = game::CollisionComponent{};
 

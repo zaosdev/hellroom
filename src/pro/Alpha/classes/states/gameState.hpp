@@ -20,6 +20,7 @@
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
 #include "../classes/sys/roomSys.hpp"
+#include "../classes/sys/trapSys.hpp"
 
 
 #include "../classes/sys/animationSys.hpp"
@@ -58,6 +59,7 @@ namespace FVEng{
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
         , animSys       { GameMan }
+        , trapSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -98,11 +100,11 @@ namespace FVEng{
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
+                GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
                     changeLevel();
                 }
-                GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
@@ -112,6 +114,7 @@ namespace FVEng{
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
                     spwnSys.update();
+                    trapSys.update();
 
                     inpRec.update();
                     inpSys.update();
@@ -182,6 +185,8 @@ namespace FVEng{
         game::PetSys            petSys;
         game::RoomSys           roomSys;
         game::animationSys      animSys;
+        game::TrapSys           trapSys;
+
   
         //Game clock
         sf::Clock clock;
