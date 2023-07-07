@@ -21,8 +21,10 @@
 #include "../classes/sys/effectSys.hpp"
 #include "../classes/sys/cofreSys.hpp"
 #include "../classes/sys/roomSys.hpp"
+#include "../classes/sys/trapSys.hpp"
 
 
+#include "../classes/sys/animationSys.hpp"
 
 #include "../man/stateManager.hpp"
 #include "../states/gameOverState.hpp"
@@ -47,7 +49,7 @@ namespace FVEng{
         , spwnSys       { GameMan }
         , efctSys       { GameMan }
         , soundSys      { GameMan, inpRec }
-        , achSys        { GameMan }
+        , achSys        { /*GameMan*/ }
         , saveSys       { GameMan }
         , collisionSys  { GameMan }
         , HudSys        { GameMan }
@@ -58,6 +60,8 @@ namespace FVEng{
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
+        , animSys       { GameMan }
+        , trapSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -83,6 +87,9 @@ namespace FVEng{
             petSys.initPetSys();
             soundSys.loadSounds();
             renSys.iniRenderSys();
+            animSys.setTexureID (GameMan.getPlayer().id()); 
+            //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
+            
         }
 
         void changeLevel()
@@ -98,11 +105,11 @@ namespace FVEng{
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
+                GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
                     changeLevel();
                 }
-                GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
@@ -111,12 +118,14 @@ namespace FVEng{
                     roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                    //spwnSys.update();
+                    spwnSys.update();
+                    trapSys.update();
 
                     inpRec.update();
                     inpSys.update();
 
-                    //AISys.update(GameMan.getBB(), dt);
+
+                    AISys.update(GameMan.getBB(), dt);
 
                     phySys.update(dt);
 
@@ -139,6 +148,8 @@ namespace FVEng{
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
+
+                    animSys.update(dt /*updateClock.getElapsedTime().asSeconds()*/);
                 
                 }
 
@@ -146,6 +157,7 @@ namespace FVEng{
                 // //Render game
                 float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
                 renSys.update(percentTick);
+
             }
 
             //player is dead
@@ -167,7 +179,7 @@ namespace FVEng{
         game::AISys             AISys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
-        game::effctSys         efctSys;
+        game::effctSys          efctSys;
         game::SoundSys          soundSys;
         game::AchievementSys    achSys;
         game::SavingSys         saveSys;
@@ -180,6 +192,10 @@ namespace FVEng{
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
         game::RoomSys           roomSys;
+        game::animationSys      animSys;
+        game::TrapSys           trapSys;
+
+  
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

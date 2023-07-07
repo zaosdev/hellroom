@@ -15,8 +15,8 @@
 #include "CollisionComponent.hpp"
 #include "cofreComponent.hpp"
 #include "roomComponent.hpp"
-
-
+#include "trapComponent.hpp"
+#include "animationComponent.hpp"
 
 
 
@@ -47,10 +47,7 @@ namespace game
         ROOM = 1 << 10,
         SPAWNER = 1 << 11,
         KILL_ON_ROOM_DELETE = 1 << 12,
-
-
-
-
+        TRAP = 1 << 13,
 
       };
 
@@ -73,6 +70,8 @@ namespace game
       std::optional<RoomComponent>      room{};
       std::optional<CofreComponent>   cofre{};
 
+      std::optional<animationComponent> anim{};
+      std::optional<TrapComponent>  trap{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

@@ -39,7 +39,7 @@ namespace FVeng
         static constexpr const char* PET2_TEXT   = "pet2_sprite";
         static constexpr const char* PET3_TEXT   = "pet3_sprite";
         static constexpr const char* SHIELD_TEXT = "shield_sprite";
-
+        static constexpr const char* TRAP_TEXT   = "trap_sprite";
 
         GameManager(sf::RenderWindow& window);
 
@@ -65,6 +65,7 @@ namespace FVeng
         void createMap();
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
+        void createTrap(FVmath::Point2Di Pos);
         void createDoor(tXMLeng::DoorInfo door);
         void createCofre(FVmath::Point2Di Pos, int id);
         void createRoom(tXMLeng::Room& room);
@@ -79,7 +80,10 @@ namespace FVeng
 
         void createAllSpawner();
         void createAllDoors();
+        void createAllTraps();
         void createAllRooms();
+
+
         void createRoomTrigger(tXMLeng::room_trigger& room, game::Entity::id_type id);
         void createRoomBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
@@ -94,6 +98,8 @@ namespace FVeng
         void SpawnDummy(FVmath::Point2Di Pos);
         void deleteKillable();
         void roomDelete(game::Entity::id_type);
+        std::vector<std::vector<int>>& getMapGridRepresentation();
+        FVmath::Point2Di worldPositionToGrid(float x, float y);
 
         void update();
 
