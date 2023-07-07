@@ -25,5 +25,6 @@ namespace game
         bool canOpen{false};
         std::string nextLevel{""};
 
+
     };
 }

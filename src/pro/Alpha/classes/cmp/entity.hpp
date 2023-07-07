@@ -14,6 +14,8 @@
 #include "shieldComponent.hpp"
 #include "CollisionComponent.hpp"
 #include "cofreComponent.hpp"
+#include "roomComponent.hpp"
+
 
 
 
@@ -41,25 +43,36 @@ namespace game
         DOOR = 1 << 7,
         KILL_ON_MAP_CHANGE = 1 << 8,
         Cofre = 1 << 20,
+        TRIGGER = 1 << 9,
+        ROOM = 1 << 10,
+        SPAWNER = 1 << 11,
+        KILL_ON_ROOM_DELETE = 1 << 12,
+
+
+
+
 
       };
 
       friend struct FVeng::EntityManager<Entity>;
+
       
-      std::optional<RenderComponent>  render{};
-      std::optional<PhysicsComponent> physics{};
-      std::optional<InputComponent>   input{};
-      std::optional<MapComponent>     map{};
-      std::optional<AIComponent>      AI{};
-      std::optional<SpawnerComponent> Spawn{};
-      std::optional<HealthComponent>  health{};
-      std::optional<DataComponent>    data{};
-      std::optional<RewardComponent>  reward{};
-      std::optional<EffectComponent>  effct{};
-      std::optional<WeaponComponent>  weapon{};
-      std::optional<ShieldComponent>  shield{};
-      std::optional<CollisionComponent>  coll{};
+      std::optional<RenderComponent>    render{};
+      std::optional<PhysicsComponent>   physics{};
+      std::optional<InputComponent>     input{};
+      std::optional<MapComponent>       map{};
+      std::optional<AIComponent>        AI{};
+      std::optional<SpawnerComponent>   Spawn{};
+      std::optional<HealthComponent>    health{};
+      std::optional<DataComponent>      data{};
+      std::optional<RewardComponent>    reward{};
+      std::optional<EffectComponent>    effct{};
+      std::optional<WeaponComponent>    weapon{};
+      std::optional<ShieldComponent>    shield{};
+      std::optional<CollisionComponent> coll{};
+      std::optional<RoomComponent>      room{};
       std::optional<CofreComponent>   cofre{};
+
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

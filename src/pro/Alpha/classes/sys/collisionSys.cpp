@@ -43,6 +43,8 @@ namespace game
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
       auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
+      auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
+
 
       
       //function called when user collides with heart
@@ -50,6 +52,19 @@ namespace game
       {
         entCollided.effct->affectedPartyID= entColliding.id();
         entCollided.effct->state=effectState::readyToApply;
+      };
+
+      //function called when user collides triggers room activation
+      auto enableRoom = [&](Entity& entColliding,Entity&  entCollided)
+      {
+        (void)entColliding;
+
+        auto* room = EM.getEntityByID(entCollided.Spawn->ownerID);
+        if(room->room->enabled!=true)
+        {
+          room->room->enabled=true;
+        }
+
       };
 
       //function called when entity is hit by bullet
@@ -72,10 +87,10 @@ namespace game
       auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
         if(storage)
-          storage->push_back(&entColliding);
-        if (DynamicEntityVsStaticEntity(entCollided, dt, entColliding))
+          storage->push_back(&entCollided);
+        if (DynamicEntityVsStaticEntity(entColliding, dt, entCollided ))
         {
-          collInstance.push_back({ &entColliding, entCollided.coll->contactTime });
+          collInstance.push_back({ &entCollided, entCollided.coll->contactTime });
           return true;
         }
         else return false;
@@ -121,15 +136,15 @@ namespace game
         {
           if(isEnemy(ent))
           {
-            saveCollisions(ent,player,&enemies);
+            saveCollisions(player,ent,&enemies);
           }
           else if(isEnemyBullet(ent))
           {
-            saveCollisions(ent,player,&enmyBullets);
+            saveCollisions(player,ent,&enmyBullets);
           }
           else if(isStaticObject(ent))
           {
-            saveCollisions(ent,player,&stat_coll);
+            saveCollisions(player,ent,&stat_coll);
           }
           else if(isHealth(ent))
           {
@@ -141,6 +156,10 @@ namespace game
           }
           else if(isCofre(ent)){
             saveCollisions(ent,player,nullptr);
+          }
+          else if(isRoomTrigger(ent))
+          {
+            actOnCollisions(player,ent,enableRoom);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
