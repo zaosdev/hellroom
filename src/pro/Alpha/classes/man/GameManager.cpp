@@ -425,7 +425,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 40, 40));
+            initEntityRender(e, {0,0}, sf::IntRect(0, 0, 16, 14));
 
             e.cofre = game::CofreComponent{};
             e.cofre->id = id;

@@ -163,7 +163,7 @@ namespace game
             actOnCollisions(player,ent,changeLevel);
           }
           else if(isCofre(ent)){
-            saveCollisions(ent,player,nullptr);
+            saveCollisions(player,ent ,nullptr);
           }
           else if(isRoomTrigger(ent))
           {

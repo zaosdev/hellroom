@@ -23,7 +23,7 @@ namespace game
     {   
         if(first == true){
             std::cout <<  "COFRE!"<< std::endl;
-            FVmath::Point2Di position = {210,250};
+            FVmath::Point2Di position = {80,250};
             FVmath::Point2Di position2 = {360,180};
             gMan_.createCofre(position, 1);
             //gMan_.createCofre(position2, 2);
@@ -58,17 +58,17 @@ namespace game
                     if(esp==0){
                         //cruz
                         player.weapon->especial=mejora::cruz;
-                        std::cout << "premio cruz" << std::endl;
+                        //std::cout << "premio cruz" << std::endl;
                     }
                     else if(esp==1){
                         //escopeta
                         player.weapon->especial=mejora::escopeta;
-                        std::cout << "premio escopeta" << std::endl;
+                        //std::cout << "premio escopeta" << std::endl;
                     }
                     else if(esp==2){
                         //rafaga
                         player.weapon->especial=mejora::rafaga;
-                        std::cout << "premio rafaga" << std::endl;
+                        //std::cout << "premio rafaga" << std::endl;
                     }
 
                     e.cofre->abierto = true;
