@@ -66,6 +66,21 @@ namespace game
         coin_ = id;
     }
 
+    void HUDSys::setGunCruzID(size_t id)
+    {
+        gunCruz_ = id;
+    }
+
+    void HUDSys::setGunEscopetaID(size_t id)
+    {
+        gunEscopeta_ = id;
+    }
+
+    void HUDSys::setGunRafagaID(size_t id)
+    {
+        gunRafaga_ = id;
+    }
+
     void HUDSys::setClockID(size_t id)
     {
         clocksp_ = id;
@@ -199,35 +214,27 @@ namespace game
     }
 
     void HUDSys::renderGunType(){
-        //Get the gun type
         auto& EM = gMan_.getEntityManager();
         std::vector<game::Entity>::iterator it;
-        //game::Entity &trueGun;
 
         game::Entity& player = gMan_.getPlayer();
         auto tipo = player.weapon->especial;
         switch(tipo){
             case game::mejora::escopeta:
-                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunEscopeta_;});
             break;
             case game::mejora::cruz:
-                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunCruz_;});
             break;
             case game::mejora::rafaga: 
-                std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunRafaga_;});
             break;
             case game::mejora::normal:
-                //aqui si quieres puedes poner icono de arma normal, si no return para que no pete
-                return;
+            return;
         }
         auto& trueGun = *it.base();
-        trueGun.render->Sprite.setPosition(100,100);
+        trueGun.render->Sprite.setPosition(10,640);
         window_.draw(trueGun.render->Sprite);
-        
-        //auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
     }
 
     void HUDSys::update()
@@ -257,7 +264,7 @@ namespace game
         renderTimer();
 
         //render the type of special shot obtained
-        //renderGunType();
+        renderGunType();
     }
 
 }

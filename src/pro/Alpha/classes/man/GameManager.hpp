@@ -27,11 +27,9 @@ namespace FVeng
         static constexpr const char* MAP_TEXT    = "map_sprite";
         static constexpr const char* HEART_TEXT  = "heart_sprite";
         static constexpr const char* COIN_TEXT   = "coin_sprite";
-
         static constexpr const char* GUN_CRUZ_TEXT = "gun_cruz_sprite";
         static constexpr const char* GUN_ESCOPETA_TEXT = "gun_escopeta_sprite";
         static constexpr const char* GUN_RAFAGA_TEXT = "gun_rafaga_sprite";
-
         static constexpr const char* CLOCK_TEXT  = "clock_sprite";
         static constexpr const char* BULLET_TEXT = "bullet_sprite";
         static constexpr const char* COFRE_TEXT  = "chest_sprite";
@@ -58,6 +56,9 @@ namespace FVeng
         game::Entity& createClock   ();
         game::Entity& createShield  ();
         game::Entity& createMapCollider(FVmath::Point2Di Pos);
+        game::Entity& createGunCruz();
+        game::Entity& createGunEscopeta();
+        game::Entity& createGunRafaga();
 
         game::Entity::id_type createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         game::Entity::id_type createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);

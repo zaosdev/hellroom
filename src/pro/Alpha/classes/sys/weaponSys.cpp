@@ -26,7 +26,7 @@ namespace game
     {      
         for(auto& e: gMan_.getEntityManager()){
             if(e.weapon && e.physics && e.weapon->on){
-                std::cout << "entra" << std::endl;
+                //std::cout << "entra" << std::endl;
                 auto& pos = e.physics->pos;
                 if(e.weapon->current!=mejora::normal){
                     auto current_time = std::chrono::steady_clock::now();

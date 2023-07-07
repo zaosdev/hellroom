@@ -23,10 +23,10 @@ namespace game
     {   
         if(first == true){
             std::cout <<  "COFRE!"<< std::endl;
-            FVmath::Point2Di position = {160,160};
+            FVmath::Point2Di position = {210,250};
             FVmath::Point2Di position2 = {360,180};
             gMan_.createCofre(position, 1);
-            gMan_.createCofre(position2, 2);
+            //gMan_.createCofre(position2, 2);
             first = false;
         }
 
@@ -54,21 +54,21 @@ namespace game
 
                     std::srand(static_cast<unsigned int>(std::time(0)));
                     int esp = std::rand() % 3;
-                    //std::cout << "arma: " << esp << std::endl;
+                    //int esp = 2;
                     if(esp==0){
                         //cruz
                         player.weapon->especial=mejora::cruz;
-                        //std::cout << "premio cruz" << std::endl;
+                        std::cout << "premio cruz" << std::endl;
                     }
                     else if(esp==1){
                         //escopeta
                         player.weapon->especial=mejora::escopeta;
-                        //std::cout << "premio escopeta" << std::endl;
+                        std::cout << "premio escopeta" << std::endl;
                     }
                     else if(esp==2){
                         //rafaga
                         player.weapon->especial=mejora::rafaga;
-                        //std::cout << "premio rafaga" << std::endl;
+                        std::cout << "premio rafaga" << std::endl;
                     }
 
                     e.cofre->abierto = true;
@@ -80,6 +80,6 @@ namespace game
                 }
             }
         }
-        std::cout << "Termina el cofre sys" << std::endl;
+        //std::cout << "Termina el cofre sys" << std::endl;
     }
 }

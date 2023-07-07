@@ -333,7 +333,7 @@ namespace FVeng
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
-            std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+           // std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
@@ -762,6 +762,39 @@ namespace FVeng
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
             initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,32,32));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunCruz(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_CRUZ_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunEscopeta(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_ESCOPETA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunRafaga(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_RAFAGA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
 
             return e;
         }

@@ -77,6 +77,9 @@ namespace FVEng{
             HudSys.setCoinID    (GameMan.createCoin().id());
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
+            HudSys.setGunCruzID (GameMan.createGunCruz().id());
+            HudSys.setGunEscopetaID (GameMan.createGunEscopeta().id());
+            HudSys.setGunRafagaID (GameMan.createGunRafaga().id());
             // HudSys.setWeapon1ID (GameMan.createWeapon1().id());
             // HudSys.setWeapon2ID (GameMan.createWeapon2().id());
             // HudSys.setWeapon3ID (GameMan.createWeapon3().id());

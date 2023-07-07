@@ -20,11 +20,14 @@ namespace game
         HUDSys& operator=(const HUDSys&)= delete;
         HUDSys& operator=(HUDSys&&)= delete;
 
-        void setPlayer  (Entity* player);
-        void setHeartID (size_t id);
-        void setCoinID  (size_t id);
-        void setClockID (size_t id);
-        void setShieldID(size_t id);
+        void setPlayer         (Entity* player);
+        void setHeartID        (size_t id);
+        void setCoinID         (size_t id);
+        void setClockID        (size_t id);
+        void setShieldID       (size_t id);
+        void setGunCruzID      (size_t id);
+        void setGunEscopetaID  (size_t id);
+        void setGunRafagaID    (size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -40,6 +43,7 @@ namespace game
         void renderTimer();
         void restartTime();
         void setMaxTime(double newTime);
+        
 
         private:
             FVeng::GameManager& gMan_;
