@@ -1,4 +1,5 @@
-#include "linearIterator.hpp"
+#include "linearIterator.hpp" 
+#include <iostream>
 
 namespace FVAI {
     using PointType = linearIterator::PointType;
@@ -9,7 +10,12 @@ namespace FVAI {
             return path_[current_];
         } else {
             // Se alcanzó el final del vector, devolver un valor indicativo de fin
-            return {-1, -1};
+            std::cout << "Se alcanzo el final del vector..."
+            << "size: "  << size_ 
+            << "current: " << current_ 
+            << "path size: " << path_.size()
+            << std::endl;
+            return {nullValue, nullValue}; 
         }
     }
 
@@ -30,5 +36,12 @@ namespace FVAI {
 
     std::vector<PointType> linearIterator::getPath() {
         return path_;
+    }
+
+    void linearIterator::clear()
+    {
+        path_.clear();
+        current_ = 0;
+        size_    = 0;
     }
 }

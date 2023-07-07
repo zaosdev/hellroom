@@ -83,7 +83,7 @@ namespace game
       //function called when enemy is hit by wall
       auto EnemyInWall = [&](Entity& entColliding, Entity&  entCollided)
       {
-        (void) entCollided;
+        (void)entCollided;
         if( entColliding.AI->behaviour != FVAI::SB::PATHFINDING 
             && 
             entColliding.AI->behaviour != FVAI::SB::FOLLOWPATH)
@@ -203,9 +203,9 @@ namespace game
       //ENEMY COLLISION AGAINST WALLS
       for(auto* wallColl : stat_coll)
       {
+        //if(enemy->AI->behaviour != FVAI::SB::FOLLOWPATH) 
         saveCollisions(*enemy,*wallColl,nullptr);
         actOnCollisions(*enemy, *wallColl, EnemyInWall);
-        //here the function of 
       }
 
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
@@ -345,7 +345,6 @@ namespace game
 
   bool CollisionSys::ResolveDynamicEntityVsEntity(Entity& dynamicEntity, Entity& staticEntity, const float dt)
   {
-
 			if (DynamicEntityVsStaticEntity(dynamicEntity, dt, staticEntity))
 			{
 				dynamicEntity.physics->vel += dynamicEntity.coll->contactNormal * FVmath::Point2D{std::abs(dynamicEntity.physics->vel.x), std::abs(dynamicEntity.physics->vel.y)} * (1 - dynamicEntity.coll->contactTime);

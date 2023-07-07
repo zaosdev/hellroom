@@ -11,7 +11,7 @@
 #include <limits>
 
 
-static constexpr int defaultmaxiter  = 500;
+static constexpr int defaultmaxiter  = 1000;
 namespace FVAI
 {
     enum class SB
@@ -88,6 +88,6 @@ namespace FVAI
     FVmath::Point2D flee                            (FVmath::Point2D origin, FVmath::Point2D target, double speed);
     FVmath::Point2D cross                           (FVAI::PriotiryCross priority, double speed);
     FVmath::Point2D followCircularPath              (FVmath::Point2D origin, circularIterator& path, double speed);
-    FVmath::Point2D followPath                      (FVmath::Point2D origin, linearIterator& path, double speed);
+    FVmath::Point2D followPath                      (FVmath::Point2D origin, linearIterator& path, double speed, bool& pathIsOver);
     std::vector<FVmath::Point2Di> findPathAStar     (FVmath::Point2Di start, FVmath::Point2Di goal, const std::vector<std::vector<int>>& map, int maxIteraciones = defaultmaxiter);
 }
