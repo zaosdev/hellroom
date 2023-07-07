@@ -27,7 +27,7 @@ namespace game
       std::vector<Entity*> stat_coll{};
       std::vector<Entity*> plyrBullets{};
       std::vector<Entity*> enmyBullets{};
-
+      std::vector<Entity*> mapTrap{};
 
 
       //bool nomore{false};
@@ -44,8 +44,7 @@ namespace game
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
       auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
       auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
-
-
+      auto isTrap           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRAP);};
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
@@ -64,7 +63,15 @@ namespace game
         {
           room->room->enabled=true;
         }
+      };
+      //function called when entity is hit by trap
+      auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        if(entCollided.trap->modo==estado::cuarto){
 
+        entColliding.health->negativeAffection = entCollided.trap->trapDamage;
+        entCollided.trap->modo=estado::primero;
+        }
       };
 
       //function called when entity is hit by bullet
@@ -73,12 +80,13 @@ namespace game
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+
+
       
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
         (void)entColliding;
         gMan_.change_level=true;
-        gMan_.nextLevel = entCollided.map->nextLevel;
       };
       //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
       //First parameter must be moving entity- the one that collides with
@@ -161,6 +169,10 @@ namespace game
           {
             actOnCollisions(player,ent,enableRoom);
           }
+          else if(isTrap(ent))
+          {
+            actOnCollisions(player,ent,trapHit);
+          }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
           // {
@@ -216,6 +228,13 @@ namespace game
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
 
+      //COLISION DEL JUGADOR CON LA TRAMPA
+    for(auto* trap : mapTrap)
+    {
+      actOnCollisions(*trap,player,trapHit);
+
+      player.health->negativeAffection = 1;
+    }
 
   }
 

@@ -1,6 +1,9 @@
 #include "AISys.hpp"
 #include "utils/AI.hpp"
 #include <iostream>
+#include "../define.h"
+
+
 
 namespace game
 {
@@ -29,6 +32,68 @@ namespace game
         return true;
     }
 
+
+    void mainDepruebas(FVmath::Point2Di start, FVmath::Point2Di goal, std::vector<std::vector<int>>& map)
+    {
+         sf::RenderWindow window(sf::VideoMode(800, 600), "Pathfinding A*");
+
+        sf::RectangleShape tile(sf::Vector2f(10.f, 10.f));
+        tile.setOutlineThickness(1.f);
+        tile.setOutlineColor(sf::Color::Black);
+
+        std::vector<FVmath::Point2Di> path = FVAI::findPathAStar(start, goal, map);
+
+        while (window.isOpen())
+        {
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+
+            window.clear();
+
+            for (int i = 0; i < static_cast<int>(map.size()); ++i)
+            {
+                for (int j = 0; j < static_cast<int>(map[i].size()); ++j)
+                {
+                    tile.setPosition(i * 10.f, j * 10.f);
+                    if (i == start.x && j == start.y)
+                    {
+                        tile.setFillColor(sf::Color::Green);
+                    }
+                    else if (i == goal.x && j == goal.y)
+                    {
+                        tile.setFillColor(sf::Color::Red);
+                    }
+                    else if (map[i][j] == 1)
+                    {
+                        tile.setFillColor(sf::Color::Black);
+                    }
+                    else if (std::find_if(path.begin(), path.end(), [&](FVmath::Point2Di node) { return node.x == i && node.y == j; }) != path.end())
+                    {
+                        tile.setFillColor(sf::Color::Blue);
+                    }
+                    else
+                    {
+                        tile.setFillColor(sf::Color::White);
+                    }
+                    window.draw(tile);
+                }
+            }
+
+            window.display();
+        }
+
+        // for (auto& node : path)
+        // {
+        //     delete node;
+        // }
+
+
+    }
+
     void AISys::update(blackBoardComponent bb, double const dt)
     {
         auto& EM = gMan_.getEntityManager();
@@ -38,7 +103,7 @@ namespace game
             if(ent.AI && ent.physics)
             {
                 ent.AI->timeAlive += dt;
-                FVmath::Point2D addPos;
+                FVmath::Point2D addPos {};
                 bool percep = perception(ent.AI, EM, bb, dt);
                 switch(ent.AI->behaviour)
                 {
@@ -74,9 +139,15 @@ namespace game
                         addPos = FVAI::cross(ent.AI->priotiryCross, ent.physics->mov_speed);
                         break;
                     }
+                    case FVAI::SB::FOLLOWCIRCULARPATH:
+                    {
+                        addPos = FVAI::followCircularPath(ent.physics->pos, ent.AI->circularPath, ent.physics->mov_speed);
+                        break;
+                    }
                     case FVAI::SB::FOLLOWPATH:
                     {
-                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
+                        addPos = FVAI::followPath(ent.physics->pos, ent.AI->linearPath, ent.physics->mov_speed);
+                        if(addPos == FVmath::Point2D{}) ent.AI->behaviour = FVAI::SB::SEEK;
                         break;
                     }
                     case FVAI::SB::STAY:
@@ -92,6 +163,50 @@ namespace game
                             //Generate a bullet from the enemy to the player position
                             gMan_.createEnemyBullet(ent.physics->pos, FVAI::SB::SEEK, gMan_.getPlayer().physics->pos);
                         }                    
+                        break;
+                    }
+                    case FVAI::SB::PATHFINDING:
+                    {
+                        //creates a path to the point and then uses followpath to run over the points
+                        //Calculate the position of the enemy in the map representation
+                        auto bounds   = ent.render->Sprite.getGlobalBounds();
+                        auto& pos      = ent.physics->pos;
+                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x + bounds.width / 2, pos.y + bounds.height / 2);
+                        
+                        //Calculate the position of the goal in the map representation
+                        auto& playerPos      = gMan_.getPlayer().physics->pos;
+                        auto playerBounds   = gMan_.getPlayer().render->Sprite.getGlobalBounds();
+                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x + playerBounds.width / 2, playerPos.y + playerBounds.height / 2);
+ 
+                        std::cout << "Player position:  " << playerPos << std::endl;
+
+                        std::cout << "Goal Grid:  " << goalGrid << std::endl;
+
+                        std::cout << "Start Grid: " << startGrid << std::endl;
+
+                        //Calculate the points of the map representation to the real world
+                        auto reversedGridPath = FVAI::findPathAStar(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                        for (int i = reversedGridPath.size() - 1; i >= 0; --i) 
+                        {
+                            //std::cout << reversedGridPath[i] << std::endl;
+                            //transform point to world position and add to the linear iterator
+                            ent.AI->linearPath.addPoint(reversedGridPath[i] * tileSize);
+                        }
+                                            
+                        if(ent.AI->linearPath.getPath().size() == 0) 
+                        {
+                            std::cout << "No se ha encontrado un camino" << std::endl; 
+                        }
+                        else
+                        {
+                            //change behaviour to follow path
+                            //mainDepruebas(startGrid, goalGrid, gMan_.getMapGridRepresentation());
+                            ent.AI->behaviour = FVAI::SB::FOLLOWPATH;
+                        }
+                        
+                        //ACTIVATE THE PATHFOLLOW
+
+
                         break;
                     }
                     default:break;
