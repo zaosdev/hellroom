@@ -43,7 +43,7 @@ namespace game
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
       auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
-
+      
 
       
       //function called when user collides with heart
@@ -71,6 +71,18 @@ namespace game
       {
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
+      };
+
+      //function called when enemy is hit by wall
+      auto EnemyInWall = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        (void) entCollided;
+        if( entColliding.AI->behaviour != FVAI::SB::PATHFINDING 
+            && 
+            entColliding.AI->behaviour != FVAI::SB::FOLLOWPATH)
+        {
+          entColliding.AI->behaviour = FVAI::SB::PATHFINDING;
+        }
       };
       
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
@@ -182,6 +194,8 @@ namespace game
       for(auto* wallColl : stat_coll)
       {
         saveCollisions(*enemy,*wallColl,nullptr);
+        actOnCollisions(*enemy, *wallColl, EnemyInWall);
+        //here the function of 
       }
 
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE

@@ -264,7 +264,8 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::PATHFINDING, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; //ÑÑÑÑ cambiar behaviour a arrive
+            auto bh = FVAI::SB::ARRIVE;
+            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh  , .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
@@ -323,7 +324,8 @@ namespace FVeng
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
 
-            e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
+            auto bh = FVAI::SB::SHOOTATTACK;
+            e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh,  .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
             e.render    = game::RenderComponent     { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
@@ -565,8 +567,8 @@ namespace FVeng
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
            
-
-            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PATHFINDING, .targetID=targetID, .perceptionTime=perceptionTime};   //ÑÑÑÑ      
+            auto bh = FVAI::SB::PURSUE;
+            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
                                     
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
