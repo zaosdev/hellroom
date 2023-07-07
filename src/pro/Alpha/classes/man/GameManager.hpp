@@ -108,14 +108,14 @@ namespace FVeng
 
 
         private:
-        SFMLeng::SpriteManager SPman{15};
+        SFMLeng::SpriteManager SPman{100};
 
         sf::RenderWindow& window_;
         //create Sprite manager
         tXMLeng::mapManager mapMan{};
         FV_factory::effectsFactory effMan{};
 
-        FVeng::EntityManager<game::Entity> EM_{100};
+        FVeng::EntityManager<game::Entity> EM_{500};
         game::blackBoardComponent bb_{} ;
         // bool allSpawned{false};
         game::Entity::id_type mapID_{0};

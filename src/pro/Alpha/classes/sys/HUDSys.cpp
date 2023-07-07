@@ -207,18 +207,21 @@ namespace game
         game::Entity& player = gMan_.getPlayer();
         auto tipo = player.weapon->especial;
         switch(tipo){
-            case 1:
+            case game::mejora::escopeta:
                 std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunEscopeta_;});
             break;
-            case 2:
+            case game::mejora::cruz:
                 std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunCruz_;});
             break;
-            case 3:
+            case game::mejora::rafaga: 
                 std::cout << "tipo disparo: "<<player.weapon->especial << std::endl;
                 it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunRafaga_;});
             break;
+            case game::mejora::normal:
+                //aqui si quieres puedes poner icono de arma normal, si no return para que no pete
+                return;
         }
         auto& trueGun = *it.base();
         trueGun.render->Sprite.setPosition(100,100);
@@ -254,7 +257,7 @@ namespace game
         renderTimer();
 
         //render the type of special shot obtained
-        renderGunType();
+        //renderGunType();
     }
 
 }
