@@ -43,6 +43,10 @@ namespace tXMLeng
         XMLElem doors = map.FindFirstChildwithName("objectgroup","door");
         assert(not doors.isEmpty() && "There must be a door object group even if empty");
         GenerateDoors(doors);
+
+        XMLElem traps = map.FindFirstChildwithName("objectgroup","traps");
+        assert(not traps.isEmpty() && "There must be a door object group even if empty");
+        GenerateTraps(traps);
     }
 
     void mapManager::GenerateRooms(XMLElem& map)
@@ -165,6 +169,22 @@ namespace tXMLeng
         }
     }
 
+    void  mapManager::GenerateTraps(XMLElem& traps)
+    {
+        XMLElem trap = traps.FirstChildNamed("object");
+
+        while(!trap.isEmpty())
+        {
+            auto& trapInfo = TrapsInfo_.emplace_back();
+
+            trap.queryAttribute<int*>("x", &trapInfo.x);
+            trap.queryAttribute<int*>("y", &trapInfo.y);
+
+            trap = trap.NextSiblingNamed("object");
+        }
+    }
+
+
     void mapManager::assignDoorInfo(DoorInfo& door,XMLElem& doors )
     {
 
@@ -284,6 +304,7 @@ namespace tXMLeng
         map_.tileMap.clear();
         SpawnersInfo_.clear();
         DoorsInfo_.clear();
+        TrapsInfo_.clear();
         RoomsInfo_.clear();
         map_ = TileMap{};
     }
@@ -373,6 +394,11 @@ namespace tXMLeng
     std::vector<DoorInfo>& mapManager::getDoors() 
     {
         return DoorsInfo_;
+    }
+
+    std::vector<FVmath::Point2Di>& mapManager::getTraps() 
+    {
+        return TrapsInfo_;
     }
 
     std::vector<Room>& mapManager::getRooms() 

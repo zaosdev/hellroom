@@ -54,12 +54,12 @@ namespace FVEng{
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
-        , trapSys       { GameMan }
         , weaponSys     { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
         , animSys       { GameMan }
+        , trapSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -113,7 +113,7 @@ namespace FVEng{
                     roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                    //spwnSys.update();
+                    spwnSys.update();
                     trapSys.update();
 
                     inpRec.update();
@@ -170,7 +170,6 @@ namespace FVEng{
         game::InputManager      inpRec;
         game::InputSys          inpSys;
         game::AISys             AISys;
-        game::TrapSys           trapSys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
         game::effctSys          efctSys;
@@ -186,6 +185,8 @@ namespace FVEng{
         game::PetSys            petSys;
         game::RoomSys           roomSys;
         game::animationSys      animSys;
+        game::TrapSys           trapSys;
+
   
         //Game clock
         sf::Clock clock;

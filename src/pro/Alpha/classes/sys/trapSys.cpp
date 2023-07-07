@@ -15,48 +15,39 @@ namespace game
 
     TrapSys::~TrapSys() = default;
 
-    
-
     void TrapSys::update()
     {  
-        if(primera_vez == false){
-            FVmath::Point2Di Pos = {150,150};
-            tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-            //gMan_.createTrap(Pos);
-            primera_vez = true;
-            std::cout << "estado 0" << std::endl;
-
-        }
 
         for(auto& e: gMan_.getEntityManager()){
             if(e.trap){
-                auto current_time = std::chrono::steady_clock::now();
-                auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - tiempo_comienzo_1).count();
-                if (elapsed_time >= e.trap->delayTime) { //<- segundos que dura cada estado de la trampa
+                e.trap->current_time = std::chrono::steady_clock::now();
+                e.trap->elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(e.trap->current_time - e.trap->tiempo_comienzo_1).count();
+                if (e.trap->elapsed_time >= e.trap->delayTime) { //<- segundos que dura cada estado de la trampa
 
                     if(e.trap->modo==estado::primero){
                         e.trap->modo=estado::segundo;
-                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-                        //Cambiar imagen de la trampa
+                        e.trap->tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
+                        gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(2*gMan_.getMapManager().getTileSize().x,11*gMan_.getMapManager().getTileSize().y, 16, 16));
+
                         std::cout << "estado 1" << std::endl;
                     }
                     else if(e.trap->modo==estado::segundo){
                         e.trap->modo=estado::tercero;
-                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-                        //Cambiar imagen de la trampa
+                        e.trap->tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
+                        gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(3*gMan_.getMapManager().getTileSize().x,11*gMan_.getMapManager().getTileSize().y, 16, 16));
                         std::cout << "estado 2" << std::endl;
 
                     }
                     else if(e.trap->modo==estado::tercero){
                         e.trap->modo=estado::cuarto;
-                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-                        //Cambiar imagen de la trampa
+                        e.trap->tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
+                        gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(4*gMan_.getMapManager().getTileSize().x,11*gMan_.getMapManager().getTileSize().y, 16, 16));
                         std::cout << "estado 3" << std::endl;
                     }
                     else if(e.trap->modo==estado::cuarto){
                         e.trap->modo=estado::primero;
-                        tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
-                    //Comprobar si el jugador esta en la posicion de la trampa, mediante un rando de esta misma. SI se encuentra, se le resta vida, se cambiara la imagen y se resetea el tiempo. 
+                        e.trap->tiempo_comienzo_1 = std::chrono::steady_clock::now(); 
+                        gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*gMan_.getMapManager().getTileSize().x,11*gMan_.getMapManager().getTileSize().y, 16, 16));
                     std::cout << "estado 4" << std::endl;
                     }
                 }

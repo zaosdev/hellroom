@@ -73,7 +73,10 @@ namespace FVeng
 
         void createAllSpawner();
         void createAllDoors();
+        void createAllTraps();
         void createAllRooms();
+
+
         void createRoomTrigger(tXMLeng::room_trigger& room, game::Entity::id_type id);
         void createRoomBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);

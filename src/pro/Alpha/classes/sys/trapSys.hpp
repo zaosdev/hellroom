@@ -21,7 +21,6 @@ namespace game
         //void iniPhysicsSys();
         void update();
      
-        std::chrono::steady_clock::time_point tiempo_comienzo_1;
 
         private:
             FVeng::GameManager& gMan_;

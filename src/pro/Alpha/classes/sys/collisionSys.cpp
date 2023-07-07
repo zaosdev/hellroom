@@ -67,7 +67,6 @@ namespace game
       auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
       {
         if(entCollided.trap->modo==estado::cuarto){
-        std::cout << "colision con la trampa" << std::endl;
 
         entColliding.health->negativeAffection = entCollided.trap->trapDamage;
         entCollided.trap->modo=estado::primero;
@@ -229,7 +228,6 @@ namespace game
     for(auto* trap : mapTrap)
     {
       actOnCollisions(*trap,player,trapHit);
-      std::cout << "colision con la trampa" << std::endl;
 
       player.health->negativeAffection = 1;
     }

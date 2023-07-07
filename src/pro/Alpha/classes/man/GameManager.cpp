@@ -70,7 +70,6 @@ namespace FVeng
         {
             LoadLevel();
             LoadAllTextures();
-            createTrap({150,150});
             createPlayer({320,240});
             if(FVData::getSelectedPet() != -1)
             {
@@ -265,11 +264,11 @@ namespace FVeng
 
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(TRAP_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getMapSize().x,11*mapMan.getMapSize().y, 16, 16));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getTileSize().x,11*mapMan.getTileSize().y, 16, 16));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
             e.trap = game::TrapComponent{};
@@ -481,6 +480,12 @@ namespace FVeng
                 createDoor(door);
         }
 
+        void GameManager::createAllTraps()
+        {
+            for(auto& trap : mapMan.getTraps())
+                createTrap(trap);
+        }
+
         //Create all rooms on the current map
         void GameManager::createAllRooms()
         {
@@ -563,6 +568,7 @@ namespace FVeng
 
             createAllSpawner();
             createAllDoors();
+            createAllTraps();
             createAllRooms();
 
 
