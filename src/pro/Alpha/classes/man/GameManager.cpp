@@ -271,7 +271,7 @@ namespace FVeng
             initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getTileSize().x,11*mapMan.getTileSize().y, 16, 16));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
-            e.trap = game::TrapComponent{};
+            e.trap = game::TrapComponent{ .delayTime = float(FVmath::calculateRandom(300,100)/100) };
 
             e.addTag(game::Entity::TAG::TRAP); 
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);

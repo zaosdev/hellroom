@@ -10464,6 +10464,75 @@
    <property name="next_level" value="game_end"/>
   </properties>
  </objectgroup>
- <objectgroup id="88" name="traps"/>
-
+ <objectgroup id="88" name="traps">
+  <object id="320" x="672" y="688" width="16" height="16"/>
+  <object id="321" x="688.667" y="688" width="16" height="16"/>
+  <object id="322" x="704.167" y="687.75" width="16" height="16"/>
+  <object id="323" x="720.833" y="688" width="16" height="16"/>
+  <object id="324" x="608.667" y="574.667" width="16" height="16"/>
+  <object id="325" x="623.333" y="592" width="16" height="16"/>
+  <object id="326" x="641.333" y="574.667" width="16" height="16"/>
+  <object id="327" x="656.667" y="592.667" width="16" height="16"/>
+  <object id="328" x="592" y="592.667" width="16" height="16"/>
+  <object id="329" x="688" y="416.667" width="16" height="16"/>
+  <object id="330" x="706" y="400" width="16" height="16"/>
+  <object id="331" x="688" y="385.333" width="16" height="16"/>
+  <object id="332" x="704.667" y="368" width="16" height="16"/>
+  <object id="333" x="688" y="352.667" width="16" height="16"/>
+  <object id="335" x="366.667" y="224.667" width="16" height="16"/>
+  <object id="336" x="384" y="240" width="16" height="16"/>
+  <object id="337" x="400" y="240" width="16" height="16"/>
+  <object id="338" x="414.667" y="223.333" width="16" height="16"/>
+  <object id="339" x="322.667" y="272.667" width="16" height="16"/>
+  <object id="340" x="335.333" y="286" width="16" height="16"/>
+  <object id="341" x="351.333" y="304" width="16" height="16"/>
+  <object id="342" x="462.667" y="270.667" width="16" height="16"/>
+  <object id="343" x="447.333" y="287.333" width="16" height="16"/>
+  <object id="344" x="430.667" y="302.667" width="16" height="16"/>
+  <object id="345" x="288.667" y="431.333" width="16" height="16"/>
+  <object id="346" x="304.667" y="446.667" width="16" height="16"/>
+  <object id="347" x="353.333" y="368.667" width="16" height="16"/>
+  <object id="348" x="368.667" y="384" width="16" height="16"/>
+  <object id="349" x="463.333" y="352" width="16" height="16"/>
+  <object id="350" x="480.667" y="352" width="16" height="16"/>
+  <object id="351" x="498" y="352" width="16" height="16"/>
+  <object id="352" x="144" y="416" width="16" height="16"/>
+  <object id="353" x="160" y="432" width="16" height="16"/>
+  <object id="354" x="176" y="448" width="16" height="16"/>
+  <object id="355" x="192" y="464" width="16" height="16"/>
+  <object id="356" x="208" y="480" width="16" height="16"/>
+  <object id="361" x="160" y="464" width="16" height="16"/>
+  <object id="362" x="144" y="480" width="16" height="16"/>
+  <object id="363" x="192" y="432" width="16" height="16"/>
+  <object id="364" x="208" y="416" width="16" height="16"/>
+  <object id="365" x="144" y="448" width="16" height="16"/>
+  <object id="366" x="208" y="448" width="16" height="16"/>
+  <object id="367" x="176" y="416" width="16" height="16"/>
+  <object id="368" x="176" y="480" width="16" height="16"/>
+  <object id="369" x="47.3333" y="592.667" width="16" height="16"/>
+  <object id="370" x="64.6667" y="607.333" width="16" height="16"/>
+  <object id="371" x="80.6667" y="623.333" width="16" height="16"/>
+  <object id="372" x="96" y="640" width="16" height="16"/>
+  <object id="373" x="304" y="593.333" width="16" height="16"/>
+  <object id="374" x="288" y="608" width="16" height="16"/>
+  <object id="375" x="272" y="624" width="16" height="16"/>
+  <object id="376" x="255.333" y="640.667" width="16" height="16"/>
+  <object id="377" x="144" y="656" width="16" height="16"/>
+  <object id="378" x="159.333" y="640.667" width="16" height="16"/>
+  <object id="379" x="176" y="656" width="16" height="16"/>
+  <object id="380" x="192" y="639.333" width="16" height="16"/>
+  <object id="381" x="208.667" y="655.333" width="16" height="16"/>
+  <object id="382" x="176" y="608.667" width="16" height="16"/>
+  <object id="383" x="176" y="592" width="16" height="16"/>
+  <object id="384" x="80.6667" y="688" width="16" height="16"/>
+  <object id="385" x="80" y="671.333" width="16" height="16"/>
+  <object id="386" x="80" y="705.333" width="16" height="16"/>
+  <object id="387" x="64.6667" y="688" width="16" height="16"/>
+  <object id="388" x="96" y="688" width="16" height="16"/>
+  <object id="389" x="272" y="688" width="16" height="16"/>
+  <object id="390" x="254" y="688" width="16" height="16"/>
+  <object id="391" x="272" y="670.667" width="16" height="16"/>
+  <object id="392" x="289.333" y="688" width="16" height="16"/>
+  <object id="393" x="272" y="705.333" width="16" height="16"/>
+ </objectgroup>
 </map>
