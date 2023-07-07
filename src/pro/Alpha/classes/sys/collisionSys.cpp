@@ -27,7 +27,7 @@ namespace game
       std::vector<Entity*> stat_coll{};
       std::vector<Entity*> plyrBullets{};
       std::vector<Entity*> enmyBullets{};
-
+      std::vector<Entity*> mapTrap{};
 
 
       //bool nomore{false};
@@ -43,8 +43,7 @@ namespace game
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
       auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
-
-
+      auto isTrap           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRAP);};
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
@@ -63,7 +62,16 @@ namespace game
         {
           room->room->enabled=true;
         }
+      };
+      //function called when entity is hit by trap
+      auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        if(entCollided.trap->modo==estado::cuarto){
+        std::cout << "colision con la trampa" << std::endl;
 
+        entColliding.health->negativeAffection = entCollided.trap->trapDamage;
+        entCollided.trap->modo=estado::primero;
+        }
       };
 
       //function called when entity is hit by bullet
@@ -72,6 +80,8 @@ namespace game
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+
+
       
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
@@ -156,6 +166,10 @@ namespace game
           {
             actOnCollisions(player,ent,enableRoom);
           }
+          else if(isTrap(ent))
+          {
+            actOnCollisions(player,ent,trapHit);
+          }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
           // {
@@ -211,6 +225,14 @@ namespace game
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
 
+      //COLISION DEL JUGADOR CON LA TRAMPA
+    for(auto* trap : mapTrap)
+    {
+      actOnCollisions(*trap,player,trapHit);
+      std::cout << "colision con la trampa" << std::endl;
+
+      player.health->negativeAffection = 1;
+    }
 
   }
 

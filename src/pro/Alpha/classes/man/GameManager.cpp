@@ -15,6 +15,7 @@ static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
 static constexpr const char* PET2_SP_PATH       { "../media/pets/guardian.png"};
 static constexpr const char* PET3_SP_PATH       { "../media/pets/sentinel.png"};
 static constexpr const char* BULLET_PATH        { "../media/bullet.png"};
+static constexpr const char* TRAP_PATH          { "../media//HUD/trap.png"};
 
 
 
@@ -51,6 +52,7 @@ namespace FVeng
 
         void GameManager::LoadAllTextures()
         {
+            SPman.loadTexture(TRAP_PATH, TRAP_TEXT);
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(ENEMYA_SPRITE_PATH, ENEMY_A);
             SPman.loadTexture(ENEMYB_SPRITE_PATH, ENEMY_B);
@@ -68,6 +70,7 @@ namespace FVeng
         {
             LoadLevel();
             LoadAllTextures();
+            createTrap({150,150});
             createPlayer({320,240});
             if(FVData::getSelectedPet() != -1)
             {
@@ -258,7 +261,21 @@ namespace FVeng
 
             return e;
         }
+        void GameManager::createTrap(FVmath::Point2Di Pos){
 
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(TRAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getMapSize().x,11*mapMan.getMapSize().y, 16, 16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
+            e.trap = game::TrapComponent{};
+
+            e.addTag(game::Entity::TAG::TRAP);            
+        }
 
         game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {

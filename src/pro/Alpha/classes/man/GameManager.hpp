@@ -33,7 +33,7 @@ namespace FVeng
         static constexpr const char* PET2_TEXT   = "pet2_sprite";
         static constexpr const char* PET3_TEXT   = "pet3_sprite";
         static constexpr const char* SHIELD_TEXT = "shield_sprite";
-
+        static constexpr const char* TRAP_TEXT   = "trap_sprite";
 
         GameManager(sf::RenderWindow& window);
 
@@ -59,6 +59,7 @@ namespace FVeng
         void createMap();
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
+        void createTrap(FVmath::Point2Di Pos);
         void createDoor(tXMLeng::DoorInfo door);
         void createRoom(tXMLeng::Room& room);
         void instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id);

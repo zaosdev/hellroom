@@ -20,6 +20,7 @@
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
 #include "../classes/sys/roomSys.hpp"
+#include "../classes/sys/trapSys.hpp"
 
 
 #include "../classes/sys/animationSys.hpp"
@@ -53,6 +54,7 @@ namespace FVEng{
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
+        , trapSys       { GameMan }
         , weaponSys     { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
@@ -111,7 +113,8 @@ namespace FVEng{
                     roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
-                    spwnSys.update();
+                    //spwnSys.update();
+                    trapSys.update();
 
                     inpRec.update();
                     inpSys.update();
@@ -167,6 +170,7 @@ namespace FVEng{
         game::InputManager      inpRec;
         game::InputSys          inpSys;
         game::AISys             AISys;
+        game::TrapSys           trapSys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
         game::effctSys          efctSys;
