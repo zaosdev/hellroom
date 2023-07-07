@@ -10464,4 +10464,6 @@
    <property name="next_level" value="game_end"/>
   </properties>
  </objectgroup>
+ <objectgroup id="88" name="traps"/>
+
 </map>
