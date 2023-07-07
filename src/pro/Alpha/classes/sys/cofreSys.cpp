@@ -80,5 +80,6 @@ namespace game
                 }
             }
         }
+        std::cout << "Termina el cofre sys" << std::endl;
     }
 }

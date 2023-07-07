@@ -74,6 +74,9 @@ namespace FVEng{
             HudSys.setCoinID    (GameMan.createCoin().id());
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
+            // HudSys.setWeapon1ID (GameMan.createWeapon1().id());
+            // HudSys.setWeapon2ID (GameMan.createWeapon2().id());
+            // HudSys.setWeapon3ID (GameMan.createWeapon3().id());
             petSys.initPetSys();
             soundSys.loadSounds();
         }
