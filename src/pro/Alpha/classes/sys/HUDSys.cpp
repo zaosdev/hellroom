@@ -66,6 +66,21 @@ namespace game
         coin_ = id;
     }
 
+    void HUDSys::setGunCruzID(size_t id)
+    {
+        gunCruz_ = id;
+    }
+
+    void HUDSys::setGunEscopetaID(size_t id)
+    {
+        gunEscopeta_ = id;
+    }
+
+    void HUDSys::setGunRafagaID(size_t id)
+    {
+        gunRafaga_ = id;
+    }
+
     void HUDSys::setClockID(size_t id)
     {
         clocksp_ = id;
@@ -179,7 +194,7 @@ namespace game
         //Get the player's coins data
         int coins = player_->data->coins;
 
-        //Get the coin sprite
+        //Get the coin sprite COPIAR ESTO
         auto& EM = gMan_.getEntityManager();
         auto it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==coin_;});
         auto& trueCoin = *it.base();
@@ -196,6 +211,30 @@ namespace game
         //Draw sprite and coin text
         window_.draw(trueCoin.render->Sprite);
         window_.draw(coinText_);
+    }
+
+    void HUDSys::renderGunType(){
+        auto& EM = gMan_.getEntityManager();
+        std::vector<game::Entity>::iterator it;
+
+        game::Entity& player = gMan_.getPlayer();
+        auto tipo = player.weapon->especial;
+        switch(tipo){
+            case game::mejora::escopeta:
+                it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunEscopeta_;});
+            break;
+            case game::mejora::cruz:
+                it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunCruz_;});
+            break;
+            case game::mejora::rafaga: 
+                it = std::find_if(EM.begin(),EM.end(),[&](auto& e){ return e.id()==gunRafaga_;});
+            break;
+            case game::mejora::normal:
+            return;
+        }
+        auto& trueGun = *it.base();
+        trueGun.render->Sprite.setPosition(10,640);
+        window_.draw(trueGun.render->Sprite);
     }
 
     void HUDSys::update()
@@ -224,6 +263,8 @@ namespace game
         //Render the time passed
         renderTimer();
 
+        //render the type of special shot obtained
+        renderGunType();
     }
 
 }

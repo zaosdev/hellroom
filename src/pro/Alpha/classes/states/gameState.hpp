@@ -19,6 +19,7 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
+#include "../classes/sys/cofreSys.hpp"
 #include "../classes/sys/roomSys.hpp"
 #include "../classes/sys/trapSys.hpp"
 
@@ -55,6 +56,7 @@ namespace FVEng{
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
+        , cofreSys      { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
@@ -79,6 +81,12 @@ namespace FVEng{
             HudSys.setCoinID    (GameMan.createCoin().id());
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
+            HudSys.setGunCruzID (GameMan.createGunCruz().id());
+            HudSys.setGunEscopetaID (GameMan.createGunEscopeta().id());
+            HudSys.setGunRafagaID (GameMan.createGunRafaga().id());
+            // HudSys.setWeapon1ID (GameMan.createWeapon1().id());
+            // HudSys.setWeapon2ID (GameMan.createWeapon2().id());
+            // HudSys.setWeapon3ID (GameMan.createWeapon3().id());
             petSys.initPetSys();
             soundSys.loadSounds();
             renSys.iniRenderSys();
@@ -138,6 +146,8 @@ namespace FVEng{
 
                     weaponSys.update();
 
+                    cofreSys.update();
+
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
@@ -181,6 +191,7 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
+        game::CofreSys          cofreSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
         game::RoomSys           roomSys;

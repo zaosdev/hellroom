@@ -1,6 +1,6 @@
 #include "GameManager.hpp"
-#include "cmp/CollisionComponent.hpp"
-#include "utils/gameData.hpp"
+#include "../cmp/CollisionComponent.hpp"
+#include "../utils/gameData.hpp"
 #include "../define.h"
 
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
@@ -9,6 +9,11 @@
 static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player_sprites.png"};
 static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
 static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
+
+static constexpr const char* GUN_CRUZ_PATH      { "../media/HUD/gun-cruz.png"};
+static constexpr const char* GUN_ESCOPETA_PATH  { "../media/HUD/gun-escopeta.png"};
+static constexpr const char* GUN_RAFAGA_PATH    { "../media/HUD/gun-rafaga.png"};
+
 static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
 static constexpr const char* SHIELD_SP_PATH     { "../media/HUD/shield.png"};
 static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
@@ -60,10 +65,15 @@ namespace FVeng
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
             SPman.loadTexture(BULLET_PATH, BULLET_TEXT);
+            SPman.loadTexture("../media/chest.png", COFRE_TEXT);
             SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
             SPman.loadTexture(SHIELD_SP_PATH, SHIELD_TEXT);
+
+            SPman.loadTexture(GUN_CRUZ_PATH, GUN_CRUZ_TEXT);
+            SPman.loadTexture(GUN_ESCOPETA_PATH, GUN_ESCOPETA_TEXT);
+            SPman.loadTexture(GUN_RAFAGA_PATH, GUN_RAFAGA_TEXT);
         }
 
         void GameManager::initGame()
@@ -387,7 +397,7 @@ namespace FVeng
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
-            std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+           // std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
@@ -406,6 +416,28 @@ namespace FVeng
             e.addTag(game::Entity::TAG::Bullet);
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
             e.addTag(game::Entity::TAG::Player);
+        }
+
+        void GameManager::createCofre(FVmath::Point2Di Pos, int id){
+
+            auto& e = EM_.createEntity();
+
+             auto texIdx = SPman.getTextureIdxByName(COFRE_TEXT);
+            //std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, sf::IntRect(0, 0, 16, 14));
+
+            e.cofre = game::CofreComponent{};
+            e.cofre->id = id;
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)}, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
+
+            e.addTag(game::Entity::TAG::Cofre);
+            e.coll = game::CollisionComponent{};
+
+            //Set player bullet
         }
 
         void GameManager::createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord)
@@ -816,6 +848,39 @@ namespace FVeng
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
             initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,32,32));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunCruz(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_CRUZ_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunEscopeta(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_ESCOPETA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunRafaga(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_RAFAGA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
 
             return e;
         }

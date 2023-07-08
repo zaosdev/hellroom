@@ -58,7 +58,7 @@ namespace game
                 soundSys.playSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
                 if(inpRec_.isKeyPressed(getKeyCode('u'))){
-                    std::cout << "up" << std::endl;
+                    //std::cout << "up" << std::endl;
                      ent.weapon->on=true; 
                      ent.weapon->direction=directionType::norte;
     
@@ -78,7 +78,11 @@ namespace game
             }
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
-                
+               //cofre
+                if(inpRec_.isKeyPressed(getKeyCode('e')))
+                {
+                    ent.cofre->abrir=true;
+                } 
         }
 
         
