@@ -33,6 +33,7 @@ namespace game
 
         void iniSprite(game::Entity& ent, double pt);
         void update(double percentTick);
+        void startOnPlayer();
        // void addHUD(HUDSys& hud);
 
         private:

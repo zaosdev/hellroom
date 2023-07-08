@@ -338,7 +338,7 @@ namespace tXMLeng
                 currentTile = currentTile.NextSiblingNamed("tile");
             }
         }
-        imprimirMapa(mapRepresentation_);
+        //imprimirMapa(mapRepresentation_);
     }
 
 
