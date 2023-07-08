@@ -82,6 +82,7 @@ namespace FVeng
         void createAllSpawner();
         void createAllDoors();
         void createAllTraps();
+        void createAllCoffers();
         void createAllRooms();
 
 

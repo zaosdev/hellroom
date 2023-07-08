@@ -57,7 +57,6 @@ namespace FVeng
 
         void GameManager::LoadAllTextures()
         {
-            SPman.loadTexture(TRAP_PATH, TRAP_TEXT);
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(ENEMYA_SPRITE_PATH, ENEMY_A);
             SPman.loadTexture(ENEMYB_SPRITE_PATH, ENEMY_B);
@@ -65,12 +64,10 @@ namespace FVeng
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
             SPman.loadTexture(BULLET_PATH, BULLET_TEXT);
-            SPman.loadTexture("../media/chest.png", COFRE_TEXT);
             SPman.loadTexture(PET1_SP_PATH, PET1_TEXT);
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
             SPman.loadTexture(SHIELD_SP_PATH, SHIELD_TEXT);
-
             SPman.loadTexture(GUN_CRUZ_PATH, GUN_CRUZ_TEXT);
             SPman.loadTexture(GUN_ESCOPETA_PATH, GUN_ESCOPETA_TEXT);
             SPman.loadTexture(GUN_RAFAGA_PATH, GUN_RAFAGA_TEXT);
@@ -422,12 +419,12 @@ namespace FVeng
 
             auto& e = EM_.createEntity();
 
-             auto texIdx = SPman.getTextureIdxByName(COFRE_TEXT);
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
             //std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0, 0, 16, 14));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(19*mapMan.getTileSize().x,18*mapMan.getTileSize().y, 16, 16));
 
             e.cofre = game::CofreComponent{};
             e.cofre->id = id;
@@ -435,6 +432,8 @@ namespace FVeng
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)}, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
 
             e.addTag(game::Entity::TAG::Cofre);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
             e.coll = game::CollisionComponent{};
 
             //Set player bullet
@@ -505,6 +504,12 @@ namespace FVeng
             for(auto& spawner : mapMan.getSpawners())
                 createSpawner(spawner,0);
             
+        }
+
+        void GameManager::createAllCoffers()
+        {
+            for(auto& coffer : mapMan.getCoffers())
+                createCofre(coffer,0);
         }
 
         //Create all doors on the current map
@@ -603,6 +608,7 @@ namespace FVeng
             createAllSpawner();
             createAllDoors();
             createAllTraps();
+            createAllCoffers();
             createAllRooms();
 
 
@@ -727,6 +733,8 @@ namespace FVeng
             e.effct->effects.push_back(effMan.createEffectNamed("Healing"));
 
             e.addTag(game::Entity::TAG::Health);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
         }
 
         void GameManager::createDoor(tXMLeng::DoorInfo door)

@@ -10535,4 +10535,9 @@
   <object id="392" x="289.333" y="688" width="16" height="16"/>
   <object id="393" x="272" y="705.333" width="16" height="16"/>
  </objectgroup>
+  <objectgroup id="89" name="coffers">
+  <object id="396" x="705.333" y="310.667"/>
+  <object id="397" x="96" y="456"/>
+  <object id="398" x="220" y="730.667"/>
+ </objectgroup>
 </map>

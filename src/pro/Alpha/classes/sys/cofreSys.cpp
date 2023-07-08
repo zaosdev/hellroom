@@ -13,7 +13,6 @@ namespace game
     CofreSys::CofreSys(FVeng::GameManager& gameMan)
     : gMan_(gameMan)
     {
-        first = true;
     }
 
     CofreSys::~CofreSys() = default;
@@ -21,14 +20,6 @@ namespace game
 
     void CofreSys::update()
     {   
-        if(first == true){
-            std::cout <<  "COFRE!"<< std::endl;
-            FVmath::Point2Di position = {80,250};
-            FVmath::Point2Di position2 = {360,180};
-            gMan_.createCofre(position, 1);
-            //gMan_.createCofre(position2, 2);
-            first = false;
-        }
 
         game::Entity& player = gMan_.getPlayer();
         FVmath::Point2D posplayer = player.physics->pos;
@@ -51,6 +42,7 @@ namespace game
                     //std::cout << "pos: " << posplayer << std::endl;
                     //std::cout << "id: " << e.cofre->id << std::endl;
                         //premio:
+                    gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(21*gMan_.getMapManager().getTileSize().x,18*gMan_.getMapManager().getTileSize().y, 16, 16));
 
                     std::srand(static_cast<unsigned int>(std::time(0)));
                     int esp = std::rand() % 3;

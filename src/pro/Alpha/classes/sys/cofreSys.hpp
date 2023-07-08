@@ -22,7 +22,6 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
-            bool first;
-            //game::RenderSys renSys{gMan_};
+
     };
 }
