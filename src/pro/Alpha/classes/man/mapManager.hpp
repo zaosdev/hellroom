@@ -65,6 +65,7 @@ namespace tXMLeng
         void  GenerateObjects(XMLElem& objectsParent);
         void  GenerateRooms(XMLElem& objectsParent);
         void  GenerateTraps(XMLElem& objectsParent);
+        void  GenerateLevers(XMLElem& objectsParent);
         void  GenerateCoffers(XMLElem& objectsParent);
 
 
@@ -91,6 +92,8 @@ namespace tXMLeng
         const std::vector<FVmath::Point2Di>& getColliderData() const;
         std::vector<Spawner>& getSpawners();
         std::vector<FVmath::Point2Di>& getTraps();
+        std::vector<tXMLeng::Lever>& getLevers();
+
         std::vector<FVmath::Point2Di>& getCoffers();
         std::vector<DoorInfo>& getDoors();
         std::vector<Room>& getRooms();
@@ -106,6 +109,8 @@ namespace tXMLeng
         std::vector<DoorInfo> DoorsInfo_{};
         std::vector<FVmath::Point2Di> TrapsInfo_{};
         std::vector<FVmath::Point2Di> CoffersInfo_{};
+        std::vector<Lever> LeversInfo_{};
+
 
         std::vector<std::vector<int>> mapRepresentation_ {};
         std::vector<Room> RoomsInfo_{};

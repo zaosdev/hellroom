@@ -42,12 +42,14 @@ namespace game
         Health = 1 << 6,
         DOOR = 1 << 7,
         KILL_ON_MAP_CHANGE = 1 << 8,
-        Cofre = 1 << 20,
         TRIGGER = 1 << 9,
         ROOM = 1 << 10,
         SPAWNER = 1 << 11,
         KILL_ON_ROOM_DELETE = 1 << 12,
         TRAP = 1 << 13,
+        LEVER = 1 << 14,
+        Cofre = 1 << 15,
+
 
       };
 

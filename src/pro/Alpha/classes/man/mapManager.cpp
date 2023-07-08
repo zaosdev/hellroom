@@ -51,6 +51,15 @@ namespace tXMLeng
         XMLElem coffers = map.FindFirstChildwithName("objectgroup","coffers");
         assert(not coffers.isEmpty() && "There must be a coffers object group even if empty");
         GenerateCoffers(coffers);
+
+        XMLElem levers = map.FindFirstChildwithName("group","levers");
+        assert(not levers.isEmpty() && "There must be a levers group even if empty");
+        auto leverInfo = levers.FirstChildNamed("group");
+        while(not leverInfo.isEmpty())
+        {
+            GenerateLevers(leverInfo);
+            leverInfo = leverInfo.NextSiblingNamed("group");
+        }
     }
 
     void mapManager::GenerateRooms(XMLElem& map)
@@ -185,6 +194,32 @@ namespace tXMLeng
             trap.queryAttribute<int*>("y", &trapInfo.y);
 
             trap = trap.NextSiblingNamed("object");
+        }
+    }
+
+   void  mapManager::GenerateLevers(XMLElem& levers)
+    {
+        XMLElem lever = levers.FindFirstChildwithName("objectgroup","lever").FirstChildNamed("object");
+
+        auto& leverInfo = LeversInfo_.emplace_back();
+
+        lever.queryAttribute<int*>("x", &leverInfo.pos.x);
+        lever.queryAttribute<int*>("y", &leverInfo.pos.y);
+
+        XMLElem walls = levers.FindFirstChildwithName("objectgroup","walls");
+        XMLElem wall = walls.FirstChildNamed("object");
+
+        while(!wall.isEmpty())
+        {
+            auto& wallInfo = leverInfo.walls.emplace_back();
+
+            wall.queryAttribute<int*>("x", &wallInfo.pos.x);
+            wall.queryAttribute<int*>("y", &wallInfo.pos.y);
+
+            wall.queryAttribute<int*>("width", &wallInfo.size.x);
+            wall.queryAttribute<int*>("height", &wallInfo.size.y);
+
+            wall = wall.NextSiblingNamed("object");
         }
     }
 
@@ -419,6 +454,12 @@ namespace tXMLeng
     std::vector<FVmath::Point2Di>& mapManager::getTraps() 
     {
         return TrapsInfo_;
+    }
+
+    std::vector<tXMLeng::Lever>& mapManager::getLevers()
+    {
+        return LeversInfo_;
+
     }
 
     std::vector<FVmath::Point2Di>& mapManager::getCoffers() 

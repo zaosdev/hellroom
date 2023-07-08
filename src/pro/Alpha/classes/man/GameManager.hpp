@@ -67,6 +67,7 @@ namespace FVeng
         void changeMap();
         void createHealth(FVmath::Point2D Pos);
         void createTrap(FVmath::Point2Di Pos);
+        game::Entity& createLever(FVmath::Point2Di Pos);
         void createDoor(tXMLeng::DoorInfo door);
         void createCofre(FVmath::Point2Di Pos, int id);
         void createRoom(tXMLeng::Room& room);
@@ -80,6 +81,7 @@ namespace FVeng
         void createPetBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord);
 
         void createAllSpawner();
+        void createAllLevers();
         void createAllDoors();
         void createAllTraps();
         void createAllCoffers();
@@ -88,6 +90,7 @@ namespace FVeng
 
         void createRoomTrigger(tXMLeng::room_trigger& room, game::Entity::id_type id);
         void createRoomBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
+        void createLeverBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
 
 

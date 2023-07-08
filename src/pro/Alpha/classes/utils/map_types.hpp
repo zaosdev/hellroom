@@ -49,4 +49,10 @@ namespace tXMLeng
         std::vector<room_blockage> blocks{};
         std::vector<Spawner> spawners{};
     };
+
+    struct Lever
+    {
+        FVmath::Point2Di pos{};
+        std::vector<room_blockage> walls{};
+    };
 }

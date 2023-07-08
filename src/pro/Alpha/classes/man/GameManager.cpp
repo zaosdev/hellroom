@@ -525,6 +525,16 @@ namespace FVeng
                 createTrap(trap);
         }
 
+        void GameManager::createAllLevers()
+        {
+            for(auto& lever : mapMan.getLevers())
+            {
+                auto& e = createLever(lever.pos);
+                for(auto& wall : lever.walls)
+                    createLeverBlockage(wall,e.id());
+            }
+        }
+
         //Create all rooms on the current map
         void GameManager::createAllRooms()
         {
@@ -606,6 +616,7 @@ namespace FVeng
             } 
 
             createAllSpawner();
+            createAllLevers();
             createAllDoors();
             createAllTraps();
             createAllCoffers();
@@ -737,6 +748,33 @@ namespace FVeng
 
         }
 
+        game::Entity& GameManager::createLever(FVmath::Point2Di Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(5*mapMan.getTileSize().x,12*mapMan.getTileSize().y,16,16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::LEVER);
+
+
+            return e;
+        }
+
+
         void GameManager::createDoor(tXMLeng::DoorInfo door)
         {
             auto& e = EM_.createEntity();
@@ -805,6 +843,29 @@ namespace FVeng
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
             e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
 
+        }
+
+        void GameManager::createLeverBlockage(tXMLeng::room_blockage& block, game::Entity::id_type id)
+       {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
         }
 
         void GameManager::createRoom(tXMLeng::Room& room)

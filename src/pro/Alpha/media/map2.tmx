@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="51" nextobjectid="197">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="55" nextobjectid="197">
  <tileset firstgid="1" source="0x72_DungeonTilesetII_v1.4.tsx"/>
  <group id="4" name="render">
   <layer id="1" name="floor" width="50" height="50">
@@ -10021,7 +10021,7 @@
    </data>
   </layer>
  </group>
- <group id="10" name="rooms">
+ <group id="10" name="rooms" visible="0">
   <group id="18" name="room">
    <objectgroup id="24" name="room_trigger">
     <object id="108" x="346" y="31.5" width="32.5" height="142.5"/>
@@ -10415,14 +10415,14 @@
    </objectgroup>
   </group>
  </group>
- <objectgroup id="7" name="door">
+ <objectgroup id="7" name="door" visible="0">
   <object id="109" x="544.5" y="16.5" width="32" height="32">
    <properties>
     <property name="next_level" value="../media/level3.tmx"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="8" name="spawner">
+ <objectgroup id="8" name="spawner" visible="0">
   <object id="114" x="734.833" y="715.833">
    <properties>
     <property name="type" value="0"/>
@@ -10433,7 +10433,7 @@
   <object id="195" x="762.667" y="405.333"/>
   <object id="196" x="81.3333" y="86.6667"/>
  </objectgroup>
- <objectgroup id="49" name="traps">
+ <objectgroup id="49" name="traps" visible="0">
   <object id="116" x="240.333" y="672.333" width="16" height="16"/>
   <object id="117" x="223.333" y="687.667" width="16" height="16"/>
   <object id="118" x="240.333" y="704.667" width="16" height="16"/>
@@ -10512,4 +10512,5 @@
   <object id="193" x="272" y="97.3333" width="16" height="16"/>
   <object id="194" x="286.667" y="80" width="16" height="16"/>
  </objectgroup>
+ <group id="51" name="levers"/>
 </map>

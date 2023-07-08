@@ -10540,4 +10540,15 @@
   <object id="397" x="96" y="456"/>
   <object id="398" x="220" y="730.667"/>
  </objectgroup>
+  <group id="91" name="levers">
+  <group id="96" name="lever">
+   <objectgroup id="92" name="lever">
+    <object id="402" x="181" y="731"/>
+   </objectgroup>
+   <objectgroup id="94" name="walls">
+    <object id="403" x="384" y="176" width="16" height="16"/>
+    <object id="404" x="400" y="176" width="16" height="16"/>
+   </objectgroup>
+  </group>
+ </group>
 </map>

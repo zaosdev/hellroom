@@ -10497,4 +10497,6 @@
   <objectgroup id="96" name="coffers">
   <object id="451" x="81.3333" y="254.667"/>
  </objectgroup>
+ <group id="97" name="levers"/>
+
 </map>

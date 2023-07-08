@@ -15,10 +15,6 @@ namespace game
           HUD_ (hud)
         {
         }
-        // RenderSys::~RenderSys()
-        // {
-        //     if(window_.isOpen()) window_.close();
-        // }
 
         void RenderSys::iniRenderSys()
         {
@@ -269,13 +265,16 @@ namespace game
                     drawMap(*ent.map);
                     mapEnt = &ent;
                 }
-                if(ent.render && ent.physics)
+                if(ent.render && ent.physics &&  not ent.input)
                 {
                     iniSprite(ent,percentTick);
                     draw(ent.render->Sprite);
 
                 }
             }
+
+            iniSprite(gMan_.getPlayer(),percentTick);
+            draw(gMan_.getPlayer().render->Sprite);
 
             if(mapEnt)
                 drawUpperMap(*mapEnt->map);

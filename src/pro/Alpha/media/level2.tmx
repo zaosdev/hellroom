@@ -10512,4 +10512,6 @@
   <object id="195" x="762.667" y="405.333"/>
   <object id="196" x="81.3333" y="86.6667"/>
  </objectgroup>
+ <group id="51" name="levers"/>
+
 </map>
