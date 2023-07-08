@@ -20,11 +20,14 @@ namespace game
         HUDSys& operator=(const HUDSys&)= delete;
         HUDSys& operator=(HUDSys&&)= delete;
 
-        void setPlayer  (Entity* player);
-        void setHeartID (size_t id);
-        void setCoinID  (size_t id);
-        void setClockID (size_t id);
-        void setShieldID(size_t id);
+        void setPlayer         (Entity* player);
+        void setHeartID        (size_t id);
+        void setCoinID         (size_t id);
+        void setClockID        (size_t id);
+        void setShieldID       (size_t id);
+        void setGunCruzID      (size_t id);
+        void setGunEscopetaID  (size_t id);
+        void setGunRafagaID    (size_t id);
         // template<typename T>
         //void draw(sf::Sprite& Sprite);
         //void drawMap(MapComponent& Sprite);
@@ -36,9 +39,11 @@ namespace game
         FVmath::Point2Di renderHearts ();
         void renderShield(FVmath::Point2Di lastHeartPosition);
         void renderCoins();
+        void renderGunType();
         void renderTimer();
         void restartTime();
         void setMaxTime(double newTime);
+        
 
         private:
             FVeng::GameManager& gMan_;
@@ -52,6 +57,11 @@ namespace game
             size_t              coin_;
             size_t              clocksp_;
             size_t              shieldsp_;
+
+            size_t              gunCruz_;
+            size_t              gunEscopeta_;
+            size_t              gunRafaga_;
+            
             double              accumulatedTime_;    //time passed (seconds)
             double              maxTime_ = 99;
          //   float               viewPortTop_;

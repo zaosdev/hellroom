@@ -7,3 +7,5 @@
 #define maxHeightTiles       15   //tiles in height we can see 
 #define plusTilesOnDirection 2    //looking at right --> 2 more to the right
 #define maxCameraSpeed       5
+#define defSize              15
+#define pathfindingSize      2

@@ -76,7 +76,12 @@ namespace game
                     }
                     case FVAI::SB::FOLLOWPATH:
                     {
+                        std::cout << "behavipur = followpath" << std::endl;
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->path, ent.physics->mov_speed);
+                        if(addPos == FVmath::Point2D{}) {
+                            ent.AI->behaviour = FVAI::SB::SEEK;
+                            std::cout << "Cambia a seek" << std::endl;
+                        }
                         break;
                     }
                     case FVAI::SB::STAY:

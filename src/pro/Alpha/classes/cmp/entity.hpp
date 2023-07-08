@@ -13,8 +13,11 @@
 #include "weaponComponent.hpp"
 #include "shieldComponent.hpp"
 #include "CollisionComponent.hpp"
+#include "cofreComponent.hpp"
 #include "roomComponent.hpp"
-
+#include "trapComponent.hpp"
+#include "animationComponent.hpp"
+#include "leverComponent.hpp"
 
 
 
@@ -45,14 +48,15 @@ namespace game
         ROOM = 1 << 10,
         SPAWNER = 1 << 11,
         KILL_ON_ROOM_DELETE = 1 << 12,
-
-
-
+        TRAP = 1 << 13,
+        LEVER = 1 << 14,
+        Cofre = 1 << 15,
 
 
       };
 
       friend struct FVeng::EntityManager<Entity>;
+
       
       std::optional<RenderComponent>    render{};
       std::optional<PhysicsComponent>   physics{};
@@ -68,7 +72,10 @@ namespace game
       std::optional<ShieldComponent>    shield{};
       std::optional<CollisionComponent> coll{};
       std::optional<RoomComponent>      room{};
-
+      std::optional<CofreComponent>   cofre{};
+      std::optional<LeverComponent>   lever{};
+      std::optional<animationComponent> anim{};
+      std::optional<TrapComponent>  trap{};
 
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }

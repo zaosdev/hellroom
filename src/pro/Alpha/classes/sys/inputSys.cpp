@@ -15,6 +15,9 @@ namespace game
         auto& EM = gMan_.getEntityManager();
         for(auto& ent : EM)
         {
+            if(inpRec_.isKeyPressed(getKeyCode('N')))   gMan_.change_level=true; 
+
+
             if(ent.input && ent.physics)
             {
                 ent.physics->vel = {0,0};
@@ -55,7 +58,7 @@ namespace game
                 soundSys.playSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
                 if(inpRec_.isKeyPressed(getKeyCode('u'))){
-                    std::cout << "up" << std::endl;
+                    //std::cout << "up" << std::endl;
                      ent.weapon->on=true; 
                      ent.weapon->direction=directionType::norte;
     
@@ -75,7 +78,17 @@ namespace game
             }
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
-                
+            //cofre
+            if(inpRec_.isKeyPressed(getKeyCode('e')))
+            {
+                ent.cofre->abrir=true;
+            } 
+
+            //cofre
+            if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('e')))
+            {
+                ent.lever->pressed=true;
+            } 
         }
 
         

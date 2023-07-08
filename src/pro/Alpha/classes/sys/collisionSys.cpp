@@ -27,7 +27,7 @@ namespace game
       std::vector<Entity*> stat_coll{};
       std::vector<Entity*> plyrBullets{};
       std::vector<Entity*> enmyBullets{};
-
+      std::vector<Entity*> mapTrap{};
 
 
       //bool nomore{false};
@@ -42,9 +42,10 @@ namespace game
       auto isStaticObject   = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
       auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
       auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
       auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
-
-
+      auto isTrap           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRAP);};
+      auto isLever           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::LEVER);};
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
@@ -63,7 +64,15 @@ namespace game
         {
           room->room->enabled=true;
         }
+      };
+      //function called when entity is hit by trap
+      auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        if(entCollided.trap->modo==estado::cuarto){
 
+        entColliding.health->negativeAffection = entCollided.trap->trapDamage;
+        entCollided.trap->modo=estado::primero;
+        }
       };
 
       //function called when entity is hit by bullet
@@ -72,12 +81,24 @@ namespace game
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+
+      //function called when enemy is hit by wall
+      auto EnemyInWall = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        (void)entCollided;
+        if( entColliding.AI->behaviour != FVAI::SB::PATHFINDING 
+            && 
+            entColliding.AI->behaviour != FVAI::SB::FOLLOWPATH)
+        {
+          entColliding.AI->behaviour = FVAI::SB::PATHFINDING;
+        }
+      };
       
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
         (void)entColliding;
+        (void)entCollided;
         gMan_.change_level=true;
-        gMan_.nextLevel = entCollided.map->nextLevel;
       };
       //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
       //First parameter must be moving entity- the one that collides with
@@ -139,7 +160,11 @@ namespace game
           }
           else if(isEnemyBullet(ent))
           {
-            saveCollisions(player,ent,&enmyBullets);
+            enmyBullets.push_back(&ent);
+            if (DynamicEntityVsStaticEntity(player, dt, ent ))
+            {
+                bulletHit(ent,player);
+            }
           }
           else if(isStaticObject(ent))
           {
@@ -153,9 +178,21 @@ namespace game
           {
             actOnCollisions(player,ent,changeLevel);
           }
+          else if(isCofre(ent)){
+            saveCollisions(player,ent ,nullptr);
+          }
           else if(isRoomTrigger(ent))
           {
             actOnCollisions(player,ent,enableRoom);
+          }
+          else if(isTrap(ent))
+          {
+            actOnCollisions(player,ent,trapHit);
+
+          }
+          else if(isTrap(ent))
+          {
+            saveCollisions(player,ent ,nullptr);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
@@ -181,12 +218,23 @@ namespace game
       //ENEMY COLLISION AGAINST WALLS
       for(auto* wallColl : stat_coll)
       {
+        //if(enemy->AI->behaviour != FVAI::SB::FOLLOWPATH) 
         saveCollisions(*enemy,*wallColl,nullptr);
+        actOnCollisions(*enemy, *wallColl, EnemyInWall);
+      }
+
+      //ENEMY COLLISION AGAINST WALLS
+      for(auto* bullet  : plyrBullets)
+      {
+        if (DynamicEntityVsStaticEntity(*enemy, dt, *bullet ))
+        {
+            bulletHit(*bullet,*enemy);
+        }
       }
 
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
       if(saveCollisions(*enemy,player,nullptr))
-        player.health->negativeAffection = 1;
+        player.health->negativeAffection = 10;
 
       //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
       resolveEntityCollisions(*enemy);
@@ -212,6 +260,13 @@ namespace game
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
 
+      //COLISION DEL JUGADOR CON LA TRAMPA
+    for(auto* trap : mapTrap)
+    {
+      actOnCollisions(*trap,player,trapHit);
+
+      player.health->negativeAffection = 1;
+    }
 
   }
 
@@ -314,7 +369,6 @@ namespace game
 
   bool CollisionSys::ResolveDynamicEntityVsEntity(Entity& dynamicEntity, Entity& staticEntity, const float dt)
   {
-
 			if (DynamicEntityVsStaticEntity(dynamicEntity, dt, staticEntity))
 			{
 				dynamicEntity.physics->vel += dynamicEntity.coll->contactNormal * FVmath::Point2D{std::abs(dynamicEntity.physics->vel.x), std::abs(dynamicEntity.physics->vel.y)} * (1 - dynamicEntity.coll->contactTime);

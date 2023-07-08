@@ -9,7 +9,7 @@ namespace game
 
 
 
-    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice)
+    void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos, auto enemyChoice)
     {
 
         // gMan_.SpawnDummy(Pos);
@@ -34,6 +34,7 @@ namespace game
                 gMan_.createEnemyArrive(Pos,{320,240},0.1,4);
             break;
         }
+        //createEnemyArrive(Pos,{320,240},0.1,4);
     }
     void SpawnSys::SpawnPlayer()
     {

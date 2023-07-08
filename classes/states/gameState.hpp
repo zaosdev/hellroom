@@ -73,11 +73,12 @@ namespace FVEng{
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
             petSys.initPetSys();
-            soundSys.loadSounds();
+            soundSys.loadSounds(); 
         }
 
         void changeLevel()
         {
+            std::cout << "change level" << std::endl;
             spwnSys.SpawnPlayer();
             GameMan.change_level=false;
         }

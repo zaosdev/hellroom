@@ -19,9 +19,12 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
+#include "../classes/sys/cofreSys.hpp"
 #include "../classes/sys/roomSys.hpp"
+#include "../classes/sys/trapSys.hpp"
+#include "../classes/sys/leverSys.hpp"
 
-
+#include "../classes/sys/animationSys.hpp"
 
 #include "../man/stateManager.hpp"
 #include "../states/gameOverState.hpp"
@@ -46,16 +49,20 @@ namespace FVEng{
         , spwnSys       { GameMan }
         , efctSys       { GameMan }
         , soundSys      { GameMan, inpRec }
-        , achSys        { GameMan }
+        , achSys        { /*GameMan*/ }
         , saveSys       { GameMan }
         , collisionSys  { GameMan }
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
+        , cofreSys      { GameMan }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
+        , animSys       { GameMan }
+        , trapSys       { GameMan }
+        , leverSys      { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -75,15 +82,26 @@ namespace FVEng{
             HudSys.setCoinID    (GameMan.createCoin().id());
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
+            HudSys.setGunCruzID (GameMan.createGunCruz().id());
+            HudSys.setGunEscopetaID (GameMan.createGunEscopeta().id());
+            HudSys.setGunRafagaID (GameMan.createGunRafaga().id());
+            // HudSys.setWeapon1ID (GameMan.createWeapon1().id());
+            // HudSys.setWeapon2ID (GameMan.createWeapon2().id());
+            // HudSys.setWeapon3ID (GameMan.createWeapon3().id());
             petSys.initPetSys();
             soundSys.loadSounds();
             renSys.iniRenderSys();
+            animSys.setTexureID (GameMan.getPlayer().id()); 
+            //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
+            renSys.startOnPlayer();
         }
 
         void changeLevel()
         {
+            std::cout << "change level" << std::endl;
             spwnSys.SpawnPlayer();
             GameMan.change_level=false;
+            renSys.startOnPlayer();
         }
 
         void executeState() override
@@ -93,23 +111,26 @@ namespace FVEng{
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
+                GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
                     changeLevel();
                 }
-                GameMan.getEntityManager().update();
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
 
+                    leverSys.update();
 
                     roomSys.update();
 
                     //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
                     spwnSys.update();
+                    trapSys.update();
 
                     inpRec.update();
                     inpSys.update();
+
 
                     AISys.update(GameMan.getBB(), dt);
 
@@ -129,9 +150,13 @@ namespace FVEng{
 
                     weaponSys.update();
 
+                    cofreSys.update();
+
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
+
+                    animSys.update(dt /*updateClock.getElapsedTime().asSeconds()*/);
                 
                 }
 
@@ -139,6 +164,7 @@ namespace FVEng{
                 // //Render game
                 float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
                 renSys.update(percentTick);
+
             }
 
             //player is dead
@@ -160,7 +186,7 @@ namespace FVEng{
         game::AISys             AISys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
-        game::effctSys         efctSys;
+        game::effctSys          efctSys;
         game::SoundSys          soundSys;
         game::AchievementSys    achSys;
         game::SavingSys         saveSys;
@@ -169,9 +195,14 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
+        game::CofreSys          cofreSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
         game::RoomSys           roomSys;
+        game::animationSys      animSys;
+        game::TrapSys           trapSys;
+        game::LeverSys          leverSys;
+  
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;

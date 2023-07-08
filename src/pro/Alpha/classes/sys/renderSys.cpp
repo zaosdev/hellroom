@@ -15,10 +15,6 @@ namespace game
           HUD_ (hud)
         {
         }
-        // RenderSys::~RenderSys()
-        // {
-        //     if(window_.isOpen()) window_.close();
-        // }
 
         void RenderSys::iniRenderSys()
         {
@@ -196,6 +192,12 @@ namespace game
             view_.setCenter(sf::Vector2f(centerX, centerY));
         }
 
+        void RenderSys::startOnPlayer()
+        {
+            auto& pos = gMan_.getPlayer().physics->pos;
+            centerX = newCenterX = pos.x;
+            centerY = newCenterY = pos.y;
+        }
 
         void RenderSys::setVisibleArea()
         {
@@ -269,13 +271,16 @@ namespace game
                     drawMap(*ent.map);
                     mapEnt = &ent;
                 }
-                if(ent.render && ent.physics)
+                if(ent.render && ent.physics &&  not ent.input)
                 {
                     iniSprite(ent,percentTick);
                     draw(ent.render->Sprite);
 
                 }
             }
+
+            iniSprite(gMan_.getPlayer(),percentTick);
+            draw(gMan_.getPlayer().render->Sprite);
 
             if(mapEnt)
                 drawUpperMap(*mapEnt->map);

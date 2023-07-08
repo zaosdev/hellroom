@@ -2,6 +2,7 @@
 
 #include "../man/GameManager.hpp"
 #include "../cmp/blackBoardComponent.hpp"
+#include "../define.h"
 
 namespace game
 {
@@ -19,5 +20,6 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            static constexpr float MAX_DISTANCE {12 * tileSize}; //x tiles
     };
 }

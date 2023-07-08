@@ -52,6 +52,7 @@ namespace FVeng
         game::Entity& createClock   ();
         game::Entity& createShield  ();
         game::Entity& createMapCollider(FVmath::Point2Di Pos);
+        game::Entity& createGunCruz();
 
         void createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction,  double perceptionTime);
         void createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
@@ -67,6 +68,7 @@ namespace FVeng
         void createSpawner(tXMLeng::Spawner& spawner);
         void createAllSpawner();
         void createAllDoors();
+        
 
         void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);

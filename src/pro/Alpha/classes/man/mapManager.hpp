@@ -64,6 +64,10 @@ namespace tXMLeng
 
         void  GenerateObjects(XMLElem& objectsParent);
         void  GenerateRooms(XMLElem& objectsParent);
+        void  GenerateTraps(XMLElem& objectsParent);
+        void  GenerateLevers(XMLElem& objectsParent);
+        void  GenerateCoffers(XMLElem& objectsParent);
+
 
         //SHOULD USE TEMPLATE AND ONLY 1 GENERATE FUNCTION; DO IF SURPLUS TIME
         void  GenerateRoom(XMLElem& room);
@@ -74,6 +78,7 @@ namespace tXMLeng
         void  GenerateDoors(XMLElem& doors);
         void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
         void  assignDoorInfo(DoorInfo& door,XMLElem& doors );
+
         //////////
 
         //GETTERS
@@ -85,9 +90,14 @@ namespace tXMLeng
         const FVmath::Point2Di getTileSize() const;
         const std::vector<int>& getCurrentLayer() const;
         const std::vector<FVmath::Point2Di>& getColliderData() const;
-        std::vector<Spawner>& getSpawners() ;
-        std::vector<DoorInfo>& getDoors() ;
-        std::vector<Room>& getRooms() ;
+        std::vector<Spawner>& getSpawners();
+        std::vector<FVmath::Point2Di>& getTraps();
+        std::vector<tXMLeng::Lever>& getLevers();
+
+        std::vector<FVmath::Point2Di>& getCoffers();
+        std::vector<DoorInfo>& getDoors();
+        std::vector<Room>& getRooms();
+        std::vector<std::vector<int>>& getMapGridRepresentation();
 
 
 
@@ -97,6 +107,12 @@ namespace tXMLeng
         TileSet tile_{};
         std::vector<Spawner> SpawnersInfo_{};
         std::vector<DoorInfo> DoorsInfo_{};
+        std::vector<FVmath::Point2Di> TrapsInfo_{};
+        std::vector<FVmath::Point2Di> CoffersInfo_{};
+        std::vector<Lever> LeversInfo_{};
+
+
+        std::vector<std::vector<int>> mapRepresentation_ {};
         std::vector<Room> RoomsInfo_{};
 
 
