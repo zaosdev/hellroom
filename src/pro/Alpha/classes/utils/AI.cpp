@@ -74,21 +74,29 @@ FVmath::Point2D FVAI::followCircularPath(FVmath::Point2D origin, circularIterato
     return addPos;
 }
 
-FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, linearIterator& path, double speed)
+FVmath::Point2D FVAI::followPath(FVmath::Point2D origin, linearIterator& path, double speed, bool& pathIsOver)
 {
-    auto addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed, 5.f);
-    std::cout << "addpos: " << addPos << std::endl;
+    auto addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed, 3.f);
+    std::cout << "addpos:    " << addPos << std::endl;
+    std::cout << "origin:    " << origin << std::endl;
+    std::cout << "objective: " << FVmath::Point2D{(float)path.getCurrent().x, (float)path.getCurrent().y} << std::endl;
+    // std::cout << "current path num: "  << path.current_ << std::endl; 
+    // std::cout << "path size: " << path.size_ << std::endl; 
     if(addPos == FVmath::Point2D{}) 
     {   
-        if(path.getNext() == FVmath::Point2Di{-1,-1}) 
+        if(path.getNext() == FVmath::Point2Di{FVAI::linearIterator::nullValue,FVAI::linearIterator::nullValue}) 
         {
             std::cout << "HA terminado el camino" << std::endl;
-            //std::terminate();
+            pathIsOver = true;
         } 
         else
         {
             addPos = seek(origin, {(float)path.getCurrent().x, (float)path.getCurrent().y}, speed, 5.f);
         }
+    }
+    else if(path.isStuck())
+    {
+        pathIsOver = true;
     }
     
     return addPos;
