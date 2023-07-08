@@ -18,7 +18,8 @@ namespace game
     struct AIComponent
     {
         FVmath::Point2D                 targetCoord;                    //get position for arriving
-        FVAI::SB                        behaviour;                      //behaviour of entity
+        FVAI::SB                        behaviour;                      //current behaviour of entity
+        FVAI::SB                        originalBehaviour {behaviour};  //behaviour of entity
         double                          friction;                       //slowing component for certain behaviours such as arrive
         uint32_t                        targetID;                       //look at the player
         double                          time2arrive    {1};             //for slowing on arrival
