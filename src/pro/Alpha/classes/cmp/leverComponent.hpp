@@ -4,9 +4,8 @@ namespace game
 {
     struct LeverComponent
     {
-        bool interact{false};
-
-        int id;
+        bool pressed{false};
+        std::size_t ownerID{0};
 
     };
 }

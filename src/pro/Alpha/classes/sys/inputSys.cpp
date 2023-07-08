@@ -78,11 +78,17 @@ namespace game
             }
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
-               //cofre
-                if(inpRec_.isKeyPressed(getKeyCode('e')))
-                {
-                    ent.cofre->abrir=true;
-                } 
+            //cofre
+            if(inpRec_.isKeyPressed(getKeyCode('e')))
+            {
+                ent.cofre->abrir=true;
+            } 
+
+            //cofre
+            if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('e')))
+            {
+                ent.lever->pressed=true;
+            } 
         }
 
         

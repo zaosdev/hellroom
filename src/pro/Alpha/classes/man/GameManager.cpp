@@ -20,7 +20,6 @@ static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
 static constexpr const char* PET2_SP_PATH       { "../media/pets/guardian.png"};
 static constexpr const char* PET3_SP_PATH       { "../media/pets/sentinel.png"};
 static constexpr const char* BULLET_PATH        { "../media/bullet.png"};
-static constexpr const char* TRAP_PATH          { "../media//HUD/trap.png"};
 
 
 
@@ -766,6 +765,8 @@ namespace FVeng
                 e.physics->pos.y
             );      
 
+            e.lever = game::LeverComponent{};
+
             e.coll = game::CollisionComponent{};
 
             e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
@@ -857,6 +858,8 @@ namespace FVeng
             initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
 
             e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.lever = game::LeverComponent{ .ownerID = id};
 
             e.render->Sprite.move(
                 e.physics->pos.x,

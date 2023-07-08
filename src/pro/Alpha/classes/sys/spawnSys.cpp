@@ -11,6 +11,7 @@ namespace game
 
     void SpawnSys::SpawnEnemy(FVmath::Point2Di Pos,auto enemyshit, size_t& enemyID)
     {
+        (void)enemyshit;
 
         gMan_.SpawnDummy(Pos);
         auto enemyChoice = FVmath::calculateRandom(3,1);

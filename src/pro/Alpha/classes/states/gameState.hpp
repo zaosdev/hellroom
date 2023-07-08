@@ -22,7 +22,7 @@
 #include "../classes/sys/cofreSys.hpp"
 #include "../classes/sys/roomSys.hpp"
 #include "../classes/sys/trapSys.hpp"
-
+#include "../classes/sys/leverSys.hpp"
 
 #include "../classes/sys/animationSys.hpp"
 
@@ -62,6 +62,7 @@ namespace FVEng{
         , roomSys       { GameMan}
         , animSys       { GameMan }
         , trapSys       { GameMan }
+        , leverSys      { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -117,6 +118,7 @@ namespace FVEng{
                 {
                     double dt = updateClock.restart().asSeconds();
 
+                    leverSys.update();
 
                     roomSys.update();
 
@@ -197,7 +199,7 @@ namespace FVEng{
         game::RoomSys           roomSys;
         game::animationSys      animSys;
         game::TrapSys           trapSys;
-
+        game::LeverSys          leverSys;
   
         //Game clock
         sf::Clock clock;

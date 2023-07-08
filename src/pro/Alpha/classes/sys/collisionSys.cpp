@@ -45,6 +45,7 @@ namespace game
       auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
       auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
       auto isTrap           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRAP);};
+      auto isLever           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::LEVER);};
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
@@ -96,6 +97,7 @@ namespace game
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
         (void)entColliding;
+        (void)entCollided;
         gMan_.change_level=true;
       };
       //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
@@ -188,6 +190,10 @@ namespace game
             actOnCollisions(player,ent,trapHit);
 
           }
+          else if(isTrap(ent))
+          {
+            saveCollisions(player,ent ,nullptr);
+          }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
           // {
@@ -217,9 +223,18 @@ namespace game
         actOnCollisions(*enemy, *wallColl, EnemyInWall);
       }
 
+      //ENEMY COLLISION AGAINST WALLS
+      for(auto* bullet  : plyrBullets)
+      {
+        if (DynamicEntityVsStaticEntity(*enemy, dt, *bullet ))
+        {
+            bulletHit(*bullet,*enemy);
+        }
+      }
+
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
       if(saveCollisions(*enemy,player,nullptr))
-        player.health->negativeAffection = 1;
+        player.health->negativeAffection = 10;
 
       //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
       resolveEntityCollisions(*enemy);

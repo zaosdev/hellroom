@@ -17,6 +17,8 @@
 #include "roomComponent.hpp"
 #include "trapComponent.hpp"
 #include "animationComponent.hpp"
+#include "leverComponent.hpp"
+
 
 
 
@@ -71,7 +73,7 @@ namespace game
       std::optional<CollisionComponent> coll{};
       std::optional<RoomComponent>      room{};
       std::optional<CofreComponent>   cofre{};
-
+      std::optional<LeverComponent>   lever{};
       std::optional<animationComponent> anim{};
       std::optional<TrapComponent>  trap{};
 

@@ -30,6 +30,8 @@ target_sources(libModulos PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/roomSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/animationSys.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/sys/trapSys.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sys/leverSys.cpp"
+
 
 )
 
