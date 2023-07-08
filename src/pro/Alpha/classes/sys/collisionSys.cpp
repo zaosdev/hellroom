@@ -158,7 +158,11 @@ namespace game
           }
           else if(isEnemyBullet(ent))
           {
-            saveCollisions(player,ent,&enmyBullets);
+            enmyBullets.push_back(&ent);
+            if (DynamicEntityVsStaticEntity(player, dt, ent ))
+            {
+                bulletHit(ent,player);
+            }
           }
           else if(isStaticObject(ent))
           {
@@ -182,6 +186,7 @@ namespace game
           else if(isTrap(ent))
           {
             actOnCollisions(player,ent,trapHit);
+
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
