@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "math.hpp"
+#include <SFML/System/Clock.hpp>
 
 namespace FVAI {
     struct linearIterator {
@@ -20,10 +21,15 @@ namespace FVAI {
         std::vector<PointType> getPath();
 
         void clear(); 
-size_t size_    {0};size_t current_ {0};
+
+        bool isStuck();
+
     private:
         std::vector<PointType> path_ {};
-        
-        
+        float passedTime_ {0};
+        size_t size_      {0};
+        size_t current_   {0};
+        sf::Clock clock_   {};
+        static constexpr float maxTileTime = {1.f};
     };
 };

@@ -126,7 +126,7 @@ namespace FVeng
 
             initEntityRender(e, {0,16}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,16));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{16,16}};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{defSize,defSize}};
             //falsear el bounding box para que sea 16x16 en vez de 16x32
 
             
@@ -312,7 +312,7 @@ namespace FVeng
             initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
 
             e.render->Sprite.move(
@@ -370,7 +370,7 @@ namespace FVeng
             initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -629,7 +629,7 @@ namespace FVeng
             initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{16,16} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
 
             e.render->Sprite.move(

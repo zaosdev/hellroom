@@ -146,6 +146,8 @@ namespace game
                     }
                     case FVAI::SB::FOLLOWPATH:
                     {
+                        //set the size to a lower so it can move better into stretch places
+                        ent.physics->size = {pathfindingSize, pathfindingSize};
                         std::cout << "bh = followpath" << std::endl;
                         bool isOver = false;
                         addPos = FVAI::followPath(ent.physics->pos, ent.AI->linearPath, ent.physics->mov_speed, isOver);
@@ -153,6 +155,8 @@ namespace game
                         {
                             //ent.AI->behaviour = FVAI::SB::PATHFINDING;
                             ent.AI->behaviour = ent.AI->originalBehaviour; //once the path is ended, return to the previous behaviour
+                            //return to normal size
+                            ent.physics->size = {defSize, defSize};
                         }
                         break;
                     }
@@ -179,12 +183,12 @@ namespace game
                         //Calculate the position of the enemy in the map representation
                         auto bounds       = ent.render->Sprite.getGlobalBounds();
                         auto& pos         = ent.physics->pos;
-                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x + bounds.width / 2, pos.y + bounds.height / 3);
+                        FVmath::Point2Di startGrid = gMan_.worldPositionToGrid(pos.x + bounds.width / 3, pos.y + bounds.height / 3);
                         
                         //Calculate the position of the goal in the map representation
                         auto& playerPos           = gMan_.getPlayer().physics->pos;
                         auto playerBounds         = gMan_.getPlayer().render->Sprite.getGlobalBounds();
-                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x + playerBounds.width / 2, (playerPos.y + playerBounds.height / 3));
+                        FVmath::Point2Di goalGrid = gMan_.worldPositionToGrid(playerPos.x + playerBounds.width / 3, (playerPos.y + playerBounds.height / 3));
  
                         std::cout << "Player position:  " << playerPos << std::endl;
 
@@ -203,7 +207,8 @@ namespace game
                                             
                         if(ent.AI->linearPath.getPath().size() == 0) 
                         {
-                            std::cout << "No se ha encontrado un camino" << std::endl; 
+                            std::cout << "No se ha encontrado un camino, vuelve a comportamiento original" << std::endl; 
+                            ent.AI->behaviour = ent.AI->originalBehaviour;
                         }
                         else
                         {

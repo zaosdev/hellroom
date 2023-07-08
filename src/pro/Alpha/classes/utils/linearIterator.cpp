@@ -4,11 +4,16 @@
 namespace FVAI {
     using PointType = linearIterator::PointType;
 
-    PointType linearIterator::getNext() {
-        if (current_ < path_.size() - 1) {
+    PointType linearIterator::getNext() 
+    {
+        if (current_ < path_.size() - 1) 
+        {
+            clock_.restart();
             ++current_;
             return path_[current_];
-        } else {
+        } 
+        else 
+        {
             // Se alcanzó el final del vector, devolver un valor indicativo de fin
             std::cout << "Se alcanzo el final del vector..."
             << "size: "  << size_ 
@@ -17,6 +22,16 @@ namespace FVAI {
             << std::endl;
             return {nullValue, nullValue}; 
         }
+    }
+
+    bool linearIterator::isStuck() 
+    {
+        if(clock_.getElapsedTime().asSeconds() > maxTileTime)
+        {
+            clock_.restart();
+            return true;
+        }
+        else return false;
     }
 
     PointType linearIterator::getCurrent() const {
@@ -41,7 +56,9 @@ namespace FVAI {
     void linearIterator::clear()
     {
         path_.clear();
-        current_ = 0;
-        size_    = 0;
+        current_    = 0;
+        size_       = 0;
+        passedTime_ = 0;
+        clock_.restart();
     }
 }
