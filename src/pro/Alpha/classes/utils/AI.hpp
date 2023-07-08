@@ -4,7 +4,6 @@
 #include "math.hpp"
 #include "circularIterator.hpp"
 #include "linearIterator.hpp"
-#include "Pathfinding.hpp"
 #include <vector>
 #include <queue>
 #include <cmath>

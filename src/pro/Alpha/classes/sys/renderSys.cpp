@@ -192,6 +192,12 @@ namespace game
             view_.setCenter(sf::Vector2f(centerX, centerY));
         }
 
+        void RenderSys::startOnPlayer()
+        {
+            auto& pos = gMan_.getPlayer().physics->pos;
+            centerX = newCenterX = pos.x;
+            centerY = newCenterY = pos.y;
+        }
 
         void RenderSys::setVisibleArea()
         {

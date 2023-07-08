@@ -92,13 +92,15 @@ namespace FVEng{
             renSys.iniRenderSys();
             animSys.setTexureID (GameMan.getPlayer().id()); 
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
-            
+            renSys.startOnPlayer();
         }
 
         void changeLevel()
         {
+            std::cout << "change level" << std::endl;
             spwnSys.SpawnPlayer();
             GameMan.change_level=false;
+            renSys.startOnPlayer();
         }
 
         void executeState() override

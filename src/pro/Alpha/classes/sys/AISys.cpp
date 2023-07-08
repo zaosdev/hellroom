@@ -105,6 +105,12 @@ namespace game
                 ent.AI->timeAlive += dt;
                 FVmath::Point2D addPos {};
                 bool percep = perception(ent.AI, EM, bb, dt);
+
+                //If the distance to the player is to high, dont even bother to activate this entity AI
+                if(FVmath::calculateDistance(ent.physics->pos, gMan_.getPlayer().physics->pos) > MAX_DISTANCE) {continue;}
+
+
+
                 switch(ent.AI->behaviour)
                 {
                     case FVAI::SB::ARRIVE:
@@ -157,6 +163,10 @@ namespace game
                             ent.AI->behaviour = ent.AI->originalBehaviour; //once the path is ended, return to the previous behaviour
                             //return to normal size
                             ent.physics->size = {defSize, defSize};
+                            //add little random values (to avoid stucks)
+                            bool sign = FVmath::calculateRandom(1,0);
+                            addPos = { static_cast<float>(FVmath::calculateRandom(5, 0)), static_cast<float>(FVmath::calculateRandom(5, 0))};
+                            if(!sign) addPos = addPos * -1;
                         }
                         break;
                     }

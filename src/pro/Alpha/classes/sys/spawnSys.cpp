@@ -53,9 +53,12 @@ namespace game
         
         auto& player = gMan_.getPlayer();
 
-        player.physics->pos = FVmath::Point2D{float(Pos.x),float(Pos.y)};
+        player.physics->pos     = FVmath::Point2D{float(Pos.x),float(Pos.y)};
+        player.physics->prevPos = FVmath::Point2D{float(Pos.x),float(Pos.y)};
 
         e.Spawn->capacity++;
+
+
     }
 
     void SpawnSys::setPlayerSpawner()
