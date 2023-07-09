@@ -100,7 +100,7 @@ namespace FVEng{
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             renSys.startOnPlayer();
             dialogueSys.activateDialogue("1.1");
-            GameMan.createBoss({100, 700},{320,240},GameMan.getPlayer().id(),3);
+            //GameMan.createBoss({100, 700},{320,240},GameMan.getPlayer().id(),3);
         }
 
         void changeLevel()
@@ -146,7 +146,7 @@ namespace FVEng{
                 {
                     double dt = updateClock.restart().asSeconds();
 
-                    bossSys.update(dt);
+                    //bossSys.update(dt);
 
 
                     leverSys.update();

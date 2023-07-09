@@ -96,7 +96,7 @@ namespace FVeng
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
 
         game::Entity&  createLaser(FVmath::Point2Di Pos);
-        void createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
+        //void createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
 
         void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);

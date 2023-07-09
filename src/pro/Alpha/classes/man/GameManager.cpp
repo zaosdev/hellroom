@@ -288,46 +288,46 @@ namespace FVeng
 
         }
 
-        void GameManager::createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
-        {
-            auto& e = EM_.createEntity();
+        // void GameManager::createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        // {
+        //     auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(BOSS_TEXT);
+        //     auto texIdx = SPman.getTextureIdxByName(BOSS_TEXT);
 
-            auto bh = FVAI::SB::PURSUE;
-            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
+        //     auto bh = FVAI::SB::PURSUE;
+        //     e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
                                     
-            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+        //     e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            e.reward = game::RewardComponent    {.min_reward = 90, .max_reward = 100};
+        //     e.reward = game::RewardComponent    {.min_reward = 90, .max_reward = 100};
 
-            float life = 200;
-            e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
+        //     float life = 200;
+        //     e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
 
-            //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy);
-            e.addTag(game::Entity::TAG::BOSS);
-            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+        //     //add tag enemy
+        //     e.addTag(game::Entity::TAG::Enemy);
+        //     e.addTag(game::Entity::TAG::BOSS);
+        //     e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
-            //create animation component
-            sf::Vector2u imgcount {4,6};
+        //     //create animation component
+        //     sf::Vector2u imgcount {4,6};
 
-            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 1};
+        //     e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 1};
 
-            e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+        //     e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(32 , 32, 200, 80));
+        //     initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(32 , 32, 200, 80));
 
-            FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
+        //     FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+        //     e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
-            e.render->Sprite.move(
-                e.physics->pos.x,
-                e.physics->pos.y
-            );    
+        //     e.render->Sprite.move(
+        //         e.physics->pos.x,
+        //         e.physics->pos.y
+        //     );    
 
-            e.coll = game::CollisionComponent{};  
-        }
+        //     e.coll = game::CollisionComponent{};  
+        // }
 
 
         game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
