@@ -108,8 +108,10 @@ namespace FVEng{
                 ++levelnumber;
             }
             HudSys.restartTime();
-            if(cambialvl == true){//este if es solo por el soundsys
                 //colocar sonido
+                soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
+                soundSys.update();
+
                 soundSys.setLoop(false, soundSys.soundLevel);
                 soundSys.playSound(soundSys.soundLevel, soundSys.isChangeLvl);
 
@@ -120,14 +122,6 @@ namespace FVEng{
                 std::cout << "level number: " << levelnumber << std::endl;
                 dialogueSys.activateDialogue(levelDialogues[levelnumber]);
                 cambialvl = false;
-            }
-            else
-            {
-               // soundSys.setLoop(false, soundSys.soundLevel);
-                soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
-                cambialvl = true;
-            }
-
 
         }
 
@@ -146,11 +140,9 @@ namespace FVEng{
                 GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
-                    
                     changeLevel();
                 }
                
-
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
