@@ -51,6 +51,7 @@ namespace FVeng
         sf::RenderWindow& getWindow();
         void initLevel();
         void initGame();
+        bool isGameWon();
         game::Entity& createPlayer(FVmath::Point2Di Pos);
         game::Entity& createPet   (FVmath::Point2Di Pos);
         game::Entity& createHeart   ();
@@ -135,6 +136,7 @@ namespace FVeng
         // bool allSpawned{false};
         game::Entity::id_type mapID_{0};
         game::Entity::id_type playerID_{0};
+        bool gameIsWon_ {false};
 
            
     };

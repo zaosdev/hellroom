@@ -30,6 +30,7 @@ namespace FVEng{
             void ChangeToGameOverState(bool replace);
             void ChangeToControlsState(bool replace);
             void ChangeToPauseState(bool replace);
+            void ChangeToEndGameState(bool replace);
 
             sf::RenderWindow& getWindow();
             void ProcessStateChanges( );

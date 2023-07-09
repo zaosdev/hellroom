@@ -139,7 +139,7 @@ namespace FVEng{
             updateClock.restart();
 
             //Bucle del juego
-            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0 && not inpSys.IsGamePaused() && not HudSys.isTimeOver()) 
+            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0 && not inpSys.IsGamePaused() && not HudSys.isTimeOver() && not GameMan.isGameWon()) 
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
@@ -209,8 +209,9 @@ namespace FVEng{
             //colocar sonido
             soundSys.setLoop(false, soundSys.soundGameOver);
             soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
-            if      (inpSys.IsGamePaused())                                              { SM_.ChangeToPauseState(false); }
-            else if (GameMan.getPlayer().health->currentLife > 0 || HudSys.isTimeOver()) { SM_.ChangeToGameOverState(true); }
+            if      (inpSys.IsGamePaused())                                                  { SM_.ChangeToPauseState(false);   }
+            else if (GameMan.getPlayer().health->currentLife <= 0 || HudSys.isTimeOver())    { SM_.ChangeToGameOverState(true); }
+            else if (GameMan.isGameWon())                                                    { SM_.ChangeToEndGameState(true); }
             //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 

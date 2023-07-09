@@ -7,6 +7,7 @@
 #include "states/gameOverState.hpp"
 #include "states/controlsState.hpp"
 #include "states/pauseState.hpp"
+#include "states/engGameState.hpp"
 
 namespace FVEng{
 
@@ -43,6 +44,11 @@ namespace FVEng{
     void StateMachine::ChangeToGameOverState(bool replace) 
     {
         AddState(std::make_unique<FVEng::gameOverState>(getWindow(), *this), replace);
+    }
+
+    void StateMachine::ChangeToEndGameState(bool replace)
+    {
+        AddState(std::make_unique<FVEng::endGameState>(getWindow(), *this), replace);
     }
 
     void StateMachine::ChangeToControlsState(bool replace) 

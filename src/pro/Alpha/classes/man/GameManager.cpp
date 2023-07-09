@@ -665,6 +665,11 @@ namespace FVeng
             }
         }
 
+        bool GameManager::isGameWon()
+        {
+            return gameIsWon_;
+        }
+
 
         void GameManager::update()
         {
@@ -677,7 +682,7 @@ namespace FVeng
                 }
                 else
                 {
-                    //AQUI JUANMA 
+                    gameIsWon_ = true;
                 }
             }
         }
