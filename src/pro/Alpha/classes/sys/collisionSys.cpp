@@ -139,7 +139,7 @@ namespace game
       //third prameter must be lambda object that needs 2 entities as paramter and only those
       auto actOnCollisions = [&](Entity& entColliding, Entity&  entCollided, auto action)
       {
-       if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
+       if (checkCollision(entColliding,entCollided ))
         {
           //coloca sonido
           soundSys_.setLoop(true, soundSys_.soundEHit);
