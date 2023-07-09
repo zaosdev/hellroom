@@ -27,12 +27,9 @@
 #include "../classes/sys/animationSys.hpp"
 
 #include "../man/stateManager.hpp"
-#include "../states/gameOverState.hpp"
 
 #include "../utils/circularIterator.hpp"
 #include "../cmp/blackBoardComponent.hpp"
-
-#define MAX_NUMBER_OF_ITEMS 3
 
 namespace FVEng{
     class gameState : public State {
@@ -193,7 +190,7 @@ namespace FVEng{
             //colocar sonido
             soundSys.setLoop(false, soundSys.soundGameOver);
             soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
-            SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
+            SM_.ChangeToGameOverState(true);
             //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 
