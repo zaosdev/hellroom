@@ -38,6 +38,8 @@ namespace FVeng
         static constexpr const char* PET3_TEXT   = "pet3_sprite";
         static constexpr const char* SHIELD_TEXT = "shield_sprite";
         static constexpr const char* TRAP_TEXT   = "trap_sprite";
+        static constexpr const char* BOSS_TEXT   = "boss_sprite";
+        static constexpr const char* LASER_TEXT  = "laser_sprite";
 
         GameManager(sf::RenderWindow& window);
 
@@ -93,6 +95,8 @@ namespace FVeng
         void createLeverBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
 
+        game::Entity&  createLaser(FVmath::Point2Di Pos);
+        //void createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime);
 
         void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);

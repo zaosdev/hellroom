@@ -49,11 +49,11 @@ namespace game
 
         void effctSys::listEffect(EffectComponent& effect)
         {
-
-            for(auto& efct : effect.effects)
-            {
-                //std::cout << "Description" << efct.description << "\n";
-            }
+            (void) effect;
+            // for(auto& efct : effect.effects)
+            // {
+            //     //std::cout << "Description" << efct.description << "\n";
+            // }
             //std::cout << "state: " << int(effect.state) << "\n";
             //std::cout << "entityID: " << effect.getEntityID() << "\n";
 
