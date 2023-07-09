@@ -32,6 +32,12 @@ namespace game
         
     }
 
+    void DialogueSys::activateDialogue(std::string nextDialogue)
+    {
+        textToRead_ = nextDialogue;
+        hasToRead_ = true;
+    }
+
     void DialogueSys::loadResources()
     {
         if (!font_.loadFromFile(FONT_PATH)) 
@@ -73,20 +79,28 @@ namespace game
     {
         text_.setString(allContent);
         currentIndex_ = allContent.size();
+        enterPressed_ = false;
     }
 
 
     void DialogueSys::update()
     {   
-        if(not hasToRead_) return;
-
+        if(not hasToRead_)  
+        {
+            enterPressed_ = false;
+            currentIndex_ = 0;
+            text_.setString("");
+            enterClock_.restart(); 
+            clock_.restart();
+            return;
+        }
         
 
         //Read the text archive
-        std::ifstream ifstream(textMap_.at("1.1"));
+        std::ifstream ifstream(textMap_.at(textToRead_));
         if(!ifstream) 
         {
-            std::cout << textMap_.at("1.1") << std::endl;
+            std::cout << textMap_.at(textToRead_) << std::endl;
             std::terminate();
         }
         else 
@@ -150,27 +164,16 @@ namespace game
         }
         else if(enterPressed_)
         {
-
             hasToRead_ = false;
         }
 
         
-        
-        
-        
-
-
-
-
         // Dibujar el texto en la vista de la interfaz de usuario
         window_.draw(square_);
         window_.draw(text_);
         window_.draw(skipText_);
+
         
-       
-
-
-        enterPressed_ = false;
     }
 
 }

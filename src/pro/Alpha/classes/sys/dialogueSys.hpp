@@ -26,6 +26,8 @@ namespace game
 
         void enterHasBeenPreesed();
 
+        void activateDialogue(std::string nextDialogue);
+
         void showAllText(std::string& allContent);
         // FVmath::Point2Di renderHearts ();
         // void renderShield(FVmath::Point2Di lastHeartPosition);
@@ -47,8 +49,9 @@ namespace game
             std::map<std::string, std::string> textMap_  {}; 
             sf::RectangleShape square_                   {};
             size_t              currentIndex_            {0};
-            bool                hasToRead_               {true};
+            bool                hasToRead_               {false};
             bool                enterPressed_            {false};
+            std::string         textToRead_              {};
 
             //for example, 1_2 means the second text in the level, there should be triggers to activate each text when needed
 

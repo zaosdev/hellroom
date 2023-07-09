@@ -95,6 +95,7 @@ namespace FVEng{
             animSys.setTexureID (GameMan.getPlayer().id()); 
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             renSys.startOnPlayer();
+            dialogueSys.activateDialogue("1.1");
         }
 
         void changeLevel()
@@ -103,6 +104,7 @@ namespace FVEng{
             spwnSys.SpawnPlayer();
             GameMan.change_level=false;
             renSys.startOnPlayer();
+            dialogueSys.activateDialogue("2.1");
         }
 
         void executeState() override
