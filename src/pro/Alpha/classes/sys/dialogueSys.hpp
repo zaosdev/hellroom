@@ -28,15 +28,7 @@ namespace game
 
         void activateDialogue(std::string nextDialogue);
 
-        void showAllText(std::string& allContent);
-        // FVmath::Point2Di renderHearts ();
-        // void renderShield(FVmath::Point2Di lastHeartPosition);
-        // void renderCoins();
-        // void renderGunType();
-        // void renderTimer();
-        // void restartTime();
-        // void setMaxTime(double newTime);
-        
+        void showAllText(std::string& allContent);        
 
         private:
             FVeng::GameManager& gMan_;
@@ -51,7 +43,8 @@ namespace game
             size_t              currentIndex_            {0};
             bool                hasToRead_               {false};
             bool                enterPressed_            {false};
-            std::string         textToRead_              {};
+            std::string         textToRead_              {}; //key to search in the map
+            std::string         content_                 {}; //actual content
 
             //for example, 1_2 means the second text in the level, there should be triggers to activate each text when needed
 

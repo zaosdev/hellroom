@@ -36,6 +36,35 @@ namespace game
     {
         textToRead_ = nextDialogue;
         hasToRead_ = true;
+    
+        textToRead_ = nextDialogue;
+        hasToRead_ = true;
+
+        // Leer el archivo y almacenar el contenido
+        std::ifstream ifstream(textMap_.at(textToRead_));
+        if (!ifstream)
+        {
+            std::cout << textMap_.at(textToRead_) << std::endl;
+            std::terminate();
+        }
+        else
+        {
+            std::cout << "Archivo leido correctamente" << std::endl;
+        }
+
+        content_ = "";
+        std::string linea;
+        while (std::getline(ifstream, linea))
+        {
+            content_ += linea + "\n";
+        }
+
+        ifstream.close();
+
+        currentIndex_ = 0; // Reiniciar currentIndex_ a cero
+        enterPressed_ = false;
+        enterClock_.restart();
+        clock_.restart();
     }
 
     void DialogueSys::loadResources()
@@ -94,28 +123,9 @@ namespace game
             clock_.restart();
             return;
         }
-        
 
-        //Read the text archive
-        std::ifstream ifstream(textMap_.at(textToRead_));
-        if(!ifstream) 
-        {
-            std::cout << textMap_.at(textToRead_) << std::endl;
-            std::terminate();
-        }
-        else 
-        {
-            std::cout << "Archivo leido correctamente" << std::endl;
-        }
-
-        std::string content {};
-        std::string linea   {};
-        while (std::getline(ifstream, linea)) 
-        {
-            content += linea + "\n";
-        }
-        auto textFinished = [&content](size_t currentIndex_) 
-        {return !(currentIndex_ >= 0 && currentIndex_ < content.size());};
+        auto textFinished = [&](size_t currentIndex_) 
+        {return !(currentIndex_ >= 0 && currentIndex_ < content_.size());};
 
         bool skip = false; //para saber si se lee el texto de una o letra a letra
 
@@ -148,7 +158,7 @@ namespace game
             float textY = squarePosition.y + squareSize.y - 30.f;
             skipText_.setPosition(textX, textY);
 
-            if(enterPressed_) showAllText(content);
+            if(enterPressed_) showAllText(content_);
             else
             {
                 //Fill the text char by char if skip not active
@@ -156,7 +166,7 @@ namespace game
                 && not textFinished(currentIndex_))
                 {
                     clock_.restart();
-                    char nextChar {content[currentIndex_]};
+                    char nextChar {content_[currentIndex_]};
                     text_.setString(text_.getString() + nextChar);
                     currentIndex_ ++;
                 }
