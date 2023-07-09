@@ -4,13 +4,14 @@
 #include "../cmp/entity.hpp"
 #include "../man/GameManager.hpp"
 #include "HUDSys.hpp"
+#include "dialogueSys.hpp"
 
 
 namespace game
 {
     struct RenderSys
     {
-        RenderSys(FVeng::GameManager& Gman, HUDSys& HUD);
+        RenderSys(FVeng::GameManager& Gman, HUDSys& HUD, DialogueSys& dialSys);
         ~RenderSys() = default;
 
         RenderSys (const RenderSys&) = delete;
@@ -40,6 +41,7 @@ namespace game
             FVeng::GameManager&          gMan_;
             sf::RenderWindow&          window_;
             HUDSys&                       HUD_;
+            DialogueSys&          dialogueSys_;
             sf::View                   view_{};
             float          centerX{},centerY{};
             float          newCenterX{},newCenterY{};

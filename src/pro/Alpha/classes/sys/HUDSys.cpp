@@ -163,7 +163,6 @@ namespace game
         window_.draw(trueShield.render->Sprite);
     }
 
-
     void HUDSys::renderTimer()
     {
         //Get the clock sprite

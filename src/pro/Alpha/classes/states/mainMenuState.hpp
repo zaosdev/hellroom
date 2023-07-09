@@ -7,7 +7,7 @@
 #include "../states/gameState.hpp"
 #include "../states/storeState.hpp"
 
-#define MAX_NUMBER_OF_ITEMS 3
+#define MAX_NUMBER_OF_ITEMS 4
 
 namespace FVEng{
     class mainMenuState : public State {
@@ -61,6 +61,7 @@ namespace FVEng{
                 menu_[i].setString(menu_values_[i]);
                 menu_[i].setPosition(sf::Vector2f(window_.getSize().x/2, window_.getSize().y / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1)));
             }
+            menu_[selectedItemIndex].setFillColor(sf::Color::Red);
         }
 
         void configurateBackgroundAccordingToWindow()
@@ -156,7 +157,12 @@ namespace FVEng{
                 std::cout << "Entering store..." << std::endl;
                 SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
             }
-            if(selectedItemIndex == 2) //Exit option
+            if(selectedItemIndex == 2) //Controls option
+            {
+                std::cout << "Controls... add new state when have the pic" << std::endl;
+               // window_.close();
+            }
+            if(selectedItemIndex == 3) //Exit option
             {
                 std::cout << "Exit..." << std::endl;
                 window_.close();
@@ -206,7 +212,7 @@ namespace FVEng{
         int selectedItemIndex = 0;
         sf::Font font_;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
-        std::vector<std::string> menu_values_ {"Play", "Store", "Exit"};
+        std::vector<std::string> menu_values_ {"Play", "Store", "Controls", "Exit"};
         bool upPressed_, downPressed_;
         bool enterPressed_ = false;
 

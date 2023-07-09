@@ -43,7 +43,8 @@ namespace FVEng{
         , GameMan       { window_ }
         , phySys        { GameMan }
         , inpRec        { window_ }
-        , inpSys        { GameMan, inpRec, soundSys }
+        , dialogueSys   { GameMan }
+        , inpSys        { GameMan, inpRec, soundSys, dialogueSys }
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
@@ -53,7 +54,7 @@ namespace FVEng{
         , saveSys       { GameMan }
         , collisionSys  { GameMan }
         , HudSys        { GameMan }
-        , renSys        { GameMan, HudSys }
+        , renSys        { GameMan, HudSys, dialogueSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
         , cofreSys      { GameMan }
@@ -94,6 +95,7 @@ namespace FVEng{
             animSys.setTexureID (GameMan.getPlayer().id()); 
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             renSys.startOnPlayer();
+            dialogueSys.activateDialogue("1.1");
         }
 
         void changeLevel()
@@ -102,6 +104,7 @@ namespace FVEng{
             spwnSys.SpawnPlayer();
             GameMan.change_level=false;
             renSys.startOnPlayer();
+            dialogueSys.activateDialogue("2.1");
         }
 
         void executeState() override
@@ -182,6 +185,7 @@ namespace FVEng{
         FVeng::GameManager      GameMan;
         game::PhysicsSys        phySys;
         game::InputManager      inpRec;
+        game::DialogueSys       dialogueSys;
         game::InputSys          inpSys;
         game::AISys             AISys;
         game::HealthSys         healthSys;
