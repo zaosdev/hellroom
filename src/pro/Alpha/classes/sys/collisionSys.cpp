@@ -50,8 +50,20 @@ namespace game
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
       {
-        entCollided.effct->affectedPartyID= entColliding.id();
-        entCollided.effct->state=effectState::readyToApply;
+        if(heart==false){
+
+          soundSys_.setLoop(false, soundSys_.soundHeart);
+          soundSys_.playSound(soundSys_.soundHeart, soundSys_.isHeart);
+
+          entCollided.effct->affectedPartyID= entColliding.id();
+          entCollided.effct->state=effectState::readyToApply;
+
+          heart = true;
+        }
+        else{
+          soundSys_.stopSound(soundSys_.soundHeart, soundSys_.isHeart);
+          heart = false;
+        }
       };
 
       //function called when user collides triggers room activation

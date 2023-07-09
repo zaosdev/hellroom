@@ -27,6 +27,7 @@ namespace game{
 
         isCofre       = false;
         isLever       = false;
+        isHeart       = false;
 
 
         musicPlaying = false;
@@ -64,6 +65,8 @@ namespace game{
         //COFRE Y PALANCA
         if(!sBcofre.loadFromFile("../media/SFX/cofre.wav")){std::cout << "FAILED TO LOAD COFRE" << std::endl;}
         if(!sBlever.loadFromFile("../media/SFX/palanca.wav")){std::cout << "FAILED TO LOAD PALANCA" << std::endl;}
+        if(!sBHeart.loadFromFile("../media/SFX/heart.wav")){std::cout << "FAILED TO LOAD HEART" << std::endl;}
+
 
         // sBfrs["playerStep"] = sBplayerStep;
         // sBfrs["playerDash"] = sBplayerDash;
@@ -91,6 +94,7 @@ namespace game{
 
         soundCofre.setBuffer(sBcofre);
         soundLever.setBuffer(sBlever);
+        soundHeart.setBuffer(sBHeart);
 
 
         if (!music.openFromFile("../media/MUSIC/OST-Juego.wav")) {

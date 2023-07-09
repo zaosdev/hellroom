@@ -55,6 +55,7 @@ namespace game{
 
             sf::SoundBuffer sBcofre;
             sf::SoundBuffer sBlever;
+            sf::SoundBuffer sBHeart;
 
 
             //SOUNDS
@@ -78,9 +79,10 @@ namespace game{
             //Change Level
             sf::Sound soundLevel;
 
-            //Cofre y Palanca
+            //Cofre , Palanca y Heart
             sf::Sound soundCofre;
             sf::Sound soundLever;
+            sf::Sound soundHeart;
 
             // sf::Sound soundBP;
             // sf::Sound soundBF;
@@ -96,7 +98,7 @@ namespace game{
 
             bool isChangeLvl;
 
-            bool isCofre, isLever;
+            bool isCofre, isLever, isHeart;
 
 
             
