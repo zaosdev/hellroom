@@ -2,6 +2,7 @@
 #include "../man/GameManager.hpp"
 #include "../man/inputManager.hpp"
 #include "../sys/soundSys.hpp"
+#include "../sys/dialogueSys.hpp"
 #include <iostream>
 
 namespace game
@@ -9,7 +10,7 @@ namespace game
 
     struct InputSys
     {
-        InputSys(FVeng::GameManager& gameMan, InputManager& intpRec, SoundSys& soundSys);
+        InputSys(FVeng::GameManager& gameMan, InputManager& intpRec, SoundSys& soundSys, DialogueSys& dialSys);
 
         InputSys (const InputSys&) = delete;
         InputSys (InputSys&&) = delete;
@@ -22,6 +23,7 @@ namespace game
             FVeng::GameManager& gMan_;
             InputManager&       inpRec_;
             SoundSys&           soundSys;
+            DialogueSys&        dialogueSys;
     };
 
 }

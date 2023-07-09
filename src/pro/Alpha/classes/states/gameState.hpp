@@ -43,7 +43,8 @@ namespace FVEng{
         , GameMan       { window_ }
         , phySys        { GameMan }
         , inpRec        { window_ }
-        , inpSys        { GameMan, inpRec, soundSys }
+        , dialogueSys   { GameMan }
+        , inpSys        { GameMan, inpRec, soundSys, dialogueSys }
         , AISys         { GameMan }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
@@ -53,7 +54,7 @@ namespace FVEng{
         , saveSys       { GameMan }
         , collisionSys  { GameMan }
         , HudSys        { GameMan }
-        , renSys        { GameMan, HudSys }
+        , renSys        { GameMan, HudSys, dialogueSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
         , cofreSys      { GameMan }
@@ -182,6 +183,7 @@ namespace FVEng{
         FVeng::GameManager      GameMan;
         game::PhysicsSys        phySys;
         game::InputManager      inpRec;
+        game::DialogueSys       dialogueSys;
         game::InputSys          inpSys;
         game::AISys             AISys;
         game::HealthSys         healthSys;

@@ -9,10 +9,11 @@
 
 namespace game
 {
-        RenderSys::RenderSys(FVeng::GameManager& Gman, HUDSys& hud)
+        RenderSys::RenderSys(FVeng::GameManager& Gman, HUDSys& hud, DialogueSys& dialSys)
         : gMan_(Gman), 
           window_(gMan_.getWindow()),
-          HUD_ (hud)
+          HUD_ (hud), 
+          dialogueSys_ (dialSys)
         {
         }
 
@@ -289,6 +290,9 @@ namespace game
 
             //Set the low life effect
             lowLifeEffect();
+
+            //Update the dialogues 
+            dialogueSys_.update();
             
             window_.display();    
 

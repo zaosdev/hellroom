@@ -5,8 +5,8 @@
 #define movement_speed  100
 namespace game
 {
-    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan, SoundSys& soundSys)
-    : gMan_(gameMan), inpRec_(inpMan), soundSys(soundSys)
+    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan, SoundSys& soundSys, DialogueSys& dialSys)
+    : gMan_(gameMan), inpRec_(inpMan), soundSys(soundSys), dialogueSys(dialSys)
     {
     }
 
@@ -91,8 +91,11 @@ namespace game
             } 
         }
 
-        
-
+        //out of the entities things we only need to check once
+        if(inpRec_.isKeyPressed(getKeyCode('e')))//e is enter in the map keys
+        {
+            dialogueSys.enterHasBeenPreesed();
+        }
     }
 
 }
