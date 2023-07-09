@@ -7,7 +7,6 @@
 #include "gameState.hpp"
 #include "../utils/gameData.hpp"
 
-#define MAX_NUMBER_OF_ITEMS 3
 #define PET1_PATH "../media/pets/vitalis.png"
 #define PET2_PATH "../media/pets/guardian.png"
 #define PET3_PATH "../media/pets/sentinel.png"
@@ -345,6 +344,8 @@ namespace FVEng{
     
 
     private:
+        static constexpr int MAX_NUMBER_OF_ITEMS = 3;
+        
         sf::Texture         backgroundTexture_;
         sf::Sprite          backgroundSprite_;
         sf::Texture         coinTexture_;
@@ -358,6 +359,7 @@ namespace FVEng{
         sf::RenderWindow&   window_;
         int selectedItemIndex = 0;
         sf::Font font_;
+        
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
         
         std::vector<std::string> pet_names_ {"Vitalis", "Guardian", "Sentinel"};

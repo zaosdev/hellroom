@@ -79,7 +79,7 @@ namespace game
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
             //cofre
-            if(inpRec_.isKeyPressed(getKeyCode('e')))
+            if(inpRec_.isKeyPressed(getKeyCode('E')))
             {
                 // soundSys.setLoop(true, soundSys.soundCofre);
                 // soundSys.playSound(soundSys.soundCofre, soundSys.isCofre);
@@ -91,7 +91,7 @@ namespace game
             // }
 
             //lever
-            if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('e')))
+            if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('E')))
             {
                 // soundSys.setLoop(true, soundSys.soundLever);
                 // soundSys.playSound(soundSys.soundLever, soundSys.isLever);

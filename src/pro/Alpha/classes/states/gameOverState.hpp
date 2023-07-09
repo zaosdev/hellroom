@@ -4,9 +4,8 @@
 
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
-//#include "../states/mainMenuState.hpp" dependencia circular
 #include "../utils/gameData.hpp"
-#include "../states/storeState.hpp"
+
 
 
 namespace FVEng{
@@ -34,7 +33,7 @@ namespace FVEng{
         {
             for(int i = 0; i < 60; i++)
             {
-                if(timePassed_ > time2newKey_) 
+                if(time2newKey_ < clockMenu_.getElapsedTime().asSeconds()) 
                 {
                     RegisterKeys();
                     HandleInput();
@@ -91,7 +90,7 @@ namespace FVEng{
             {
                 //end game
                 // SM_.RemoveState();
-                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
+                SM_.ChangeToMainMenuState(false);
             }
             //once handled, restart values
             scapePressed_ = false;
@@ -112,7 +111,7 @@ namespace FVEng{
         sf::Texture         backgroundTexture_  {};
         sf::Sprite          backgroundSprite_   {};
         float               time2newKey_        {};
-        float               timePassed_         {};
+        sf::Clock          clockMenu_           {};
 
         sf::RenderWindow&   window_;
 

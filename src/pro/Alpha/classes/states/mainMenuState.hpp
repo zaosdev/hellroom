@@ -4,10 +4,6 @@
 
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
-#include "../states/gameState.hpp"
-#include "../states/storeState.hpp"
-
-#define MAX_NUMBER_OF_ITEMS 4
 
 namespace FVEng{
     class mainMenuState : public State {
@@ -160,13 +156,13 @@ namespace FVEng{
             {
                 //colocar sonido
                 std::cout << "Entering game mode..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::gameState>(SM_.getWindow(), SM_), true);
+                SM_.ChangeToGameState(true);
             }
             if(selectedItemIndex == 1) //Options option
             {   
                 //colocar sonido
                 std::cout << "Entering store..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
+                SM_.ChangeToStoreState(false);
             }
             if(selectedItemIndex == 2) //Controls option
             {
@@ -222,6 +218,7 @@ namespace FVEng{
         sf::Clock           clockMenu_          {};
         int selectedItemIndex = 0;
         sf::Font font_;
+        static constexpr int MAX_NUMBER_OF_ITEMS = 4;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
         std::vector<std::string> menu_values_ {"Play", "Store", "Controls", "Exit"};
         bool upPressed_, downPressed_;
