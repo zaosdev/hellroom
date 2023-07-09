@@ -6,12 +6,31 @@ namespace game{
     //SoundSys::SoundSys() : isPlaying(false) {}
 
     SoundSys::SoundSys(FVeng::GameManager& gameMan, InputManager& inpMan): gMan_(gameMan), inpRec_(inpMan){
-        
+       
+        initMusic = true; //musica reproduciendose nada mas entrar al nivel
+       
         isPlayingStep = false;
         isPlayingDash = false;
         isPlayingPB   = false;
+        isPHit        = false;
 
-        //musicPlaying = false;
+        isMdown       = false;
+        isMup         = false;
+
+        isGameOver    = false;
+
+        isEHit        = false;
+        isEShoot      = false;
+
+        
+        isChangeLvl   = false;
+
+        isCofre       = false;
+        isLever       = false;
+        isHeart       = false;
+
+
+        musicPlaying = false;
    
     }
 
@@ -21,21 +40,63 @@ namespace game{
         
         // loadSound("playerStep","../media/SFX/16_human_walk_stone_1.wav");
         // loadSound("playerDash","../media/SFX/15_human_dash_1.wav");
+
+        //PLAYER SOUNDS
         if(!sBplayerStep.loadFromFile("../media/SFX/16_human_walk_stone_1.wav")){std::cout << "FAILED TO LOAD PLAYERSTEP" << std::endl; }
         if(!sBplayerDash.loadFromFile("../media/SFX/15_human_dash_1.wav")){std::cout << "FAILED TO LOAD PLAYERDASH" << std::endl; }
         if(!sBplayerBullet.loadFromFile("../media/SFX/Laser_Shoot2.wav")){std::cout << "FAILED TO LOAD PLAYERBULLET" << std::endl;}
+        if(!sBplayerHit.loadFromFile("../media/SFX/hit_player.wav")){std::cout << "FAILED TO LOAD PLAYERHIT" << std::endl;}
+
+        if(!sBMdown.loadFromFile("../media/SFX/Blip_Select3.wav")){std::cout << "FAILED TO LOAD MENU DOWN" << std::endl;}
+        if(!sBMup.loadFromFile("../media/SFX/Blip_Select4.wav")){std::cout << "FAILED TO LOAD MENU UP" << std::endl;}
+
+        // //GAME OVER
+        // if(!sBGameOver.loadFromFile(".../media/SFX/game_over.wav")){std::cout << "FAILED TO LOAD GAMEOVER" << std::endl;}
+
+        //ENEMY SOUNDS
+        if(!sBenemyHit.loadFromFile("../media/SFX/hit_enemy.wav")){std::cout << "FAILED TO LOAD ENEMYHIT" << std::endl;}
+        if(!sBenemyShoot.loadFromFile("../media/SFX/shoot_enemy.wav")){std::cout << "FAILED TO LOAD ENEMYSHOOT" << std::endl;}
+
+
+        //CHANGE LEVEL
+        if(!sBchangeLevel.loadFromFile("../media/SFX/changeLVL.wav")){std::cout << "FAILED TO LOAD CHANGE LEVEL" << std::endl;}
+
+
+        //COFRE Y PALANCA
+        if(!sBcofre.loadFromFile("../media/SFX/cofre.wav")){std::cout << "FAILED TO LOAD COFRE" << std::endl;}
+        if(!sBlever.loadFromFile("../media/SFX/palanca.wav")){std::cout << "FAILED TO LOAD PALANCA" << std::endl;}
+        if(!sBHeart.loadFromFile("../media/SFX/heart.wav")){std::cout << "FAILED TO LOAD HEART" << std::endl;}
+
+
         // sBfrs["playerStep"] = sBplayerStep;
         // sBfrs["playerDash"] = sBplayerDash;
 
         soundP.setPitch(1.5); //esto acelera la reproduccion de sonido
         soundP.setBuffer(sBplayerStep); //asigno el sonido que necesito
-        
         soundD.setPitch(1.5);
-        soundPbullet.setVolume(50);
         soundD.setBuffer(sBplayerDash);
-
-        soundPbullet.setVolume(30);
+        soundPbullet.setVolume(20);
         soundPbullet.setBuffer(sBplayerBullet);
+        soundPHit.setPitch(0.5);
+        soundPHit.setBuffer(sBplayerHit);
+
+        soundGameOver.setBuffer(sBGameOver);
+
+        soundEHit.setVolume(20);
+        soundEHit.setPitch(1.5);
+        soundEHit.setBuffer(sBenemyHit);
+        soundEShoot.setVolume(20);
+        soundEShoot.setPitch(0.5);
+        soundEShoot.setBuffer(sBenemyShoot);
+
+        //soundLevel.setVolume(75);
+        soundLevel.setBuffer(sBchangeLevel); // comprobar por que no suena
+
+        soundCofre.setVolume(75);
+        soundCofre.setBuffer(sBcofre);
+        soundLever.setBuffer(sBlever);
+        soundHeart.setVolume(75);
+        soundHeart.setBuffer(sBHeart);
 
 
         if (!music.openFromFile("../media/MUSIC/OST-Juego.wav")) {
@@ -87,7 +148,7 @@ namespace game{
     void SoundSys::stopMusic(){
         
         if (musicPlaying) {
-            music.stop();
+            music.pause();
             musicPlaying = false;
         }
     }
@@ -121,7 +182,11 @@ namespace game{
         }
 
 
-         // Play/Stop music
+        // Play/Stop music
+        if(initMusic == true){ 
+            this->playMusic();
+            initMusic = false;
+        }
         if (inpRec_.isKeyPressed(getKeyCode('M'))) {
             if (musicPlaying) {
                 this->stopMusic();

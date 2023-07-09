@@ -17,15 +17,20 @@ namespace FVEng{
             StateMachine (int x, int y, std::string nameGame); 
             ~StateMachine( ) {}
 
-            void AddState(StateRef NewState, bool isReplacing);
             void RemoveState(  );
 
+            void ChangeToMainMenuState(bool replace);
+            void ChangeToGameState(bool replace);   
+            void ChangeToStoreState(bool replace);
+            void ChangeToGameOverState(bool replace);
+            void ChangeToControlsState(bool replace);
+
+            sf::RenderWindow& getWindow();
             void ProcessStateChanges( );
             StateRef &GetActivateState( );
 
-            sf::RenderWindow& getWindow();
-
         private:
+            void AddState(StateRef NewState, bool isReplacing);
             std::stack<StateRef> states_;
             StateRef newState_;
 

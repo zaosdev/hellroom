@@ -13,7 +13,12 @@
 #include "weaponComponent.hpp"
 #include "shieldComponent.hpp"
 #include "CollisionComponent.hpp"
-
+#include "cofreComponent.hpp"
+#include "roomComponent.hpp"
+#include "trapComponent.hpp"
+#include "animationComponent.hpp"
+#include "leverComponent.hpp"
+#include "bossComponent.hpp"
 
 
 
@@ -38,25 +43,41 @@ namespace game
         STATIC_COLL = 1 << 5,
         Health = 1 << 6,
         DOOR = 1 << 7,
+        KILL_ON_MAP_CHANGE = 1 << 8,
+        TRIGGER = 1 << 9,
+        ROOM = 1 << 10,
+        SPAWNER = 1 << 11,
+        KILL_ON_ROOM_DELETE = 1 << 12,
+        TRAP = 1 << 13,
+        LEVER = 1 << 14,
+        Cofre = 1 << 15,
+        LASER = 1 << 16,
+        BOSS = 1 << 16,
 
       };
 
       friend struct FVeng::EntityManager<Entity>;
-      
-      std::optional<RenderComponent>  render{};
-      std::optional<PhysicsComponent> physics{};
-      std::optional<InputComponent>   input{};
-      std::optional<MapComponent>     map{};
-      std::optional<AIComponent>      AI{};
-      std::optional<SpawnerComponent> Spawn{};
-      std::optional<HealthComponent>  health{};
-      std::optional<DataComponent>    data{};
-      std::optional<RewardComponent>  reward{};
-      std::optional<EffectComponent>  effct{};
-      std::optional<WeaponComponent>  weapon{};
-      std::optional<ShieldComponent>  shield{};
-      std::optional<CollisionComponent>  coll{};
 
+      
+      std::optional<RenderComponent>    render{};
+      std::optional<PhysicsComponent>   physics{};
+      std::optional<InputComponent>     input{};
+      std::optional<MapComponent>       map{};
+      std::optional<AIComponent>        AI{};
+      std::optional<SpawnerComponent>   Spawn{};
+      std::optional<HealthComponent>    health{};
+      std::optional<DataComponent>      data{};
+      std::optional<RewardComponent>    reward{};
+      std::optional<EffectComponent>    effct{};
+      std::optional<WeaponComponent>    weapon{};
+      std::optional<ShieldComponent>    shield{};
+      std::optional<CollisionComponent> coll{};
+      std::optional<RoomComponent>      room{};
+      std::optional<CofreComponent>   cofre{};
+      std::optional<LeverComponent>   lever{};
+      std::optional<animationComponent> anim{};
+      std::optional<TrapComponent>  trap{};
+      std::optional<BossComponent>      boss{};
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
       [[nodiscard]] constexpr bool alive() const noexcept { return alive_; }

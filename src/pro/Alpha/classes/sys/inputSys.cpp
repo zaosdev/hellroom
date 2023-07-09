@@ -5,8 +5,8 @@
 #define movement_speed  100
 namespace game
 {
-    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan, SoundSys& soundSys)
-    : gMan_(gameMan), inpRec_(inpMan), soundSys(soundSys)
+    InputSys::InputSys(FVeng::GameManager& gameMan, InputManager& inpMan, SoundSys& soundSys, DialogueSys& dialSys)
+    : gMan_(gameMan), inpRec_(inpMan), soundSys(soundSys), dialogueSys(dialSys)
     {
     }
 
@@ -15,6 +15,9 @@ namespace game
         auto& EM = gMan_.getEntityManager();
         for(auto& ent : EM)
         {
+            if(inpRec_.isKeyPressed(getKeyCode('N')))   gMan_.change_level=true; 
+
+
             if(ent.input && ent.physics)
             {
                 ent.physics->vel = {0,0};
@@ -55,7 +58,7 @@ namespace game
                 soundSys.playSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
                 if(inpRec_.isKeyPressed(getKeyCode('u'))){
-                    std::cout << "up" << std::endl;
+                    //std::cout << "up" << std::endl;
                      ent.weapon->on=true; 
                      ent.weapon->direction=directionType::norte;
     
@@ -75,11 +78,32 @@ namespace game
             }
             else soundSys.stopSound(soundSys.soundPbullet, soundSys.isPlayingPB);
 
-                
+            //cofre
+            if(inpRec_.isKeyPressed(getKeyCode('E')))
+            {
+                // soundSys.setLoop(true, soundSys.soundCofre);
+                // soundSys.playSound(soundSys.soundCofre, soundSys.isCofre);
+                ent.cofre->abrir=true;
+            }
+            // else{
+            //     soundSys.setLoop(false, soundSys.soundCofre);
+            //     soundSys.stopSound(soundSys.soundCofre, soundSys.isCofre);
+            // }
+
+            //lever
+            if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('E')))
+            {
+                // soundSys.setLoop(true, soundSys.soundLever);
+                // soundSys.playSound(soundSys.soundLever, soundSys.isLever);
+                ent.lever->pressed=true;
+            }
         }
 
-        
-
+        //out of the entities things we only need to check once
+        if(inpRec_.isKeyPressed(getKeyCode('e')))//e is enter in the map keys
+        {
+            dialogueSys.enterHasBeenPreesed();
+        }
     }
 
 }

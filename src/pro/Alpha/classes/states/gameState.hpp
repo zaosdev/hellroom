@@ -4,7 +4,7 @@
 #include "../classes/sys/renderSys.hpp"
 #include "../classes/sys/physicsSys.hpp"
 #include "../classes/sys/inputSys.hpp"
-#include "../classes/sys/soundSys.hpp"
+//#include "../classes/sys/soundSys.hpp"
 #include "../classes/sys/achievementSys.hpp"
 #include "../classes/sys/savingSys.hpp"
 #include "../classes/man/GameManager.hpp"
@@ -19,15 +19,19 @@
 #include "../classes/sys/petSys.hpp"
 #include "../classes/sys/shieldSys.hpp"
 #include "../classes/sys/effectSys.hpp"
+#include "../classes/sys/cofreSys.hpp"
+#include "../classes/sys/roomSys.hpp"
+#include "../classes/sys/trapSys.hpp"
+#include "../classes/sys/leverSys.hpp"
+#include "../classes/sys/bossSys.hpp"
 
+
+#include "../classes/sys/animationSys.hpp"
 
 #include "../man/stateManager.hpp"
-#include "../states/gameOverState.hpp"
 
 #include "../utils/circularIterator.hpp"
 #include "../cmp/blackBoardComponent.hpp"
-
-#define MAX_NUMBER_OF_ITEMS 3
 
 namespace FVEng{
     class gameState : public State {
@@ -36,24 +40,30 @@ namespace FVEng{
         : window_       { window }
         , SM_           { SM }
         , GameMan       { window_ }
-        , SPman         {}
         , phySys        { GameMan }
         , inpRec        { window_ }
-        , inpSys        { GameMan, inpRec, soundSys }
-        , AISys         { GameMan }
+        , dialogueSys   { GameMan }
+        , inpSys        { GameMan, inpRec, soundSys, dialogueSys }
+        , AISys         { GameMan, soundSys }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
         , efctSys       { GameMan }
         , soundSys      { GameMan, inpRec }
-        , achSys        { GameMan }
+        , achSys        { /*GameMan*/ }
         , saveSys       { GameMan }
-        , collisionSys  { GameMan }
+        , collisionSys  { GameMan, soundSys }
         , HudSys        { GameMan }
-        , renSys        { GameMan, HudSys }
+        , renSys        { GameMan, HudSys, dialogueSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
+        , cofreSys      { GameMan, soundSys }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
+        , roomSys       { GameMan}
+        , animSys       { GameMan }
+        , trapSys       { GameMan }
+        , leverSys      { GameMan, soundSys }
+        , bossSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -67,13 +77,51 @@ namespace FVEng{
             //create the player and update(needed fot the hud)
             GameMan.initGame();
             GameMan.getEntityManager().update();
+            spwnSys.SpawnPlayer();
             HudSys.setPlayer    (&GameMan.getPlayer());
             HudSys.setHeartID   (GameMan.createHeart().id());
             HudSys.setCoinID    (GameMan.createCoin().id());
             HudSys.setClockID   (GameMan.createClock().id());
             HudSys.setShieldID  (GameMan.createShield().id());
+            HudSys.setGunCruzID (GameMan.createGunCruz().id());
+            HudSys.setGunEscopetaID (GameMan.createGunEscopeta().id());
+            HudSys.setGunRafagaID (GameMan.createGunRafaga().id());
+            // HudSys.setWeapon1ID (GameMan.createWeapon1().id());
+            // HudSys.setWeapon2ID (GameMan.createWeapon2().id());
+            // HudSys.setWeapon3ID (GameMan.createWeapon3().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            //soundSys.initMusic = true;
+            renSys.iniRenderSys();
+            animSys.setTexureID (GameMan.getPlayer().id()); 
+            //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
+            renSys.startOnPlayer();
+            dialogueSys.activateDialogue("1.1");
+            //GameMan.createBoss({100, 700},{320,240},GameMan.getPlayer().id(),3);
+        }
+
+        void changeLevel()
+        {
+            
+            if(cambialvl == true){//este if es solo por el soundsys
+                //colocar sonido
+                soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.playSound(soundSys.soundLevel, soundSys.isChangeLvl);
+
+                std::cout << "change level" << std::endl;
+                spwnSys.SpawnPlayer();
+                GameMan.change_level=false;
+                renSys.startOnPlayer();
+                dialogueSys.activateDialogue("2.1");
+                cambialvl = false;
+            }
+            else{
+               // soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
+                cambialvl = true;
+            }
+
+
         }
 
         void executeState() override
@@ -82,15 +130,33 @@ namespace FVEng{
             while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0) 
             {
                 //Bucle de obtención de eventos
+                GameMan.update();
                 GameMan.getEntityManager().update();
+                if(GameMan.change_level)
+                {
+                    
+                    changeLevel();
+                }
+               
+
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
 
-                    GameMan.update();
+                    //bossSys.update(dt);
+
+
+                    leverSys.update();
+
+                    roomSys.update();
+
+                    //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE, MAYBE NOT 
+                    spwnSys.update();
+                    trapSys.update();
 
                     inpRec.update();
                     inpSys.update();
+
 
                     AISys.update(GameMan.getBB(), dt);
 
@@ -102,9 +168,6 @@ namespace FVEng{
 
                     collisionSys.update(dt);
 
-                    //IN THE FUTURE THIS MUST BE AFTER COLLSYS UPDATE
-                    spwnSys.update();
-
                     efctSys.update(dt);
 
                     soundSys.update();
@@ -113,9 +176,13 @@ namespace FVEng{
 
                     weaponSys.update();
 
+                    cofreSys.update();
+
                     rewardSys.update();
                     //achSys.update();
                     saveSys.update();
+
+                    animSys.update(dt /*updateClock.getElapsedTime().asSeconds()*/);
                 
                 }
 
@@ -123,10 +190,15 @@ namespace FVEng{
                 // //Render game
                 float percentTick = std::min(1.0, updateClock.getElapsedTime().asMilliseconds() / UPDATE_TICK_TIME); // ms / ms to get pt
                 renSys.update(percentTick);
+
             }
 
             //player is dead
-            SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
+            //colocar sonido
+            soundSys.setLoop(false, soundSys.soundGameOver);
+            soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
+            SM_.ChangeToGameOverState(true);
+            //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 
 
@@ -138,14 +210,14 @@ namespace FVEng{
 
 
         FVeng::GameManager      GameMan;
-        SFMLeng::SpriteManager  SPman;
         game::PhysicsSys        phySys;
         game::InputManager      inpRec;
+        game::DialogueSys       dialogueSys;
         game::InputSys          inpSys;
         game::AISys             AISys;
         game::HealthSys         healthSys;
         game::SpawnSys          spwnSys;
-        game::effctSys         efctSys;
+        game::effctSys          efctSys;
         game::SoundSys          soundSys;
         game::AchievementSys    achSys;
         game::SavingSys         saveSys;
@@ -154,12 +226,20 @@ namespace FVEng{
         game::RenderSys         renSys;
         game::RewardSys         rewardSys;
         game::WeaponSys         weaponSys;
+        game::CofreSys          cofreSys;
         game::ShieldSys         shieldSys;
         game::PetSys            petSys;
-        
+        game::RoomSys           roomSys;
+        game::animationSys      animSys;
+        game::TrapSys           trapSys;
+        game::LeverSys          leverSys;
+        game::BossSys          bossSys;
+
+  
         //Game clock
         sf::Clock clock;
         sf::Clock updateClock;
         double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
+        bool cambialvl = true;
     };
 }

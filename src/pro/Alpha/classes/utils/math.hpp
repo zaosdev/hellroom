@@ -167,5 +167,13 @@ namespace FVmath
 
     using Point2D = Point2Dt<float>;
     using Point2Di = Point2Dt<int>;
+
+    float calculateDistance(auto P1, auto P2)
+    {
+        auto dx = P2.x - P1.x;
+        auto dy = P2.y - P1.y;
+
+        return {std::sqrt(dx*dx + dy*dy)};
+    }
     
 }

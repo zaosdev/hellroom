@@ -69,7 +69,8 @@
 			"ratio": "cpp",
 			"thread": "cpp",
 			"cfenv": "cpp",
-			"cinttypes": "cpp"
+			"cinttypes": "cpp",
+			"text_level_1_0": "cpp"
 		}
 	}
 }

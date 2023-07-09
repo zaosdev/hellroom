@@ -8,7 +8,7 @@ namespace game
 {
     struct AchievementSys
     {
-        AchievementSys(FVeng::GameManager& gameMan);
+        AchievementSys(/*FVeng::GameManager& gameMan*/);
         ~AchievementSys();
 
         AchievementSys (const AchievementSys&) = delete;
@@ -22,8 +22,8 @@ namespace game
 
 
         private:
-            FVeng::GameManager& gMan_;
-            SFMLeng::SpriteManager SPman{};
+            //FVeng::GameManager& gMan_;
+
             //game::RenderSys renSys{gMan_};
     };
 }

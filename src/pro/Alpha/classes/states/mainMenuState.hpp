@@ -4,10 +4,6 @@
 
 #include "state.hpp"
 #include "../classes/man/stateManager.hpp"
-#include "../states/gameState.hpp"
-#include "../states/storeState.hpp"
-
-#define MAX_NUMBER_OF_ITEMS 3
 
 namespace FVEng{
     class mainMenuState : public State {
@@ -16,7 +12,9 @@ namespace FVEng{
         : window_ {window}, SM_ {SM}
         {
             Init();
+
         }
+
 
         void Init() override {
             
@@ -35,13 +33,15 @@ namespace FVEng{
 
             //Configurate color and position of text
             configurateMenuAccordingToWindow();
+
+            clockMenu_.restart();
         }
 
         void executeState() override
         {
             for(int i = 0; i < 60; i++)
             {
-                if(i % 10==0) 
+                if(time2newKey_ < clockMenu_.getElapsedTime().asSeconds()) 
                 {
                     RegisterKeys();
                     HandleInput();
@@ -59,6 +59,7 @@ namespace FVEng{
                 menu_[i].setString(menu_values_[i]);
                 menu_[i].setPosition(sf::Vector2f(window_.getSize().x/2, window_.getSize().y / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1)));
             }
+            menu_[selectedItemIndex].setFillColor(sf::Color::Red);
         }
 
         void configurateBackgroundAccordingToWindow()
@@ -109,13 +110,26 @@ namespace FVEng{
                 }
             }
 
+            //check if any key is selected and restart the clock or return
+            if(upPressed_ || downPressed_ || enterPressed_)
+            {
+                clockMenu_.restart();
+            }
+            else return;
+
             //act to registered key events
             if(upPressed_)
             {
+                
+                //colocar sonido
+                // soundSys_.setLoop(false, soundSys_.soundMdown);
+                // soundSys_.playSound(soundSys_.soundMdown, soundSys_.isMdown);
                 moveDown();
+                
             }
             if(downPressed_)
             {
+                //colocar sonido
                 moveUp();
             }
 
@@ -127,10 +141,12 @@ namespace FVEng{
 
             if(enterPressed_)
             {
+                //colocar sonido
                 changeStateAccordingToSelectedIndex();
             }
+            
             //once handled, restart values
-            upPressed_ = downPressed_ =  enterPressed_= false;
+            upPressed_ = downPressed_ = enterPressed_ = false;
         }
 
 
@@ -138,15 +154,22 @@ namespace FVEng{
         {
             if(selectedItemIndex == 0) //Play option
             {
+                //colocar sonido
                 std::cout << "Entering game mode..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::gameState>(SM_.getWindow(), SM_), true);
+                SM_.ChangeToGameState(true);
             }
             if(selectedItemIndex == 1) //Options option
             {   
+                //colocar sonido
                 std::cout << "Entering store..." << std::endl;
-                SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
+                SM_.ChangeToStoreState(false);
             }
-            if(selectedItemIndex == 2) //Exit option
+            if(selectedItemIndex == 2) //Controls option
+            {
+                std::cout << "Controls..." << std::endl;
+                SM_.ChangeToControlsState(false);
+            }
+            if(selectedItemIndex == 3) //Exit option
             {
                 std::cout << "Exit..." << std::endl;
                 window_.close();
@@ -191,13 +214,17 @@ namespace FVEng{
         sf::Texture         backgroundTexture_;
         sf::Sprite          backgroundSprite_;
         sf::RenderWindow&   window_;
+        float               time2newKey_        {.3f};
+        sf::Clock           clockMenu_          {};
         int selectedItemIndex = 0;
         sf::Font font_;
+        static constexpr int MAX_NUMBER_OF_ITEMS = 4;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
-        std::vector<std::string> menu_values_ {"Play", "Store", "Exit"};
+        std::vector<std::string> menu_values_ {"Play", "Store", "Controls", "Exit"};
         bool upPressed_, downPressed_;
         bool enterPressed_ = false;
 
         FVEng::StateMachine& SM_;
+        
     };
 }

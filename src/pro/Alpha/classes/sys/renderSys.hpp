@@ -4,14 +4,14 @@
 #include "../cmp/entity.hpp"
 #include "../man/GameManager.hpp"
 #include "HUDSys.hpp"
-
+#include "dialogueSys.hpp"
 
 
 namespace game
 {
     struct RenderSys
     {
-        RenderSys(FVeng::GameManager& Gman, HUDSys& HUD);
+        RenderSys(FVeng::GameManager& Gman, HUDSys& HUD, DialogueSys& dialSys);
         ~RenderSys() = default;
 
         RenderSys (const RenderSys&) = delete;
@@ -24,15 +24,27 @@ namespace game
         void draw(sf::Sprite& Sprite);
         void drawMap(MapComponent& Sprite);
         void drawUpperMap(MapComponent& Sprite);
+        void setVisibleArea();
+        void setCameraCenter(float newCenterX, float newCenterY);
+        void lowLifeEffect();
+        void moveCameraOnDirection(float& centerX, float& centerY);
+        void cameraOnPlayerCenter(float& centerX, float& centerY);
+        void getViewSize(float& viewWidth, float& viewHeight);
         //void drawFV(sfml_util::FVSprite& Sprite);
 
         void iniSprite(game::Entity& ent, double pt);
         void update(double percentTick);
+        void startOnPlayer();
        // void addHUD(HUDSys& hud);
 
         private:
-            FVeng::GameManager& gMan_;
-            sf::RenderWindow& window_;
-            HUDSys&              HUD_;
+            FVeng::GameManager&          gMan_;
+            sf::RenderWindow&          window_;
+            HUDSys&                       HUD_;
+            DialogueSys&          dialogueSys_;
+            sf::View                   view_{};
+            float          centerX{},centerY{};
+            float          newCenterX{},newCenterY{};
+
     };
 }

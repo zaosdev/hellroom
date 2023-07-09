@@ -7,8 +7,8 @@
 
 namespace game
 {
-    AchievementSys::AchievementSys(FVeng::GameManager& gameMan)
-    : gMan_(gameMan)
+    AchievementSys::AchievementSys(/*FVeng::GameManager& gameMan*/)
+    //: gMan_(gameMan)
     {
     }
 

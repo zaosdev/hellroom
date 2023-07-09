@@ -25,6 +25,8 @@ namespace tXMLeng
 
             GenerateObjects(mapElement);
 
+            GenerateRooms(mapElement);
+
         } 
         else 
         {
@@ -36,19 +38,101 @@ namespace tXMLeng
     {
         XMLElem spawners = map.FindFirstChildwithName("objectgroup","spawner");
         assert(not spawners.isEmpty() && "There must be an spawner object group even if empty");
-        GenerateSpawners(spawners);
+        GenerateSpawners(spawners, SpawnersInfo_);
+		
         XMLElem doors = map.FindFirstChildwithName("objectgroup","door");
         assert(not doors.isEmpty() && "There must be a door object group even if empty");
         GenerateDoors(doors);
+
+        XMLElem traps = map.FindFirstChildwithName("objectgroup","traps");
+        assert(not traps.isEmpty() && "There must be a traps object group even if empty");
+        GenerateTraps(traps);
+
+        XMLElem coffers = map.FindFirstChildwithName("objectgroup","coffers");
+        assert(not coffers.isEmpty() && "There must be a coffers object group even if empty");
+        GenerateCoffers(coffers);
+
+        XMLElem levers = map.FindFirstChildwithName("group","levers");
+        assert(not levers.isEmpty() && "There must be a levers group even if empty");
+        auto leverInfo = levers.FirstChildNamed("group");
+        while(not leverInfo.isEmpty())
+        {
+            GenerateLevers(leverInfo);
+            leverInfo = leverInfo.NextSiblingNamed("group");
+        }
     }
 
-    void mapManager::GenerateSpawners(XMLElem& spawners)
+    void mapManager::GenerateRooms(XMLElem& map)
+    {
+        auto rooms = map.FindFirstChildwithName("group","rooms");
+
+        auto currentRoom = rooms.FirstChildNamed("group");
+
+        while (!currentRoom.isEmpty())
+        {
+            GenerateRoom(currentRoom);
+
+            currentRoom = currentRoom.NextSiblingNamed("group");
+        }
+        
+    }
+
+    void mapManager::GenerateRoom(XMLElem& room)
+    {
+        auto& roomInfo = RoomsInfo_.emplace_back();
+
+        XMLElem trigger = room.FindFirstChildwithName("objectgroup","room_trigger");
+        assert(not trigger.isEmpty() && "There must be a rooom trigger object group even if empty");
+        GenerateRoom_Trigger(trigger, roomInfo.trigger);
+
+        XMLElem blocks = room.FindFirstChildwithName("objectgroup","wall");
+        assert(not blocks.isEmpty() && "There must be a wall object group even if empty");
+        GenerateRoom_Blockage(blocks, roomInfo.blocks);
+
+
+        XMLElem spawners = room.FindFirstChildwithName("objectgroup","spawner");
+        assert(not spawners.isEmpty() && "There must be an spawner object group even if empty");
+        GenerateSpawners(spawners, roomInfo.spawners);
+
+    }
+
+    void  mapManager::GenerateRoom_Trigger(XMLElem& room, room_trigger& trigger)
+    {
+       auto triggerElem = room.FirstChildNamed("object");
+
+       triggerElem.queryAttribute<int*>("x", &trigger.pos.x);
+       triggerElem.queryAttribute<int*>("y", &trigger.pos.y);
+       triggerElem.queryAttribute<int*>("width", &trigger.size.x);
+       triggerElem.queryAttribute<int*>("height", &trigger.size.y);
+    }
+
+    void  mapManager::GenerateRoom_Blockage(XMLElem& room, std::vector<room_blockage>& blocks)
+    {
+		auto wall = room.FirstChildNamed("object");
+
+		while (!wall.isEmpty())
+		{
+			auto& wallInfo = blocks.emplace_back(); 
+
+			wall.queryAttribute<int*>("x", &wallInfo.pos.x);
+       		wall.queryAttribute<int*>("y", &wallInfo.pos.y);
+       		wall.queryAttribute<int*>("width", &wallInfo.size.x);
+       		wall.queryAttribute<int*>("height", &wallInfo.size.y);
+
+			wall = wall.NextSiblingNamed("object");
+		}
+		
+
+
+    }
+
+    void mapManager::GenerateSpawners(XMLElem& spawners, std::vector<Spawner>& spawnerV)
     {
         XMLElem spawner = spawners.FirstChildNamed("object");
 
         while(!spawner.isEmpty())
         {
-            Spawner& spawnerInfo = SpawnersInfo_.emplace_back();
+            Spawner& spawnerInfo = spawnerV.emplace_back();
 
             assignSpawnInfo(spawnerInfo,spawner);
 
@@ -68,10 +152,19 @@ namespace tXMLeng
         
         auto spawner_properties = spawners.FirstChildNamed("properties");
         
-        auto spawner_type = spawner_properties.FirstChildNamed("property"); 
+        auto spawner_type = spawner_properties.FindFirstChildwithName("property","type"); 
 
         spawner_type.queryAttribute<int*>("value", &tempType);
-        spawner.type = object_type{1 << tempType};
+        spawner.type = tXMLeng::object_type(1 << tempType);
+
+        if(spawner.type & tXMLeng::object_type::ENEMY)
+        {
+            
+            auto enemy_type = spawner_properties.FindFirstChildwithName("property","enemy"); 
+        
+            enemy_type.queryAttribute<int*>("value", &tempType);
+            spawner.enemy_spawned = game::enemy_type(1 << tempType);
+        }
 
     }
 
@@ -88,6 +181,63 @@ namespace tXMLeng
             door= door.NextSiblingNamed("object");
         }
     }
+
+    void  mapManager::GenerateTraps(XMLElem& traps)
+    {
+        XMLElem trap = traps.FirstChildNamed("object");
+
+        while(!trap.isEmpty())
+        {
+            auto& trapInfo = TrapsInfo_.emplace_back();
+
+            trap.queryAttribute<int*>("x", &trapInfo.x);
+            trap.queryAttribute<int*>("y", &trapInfo.y);
+
+            trap = trap.NextSiblingNamed("object");
+        }
+    }
+
+   void  mapManager::GenerateLevers(XMLElem& levers)
+    {
+        XMLElem lever = levers.FindFirstChildwithName("objectgroup","lever").FirstChildNamed("object");
+
+        auto& leverInfo = LeversInfo_.emplace_back();
+
+        lever.queryAttribute<int*>("x", &leverInfo.pos.x);
+        lever.queryAttribute<int*>("y", &leverInfo.pos.y);
+
+        XMLElem walls = levers.FindFirstChildwithName("objectgroup","walls");
+        XMLElem wall = walls.FirstChildNamed("object");
+
+        while(!wall.isEmpty())
+        {
+            auto& wallInfo = leverInfo.walls.emplace_back();
+
+            wall.queryAttribute<int*>("x", &wallInfo.pos.x);
+            wall.queryAttribute<int*>("y", &wallInfo.pos.y);
+
+            wall.queryAttribute<int*>("width", &wallInfo.size.x);
+            wall.queryAttribute<int*>("height", &wallInfo.size.y);
+
+            wall = wall.NextSiblingNamed("object");
+        }
+    }
+
+    void  mapManager::GenerateCoffers(XMLElem& coffers)
+    {
+        XMLElem coffer = coffers.FirstChildNamed("object");
+
+        while(!coffer.isEmpty())
+        {
+            auto& cofferInfo = CoffersInfo_.emplace_back();
+
+            coffer.queryAttribute<int*>("x", &cofferInfo.x);
+            coffer.queryAttribute<int*>("y", &cofferInfo.y);
+
+            coffer = coffer.NextSiblingNamed("object");
+        }
+    }
+
 
     void mapManager::assignDoorInfo(DoorInfo& door,XMLElem& doors )
     {
@@ -134,13 +284,35 @@ namespace tXMLeng
             }
 
     }
-    
+
+   void imprimirMapa(const std::vector<std::vector<int>>& mapRepresentation) 
+   {
+        const size_t numRows = mapRepresentation.size();
+        const size_t numCols = mapRepresentation[0].size();
+
+        for (size_t j = 0; j < numCols; ++j) {
+            for (size_t i = 0; i < numRows; ++i) {
+                std::cout << mapRepresentation[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+
+    std::vector<std::vector<int>>& mapManager::getMapGridRepresentation()
+    {
+        return mapRepresentation_;
+    }
 
     void mapManager::loadColliders(XMLElem& map)
     {
-            
-        XMLElem groups = map.FirstChildNamed("group");
-        XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
+        auto filas = map_.mapSize.y;
+        auto columnas = map_.mapSize.x;
+        mapRepresentation_.resize(filas, std::vector<int>(columnas, 0));    
+        // XMLElem groups = map.FirstChildNamed("group");
+        // XMLElem colliderData = groups.NextSiblingNamed("group").FirstChildNamed("layer");
+
+        XMLElem colliderData = map.FindFirstChildwithName("group","collData").FirstChildNamed("layer");
         map_.colliderLayer.reserve(map_.mapSize.y*map_.mapSize.x);
             
         auto currentTile = colliderData.FirstChildNamed("data").FirstChildNamed("tile") ; 
@@ -158,11 +330,15 @@ namespace tXMLeng
 
                     posColl.x = x*map_.tileSize.x;
                     posColl.y = y*map_.tileSize.y;
+
+                    //Create the grid representation of the map to use the pathfinding
+                    mapRepresentation_[x][y] = 1;
                 }
 
                 currentTile = currentTile.NextSiblingNamed("tile");
             }
         }
+        //imprimirMapa(mapRepresentation_);
     }
 
 
@@ -182,6 +358,9 @@ namespace tXMLeng
         map_.tileMap.clear();
         SpawnersInfo_.clear();
         DoorsInfo_.clear();
+        TrapsInfo_.clear();
+        CoffersInfo_.clear();
+        RoomsInfo_.clear();
         map_ = TileMap{};
     }
 
@@ -270,6 +449,27 @@ namespace tXMLeng
     std::vector<DoorInfo>& mapManager::getDoors() 
     {
         return DoorsInfo_;
+    }
+
+    std::vector<FVmath::Point2Di>& mapManager::getTraps() 
+    {
+        return TrapsInfo_;
+    }
+
+    std::vector<tXMLeng::Lever>& mapManager::getLevers()
+    {
+        return LeversInfo_;
+
+    }
+
+    std::vector<FVmath::Point2Di>& mapManager::getCoffers() 
+    {
+        return CoffersInfo_;
+    }
+
+    std::vector<Room>& mapManager::getRooms() 
+    {
+        return RoomsInfo_;
     }
 
 }

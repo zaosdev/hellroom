@@ -1,6 +1,12 @@
 #include "stateManager.hpp"
 
 
+#include "states/gameState.hpp"
+#include "states/storeState.hpp"
+#include "states/mainMenuState.hpp"
+#include "states/gameOverState.hpp"
+#include "states/controlsState.hpp"
+
 namespace FVEng{
 
     StateMachine::StateMachine(int x, int y, std::string nameGame)
@@ -16,6 +22,31 @@ namespace FVEng{
         this-> isReplacing_ = isReplacing;
 
         this->newState_ = std::move(newState);
+    }
+
+    void StateMachine::ChangeToMainMenuState(bool replace) 
+    {
+        AddState(std::make_unique<FVEng::mainMenuState>(getWindow(), *this), replace);
+    }
+
+    void StateMachine::ChangeToGameState(bool replace) 
+    {
+        AddState(std::make_unique<FVEng::gameState>(getWindow(), *this), replace);
+    }
+
+    void StateMachine::ChangeToStoreState(bool replace) 
+    {
+        AddState(std::make_unique<FVEng::storeState>(getWindow(), *this), replace);
+    }
+
+    void StateMachine::ChangeToGameOverState(bool replace) 
+    {
+        AddState(std::make_unique<FVEng::gameOverState>(getWindow(), *this), replace);
+    }
+
+    void StateMachine::ChangeToControlsState(bool replace) 
+    {
+        AddState(std::make_unique<FVEng::controlsState>(getWindow(), *this), replace);
     }
 
     void StateMachine::RemoveState(){

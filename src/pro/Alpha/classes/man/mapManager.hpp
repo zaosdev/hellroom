@@ -2,7 +2,7 @@
 
 #include "../../include/tinyXML2/tinyxml2.h"
 #include "../facade/xmlFacade.hpp"
-#include "../utils/Spawner.hpp"
+#include "../utils/map_types.hpp"
 
 
 #include <vector>
@@ -63,11 +63,22 @@ namespace tXMLeng
 
 
         void  GenerateObjects(XMLElem& objectsParent);
+        void  GenerateRooms(XMLElem& objectsParent);
+        void  GenerateTraps(XMLElem& objectsParent);
+        void  GenerateLevers(XMLElem& objectsParent);
+        void  GenerateCoffers(XMLElem& objectsParent);
+
+
         //SHOULD USE TEMPLATE AND ONLY 1 GENERATE FUNCTION; DO IF SURPLUS TIME
-        void  GenerateSpawners(XMLElem& spawners);
+        void  GenerateRoom(XMLElem& room);
+        void  GenerateRoom_Trigger(XMLElem& room, room_trigger& trigger);
+        void  GenerateRoom_Blockage(XMLElem& room, std::vector<room_blockage>& block);
+
+        void  GenerateSpawners(XMLElem& spawners,std::vector<Spawner>& spawnerV);
         void  GenerateDoors(XMLElem& doors);
         void  assignSpawnInfo(Spawner& spawner,XMLElem& spawners );
         void  assignDoorInfo(DoorInfo& door,XMLElem& doors );
+
         //////////
 
         //GETTERS
@@ -79,8 +90,15 @@ namespace tXMLeng
         const FVmath::Point2Di getTileSize() const;
         const std::vector<int>& getCurrentLayer() const;
         const std::vector<FVmath::Point2Di>& getColliderData() const;
-        std::vector<Spawner>& getSpawners() ;
-        std::vector<DoorInfo>& getDoors() ;
+        std::vector<Spawner>& getSpawners();
+        std::vector<FVmath::Point2Di>& getTraps();
+        std::vector<tXMLeng::Lever>& getLevers();
+
+        std::vector<FVmath::Point2Di>& getCoffers();
+        std::vector<DoorInfo>& getDoors();
+        std::vector<Room>& getRooms();
+        std::vector<std::vector<int>>& getMapGridRepresentation();
+
 
 
         private:
@@ -89,6 +107,14 @@ namespace tXMLeng
         TileSet tile_{};
         std::vector<Spawner> SpawnersInfo_{};
         std::vector<DoorInfo> DoorsInfo_{};
+        std::vector<FVmath::Point2Di> TrapsInfo_{};
+        std::vector<FVmath::Point2Di> CoffersInfo_{};
+        std::vector<Lever> LeversInfo_{};
+
+
+        std::vector<std::vector<int>> mapRepresentation_ {};
+        std::vector<Room> RoomsInfo_{};
+
 
 
         XMLReader xmlDoc_{};

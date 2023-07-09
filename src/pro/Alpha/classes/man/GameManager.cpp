@@ -1,14 +1,21 @@
 #include "GameManager.hpp"
-#include "cmp/CollisionComponent.hpp"
-#include "utils/gameData.hpp"
-
+#include "../cmp/CollisionComponent.hpp"
+#include "../utils/gameData.hpp"
+#include "../define.h"
 
 #define ENEMYA_SPRITE_PATH  "../media/player_enemy/wizard_attack.png"
 #define ENEMYB_SPRITE_PATH  "../media/player_enemy/enemy_botaV.png"
 
-static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player.png"};
+static constexpr const char* PLAYER_SPRITE_PATH { "../media/player_enemy/player_sprites.png"};
 static constexpr const char* HEARTH_PATH        { "../media/HUD/heart.png"};
 static constexpr const char* COIN_PATH          { "../media/HUD/coin.png"};
+static constexpr const char* LASER_PATH        { "../media/boss/weaponPNG/Laser_sheet.png"};
+static constexpr const char* BOSS_PATH         { "../media/boss/PNGsheet/Character_sheet.png"};
+
+static constexpr const char* GUN_CRUZ_PATH      { "../media/HUD/gun-cruz.png"};
+static constexpr const char* GUN_ESCOPETA_PATH  { "../media/HUD/gun-escopeta.png"};
+static constexpr const char* GUN_RAFAGA_PATH    { "../media/HUD/gun-rafaga.png"};
+
 static constexpr const char* CLOCK_PATH         { "../media/HUD/clock.png"};
 static constexpr const char* SHIELD_SP_PATH     { "../media/HUD/shield.png"};
 static constexpr const char* PET1_SP_PATH       { "../media/pets/vitalis.png"};
@@ -49,19 +56,13 @@ namespace FVeng
             return mapMan;
         }
 
-
-
-        void GameManager::initLevel()
-        {
-            mapMan.InitMap("../media/Mapa_door.tmx");
-        }
-
         void GameManager::LoadAllTextures()
         {
             SPman.loadTexture(PLAYER_SPRITE_PATH, PLAYER_TEXT);
             SPman.loadTexture(ENEMYA_SPRITE_PATH, ENEMY_A);
             SPman.loadTexture(ENEMYB_SPRITE_PATH, ENEMY_B);
-            SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
+            SPman.loadTexture(LASER_PATH, LASER_TEXT);
+            SPman.loadTexture(BOSS_PATH, BOSS_TEXT);
             SPman.loadTexture(HEARTH_PATH, HEART_TEXT);
             SPman.loadTexture(COIN_PATH, COIN_TEXT);
             SPman.loadTexture(CLOCK_PATH, CLOCK_TEXT);
@@ -70,21 +71,20 @@ namespace FVeng
             SPman.loadTexture(PET2_SP_PATH, PET2_TEXT);
             SPman.loadTexture(PET3_SP_PATH, PET3_TEXT);
             SPman.loadTexture(SHIELD_SP_PATH, SHIELD_TEXT);
+            SPman.loadTexture(GUN_CRUZ_PATH, GUN_CRUZ_TEXT);
+            SPman.loadTexture(GUN_ESCOPETA_PATH, GUN_ESCOPETA_TEXT);
+            SPman.loadTexture(GUN_RAFAGA_PATH, GUN_RAFAGA_TEXT);
         }
 
         void GameManager::initGame()
         {
-            initLevel();
+            LoadLevel();
             LoadAllTextures();
-            createMap();
-            createAllSpawner();
-            createAllDoors();
-            auto& player = createPlayer({320,240});
+            createPlayer({320,240});
             if(FVData::getSelectedPet() != -1)
             {
                 createPet({320,240});
             }
-            bb_.targetID = player.id();
 
         }
 
@@ -92,9 +92,11 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
+            setPlayerID(e.id());
+            bb_.targetID = e.id();
+
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
             // Lo dispongo en el centro de la pantalla
-
 
             e.input  = game::InputComponent{};
 
@@ -110,6 +112,19 @@ namespace FVeng
             //create life 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
+            //create animation component
+
+            //const sf::Texture* tex = e.render->Sprite.getTexture();cd 
+            sf::Vector2u imgcount {4,8};
+
+            ////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTANTE
+            //recupero id de textura con el texID, se lo paso al componente y en animationSys partiendo del id recupero la textura, calculo valores de uvRect en el update
+
+            // e.anim = game::animationComponent { .idText = texIdx, .imageCount = imgcount , .uvRect.width = static_cast<int>(tex->getSize().x/float(imgcount.x)), .uvRect.height = static_cast<int>(tex->getSize().y/float(imgcount.y)), .row = 1};
+
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 0};
+
+
             //create data component
             int coins = FVData::getCoins();
 
@@ -117,11 +132,14 @@ namespace FVeng
 
             e.shield = game::ShieldComponent    {.refreshTime = 6.f, .autoActive = false, .max_ActivatedTime = 1.5f};
 
-            e.render->Sprite.setScale(2.5,2.75);
+            //e.render->Sprite.setScale(2.5, 2.75);
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 32, 0 *32,32,32));
+            initEntityRender(e, {0,16}, SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 *32,16,16));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{e.render->Sprite.getGlobalBounds().height ,e.render->Sprite.getGlobalBounds().width}};
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =640/4, .size{defSize,defSize}};
+            //falsear el bounding box para que sea 16x16 en vez de 16x32
+
+            
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -184,7 +202,7 @@ namespace FVeng
                 e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
             }
 
-            initEntityRender(e, {0,0}, sf::IntRect(0, 0, 32, 32));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0, 0, 32, 32));
 
             return e;
         }
@@ -227,28 +245,108 @@ namespace FVeng
         {
             auto& e = EM_.createEntity();
 
+            //auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::WALL };
 
             e.coll = game::CollisionComponent{};           
 
             e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+            // e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            // initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(2 * 16, 12 * 16, 16, 16));  
 
             // Lo dispongo en el centro de la pantalla
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .vel{0,0},.mov_speed =0, .size{float(mapMan.getTileSize().y),float(mapMan.getTileSize().x)}};
 
+            // e.render->Sprite.move(
+            //     e.physics->pos.x,
+            //     e.physics->pos.y
+            // );
+
+
             return e;
         }
+        void GameManager::createTrap(FVmath::Point2Di Pos){
+
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(1*mapMan.getTileSize().x,11*mapMan.getTileSize().y, 16, 16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}};
+            e.trap = game::TrapComponent{ .delayTime = float(FVmath::calculateRandom(300,100)/100) };
+
+            e.addTag(game::Entity::TAG::TRAP); 
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+        }
+
+        // void GameManager::createBoss(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        // {
+        //     auto& e = EM_.createEntity();
+
+        //     auto texIdx = SPman.getTextureIdxByName(BOSS_TEXT);
+
+        //     auto bh = FVAI::SB::PURSUE;
+        //     e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
+                                    
+        //     e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+        //     e.reward = game::RewardComponent    {.min_reward = 90, .max_reward = 100};
+
+        //     float life = 200;
+        //     e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
+
+        //     //add tag enemy
+        //     e.addTag(game::Entity::TAG::Enemy);
+        //     e.addTag(game::Entity::TAG::BOSS);
+        //     e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+        //     //create animation component
+        //     sf::Vector2u imgcount {4,6};
+
+        //     e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 1};
+
+        //     e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
+
+        //     initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(32 , 32, 200, 80));
+
+        //     FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
+        //     e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
+
+        //     e.render->Sprite.move(
+        //         e.physics->pos.x,
+        //         e.physics->pos.y
+        //     );    
+
+        //     e.coll = game::CollisionComponent{};  
+        // }
 
 
-        void GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyArrive(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, double friction, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_B);
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour=FVAI::SB::ARRIVE, .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
+            auto bh = FVAI::SB::ARRIVE;
+            e.AI     = game::AIComponent        { .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh  , .friction = friction, .time2arrive = 1 , .arrivalRadius = 2, .perceptionTime=perceptionTime}; 
 
             e.render  = game::RenderComponent   { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
+
+            //create animation component
+            sf::Vector2u imgcount {4,8};
+
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 7};
+
 
             e.reward = game::RewardComponent    {.min_reward = 1, .max_reward = 3};
 
@@ -256,14 +354,19 @@ namespace FVeng
             e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0};   
 
             //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy); 
+            e.addTag(game::Entity::TAG::Enemy);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
 
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)}};
 
-            initEntityRender(e,{0,0},sf::IntRect(0 * 62, 0 * 62, 62, 62));  
+            //e.render->Sprite.setScale(2.5, 2.75);
+
+    
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 0 * 32, 16, 32));  
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
 
             e.render->Sprite.move(
@@ -271,16 +374,31 @@ namespace FVeng
                 e.physics->pos.y
             );
 
-            e.coll = game::CollisionComponent{};           
+            e.coll = game::CollisionComponent{};      
+
+            return e.id();     
+        }
+        
+        std::vector<std::vector<int>>& GameManager::getMapGridRepresentation()
+        {
+            return mapMan.getMapGridRepresentation();
         }
 
-        void GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
+        FVmath::Point2Di GameManager::worldPositionToGrid(float x, float y)
+        {
+            FVmath::Point2Di start        = {static_cast<int>(x), static_cast<int>(y)};
+            FVmath::Point2Di gridPosition = {static_cast<int>(std::trunc(start.x / tileSize)), static_cast<int>(std::trunc(start.y / tileSize))};  // * applied scale??
+            return gridPosition;
+        }
+
+        game::Entity::id_type GameManager::createEnemyShoot(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID, double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
-            auto texIdx = SPman.getTextureIdxByName(ENEMY_A);           
+            auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);           
 
-            e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = FVAI::SB::SHOOTATTACK, .targetID=targetID, .perceptionTime=perceptionTime};         
+            auto bh = FVAI::SB::SHOOTATTACK;
+            e.AI        = game::AIComponent         { .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh,  .targetID=targetID, .perceptionTime=perceptionTime};         
                                     
             e.render    = game::RenderComponent     { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
@@ -290,14 +408,23 @@ namespace FVeng
             e.health    = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
 
             //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy); 
+            e.addTag(game::Entity::TAG::Enemy);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
-            e.render->Sprite.setScale(0.2,0.2);
+            //create animation component
+            sf::Vector2u imgcount {4,8};
 
-            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 2 * 75, 75, 75));
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 4};
+
+
+
+            //e.render->Sprite.setScale(2,2);
+
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 2 * 32, 16, 32));
         
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -305,20 +432,49 @@ namespace FVeng
             );
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
+
+        game::Entity&  GameManager::createLaser(FVmath::Point2Di Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(LASER_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(46 , 126, 16, 16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{0,0}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            e.coll = game::CollisionComponent{};
+
+            e.boss = game::BossComponent{ .minDelay2nextState = 0.2f};
+
+            //Set player bullet
+            e.addTag(game::Entity::TAG::LASER);
+        }
+
+
 
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
 
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(BULLET_TEXT);
-            std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+           // std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 75, 0 * 75, 40, 40));
+            initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+5,float(Pos.y)}, .prevPos{float(Pos.x)+5,float(Pos.y)},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{20,20}};
 
             e.render->Sprite.move(
                 e.physics->pos.x,
@@ -329,7 +485,32 @@ namespace FVeng
 
             //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
             e.addTag(game::Entity::TAG::Player);
+        }
+
+        void GameManager::createCofre(FVmath::Point2Di Pos, int id){
+
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+            //std::cout <<  "NUM TEXTURA: " << texIdx << std::endl;
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(19*mapMan.getTileSize().x,18*mapMan.getTileSize().y, 16, 16));
+
+            e.cofre = game::CofreComponent{};
+            e.cofre->id = id;
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)}, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
+
+            e.addTag(game::Entity::TAG::Cofre);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
+            e.coll = game::CollisionComponent{};
+
+            //Set player bullet
         }
 
         void GameManager::createEnemyBullet(FVmath::Point2D Pos, FVAI::SB sb, FVmath::Point2D targetCoord)
@@ -340,7 +521,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 15, 0 * 15, 15, 15));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(0),float(0)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -357,6 +538,7 @@ namespace FVeng
 
             //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
             e.addTag(game::Entity::TAG::Enemy);
         }
 
@@ -368,7 +550,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
 
-            initEntityRender(e, {0,0}, sf::IntRect(0 * 15, 0 * 15, 15, 15));
+            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+30,float(Pos.y)+35}, .prevPos{float(Pos.x)+30,float(Pos.y)+35},  .vel{float(0),float(0)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -386,15 +568,22 @@ namespace FVeng
             //Set player bullet
             e.addTag(game::Entity::TAG::Bullet);
             e.addTag(game::Entity::TAG::Player);
+
+            
         }
 
         //Create all spawners on the current map
         void GameManager::createAllSpawner()
         {
-
             for(auto& spawner : mapMan.getSpawners())
-                createSpawner(spawner);
+                createSpawner(spawner,0);
             
+        }
+
+        void GameManager::createAllCoffers()
+        {
+            for(auto& coffer : mapMan.getCoffers())
+                createCofre(coffer,0);
         }
 
         //Create all doors on the current map
@@ -404,90 +593,108 @@ namespace FVeng
                 createDoor(door);
         }
 
+        void GameManager::createAllTraps()
+        {
+            for(auto& trap : mapMan.getTraps())
+                createTrap(trap);
+        }
+
+        void GameManager::createAllLevers()
+        {
+            for(auto& lever : mapMan.getLevers())
+            {
+                auto& e = createLever(lever.pos);
+                for(auto& wall : lever.walls)
+                    createLeverBlockage(wall,e.id());
+            }
+        }
+
+        //Create all rooms on the current map
+        void GameManager::createAllRooms()
+        {
+            for(auto& room : mapMan.getRooms())
+                createRoom(room);
+        }
+
         //Creates a concrete instance of a Spawner
-        void GameManager::createSpawner(tXMLeng::Spawner& spawner)
+        void GameManager::createSpawner(tXMLeng::Spawner& spawner,game::Entity::id_type id)
         {
             auto& e = EM_.createEntity();
 
-            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}};
+            e.Spawn = game::SpawnerComponent{.SpawnInfo{spawner}, .ownerID = id};
 
-            if(e.Spawn->SpawnInfo.type==tXMLeng::object_type::ENEMY)
+            if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::ENEMY)
                 SpawnersID.push_back(e.id());
+            else if(e.Spawn->SpawnInfo.type & tXMLeng::object_type::PLAYER)
+            {
+                e.Spawn->minTime=0;
+            }
+
+            e.addTag(game::Entity::TAG::SPAWNER);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
         }
 
-        void  GameManager::deleteMap()
+        void  GameManager::deleteKillable()
         {
             for(auto& ent :  EM_)
             {
-                if(ent.map && ent.hasTag(game::Entity::TAG::STATIC_COLL))
+                if(ent.hasTag(game::Entity::TAG::KILL_ON_MAP_CHANGE))
                 {
                     ent.mark4destruction();
                 }
             }
         }
 
+        void GameManager::roomDelete(game::Entity::id_type room_id)
+        {
+            auto isRoom = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::ROOM) && e.id()==room_id;};
+            auto isRoomTrigger = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::TRIGGER) && e.Spawn->ownerID==room_id;};
+            auto isRoomBlockage = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::STATIC_COLL) ;};
+            auto isRoomSpawner = [&](game::Entity& e){return e.hasTag(game::Entity::TAG::SPAWNER) && e.Spawn->ownerID==room_id;};
+
+            auto isRoomObject = [&](game::Entity& e){return (isRoom(e) || isRoomTrigger(e) || isRoomBlockage(e) || isRoomSpawner(e));};
+
+            for(auto& ent : EM_)
+            {
+                if(ent.hasTag(game::Entity::TAG::KILL_ON_ROOM_DELETE) && isRoomObject(ent))
+                {
+                    ent.mark4destruction();
+                }
+            }
+        }
+
+
         void GameManager::update()
         {
-//             if(allSpawned)
-//             {
-//                 for(auto& ent : EM_)
-//                 {
-//                     if(ent.hasTag(game::Entity::TAG::Enemy))
-//                     {
-//                         return ;
-//                     }
-//                 }
-
-//                 allSpawned=false;
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent)
-//                     {
-//                         ent->mark4destruction();
-//                     }
-//                 }
-//                 SpawnersID.clear();
-//                 deleteMap();
-//                 mapMan.clearMap();
-//                 mapMan.InitMap("../media/Mapa2.tmx");
-//                 changeMap();
-//                 createAllSpawner();
-//             }
-//             else
-//             {
-//                 for(auto id : SpawnersID)
-//                 {
-//                     auto* ent =EM_.getEntityByID(id);
-//                     if(ent && !ent->Spawn->fullCapacity)
-//                     {
-//                         goto label;
-//                     }
-//                 }
-//                 allSpawned=true;
-//             }
-// label:
-// float a = 3;
-// (void) a;
-
             if(change_level)
             {
-                for(auto id : SpawnersID)
-                {
-                    auto* ent =EM_.getEntityByID(id);
-                    if(ent)
-                    {
-                        ent->mark4destruction();
-                    }
-                }
-                SpawnersID.clear();
-                deleteMap();
-                mapMan.clearMap();
-                mapMan.InitMap("../media/Mapa2.tmx");
-                changeMap();
-                createAllSpawner();
-                change_level=false;
+                deleteKillable();
+                LoadLevel();
             }
+        }
+
+        void GameManager::LoadLevel()
+        {
+
+            if(mapID_!=0) mapMan.clearMap();
+
+            mapMan.InitMap(nextLevel.c_str());
+
+            if(mapID_!=0) changeMap();
+            else
+            {
+                SPman.loadTexture(mapMan.getTexturePath(), MAP_TEXT);
+                createMap();
+            } 
+
+            createAllSpawner();
+            createAllLevers();
+            createAllDoors();
+            createAllTraps();
+            createAllCoffers();
+            createAllRooms();
 
 
         }
@@ -509,15 +716,14 @@ namespace FVeng
         }
 
 
-        void GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
+        game::Entity::id_type GameManager::createEnemyPursue(FVmath::Point2Di Pos,FVmath::Point2D targetCoord, game::Entity::id_type targetID,  double perceptionTime)
         {
             auto& e = EM_.createEntity();
 
             auto texIdx = SPman.getTextureIdxByName(PLAYER_TEXT);
 
-           
-
-            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour =FVAI::SB::PURSUE, .targetID=targetID, .perceptionTime=perceptionTime};         
+            auto bh = FVAI::SB::PURSUE;
+            e.AI  = game::AIComponent{ .targetCoord{targetCoord}, .behaviour = bh, .originalBehaviour = bh, .targetID=targetID, .perceptionTime=perceptionTime};       
                                     
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
@@ -527,15 +733,26 @@ namespace FVeng
             e.health = game::HealthComponent    { .maxLife = life, .currentLife = life, .inmortalityTime = 0}; 
 
             //add tag enemy
-            e.addTag(game::Entity::TAG::Enemy); 
+            e.addTag(game::Entity::TAG::Enemy);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
+            //create animation component
+            sf::Vector2u imgcount {4,8};
+
+           
+            e.anim = game::animationComponent { .idTex = size_t(texIdx), .imageCount = imgcount, .row = 2};
+
+
+
+
+            //e.render->Sprite.setScale(2,2);
             
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
-            initEntityRender(e,{0,0},sf::IntRect(1 * 75, 0 * 75, 75, 75));
+            initEntityRender(e,{0,16},SFMLeng::SpriteManager::rect_i_type(0 * 16, 3 * 32, 16, 32));
 
             FVmath::Point2D position = {float(Pos.x),float(Pos.y)};
-            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{position}, .prevPos{position}, .vel{0,0}, .mov_speed = 640/8, .size{defSize,defSize} };
 
 
             e.render->Sprite.move(
@@ -544,6 +761,8 @@ namespace FVeng
             );    
 
             e.coll = game::CollisionComponent{};  
+
+            return e.id();
         }
 
         void GameManager::SpawnDummy(FVmath::Point2Di Pos)
@@ -562,12 +781,15 @@ namespace FVeng
                 e.physics->pos.y
             );    
 
+            e.render->Sprite.setScale(0.5,0.5);
+
             e.render  = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(Pos.x),int(Pos.y)} };
 
             auto row = FVmath::calculateRandom(3,1);
 
-            initEntityRender(e,{0,0},sf::IntRect(row * 75, 1 * 75, 75, 75));
+            initEntityRender(e,{0,0},SFMLeng::SpriteManager::rect_i_type(row * 75, 1 * 75, 75, 75));
 
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
 
         }
 
@@ -579,7 +801,9 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{(int)Pos.x,(int)Pos.y}};
 
-            initEntityRender(e, {0,0},sf::IntRect(0,0,38,30));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,38,30));
+
+            e.render->Sprite.scale({0.5,0.5});
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -593,7 +817,38 @@ namespace FVeng
             e.effct->effects.push_back(effMan.createEffectNamed("Healing"));
 
             e.addTag(game::Entity::TAG::Health);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
         }
+
+        game::Entity& GameManager::createLever(FVmath::Point2Di Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(5*mapMan.getTileSize().x,12*mapMan.getTileSize().y,16,16));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.lever = game::LeverComponent{};
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::LEVER);
+
+
+            return e;
+        }
+
 
         void GameManager::createDoor(tXMLeng::DoorInfo door)
         {
@@ -603,7 +858,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(door.pos.x),int(door.pos.y)}};
 
-            initEntityRender(e, {0,0},sf::IntRect(5*mapMan.getMapSize().x,16*mapMan.getMapSize().y,door.size.x,door.size.y));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,14*mapMan.getTileSize().y,door.size.x,door.size.y));
 
             e.physics = game::PhysicsComponent{ .pos{float(door.pos.x),float(door.pos.y)}, .prevPos{float(door.pos.x),float(door.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
@@ -614,11 +869,110 @@ namespace FVeng
 
             e.map = game::MapComponent { .texIndex=-1, .FVSprite{}, .maxLowerLayer=-1, .object_type= game::map_object_t::DOOR, .nextLevel = door.next_level_path};
 
+            this->nextLevel = door.next_level_path;
+
             e.coll = game::CollisionComponent{};
 
             e.addTag(game::Entity::TAG::DOOR);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+
         }
 
+        void GameManager::createRoomTrigger(tXMLeng::room_trigger& trigger, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            e.physics = game::PhysicsComponent{ .pos{float(trigger.pos.x),float(trigger.pos.y)}, .prevPos{float(trigger.pos.x),float(trigger.pos.y)},  .vel{}, .mov_speed = 0, .size{float(trigger.size.x),float(trigger.size.y)} };   
+
+            e.coll = game::CollisionComponent{};
+
+            e.Spawn = game::SpawnerComponent{ .ownerID = id};
+
+            e.addTag(game::Entity::TAG::TRIGGER);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+
+        }
+
+        void GameManager::createRoomBlockage(tXMLeng::room_blockage& block, game::Entity::id_type id)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(4*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+        }
+
+        void GameManager::createLeverBlockage(tXMLeng::room_blockage& block, game::Entity::id_type id)
+       {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(MAP_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{int(block.pos.x),int(block.pos.y)}};
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(2*mapMan.getTileSize().x,12*mapMan.getTileSize().y,block.size.x,block.size.y));
+
+            e.physics = game::PhysicsComponent{ .pos{float(block.pos.x),float(block.pos.y)}, .prevPos{float(block.pos.x),float(block.pos.y)},  .vel{}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+
+            e.lever = game::LeverComponent{ .ownerID = id};
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );      
+
+            e.coll = game::CollisionComponent{};
+
+            e.addTag(game::Entity::TAG::STATIC_COLL);
+            e.addTag(game::Entity::TAG::KILL_ON_MAP_CHANGE);
+        }
+
+        void GameManager::createRoom(tXMLeng::Room& room)
+        {
+            auto& e = EM_.createEntity();
+
+            //CREATE ROOM TRIGGER SAVE IT ID
+            createRoomTrigger(room.trigger,e.id());
+
+            e.room = game::RoomComponent{ .roomInfo = room};
+
+            e.addTag(game::Entity::TAG::ROOM); 
+            e.addTag(game::Entity::TAG::KILL_ON_ROOM_DELETE);  
+
+                     
+        }
+
+        void GameManager::instantiateRoom(tXMLeng::Room& room,game::Entity::id_type id)
+        {
+            //CREATE ROOM BLOCKS AND SAVE THEIR ID
+            for(auto& block : room.blocks)
+            {
+                createRoomBlockage(block,id);
+            }
+            //CREATE SPAWNERS AND SAVE THEIR ID
+            for(auto& spawn : room.spawners)
+            {
+                createSpawner(spawn,id);
+            }
+        }
 
         [[maybe_unused]] game::Entity&  GameManager::createHeart()
         {
@@ -627,7 +981,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0},sf::IntRect(0,0,38,30));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,38,30));
 
             return e;
         }
@@ -639,7 +993,40 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,32,32));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunCruz(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_CRUZ_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunEscopeta(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_ESCOPETA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
+
+            return e;
+        }
+
+        game::Entity& GameManager::createGunRafaga(){
+            auto& e     = EM_.createEntity();
+            auto texIdx = SPman.getTextureIdxByName(GUN_RAFAGA_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
+
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,70,70));
 
             return e;
         }
@@ -651,7 +1038,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,32,32));
 
             return e;
         }
@@ -663,31 +1050,31 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{320,240} };
 
-            initEntityRender(e, {0,0},sf::IntRect(0,0,32,32));
+            initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(0,0,32,32));
 
             return e;
         }
 
-        void GameManager::initEntityRender(game::Entity& entity, FVmath::Point2D origin, sf::IntRect TexRect)
+        void GameManager::initEntityRender(game::Entity& entity, FVmath::Point2D origin, SFMLeng::SpriteManager::rect_i_type TexRect)
         {
             //Y creo el spritesheet a partir de la imagen anterior
             SPman.assignTexture(entity.render->Sprite,entity.render->texIndex);
             //Le pongo el centroide donde corresponde
             SPman.modifySpriteOrigin(entity.render->Sprite, origin); //{0,0}
             //Cojo el sprite que me interesa por defecto del sheet
-            SPman.modifyTextureRect(entity.render->Sprite, TexRect); //sf::IntRect(0 * 75, 0 * 75, 75, 75));
+            SPman.modifyTextureRect(entity.render->Sprite, TexRect); //SFMLeng::SpriteManager::rect_i_type(0 * 75, 0 * 75, 75, 75));
 
         }
 
+        void GameManager::setPlayerID(game::Entity::id_type id)
+        {
+            playerID_ = id;
+        }
+
+
         game::Entity& GameManager::getPlayer()
         {
-            for(auto& player : EM_)
-            {
-                if(player.input)
-                {
-                    return player;
-                }
-            }
+          return *EM_.getEntityByID(playerID_);
         }
 
 }

@@ -6,7 +6,7 @@
 
 namespace tXMLeng
 {
-    enum class object_type
+    enum object_type
     {
         PLAYER  = 1 << 0,
         ENEMY   = 1 << 1,
@@ -29,5 +29,24 @@ namespace tXMLeng
         FVmath::Point2Di pos{};
         FVmath::Point2Di size{};
         std::string next_level_path{""};
+    };
+
+    struct room_trigger
+    {
+        FVmath::Point2Di pos{};
+        FVmath::Point2Di size{};
+    };
+
+    struct room_blockage
+    {
+        FVmath::Point2Di pos{};
+        FVmath::Point2Di size{};
+    };
+
+    struct Room
+    {
+        room_trigger trigger{};
+        std::vector<room_blockage> blocks{};
+        std::vector<Spawner> spawners{};
     };
 }

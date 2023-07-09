@@ -6,8 +6,8 @@
 
 namespace game
 {
-  CollisionSys::CollisionSys(FVeng::GameManager& gameMan/*, SFMLeng::SpriteManager& spriteMan*/)
-  : gMan_(gameMan)/*, spriteMan_(spriteMan)*/{
+  CollisionSys::CollisionSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys /*, SFMLeng::SpriteManager& spriteMan*/)
+  : gMan_(gameMan), soundSys_(soundSys)/*, spriteMan_(spriteMan)*/{
 
 
   }  
@@ -27,7 +27,7 @@ namespace game
       std::vector<Entity*> stat_coll{};
       std::vector<Entity*> plyrBullets{};
       std::vector<Entity*> enmyBullets{};
-
+      std::vector<Entity*> mapTrap{};
 
 
       //bool nomore{false};
@@ -37,55 +37,119 @@ namespace game
 
       /////////////////////////////////////////
       //LAMBDAS
-      auto isEnemy = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isEnemyBullet = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
-      auto isStaticObject = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
-      auto isHealth = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::Health);};
-      auto isDoor = [&](Entity& ent ){return ent.hasTag(game::Entity::TAG::DOOR);};
-
+      auto isEnemy          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Enemy) && !ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isEnemyBullet    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Enemy) && ent.hasTag(game::Entity::TAG::Bullet);};
+      auto isStaticObject   = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::STATIC_COLL);};
+      auto isHealth         = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Health);};
+      auto isDoor           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::DOOR);};
+      auto isCofre          = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::Cofre);};
+      auto isRoomTrigger    = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRIGGER);};
+      auto isTrap           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::TRAP);};
+      auto isLever           = [&](Entity& ent){return ent.hasTag(game::Entity::TAG::LEVER);};
       
       //function called when user collides with heart
       auto pickHealth= [&](Entity& entColliding,Entity&  entCollided)
       {
-        entCollided.effct->affectedPartyID= entColliding.id();
-        entCollided.effct->state=effectState::readyToApply;
+        if(heart==false){
+
+          soundSys_.setLoop(false, soundSys_.soundHeart);
+          soundSys_.playSound(soundSys_.soundHeart, soundSys_.isHeart);
+
+          entCollided.effct->affectedPartyID= entColliding.id();
+          entCollided.effct->state=effectState::readyToApply;
+
+          heart = true;
+        }
+        else{
+          soundSys_.stopSound(soundSys_.soundHeart, soundSys_.isHeart);
+          heart = false;
+        }
       };
+
+      //function called when user collides triggers room activation
+      auto enableRoom = [&](Entity& entColliding,Entity&  entCollided)
+      {
+        (void)entColliding;
+
+        auto* room = EM.getEntityByID(entCollided.Spawn->ownerID);
+        if(room->room->enabled!=true)
+        {
+          room->room->enabled=true;
+        }
+      };
+      //function called when entity is hit by trap
+      auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
+      {
+
+    
+        if(entCollided.trap->modo==estado::cuarto){
+        //colocar sonido, mas abajo este no tocar
+        // soundSys_.setLoop(false, soundSys_.soundPHit);
+        // soundSys_.playSound(soundSys_.soundPHit, soundSys_.isPHit);
+
+        entColliding.health->negativeAffection = entCollided.trap->trapDamage;
+        entCollided.trap->modo=estado::primero;
+        }
+      };
+
       //function called when entity is hit by bullet
       auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
+        //colocar sonido
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
+
+      //function called when enemy is hit by wall
+      auto EnemyInWall = [&](Entity& entColliding, Entity&  entCollided)
+      {
+        (void)entCollided;
+        if( entColliding.AI->behaviour != FVAI::SB::PATHFINDING 
+            && 
+            entColliding.AI->behaviour != FVAI::SB::FOLLOWPATH)
+        {
+          entColliding.AI->behaviour = FVAI::SB::PATHFINDING;
+        }
+      };
+      
       auto changeLevel = [&](Entity& entColliding, Entity&  entCollided)
       {
         (void)entColliding;
+        (void)entCollided;
         gMan_.change_level=true;
-        gMan_.nextLevel = entCollided.map->nextLevel;
       };
-      //Function checks if entities are colliding if they are saves collision so that it may be resolved
+      //Function checks if entities are colliding, if they are saves collision info so that it may be resolved
       //First parameter must be moving entity- the one that collides with
       //second parameter must be static entity- the one that is collided with
-      //third prameter is pointer entity storer, in case we want to save pointer moving entity
+      //third prameter is pointer entity storer, in case we want to keep pointer to moving entity
       auto saveCollisions = [&](Entity& entColliding, Entity&  entCollided, std::vector<Entity*>* storage)
       {
         if(storage)
-          storage->push_back(&entColliding);
-        if (DynamicEntityVsStaticEntity(entCollided, dt, entColliding))
+          storage->push_back(&entCollided);
+        if (DynamicEntityVsStaticEntity(entColliding, dt, entCollided ))
         {
-          collInstance.push_back({ &entColliding, entCollided.coll->contactTime });
+          collInstance.push_back({ &entCollided, entCollided.coll->contactTime });
           return true;
         }
         else return false;
       };
-      //Function checks if entities are colliding if they are calls third parameter as a function that needs 2 entities as parameter
+      //Function checks if entities are colliding, if they are calls third parameter as a function that needs 2 entities as parameter
       //First parameter must be moving entity- the one that collides with
       //second parameter must be static entity- the one that is collided with
       //third prameter must be lambda object that needs 2 entities as paramter and only those
       auto actOnCollisions = [&](Entity& entColliding, Entity&  entCollided, auto action)
       {
-       if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
+       if (checkCollision(entColliding,entCollided ))
         {
+          //coloca sonido
+          soundSys_.setLoop(true, soundSys_.soundEHit);
+          soundSys_.playSound(soundSys_.soundEHit, soundSys_.isEHit);
+
           action(entColliding,entCollided);
+        }
+        else{
+          soundSys_.setLoop(false, soundSys_.soundEHit);
+          soundSys_.stopSound(soundSys_.soundEHit, soundSys_.isEHit);
         }
       };
       //Resolve entity collisions saved on "collInstance", a collision is added every time "saveCollision" is called
@@ -118,15 +182,19 @@ namespace game
         {
           if(isEnemy(ent))
           {
-            saveCollisions(ent,player,&enemies);
+            saveCollisions(player,ent,&enemies);
           }
           else if(isEnemyBullet(ent))
           {
-            saveCollisions(ent,player,&enmyBullets);
+            enmyBullets.push_back(&ent);
+            if (DynamicEntityVsStaticEntity(player, dt, ent ))
+            {
+                bulletHit(ent,player);
+            }
           }
           else if(isStaticObject(ent))
           {
-            saveCollisions(ent,player,&stat_coll);
+            saveCollisions(player,ent,&stat_coll);
           }
           else if(isHealth(ent))
           {
@@ -135,6 +203,22 @@ namespace game
           else if(isDoor(ent))
           {
             actOnCollisions(player,ent,changeLevel);
+          }
+          else if(isCofre(ent)){
+            saveCollisions(player,ent ,nullptr);
+          }
+          else if(isRoomTrigger(ent))
+          {
+            actOnCollisions(player,ent,enableRoom);
+          }
+          else if(isTrap(ent))
+          {
+            actOnCollisions(player,ent,trapHit);
+
+          }
+          else if(isLever(ent))
+          {
+            saveCollisions(player,ent ,nullptr);
           }
           //AÑADIR ELSE IF SI HAY MAS TIPOS DE COLISIONES
           // else if()
@@ -160,13 +244,32 @@ namespace game
       //ENEMY COLLISION AGAINST WALLS
       for(auto* wallColl : stat_coll)
       {
+        //if(enemy->AI->behaviour != FVAI::SB::FOLLOWPATH) 
         saveCollisions(*enemy,*wallColl,nullptr);
+        actOnCollisions(*enemy, *wallColl, EnemyInWall);
+      }
+
+      //ENEMY COLLISION AGAINST WALLS
+      for(auto* bullet  : plyrBullets)
+      {
+        if (DynamicEntityVsStaticEntity(*enemy, dt, *bullet ))
+        {
+            bulletHit(*bullet,*enemy);
+        }
       }
 
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
-      if(saveCollisions(*enemy,player,nullptr))
-        player.health->negativeAffection = 1;
+      if(saveCollisions(*enemy,player,nullptr)){
+        //colocar sonido - SI MOLESTA, COMENTAR
+        soundSys_.setLoop(true, soundSys_.soundPHit);
+        soundSys_.playSound(soundSys_.soundPHit, soundSys_.isPHit);
 
+        player.health->negativeAffection = 10;
+      }
+      else{ //- SI MOLESTA, COMENTAR
+        soundSys_.setLoop(false, soundSys_.soundPHit);
+        soundSys_.stopSound(soundSys_.soundPHit, soundSys_.isPHit);
+      }
       //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
       resolveEntityCollisions(*enemy);
       collInstance.clear();
@@ -177,20 +280,42 @@ namespace game
       //COLISION DEL ENEMIGO CON LAS BALAS DEL PLAYER
       for(auto* enemy : enemies)
       {
+        //colocar sonido
+  
+        // soundSys_.setLoop(true, soundSys_.soundEHit);
+        // soundSys_.playSound(soundSys_.soundEHit, soundSys_.isEHit);
+       
+
         actOnCollisions(*bullet,*enemy,bulletHit);
+  
+        
       }
+      // soundSys_.setLoop(false, soundSys_.soundEHit);
+      // soundSys_.stopSound(soundSys_.soundEHit, soundSys_.isEHit);
+
       if(bullet->alive())
         bullet->physics->pos+=bullet->physics->vel*dt;
     } 
 
     for(auto* enmyBullet : enmyBullets)
     {
+     
       actOnCollisions(*enmyBullet,player,bulletHit);
       
       if(enmyBullet->alive())
         enmyBullet->physics->pos+=enmyBullet->physics->vel*dt;
     }
 
+      //COLISION DEL JUGADOR CON LA TRAMPA
+    for(auto* trap : mapTrap)
+    {
+
+      //colocar sonido
+      
+      actOnCollisions(*trap,player,trapHit);
+
+      player.health->negativeAffection = 1;
+    }
 
   }
 
@@ -293,7 +418,6 @@ namespace game
 
   bool CollisionSys::ResolveDynamicEntityVsEntity(Entity& dynamicEntity, Entity& staticEntity, const float dt)
   {
-
 			if (DynamicEntityVsStaticEntity(dynamicEntity, dt, staticEntity))
 			{
 				dynamicEntity.physics->vel += dynamicEntity.coll->contactNormal * FVmath::Point2D{std::abs(dynamicEntity.physics->vel.x), std::abs(dynamicEntity.physics->vel.y)} * (1 - dynamicEntity.coll->contactTime);
@@ -327,7 +451,6 @@ namespace game
     float intersectY = std::abs(deltaY) - (s2_HalfSize.y + s1_HalfSize.y);
 
     playerCollision(intersectX, intersectY, deltaX, deltaY, ent2, ent2POS);
-    //shieldCollision(intersectX, intersectY, deltaX, deltaY, ent1, ent2POS, ent2, ent2POS);
     
   }
 

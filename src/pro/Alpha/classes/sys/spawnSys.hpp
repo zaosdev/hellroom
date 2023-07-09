@@ -19,8 +19,11 @@ namespace game
 
         void iniSpawnSys();
 
-        void SpawnEnemy(FVmath::Point2Di Pos);
-        void SpawnPlayer(FVmath::Point2Di Pos);
+        void setPlayerSpawner();
+        void setEnemyRoom(size_t roomID,size_t enemyID);
+
+        void SpawnEnemy(FVmath::Point2Di Pos,auto enemyChoice, size_t& enemyID);
+        void SpawnPlayer();
         FVmath::Point2Di calculateSpawnPoint(tXMLeng::Spawner& spawnInfo);
 
         void update();
@@ -28,5 +31,6 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            game::Entity::id_type player_spawner_id_{0};
     };
 }
