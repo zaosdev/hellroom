@@ -390,6 +390,33 @@ namespace FVeng
             return e.id();
         }
 
+        game::Entity&  GameManager::createLaser(FVmath::Point2Di Pos)
+        {
+            auto& e = EM_.createEntity();
+
+            auto texIdx = SPman.getTextureIdxByName(LASER_TEXT);
+
+            e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
+
+            initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
+
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x),float(Pos.y)}, .prevPos{float(Pos.x),float(Pos.y)},  .vel{0,0}, .mov_speed = 0, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width}};
+
+            e.render->Sprite.move(
+                e.physics->pos.x,
+                e.physics->pos.y
+            );
+
+            e.coll = game::CollisionComponent{};
+
+            e.boss = game::BossComponent{ .minDelay2nextState = 0.2f};
+
+            //Set player bullet
+            e.addTag(game::Entity::TAG::LASER);
+        }
+
+
+
         void GameManager::createBullet(FVmath::Point2Di Pos, FVmath::Point2Di Vel){
 
             auto& e = EM_.createEntity();
@@ -401,7 +428,7 @@ namespace FVeng
 
             initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
 
-            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+5,float(Pos.y)}, .prevPos{float(Pos.x)+5,float(Pos.y)},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
+            e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+5,float(Pos.y)}, .prevPos{float(Pos.x)+5,float(Pos.y)},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{20,20}};
 
             e.render->Sprite.move(
                 e.physics->pos.x,

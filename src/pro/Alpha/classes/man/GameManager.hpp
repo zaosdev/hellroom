@@ -93,6 +93,7 @@ namespace FVeng
         void createLeverBlockage(tXMLeng::room_blockage& room, game::Entity::id_type id);
         void createSpawner(tXMLeng::Spawner& spawner , game::Entity::id_type id);
 
+        game::Entity&  createLaser(FVmath::Point2Di Pos);
 
         void setPlayerID(game::Entity::id_type id);
         void setRenderNextLayer(game::MapComponent& map);
