@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="101" nextobjectid="447">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="101" nextobjectid="452">
  <tileset firstgid="1" source="DungeonTileset.tsx"/>
+ <tileset firstgid="1025" source="0x72_DungeonTilesetII_v1.4.tsx"/>
  <group id="52" name="render">
   <layer id="51" name="floor" width="50" height="50">
    <data>
@@ -77,10 +78,10 @@
     <tile gid="130"/>
     <tile gid="130"/>
     <tile gid="130"/>
-    <tile gid="130"/>
-    <tile gid="130"/>
-    <tile gid="130"/>
-    <tile gid="130"/>
+    <tile gid="1025"/>
+    <tile gid="1025"/>
+    <tile gid="1025"/>
+    <tile gid="1025"/>
     <tile gid="130"/>
     <tile gid="130"/>
     <tile gid="130"/>
@@ -128,8 +129,8 @@
     <tile gid="130"/>
     <tile gid="130"/>
     <tile gid="131"/>
-    <tile gid="131"/>
-    <tile gid="130"/>
+    <tile gid="1025"/>
+    <tile gid="1025"/>
     <tile gid="130"/>
     <tile gid="130"/>
     <tile gid="130"/>
@@ -2531,10 +2532,10 @@
     <tile gid="227"/>
     <tile gid="5"/>
     <tile gid="2"/>
-    <tile gid="2"/>
-    <tile gid="5"/>
-    <tile gid="5"/>
-    <tile gid="2"/>
+    <tile gid="1250"/>
+    <tile gid="1443"/>
+    <tile gid="1444"/>
+    <tile gid="1249"/>
     <tile gid="2"/>
     <tile gid="5"/>
     <tile gid="228"/>
@@ -2581,10 +2582,10 @@
     <tile gid="34"/>
     <tile gid="37"/>
     <tile gid="34"/>
-    <tile gid="34"/>
-    <tile gid="37"/>
-    <tile gid="37"/>
-    <tile gid="34"/>
+    <tile gid="1286"/>
+    <tile gid="1478"/>
+    <tile gid="1479"/>
+    <tile gid="1285"/>
     <tile gid="34"/>
     <tile gid="37"/>
     <tile gid="324"/>
@@ -2631,10 +2632,10 @@
     <tile gid="1"/>
     <tile gid="69"/>
     <tile gid="1"/>
-    <tile gid="1"/>
-    <tile gid="69"/>
-    <tile gid="69"/>
-    <tile gid="1"/>
+    <tile gid="1506"/>
+    <tile gid="1510"/>
+    <tile gid="1511"/>
+    <tile gid="1509"/>
     <tile gid="1"/>
     <tile gid="69"/>
     <tile gid="1"/>
@@ -7592,13 +7593,13 @@
     <tile gid="387"/>
     <tile gid="387"/>
     <tile gid="387"/>
+    <tile gid="1025"/>
+    <tile gid="1025"/>
     <tile gid="387"/>
     <tile gid="387"/>
     <tile gid="387"/>
     <tile gid="387"/>
     <tile gid="387"/>
-    <tile gid="387"/>
-    <tile gid="387"/>
     <tile gid="1"/>
     <tile gid="1"/>
     <tile gid="1"/>
@@ -7641,10 +7642,10 @@
     <tile gid="1"/>
     <tile gid="1"/>
     <tile gid="1"/>
+    <tile gid="1411"/>
     <tile gid="1"/>
     <tile gid="1"/>
-    <tile gid="1"/>
-    <tile gid="1"/>
+    <tile gid="1411"/>
     <tile gid="1"/>
     <tile gid="1"/>
     <tile gid="1"/>
@@ -10026,6 +10027,10 @@
    <objectgroup id="78" name="wall">
     <object id="445" x="384" y="144" width="16" height="16"/>
     <object id="446" x="400" y="144" width="16" height="16"/>
+    <object id="448" x="383.333" y="48" width="16" height="16"/>
+    <object id="449" x="400.333" y="48" width="16" height="16"/>
+    <object id="450" x="367.667" y="48" width="16" height="16"/>
+    <object id="451" x="416.667" y="48" width="16" height="16"/>
    </objectgroup>
    <objectgroup id="61" name="spawner">
     <object id="440" x="346.667" y="101.333">
@@ -10034,19 +10039,19 @@
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="441" x="361.333" y="60.6667">
+    <object id="441" x="353.333" y="63.6667">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="442" x="406.667" y="60">
+    <object id="442" x="402.667" y="85.3333">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="443" x="452.667" y="60">
+    <object id="443" x="445.667" y="65">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
@@ -10501,9 +10506,11 @@
   </object>
  </objectgroup>
  <objectgroup id="87" name="door">
-  <properties>
-   <property name="next_level" value="game_end"/>
-  </properties>
+  <object id="447" x="384" y="14.6667" width="32" height="32">
+   <properties>
+    <property name="next_level" value="game_end"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="88" name="traps" visible="0">
   <object id="320" x="672" y="688" width="16" height="16"/>

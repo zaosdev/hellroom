@@ -670,8 +670,15 @@ namespace FVeng
         {
             if(change_level)
             {
-                deleteKillable();
-                LoadLevel();
+                if(nextLevel.compare("game_end")!=0)
+                {
+                    deleteKillable();
+                    LoadLevel();
+                }
+                else
+                {
+                    //AQUI JUANMA 
+                }
             }
         }
 
