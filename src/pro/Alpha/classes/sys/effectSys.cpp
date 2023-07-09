@@ -52,9 +52,9 @@ namespace game
 
             for(auto& efct : effect.effects)
             {
-                std::cout << "Description" << efct.description << "\n";
+                //std::cout << "Description" << efct.description << "\n";
             }
-            std::cout << "state: " << int(effect.state) << "\n";
+            //std::cout << "state: " << int(effect.state) << "\n";
             //std::cout << "entityID: " << effect.getEntityID() << "\n";
 
         }

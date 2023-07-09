@@ -2,6 +2,7 @@
 #pragma once 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "../sys/soundSys.hpp"
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGTH 480
 
@@ -17,6 +18,9 @@ namespace FVEng{
             virtual void Resume( ) {}
 
             virtual ~State() = default; // Destructor virtual puro
+        
+        // private:
+        //     game::SoundSys&   soundSys;
     };
 
 }

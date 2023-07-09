@@ -2,12 +2,13 @@
 
 #include "../man/GameManager.hpp"
 #include "../sys/renderSys.hpp"
+#include "../sys/soundSys.hpp"
 
 namespace game
 {
     struct CofreSys
     {
-        CofreSys(FVeng::GameManager& gameMan);
+        CofreSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys);
         ~CofreSys();
 
         CofreSys (const CofreSys&) = delete;
@@ -22,6 +23,7 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            game::SoundSys&     soundSys_;
 
     };
 }

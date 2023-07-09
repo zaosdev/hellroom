@@ -81,14 +81,22 @@ namespace game
             //cofre
             if(inpRec_.isKeyPressed(getKeyCode('e')))
             {
+                // soundSys.setLoop(true, soundSys.soundCofre);
+                // soundSys.playSound(soundSys.soundCofre, soundSys.isCofre);
                 ent.cofre->abrir=true;
-            } 
+            }
+            // else{
+            //     soundSys.setLoop(false, soundSys.soundCofre);
+            //     soundSys.stopSound(soundSys.soundCofre, soundSys.isCofre);
+            // }
 
-            //cofre
+            //lever
             if(ent.hasTag(game::Entity::TAG::LEVER) && inpRec_.isKeyPressed(getKeyCode('e')))
             {
+                // soundSys.setLoop(true, soundSys.soundLever);
+                // soundSys.playSound(soundSys.soundLever, soundSys.isLever);
                 ent.lever->pressed=true;
-            } 
+            }
         }
 
         

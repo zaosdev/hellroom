@@ -37,18 +37,67 @@ namespace game{
 
            // std::map<std::string, sf::SoundBuffer> sBfrs; 
             
+            //BUFFERS
             sf::SoundBuffer sBplayerStep;
             sf::SoundBuffer sBplayerDash;
             sf::SoundBuffer sBplayerBullet;
+            sf::SoundBuffer sBplayerHit;
 
-            //sf::Sound sound;
+            sf::SoundBuffer sBGameOver;
+
+            sf::SoundBuffer sBMdown;
+            sf::SoundBuffer sBMup;
+
+            sf::SoundBuffer sBenemyHit;
+            sf::SoundBuffer sBenemyShoot;
+
+            sf::SoundBuffer sBchangeLevel;
+
+            sf::SoundBuffer sBcofre;
+            sf::SoundBuffer sBlever;
+
+
+            //SOUNDS
+            //Player Sounds
             sf::Sound soundP;
             sf::Sound soundD;
             sf::Sound soundPbullet;
+            sf::Sound soundPHit;
+
+            //Game Over
+            sf::Sound soundGameOver;
+
+            //Main Menu
+            sf::Sound soundMdown;
+            sf::Sound soundMup;
+
+            //Enemy Sounds
+            sf::Sound soundEHit;
+            sf::Sound soundEShoot;
+
+            //Change Level
+            sf::Sound soundLevel;
+
+            //Cofre y Palanca
+            sf::Sound soundCofre;
+            sf::Sound soundLever;
+
             // sf::Sound soundBP;
             // sf::Sound soundBF;
             sf::Music music;
-            bool isPlayingStep, isPlayingDash, isPlayingPB, musicPlaying;
+            bool isPlayingStep, isPlayingDash, isPlayingPB, isPHit;
+            bool musicPlaying, initMusic;
+
+            bool isGameOver;
+
+            bool isMdown, isMup; //main menu 
+
+            bool isEHit, isEShoot;
+
+            bool isChangeLvl;
+
+            bool isCofre, isLever;
+
 
             
         private: 

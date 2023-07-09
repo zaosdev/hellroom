@@ -19,13 +19,15 @@ namespace FVEng{
 
         void Init() override {
             
-            //load background
+        
             if (!backgroundTexture_.loadFromFile("../media/images/gameOver.png")) 
             {
                 std::cout << "Error loading background image" << std::endl;
                 std::terminate();
             }
             configurateBackgroundAccordingToWindow();
+            
+            
         }
 
         void executeState() override
@@ -117,5 +119,7 @@ namespace FVEng{
         bool scapePressed_ = false;
 
         FVEng::StateMachine& SM_;
+       
+       
     };
 }

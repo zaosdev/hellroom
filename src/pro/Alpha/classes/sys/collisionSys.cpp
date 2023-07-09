@@ -6,8 +6,8 @@
 
 namespace game
 {
-  CollisionSys::CollisionSys(FVeng::GameManager& gameMan/*, SFMLeng::SpriteManager& spriteMan*/)
-  : gMan_(gameMan)/*, spriteMan_(spriteMan)*/{
+  CollisionSys::CollisionSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys /*, SFMLeng::SpriteManager& spriteMan*/)
+  : gMan_(gameMan), soundSys_(soundSys)/*, spriteMan_(spriteMan)*/{
 
 
   }  
@@ -68,7 +68,12 @@ namespace game
       //function called when entity is hit by trap
       auto trapHit = [&](Entity& entColliding, Entity&  entCollided)
       {
+
+    
         if(entCollided.trap->modo==estado::cuarto){
+        //colocar sonido, mas abajo este no tocar
+        // soundSys_.setLoop(false, soundSys_.soundPHit);
+        // soundSys_.playSound(soundSys_.soundPHit, soundSys_.isPHit);
 
         entColliding.health->negativeAffection = entCollided.trap->trapDamage;
         entCollided.trap->modo=estado::primero;
@@ -78,6 +83,7 @@ namespace game
       //function called when entity is hit by bullet
       auto bulletHit = [&](Entity& entColliding, Entity&  entCollided)
       {
+        //colocar sonido
         entColliding.mark4destruction();
         entCollided.health->negativeAffection = defaultDamage;;
       };
@@ -123,7 +129,15 @@ namespace game
       {
        if (DynamicEntityVsStaticEntity(entColliding, dt,entCollided ))
         {
+          //coloca sonido
+          soundSys_.setLoop(true, soundSys_.soundEHit);
+          soundSys_.playSound(soundSys_.soundEHit, soundSys_.isEHit);
+
           action(entColliding,entCollided);
+        }
+        else{
+          soundSys_.setLoop(false, soundSys_.soundEHit);
+          soundSys_.stopSound(soundSys_.soundEHit, soundSys_.isEHit);
         }
       };
       //Resolve entity collisions saved on "collInstance", a collision is added every time "saveCollision" is called
@@ -233,9 +247,17 @@ namespace game
       }
 
       //ENEMY COLLISION AGAINST PLAYER, SHOULD USE A MELEE SYSTEM IN THE FUTURE
-      if(saveCollisions(*enemy,player,nullptr))
-        player.health->negativeAffection = 10;
+      if(saveCollisions(*enemy,player,nullptr)){
+        //colocar sonido - SI MOLESTA, COMENTAR
+        soundSys_.setLoop(true, soundSys_.soundPHit);
+        soundSys_.playSound(soundSys_.soundPHit, soundSys_.isPHit);
 
+        player.health->negativeAffection = 10;
+      }
+      else{ //- SI MOLESTA, COMENTAR
+        soundSys_.setLoop(false, soundSys_.soundPHit);
+        soundSys_.stopSound(soundSys_.soundPHit, soundSys_.isPHit);
+      }
       //RESOLVE ALL COLLISIONS THIS ENEMY HAS CAUSED
       resolveEntityCollisions(*enemy);
       collInstance.clear();
@@ -246,14 +268,26 @@ namespace game
       //COLISION DEL ENEMIGO CON LAS BALAS DEL PLAYER
       for(auto* enemy : enemies)
       {
+        //colocar sonido
+  
+        // soundSys_.setLoop(true, soundSys_.soundEHit);
+        // soundSys_.playSound(soundSys_.soundEHit, soundSys_.isEHit);
+       
+
         actOnCollisions(*bullet,*enemy,bulletHit);
+  
+        
       }
+      // soundSys_.setLoop(false, soundSys_.soundEHit);
+      // soundSys_.stopSound(soundSys_.soundEHit, soundSys_.isEHit);
+
       if(bullet->alive())
         bullet->physics->pos+=bullet->physics->vel*dt;
     } 
 
     for(auto* enmyBullet : enmyBullets)
     {
+     
       actOnCollisions(*enmyBullet,player,bulletHit);
       
       if(enmyBullet->alive())
@@ -263,6 +297,9 @@ namespace game
       //COLISION DEL JUGADOR CON LA TRAMPA
     for(auto* trap : mapTrap)
     {
+
+      //colocar sonido
+      
       actOnCollisions(*trap,player,trapHit);
 
       player.health->negativeAffection = 1;

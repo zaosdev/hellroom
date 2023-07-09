@@ -10,8 +10,8 @@
 namespace game
 {
 
-    CofreSys::CofreSys(FVeng::GameManager& gameMan)
-    : gMan_(gameMan)
+    CofreSys::CofreSys(FVeng::GameManager& gameMan, game::SoundSys&  soundSys)
+    : gMan_(gameMan), soundSys_(soundSys)
     {
     }
 
@@ -36,12 +36,18 @@ namespace game
                 int posxmax = pos.x +40;
                 int posymin = pos.y -70;
                 int posymax = pos.y +40;
+                
+                
+                
 
                 if((posxPlayer < posxmax) && (posxPlayer > posxmin) && (posyPlayer < posymax) && (posyPlayer > posymin) && (e.cofre->abrir==true) && (e.cofre->abierto == false)){
                     //std::cout << "premio!" << std::endl;
                     //std::cout << "pos: " << posplayer << std::endl;
                     //std::cout << "id: " << e.cofre->id << std::endl;
                         //premio:
+
+                    soundSys_.stopSound(soundSys_.soundCofre, soundSys_.isCofre);
+
                     gMan_.initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(21*gMan_.getMapManager().getTileSize().x,18*gMan_.getMapManager().getTileSize().y, 16, 16));
 
                     std::srand(static_cast<unsigned int>(std::time(0)));
@@ -64,12 +70,25 @@ namespace game
                     }
 
                     e.cofre->abierto = true;
+                    
+                    
                 }
 
                 if(e.cofre->abrir==true){
                     //std::cout << "abrir -> true" << std::endl;
+                    
+                    soundSys_.setLoop(false, soundSys_.soundCofre);
+                    soundSys_.playSound(soundSys_.soundCofre, soundSys_.isCofre);
+                   
                     e.cofre->abrir=false;
+                   
+                    //soundSys_.setLoop(false, soundSys_.soundCofre);
+                    //soundSys_.stopSound(soundSys_.soundCofre, soundSys_.isCofre);
                 }
+                // else{
+                //     //soundSys_.setLoop(false, soundSys_.soundCofre);
+                //     soundSys_.stopSound(soundSys_.soundCofre, soundSys_.isCofre);
+                // }
             }
         }
         //std::cout << "Termina el cofre sys" << std::endl;

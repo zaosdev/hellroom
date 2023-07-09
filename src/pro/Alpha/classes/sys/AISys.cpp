@@ -7,8 +7,8 @@
 
 namespace game
 {
-    AISys::AISys(FVeng::GameManager& gameMan)
-    : gMan_(gameMan)
+    AISys::AISys(FVeng::GameManager& gameMan, game::SoundSys& soundSys)
+    : gMan_(gameMan), soundSys_(soundSys)
     {
     }
 
@@ -181,8 +181,16 @@ namespace game
                         if(percep)
                         {
                             //Generate a bullet from the enemy to the player position
+                            soundSys_.setLoop(true, soundSys_.soundEShoot);
+                            soundSys_.playSound(soundSys_.soundEShoot, soundSys_.isEShoot);
+
                             gMan_.createEnemyBullet(ent.physics->pos, FVAI::SB::SEEK, gMan_.getPlayer().physics->pos);
-                        }                    
+                        }
+                        else{
+                            soundSys_.setLoop(false, soundSys_.soundEShoot);
+                            soundSys_.stopSound(soundSys_.soundEShoot, soundSys_.isEShoot);
+                        }
+                                         
                         break;
                     }
                     case FVAI::SB::PATHFINDING:
