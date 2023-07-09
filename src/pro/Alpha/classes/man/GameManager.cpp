@@ -399,7 +399,7 @@ namespace FVeng
 
             e.render = game::RenderComponent { .texIndex=texIdx  , .Sprite{}, .window_Pos{Pos.x,Pos.y}};
 
-            initEntityRender(e, {0,0}, SFMLeng::SpriteManager::rect_i_type(0 * 75, 0 * 75, 40, 40));
+            initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(0 * 15, 0 * 15, 15, 15));
 
             e.physics = game::PhysicsComponent{ .pos{float(Pos.x)+5,float(Pos.y)}, .prevPos{float(Pos.x)+5,float(Pos.y)},  .vel{float(Vel.x),float(Vel.y)}, .mov_speed = 640/4, .size{e.render->Sprite.getGlobalBounds().height,e.render->Sprite.getGlobalBounds().width} };
 
