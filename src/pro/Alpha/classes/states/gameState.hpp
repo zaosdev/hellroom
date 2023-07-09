@@ -23,6 +23,8 @@
 #include "../classes/sys/roomSys.hpp"
 #include "../classes/sys/trapSys.hpp"
 #include "../classes/sys/leverSys.hpp"
+#include "../classes/sys/bossSys.hpp"
+
 
 #include "../classes/sys/animationSys.hpp"
 
@@ -64,6 +66,7 @@ namespace FVEng{
         , animSys       { GameMan }
         , trapSys       { GameMan }
         , leverSys      { GameMan, soundSys }
+        , bossSys       { GameMan }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -97,6 +100,7 @@ namespace FVEng{
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             renSys.startOnPlayer();
             dialogueSys.activateDialogue("1.1");
+            GameMan.createBoss({100, 700},{320,240},GameMan.getPlayer().id(),3);
         }
 
         void changeLevel()
@@ -141,6 +145,9 @@ namespace FVEng{
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
+
+                    bossSys.update(dt);
+
 
                     leverSys.update();
 
@@ -229,6 +236,8 @@ namespace FVEng{
         game::animationSys      animSys;
         game::TrapSys           trapSys;
         game::LeverSys          leverSys;
+        game::BossSys          bossSys;
+
   
         //Game clock
         sf::Clock clock;

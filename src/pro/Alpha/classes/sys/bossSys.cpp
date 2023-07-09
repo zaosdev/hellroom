@@ -9,6 +9,8 @@ namespace game
 
   }  
 
+  BossSys::~BossSys() = default;
+
   void BossSys::update(float dt)
   {
       auto isBoss = [&](game::Entity& e){ return e.hasTag(game::Entity::TAG::BOSS);};
@@ -41,13 +43,14 @@ namespace game
         {
             if(laserSprite_ == 0)
             {
-                //BossSys::gMan_.
+                BossSys::gMan_.initEntityRender(e, {16,16}, SFMLeng::SpriteManager::rect_i_type(32 , 16*laserSprite_, 45, 50));
                 e.boss->minDelay2nextState = 0.2f;
+                laserSprite_+=6;
             }
             else
             {
                 e.boss->currentLaserState = laser_state::attack;
-                gMan_.attackSprite(e);
+                //gMan_.attackSprite(e);
                 e.boss->minDelay2nextState = 0.4f;
             }
         }
@@ -102,7 +105,6 @@ namespace game
       }
       case game::boss_state::laser_attack :
       {
-        auto bossCenter =  FVmath::Point2D{e.physics->pos.x+e.physics->size.x/2,e.physics->pos.y+e.physics->size.y/2};
 
         //stop in place and create laser ball, after x time change lase ball size and change it for laser beam
         if(laserId_!= 0)

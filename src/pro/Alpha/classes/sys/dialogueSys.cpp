@@ -11,7 +11,7 @@
 //#include <cmath>
 namespace game
 {
-    static constexpr int lifeHeart = 100.f;
+    //static constexpr int lifeHeart = 100.f;
 
     DialogueSys::DialogueSys(FVeng::GameManager& Gman)
     : gMan_   (Gman),
@@ -127,7 +127,7 @@ namespace game
         auto textFinished = [&](size_t currentIndex_) 
         {return !(currentIndex_ >= 0 && currentIndex_ < content_.size());};
 
-        bool skip = false; //para saber si se lee el texto de una o letra a letra
+        //bool skip = false; //para saber si se lee el texto de una o letra a letra
 
 
         // Create new view for the text

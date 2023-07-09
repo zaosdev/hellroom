@@ -27,7 +27,7 @@ namespace game
         private:
             FVeng::GameManager& gMan_;
             std::size_t laserId_    {0};
-            std::size_t laserSprite_ {0};
+            std::size_t laserSprite_ {13};
 
             
     };
