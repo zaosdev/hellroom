@@ -27,12 +27,15 @@ namespace game
         for(auto& e: gMan_.getEntityManager()){
             if(e.weapon && e.physics && e.weapon->on){
                 //std::cout << "entra" << std::endl;
-                auto& playerPos   = e.physics->pos;
-                auto& playerSize  = e.physics->size;
+                // auto& playerPos   = e.physics->pos;
+                // auto& playerSize  = e.physics->size;
                 auto& sprite      = e.render->Sprite;
-                FVmath::Point2D pos = {playerPos.x - 5, playerPos.y}; //little adjustement ññ
+                // FVmath::Point2D pos = {playerPos.x - 5, playerPos.y}; //little adjustement ññ
                 static constexpr float adjustement = 3.f;
-                pos = {(sprite.getPosition().x + sprite.getGlobalBounds().width / 2) + adjustement, sprite.getPosition().y + sprite.getGlobalBounds().height / 2};
+                FVmath::Point2D pos = {
+                    (sprite.getPosition().x + sprite.getGlobalBounds().width / 2) + adjustement,
+                    sprite.getPosition().y + sprite.getGlobalBounds().height / 2
+                };
 
                 if(e.weapon->current!=mejora::normal){
                     auto current_time = std::chrono::steady_clock::now();

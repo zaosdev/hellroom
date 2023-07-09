@@ -67,6 +67,8 @@ namespace FVEng{
             //    pet.setScale(xScale, yScale)
             // }
 
+            rectangle.setFillColor(sf::Color::Black);
+
             updateUI();
 
             
@@ -108,10 +110,19 @@ namespace FVEng{
                 pets_[i].setPosition(pet_position);
                 pets_cost_[i].setPosition(cost_position);
             }
-            sf::Vector2f coins_position = sf::Vector2f  (  window_.getSize().x / 2.0f - coins_text_.getLocalBounds().width, 
-                                                           window_.getSize().y * .06f);
+            
+            sf::Vector2f coins_position = sf::Vector2f(window_.getSize().x / 2.0f - coins_text_.getLocalBounds().width, window_.getSize().y * 0.06f);
             coins_text_.setPosition(coins_position);
-            coin_sp_.setPosition(coins_position.x + coins_text_.getGlobalBounds().width + 20, coins_position.y);
+
+            rectangle.setSize(sf::Vector2f(coins_text_.getGlobalBounds().width * 2.0f, coins_text_.getGlobalBounds().height * 1.5f));
+
+            sf::FloatRect textBounds = coins_text_.getGlobalBounds();
+            sf::FloatRect rectBounds = rectangle.getLocalBounds();
+            rectangle.setPosition(textBounds.left + (textBounds.width - rectBounds.width) / 2.0f, textBounds.top + (textBounds.height - rectBounds.height) / 2.0f);
+
+            float coinSpX = coins_position.x + coins_text_.getGlobalBounds().width + 10.0f;
+            float coinSpY = (coins_position.y + (coins_text_.getGlobalBounds().height - coin_sp_.getGlobalBounds().height) / 2.0f ) + 10.f; 
+            coin_sp_.setPosition(coinSpX, coinSpY);
 
         }
 
@@ -131,6 +142,7 @@ namespace FVEng{
         {
             window_.clear();
             window_.draw(backgroundSprite_);
+            window_.draw(rectangle);
             for(auto& option : menu_)
             {
                 window_.draw(option);
@@ -271,8 +283,13 @@ namespace FVEng{
         {
             available_coins_ = FVData::getCoins();
             coins_text_.setFont(font_);
-            coins_text_.setFillColor(sf::Color::Black);
+            coins_text_.setFillColor(sf::Color::White);
             coins_text_.setString(std::to_string(available_coins_));
+
+            rectangle.setSize(sf::Vector2f(coins_text_.getGlobalBounds().width * 2.0f, coins_text_.getGlobalBounds().height * 1.5f));
+            sf::FloatRect textBounds = coins_text_.getGlobalBounds();
+            sf::FloatRect rectBounds = rectangle.getLocalBounds();
+            rectangle.setPosition(textBounds.left + (textBounds.width - rectBounds.width) / 2.0f, textBounds.top + (textBounds.height - rectBounds.height) / 2.0f);
             
 
             //set pets cost
@@ -374,6 +391,8 @@ namespace FVEng{
         
         std::vector<bool> boughtPets_;
         int selectedPet_ = -1;
+
+        sf::RectangleShape rectangle {};
 
         FVEng::StateMachine& SM_;
     };

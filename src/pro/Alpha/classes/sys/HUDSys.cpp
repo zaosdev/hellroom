@@ -172,8 +172,8 @@ namespace game
 
         //Position the clock
         trueClock.render->Sprite.setPosition(
-            600
-        ,   0
+            timeText_.getPosition().x - trueClock.render->Sprite.getGlobalBounds().width, 
+            0
         );
 
         //Add time to counter and restart clock
