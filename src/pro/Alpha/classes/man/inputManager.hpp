@@ -19,6 +19,8 @@ namespace game
         void update();
 
         bool isKeyPressed(Key key);
+
+        void cleanPressed();
         
         // bool isWPressed() { return KEY_W; }
         // bool isAPressed() { return KEY_A; }
@@ -27,7 +29,7 @@ namespace game
 
         private:
             sf::RenderWindow& window_;
-            std::unordered_map<Key, bool> keyStates_;
+            std::unordered_map<Key, bool> keyStates_ {};
     };
 
 }

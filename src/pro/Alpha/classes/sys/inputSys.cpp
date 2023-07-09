@@ -10,6 +10,16 @@ namespace game
     {
     }
 
+    bool InputSys::IsGamePaused()
+    {
+        return gameIsPaused_;
+    }
+
+    void InputSys::unPause()
+    {
+        gameIsPaused_ = false;
+    }
+
     void InputSys::update()
     {
         auto& EM = gMan_.getEntityManager();
@@ -103,6 +113,11 @@ namespace game
         if(inpRec_.isKeyPressed(getKeyCode('e')))//e is enter in the map keys
         {
             dialogueSys.enterHasBeenPreesed();
+        }
+
+        if(inpRec_.isKeyPressed(getKeyCode('q'))) //q = quit
+        {
+            gameIsPaused_ = true;
         }
     }
 

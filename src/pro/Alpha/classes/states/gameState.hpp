@@ -122,8 +122,13 @@ namespace FVEng{
 
         void executeState() override
         {
+            inpSys.unPause();
+            inpRec.cleanPressed();
+            clock.restart();
+            updateClock.restart();
+
             //Bucle del juego
-            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0) 
+            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0 && not inpSys.IsGamePaused()) 
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
@@ -190,7 +195,8 @@ namespace FVEng{
             //colocar sonido
             soundSys.setLoop(false, soundSys.soundGameOver);
             soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
-            SM_.ChangeToGameOverState(true);
+            if      (inpSys.IsGamePaused())                       { SM_.ChangeToPauseState(false); }
+            else if (GameMan.getPlayer().health->currentLife > 0) { SM_.ChangeToGameOverState(true); }
             //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 

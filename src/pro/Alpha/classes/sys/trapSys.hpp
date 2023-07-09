@@ -24,7 +24,7 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
-            bool primera_vez = false;
+            //bool primera_vez = false;
             //game::RenderSys renSys{gMan_};
     };
 }

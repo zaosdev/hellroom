@@ -6,9 +6,9 @@
 #include "../classes/man/stateManager.hpp"
 
 namespace FVEng{
-    class mainMenuState : public State {
+    class pauseState : public State {
     public:
-        mainMenuState(sf::RenderWindow& window, FVEng::StateMachine& SM)
+        pauseState(sf::RenderWindow& window, FVEng::StateMachine& SM)
         : window_ {window}, SM_ {SM}
         {
            // Init();
@@ -118,9 +118,13 @@ namespace FVEng{
 
             //act to registered key events
             if(upPressed_)
-            { 
+            {
+                
                 //colocar sonido
-                moveDown();     
+                // soundSys_.setLoop(false, soundSys_.soundMdown);
+                // soundSys_.playSound(soundSys_.soundMdown, soundSys_.isMdown);
+                moveDown();
+                
             }
             if(downPressed_)
             {
@@ -147,13 +151,13 @@ namespace FVEng{
 
         void changeStateAccordingToSelectedIndex()
         {
-            if(selectedItemIndex == 0) //Play option
+            if(selectedItemIndex == 0) //Resume option
             {
                 //colocar sonido
                 std::cout << "Entering game mode..." << std::endl;
-                SM_.ChangeToGameState(true);
+                SM_.RemoveState();
             }
-            if(selectedItemIndex == 1) //Options option
+            if(selectedItemIndex == 1) //Store option
             {   
                 //colocar sonido
                 std::cout << "Entering store..." << std::endl;
@@ -164,9 +168,9 @@ namespace FVEng{
                 std::cout << "Controls..." << std::endl;
                 SM_.ChangeToControlsState(false);
             }
-            if(selectedItemIndex == 3) //Exit option
+            if(selectedItemIndex == 3) //Desktop option
             {
-                std::cout << "Exit..." << std::endl;
+                std::cout << "Exit game" << std::endl;
                 window_.close();
             }
             enterPressed_ = false;
@@ -215,7 +219,7 @@ namespace FVEng{
         sf::Font font_;
         static constexpr int MAX_NUMBER_OF_ITEMS = 4;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
-        std::vector<std::string> menu_values_ {"Play", "Store", "Controls", "Exit"};
+        std::vector<std::string> menu_values_ {"Resume", "Store", "Controls", "Go to desktop"};
         bool upPressed_, downPressed_;
         bool enterPressed_ = false;
 

@@ -34,6 +34,13 @@ namespace game
         }
     }
 
+    void InputManager::cleanPressed()
+    {
+        for (auto& pair : keyStates_) 
+        {
+            pair.second = false;
+        }
+    }
 
     bool InputManager::isKeyPressed(Key key)
     {

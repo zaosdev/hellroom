@@ -3,6 +3,7 @@
 #include "../man/inputManager.hpp"
 #include "../sys/soundSys.hpp"
 #include "../sys/dialogueSys.hpp"
+#include "../man/stateManager.hpp"
 #include <iostream>
 
 namespace game
@@ -18,12 +19,15 @@ namespace game
         InputSys& operator=(InputSys&&)= delete;
 
         void update();
+        bool IsGamePaused();
+        void unPause();
 
         private:
-            FVeng::GameManager& gMan_;
-            InputManager&       inpRec_;
-            SoundSys&           soundSys;
-            DialogueSys&        dialogueSys;
+            FVeng::GameManager&        gMan_;
+            InputManager&              inpRec_;
+            SoundSys&                  soundSys;
+            DialogueSys&               dialogueSys;
+            bool                       gameIsPaused_ {false};
     };
 
 }

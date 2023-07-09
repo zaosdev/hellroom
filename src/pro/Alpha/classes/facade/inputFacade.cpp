@@ -52,7 +52,8 @@ namespace KeyMapNamespace
         {'d', sf::Keyboard::Down},
         {'l', sf::Keyboard::Left},
         {'r', sf::Keyboard::Right},
-        {'e', sf::Keyboard::Enter}
+        {'e', sf::Keyboard::Enter},
+        {'q', sf::Keyboard::Escape}
     };
 }
 

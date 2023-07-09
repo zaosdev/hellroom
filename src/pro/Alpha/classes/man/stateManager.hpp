@@ -17,6 +17,11 @@ namespace FVEng{
             StateMachine (int x, int y, std::string nameGame); 
             ~StateMachine( ) {}
 
+            StateMachine (const StateMachine&) = delete;
+            StateMachine (StateMachine&&) = delete;
+            StateMachine& operator=(const StateMachine&)= delete;
+            StateMachine& operator=(StateMachine&&)= delete;
+
             void RemoveState(  );
 
             void ChangeToMainMenuState(bool replace);
@@ -24,6 +29,7 @@ namespace FVEng{
             void ChangeToStoreState(bool replace);
             void ChangeToGameOverState(bool replace);
             void ChangeToControlsState(bool replace);
+            void ChangeToPauseState(bool replace);
 
             sf::RenderWindow& getWindow();
             void ProcessStateChanges( );
