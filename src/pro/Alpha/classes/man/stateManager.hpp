@@ -23,6 +23,7 @@ namespace FVEng{
             void ChangeToGameState(bool replace);   
             void ChangeToStoreState(bool replace);
             void ChangeToGameOverState(bool replace);
+            void ChangeToControlsState(bool replace);
 
             sf::RenderWindow& getWindow();
             void ProcessStateChanges( );

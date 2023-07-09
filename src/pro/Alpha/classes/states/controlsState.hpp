@@ -9,9 +9,9 @@
 
 
 namespace FVEng{
-    class gameOverState : public State {
+    class controlsState : public State {
     public:
-        gameOverState(sf::RenderWindow& window, FVEng::StateMachine& SM)
+        controlsState(sf::RenderWindow& window, FVEng::StateMachine& SM)
         : window_ {window}, SM_ {SM}
         {
         }
@@ -19,7 +19,7 @@ namespace FVEng{
         void Init() override {
             
         
-            if (!backgroundTexture_.loadFromFile("../media/images/gameOver.png")) 
+            if (!backgroundTexture_.loadFromFile("../media/images/controles_fv_2.png")) 
             {
                 std::cout << "Error loading background image" << std::endl;
                 std::terminate();

@@ -166,8 +166,8 @@ namespace FVEng{
             }
             if(selectedItemIndex == 2) //Controls option
             {
-                std::cout << "Controls... add new state when have the pic" << std::endl;
-               // window_.close();
+                std::cout << "Controls..." << std::endl;
+                SM_.ChangeToControlsState(false);
             }
             if(selectedItemIndex == 3) //Exit option
             {
