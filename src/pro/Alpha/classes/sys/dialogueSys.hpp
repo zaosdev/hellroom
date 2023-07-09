@@ -52,5 +52,6 @@ namespace game
 
             static constexpr const char* text_path_1v1 = "../media/texts/text_level_1v1.txt";
             static constexpr const char* text_path_2v1 = "../media/texts/text_level_2v1.txt";
+            static constexpr const char* text_path_3v1 = "../media/texts/text_level_3v1.txt";
     };
 }

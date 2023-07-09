@@ -70,6 +70,7 @@ namespace FVEng{
         {
             //Init(); Init is automatically executed by the state machine
             std::cout << "Game init correctly" << std::endl;
+
         }
 
         void Init() override 
@@ -96,12 +97,16 @@ namespace FVEng{
             animSys.setTexureID (GameMan.getPlayer().id()); 
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
             renSys.startOnPlayer();
-            dialogueSys.activateDialogue("1.1");
+            dialogueSys.activateDialogue(levelDialogues[0]);
             //GameMan.createBoss({100, 700},{320,240},GameMan.getPlayer().id(),3);
         }
 
         void changeLevel()
         {
+            if(size_t(levelnumber) < levelDialogues.size()-1) 
+            {
+                ++levelnumber;
+            }
             HudSys.restartTime();
             if(cambialvl == true){//este if es solo por el soundsys
                 //colocar sonido
@@ -112,7 +117,8 @@ namespace FVEng{
                 spwnSys.SpawnPlayer();
                 GameMan.change_level=false;
                 renSys.startOnPlayer();
-                dialogueSys.activateDialogue("2.1");
+                std::cout << "level number: " << levelnumber << std::endl;
+                dialogueSys.activateDialogue(levelDialogues[levelnumber]);
                 cambialvl = false;
             }
             else
@@ -248,5 +254,7 @@ namespace FVEng{
         sf::Clock updateClock;
         double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
         bool cambialvl = true;
+        int levelnumber = 0;
+        std::vector<std::string> levelDialogues {"1.1", "2.1", "3.1"};
     };
 }

@@ -102,8 +102,8 @@ namespace FVEng{
             {
                 sf::Vector2f menu_position = sf::Vector2f(  window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - menu_[i].getLocalBounds().width/2.0f, 
                                                             window_.getSize().y / (4 + i%2));
-                sf::Vector2f pet_position  = sf::Vector2f(  window_.getSize().x / (MAX_NUMBER_OF_ITEMS + 1) * (i + 1) - pets_[i].getLocalBounds().width/2.0f, 
-                                                         (  window_.getSize().y + pets_[i].getLocalBounds().height + 80) / (4 + i%2));
+                sf::Vector2f pet_position = sf::Vector2f(menu_position.x - 50,
+                                         menu_position.y + (menu_[i].getLocalBounds().height / 2) + 80);
                 
                 sf::Vector2f cost_position = sf::Vector2f(  pet_position.x, pet_position.y + pets_[i].getLocalBounds().height);
                 menu_[i].setFont(font_);

@@ -100,6 +100,7 @@ namespace game
         //Create the map for all the texts in the game
         textMap_.insert(std::make_pair("1.1", text_path_1v1));
         textMap_.insert(std::make_pair("2.1", text_path_2v1));
+        textMap_.insert(std::make_pair("3.1", text_path_3v1));
     }
 
     void DialogueSys::showAllText(std::string& allContent)
