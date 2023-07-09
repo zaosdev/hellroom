@@ -216,7 +216,7 @@ namespace game
             actOnCollisions(player,ent,trapHit);
 
           }
-          else if(isTrap(ent))
+          else if(isLever(ent))
           {
             saveCollisions(player,ent ,nullptr);
           }

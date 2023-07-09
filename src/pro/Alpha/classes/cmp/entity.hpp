@@ -18,7 +18,7 @@
 #include "trapComponent.hpp"
 #include "animationComponent.hpp"
 #include "leverComponent.hpp"
-
+#include "bossComponent.hpp"
 
 
 
@@ -51,7 +51,8 @@ namespace game
         TRAP = 1 << 13,
         LEVER = 1 << 14,
         Cofre = 1 << 15,
-
+        LASER = 1 << 16,
+        BOSS = 1 << 16,
 
       };
 
@@ -76,7 +77,7 @@ namespace game
       std::optional<LeverComponent>   lever{};
       std::optional<animationComponent> anim{};
       std::optional<TrapComponent>  trap{};
-
+      std::optional<BossComponent>      boss{};
 
       [[nodiscard]] constexpr id_type id() const noexcept { return id_; }
       [[nodiscard]] constexpr bool alive() const noexcept { return alive_; }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="97" nextobjectid="405">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="101" nextobjectid="447">
  <tileset firstgid="1" source="DungeonTileset.tsx"/>
  <group id="52" name="render">
   <layer id="51" name="floor" width="50" height="50">
@@ -10021,101 +10021,38 @@
    </data>
   </layer>
  </group>
- <group id="55" name="rooms" visible="0">
-  <group id="59" name="room" visible="0">
+ <group id="55" name="rooms">
+  <group id="59" name="room">
    <objectgroup id="78" name="wall">
-    <object id="314" x="144.167" y="576" width="16" height="16"/>
-    <object id="315" x="159.834" y="576" width="16" height="16"/>
-    <object id="316" x="208.834" y="576" width="16" height="16"/>
-    <object id="317" x="176.167" y="576" width="16" height="16"/>
-    <object id="318" x="192.834" y="576" width="16" height="16"/>
+    <object id="445" x="384" y="144" width="16" height="16"/>
+    <object id="446" x="400" y="144" width="16" height="16"/>
    </objectgroup>
    <objectgroup id="61" name="spawner">
-    <object id="162" x="245.333" y="694.333">
+    <object id="440" x="346.667" y="101.333">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="163" x="293.667" y="694.667">
+    <object id="441" x="361.333" y="60.6667">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="164" x="277" y="729.333">
+    <object id="442" x="406.667" y="60">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="165" x="134.667" y="691.167">
+    <object id="443" x="452.667" y="60">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
      </properties>
     </object>
-    <object id="166" x="96" y="702.667">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="167" x="208.833" y="654.5">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="168" x="137.333" y="732">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="169" x="73" y="732">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="170" x="204.667" y="731.667">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="272" x="157" y="655.833">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="273" x="296.667" y="640.833">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="274" x="80.5" y="636">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="275" x="201.667" y="689.667">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="276" x="95.167" y="666.834">
-     <properties>
-      <property name="enemy" type="int" value="0"/>
-      <property name="type" type="int" value="1"/>
-     </properties>
-    </object>
-    <object id="277" x="260.667" y="662.667">
+    <object id="444" x="463.333" y="100">
      <properties>
       <property name="enemy" type="int" value="0"/>
       <property name="type" type="int" value="1"/>
@@ -10123,7 +10060,111 @@
     </object>
    </objectgroup>
    <objectgroup id="86" name="room_trigger">
-    <object id="319" x="49" y="609.5" width="273.5" height="18"/>
+    <object id="427" x="312.333" y="118.333" width="180.667" height="15.3333"/>
+   </objectgroup>
+  </group>
+  <group id="97" name="room">
+   <objectgroup id="98" name="wall">
+    <object id="405" x="144.167" y="576" width="16" height="16"/>
+    <object id="406" x="159.834" y="576" width="16" height="16"/>
+    <object id="407" x="208.834" y="576" width="16" height="16"/>
+    <object id="408" x="176.167" y="576" width="16" height="16"/>
+    <object id="409" x="192.834" y="576" width="16" height="16"/>
+   </objectgroup>
+   <objectgroup id="99" name="spawner">
+    <object id="410" x="245.333" y="694.333">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="411" x="293.667" y="694.667">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="412" x="277" y="729.333">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="413" x="134.667" y="691.167">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="414" x="96" y="702.667">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="415" x="208.833" y="654.5">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="416" x="137.333" y="732">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="417" x="73" y="732">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="418" x="204.667" y="731.667">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="419" x="157" y="655.833">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="420" x="296.667" y="640.833">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="421" x="80.5" y="636">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="422" x="201.667" y="689.667">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="423" x="95.167" y="666.834">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+    <object id="424" x="260.667" y="662.667">
+     <properties>
+      <property name="enemy" type="int" value="0"/>
+      <property name="type" type="int" value="1"/>
+     </properties>
+    </object>
+   </objectgroup>
+   <objectgroup id="100" name="room_trigger">
+    <object id="425" x="49" y="609.5" width="273.5" height="18"/>
    </objectgroup>
   </group>
   <group id="79" name="room" visible="0">
@@ -10192,7 +10233,7 @@
     <object id="309" x="63" y="437.5" width="165.5" height="19.5"/>
    </objectgroup>
   </group>
-  <group id="56" name="room" visible="0">
+  <group id="56" name="room">
    <objectgroup id="74" name="wall">
     <object id="233" x="256" y="416.33" width="16" height="16"/>
     <object id="234" x="256" y="399.663" width="16" height="16"/>
@@ -10336,7 +10377,7 @@
     <object id="308" x="485.5" y="282" width="22" height="215"/>
    </objectgroup>
   </group>
-  <group id="62" name="room" visible="0">
+  <group id="62" name="room">
    <objectgroup id="76" name="wall">
     <object id="291" x="672.243" y="496.5" width="16" height="16"/>
     <object id="292" x="688.243" y="496.5" width="16" height="16"/>
@@ -10400,7 +10441,7 @@
     <object id="301" x="646" y="455" width="101" height="22"/>
    </objectgroup>
   </group>
-  <group id="65" name="room" visible="0">
+  <group id="65" name="room">
    <objectgroup id="66" name="wall">
     <object id="279" x="672.095" y="544" width="16" height="16"/>
     <object id="280" x="688.095" y="544" width="16" height="16"/>
@@ -10452,14 +10493,14 @@
    </objectgroup>
   </group>
  </group>
- <objectgroup id="73" name="spawner" visible="0">
+ <objectgroup id="73" name="spawner">
   <object id="222" x="520" y="731">
    <properties>
     <property name="type" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="87" name="door" visible="0">
+ <objectgroup id="87" name="door">
   <properties>
    <property name="next_level" value="game_end"/>
   </properties>
@@ -10538,13 +10579,10 @@
  <objectgroup id="89" name="coffers">
   <object id="396" x="705.333" y="310.667"/>
   <object id="397" x="96" y="456"/>
-  <object id="398" x="220" y="730.667"/>
  </objectgroup>
  <group id="91" name="levers">
   <group id="96" name="lever">
-   <objectgroup id="92" name="lever">
-    <object id="402" x="181" y="731"/>
-   </objectgroup>
+   <objectgroup id="92" name="lever"/>
    <objectgroup id="94" name="walls">
     <object id="403" x="384" y="176" width="16" height="16"/>
     <object id="404" x="400" y="176" width="16" height="16"/>
