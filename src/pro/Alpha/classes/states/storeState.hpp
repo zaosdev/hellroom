@@ -56,6 +56,9 @@ namespace FVEng{
             pets_[1].setTexture(pet2Texture_);
             pets_[2].setTexture(pet3Texture_);
             coin_sp_.setTexture(coinTexture_);
+            pets_[0].setScale({8, 8});
+            pets_[1].setScale({8, 8});
+            pets_[2].setScale({8, 8});
 
             //Redimensionate to 128x128
             // FVmath::Point2Di originalSize  = {(int) pet1Texture_.getSize().x, (int) pet1Texture_.getSize().y};
