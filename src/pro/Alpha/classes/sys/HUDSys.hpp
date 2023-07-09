@@ -43,8 +43,8 @@ namespace game
         void renderTimer();
         void restartTime();
         void setMaxTime(double newTime);
+        bool isTimeOver();
         
-
         private:
             FVeng::GameManager& gMan_;
             sf::RenderWindow&   window_;
@@ -63,7 +63,8 @@ namespace game
             size_t              gunRafaga_;
             
             double              accumulatedTime_;    //time passed (seconds)
-            double              maxTime_ = 99;
+            double              maxTime_ = 120;
+            bool                timeIsOver_ {false};
          //   float               viewPortTop_;
          //   float               viewPortLeft_;
             sf::View            view_ {};

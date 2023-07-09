@@ -96,6 +96,11 @@ namespace game
         maxTime_ = newTime;
     }
 
+    bool HUDSys::isTimeOver()
+    {
+        return timeIsOver_;
+    }
+
     FVmath::Point2Di HUDSys::renderHearts()
     {
         FVmath::Point2Di lastHeartPosition {};
@@ -186,6 +191,11 @@ namespace game
         //Draw
         window_.draw(timeText_);
         window_.draw(trueClock.render->Sprite);
+
+        if(accumulatedTime_ > maxTime_) 
+        {
+            timeIsOver_ = true;
+        }
     }
 
     void HUDSys::renderCoins()

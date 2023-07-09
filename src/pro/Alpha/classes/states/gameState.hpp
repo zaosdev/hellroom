@@ -102,7 +102,7 @@ namespace FVEng{
 
         void changeLevel()
         {
-            
+            HudSys.restartTime();
             if(cambialvl == true){//este if es solo por el soundsys
                 //colocar sonido
                 soundSys.setLoop(false, soundSys.soundLevel);
@@ -115,7 +115,8 @@ namespace FVEng{
                 dialogueSys.activateDialogue("2.1");
                 cambialvl = false;
             }
-            else{
+            else
+            {
                // soundSys.setLoop(false, soundSys.soundLevel);
                 soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
                 cambialvl = true;
@@ -132,7 +133,7 @@ namespace FVEng{
             updateClock.restart();
 
             //Bucle del juego
-            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0 && not inpSys.IsGamePaused()) 
+            while (GameMan.getWindow().isOpen() && GameMan.getPlayer().health->currentLife > 0 && not inpSys.IsGamePaused() && not HudSys.isTimeOver()) 
             {
                 //Bucle de obtención de eventos
                 GameMan.update();
@@ -202,8 +203,8 @@ namespace FVEng{
             //colocar sonido
             soundSys.setLoop(false, soundSys.soundGameOver);
             soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
-            if      (inpSys.IsGamePaused())                       { SM_.ChangeToPauseState(false); }
-            else if (GameMan.getPlayer().health->currentLife > 0) { SM_.ChangeToGameOverState(true); }
+            if      (inpSys.IsGamePaused())                                              { SM_.ChangeToPauseState(false); }
+            else if (GameMan.getPlayer().health->currentLife > 0 || HudSys.isTimeOver()) { SM_.ChangeToGameOverState(true); }
             //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 

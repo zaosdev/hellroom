@@ -99,7 +99,9 @@ namespace FVEng{
 
         void RegisterKeys()
         {
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) 
+            || sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)
+            || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
                 scapePressed_ = true;
             }
