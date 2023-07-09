@@ -28,6 +28,8 @@ namespace game
             SoundSys&                  soundSys;
             DialogueSys&               dialogueSys;
             bool                       gameIsPaused_ {false};
+            int                        cycles_ {0};
+            const int                  min_cycles {30};
     };
 
 }
