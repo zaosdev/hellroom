@@ -2,7 +2,7 @@
 #include "weaponSys.hpp"
 #include "../man/SpriteManager.hpp"
 #include "../sys/renderSys.hpp"
-
+#include "../define.h"
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -27,7 +27,12 @@ namespace game
         for(auto& e: gMan_.getEntityManager()){
             if(e.weapon && e.physics && e.weapon->on){
                 //std::cout << "entra" << std::endl;
-                auto& pos = e.physics->pos;
+                auto& playerPos   = e.physics->pos;
+                auto& playerSize  = e.physics->size;
+                auto& sprite      = e.render->Sprite;
+                FVmath::Point2D pos = {playerPos.x - 5, playerPos.y}; //little adjustement ññ
+
+
                 if(e.weapon->current!=mejora::normal){
                     auto current_time = std::chrono::steady_clock::now();
                     auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - tiempo_comienzo_1).count();
@@ -72,6 +77,7 @@ namespace game
 
                 switch(e.weapon->direction){
                     case directionType::norte:
+                        pos.y -= tileSize; 
                         switch (e.weapon->especial){
                             case mejora::escopeta:
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,-300});
@@ -80,6 +86,7 @@ namespace game
 
                             break;
                             case mejora::cruz:
+                                pos.y -= tileSize; //generate the cross in the middle
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,-300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,0});
@@ -97,6 +104,7 @@ namespace game
                         }
                     break;
                     case directionType::sur:
+                        pos.y += tileSize; 
                         switch (e.weapon->especial){
                             case mejora::normal:
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,300});
@@ -108,6 +116,7 @@ namespace game
 
                             break;
                             case mejora::cruz:
+                                pos.y -= tileSize; 
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,-300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,0});
@@ -122,6 +131,7 @@ namespace game
                         }
                     break;
                     case directionType::este:
+                        pos.x += tileSize;
                         switch (e.weapon->especial){
                             case mejora::normal:
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,0});
@@ -132,6 +142,7 @@ namespace game
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,-200});
                             break;
                             case mejora::cruz:
+                                pos.x -= tileSize;
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,-300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,0});
@@ -146,6 +157,7 @@ namespace game
                         }
                     break;
                     case directionType::oeste:
+                        pos.x -= tileSize;
                         switch (e.weapon->especial){
                             case mejora::normal:
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {-300,0});
@@ -157,6 +169,7 @@ namespace game
 
                             break;
                             case mejora::cruz:
+                                pos.x += tileSize;
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,-300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {0,300});
                                 gMan_.createBullet({int(pos.x),int(pos.y)}, {300,0});
