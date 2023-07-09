@@ -25,9 +25,6 @@ namespace game
         auto& EM = gMan_.getEntityManager();
         for(auto& ent : EM)
         {
-            if(inpRec_.isKeyPressed(getKeyCode('N')))   gMan_.change_level=true; 
-
-
             if(ent.input && ent.physics)
             {
                 ent.physics->vel = {0,0};
@@ -118,6 +115,20 @@ namespace game
         if(inpRec_.isKeyPressed(getKeyCode('q'))) //q = quit
         {
             gameIsPaused_ = true;
+        }
+        cycles_++;
+        if(inpRec_.isKeyPressed(getKeyCode('N')))
+        {
+            std::cout << cycles_ << std::endl;
+            if(cycles_ > min_cycles)
+            {
+                gMan_.change_level=true;
+                cycles_ = 0;
+            }
+            else
+            {
+                gMan_.change_level=false;
+            } 
         }
     }
 
