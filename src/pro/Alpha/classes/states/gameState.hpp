@@ -4,7 +4,7 @@
 #include "../classes/sys/renderSys.hpp"
 #include "../classes/sys/physicsSys.hpp"
 #include "../classes/sys/inputSys.hpp"
-#include "../classes/sys/soundSys.hpp"
+//#include "../classes/sys/soundSys.hpp"
 #include "../classes/sys/achievementSys.hpp"
 #include "../classes/sys/savingSys.hpp"
 #include "../classes/man/GameManager.hpp"
@@ -45,25 +45,25 @@ namespace FVEng{
         , inpRec        { window_ }
         , dialogueSys   { GameMan }
         , inpSys        { GameMan, inpRec, soundSys, dialogueSys }
-        , AISys         { GameMan }
+        , AISys         { GameMan, soundSys }
         , healthSys     { GameMan }
         , spwnSys       { GameMan }
         , efctSys       { GameMan }
         , soundSys      { GameMan, inpRec }
         , achSys        { /*GameMan*/ }
         , saveSys       { GameMan }
-        , collisionSys  { GameMan }
+        , collisionSys  { GameMan, soundSys }
         , HudSys        { GameMan }
         , renSys        { GameMan, HudSys, dialogueSys }
         , rewardSys     { GameMan }
         , weaponSys     { GameMan }
-        , cofreSys      { GameMan }
+        , cofreSys      { GameMan, soundSys }
         , shieldSys     { GameMan, inpRec }
         , petSys        { GameMan, shieldSys }
         , roomSys       { GameMan}
         , animSys       { GameMan }
         , trapSys       { GameMan }
-        , leverSys      { GameMan }
+        , leverSys      { GameMan, soundSys }
         , clock         {}
         , updateClock   {}
         , UPDATE_TICK_TIME{ 1000 / 15 } 
@@ -91,6 +91,7 @@ namespace FVEng{
             // HudSys.setWeapon3ID (GameMan.createWeapon3().id());
             petSys.initPetSys();
             soundSys.loadSounds();
+            //soundSys.initMusic = true;
             renSys.iniRenderSys();
             animSys.setTexureID (GameMan.getPlayer().id()); 
             //tendria que ser con el spritesheet completo y de ahi hacer recortes de cada animacion de sprite 
@@ -100,11 +101,26 @@ namespace FVEng{
 
         void changeLevel()
         {
-            std::cout << "change level" << std::endl;
-            spwnSys.SpawnPlayer();
-            GameMan.change_level=false;
-            renSys.startOnPlayer();
-            dialogueSys.activateDialogue("2.1");
+            
+            if(cambialvl == true){//este if es solo por el soundsys
+                //colocar sonido
+                soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.playSound(soundSys.soundLevel, soundSys.isChangeLvl);
+
+                std::cout << "change level" << std::endl;
+                spwnSys.SpawnPlayer();
+                GameMan.change_level=false;
+                renSys.startOnPlayer();
+                dialogueSys.activateDialogue("2.1");
+                cambialvl = false;
+            }
+            else{
+               // soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
+                cambialvl = true;
+            }
+
+
         }
 
         void executeState() override
@@ -117,8 +133,11 @@ namespace FVEng{
                 GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
+                    
                     changeLevel();
                 }
+               
+
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
                     double dt = updateClock.restart().asSeconds();
@@ -171,7 +190,11 @@ namespace FVEng{
             }
 
             //player is dead
+            //colocar sonido
+            soundSys.setLoop(false, soundSys.soundGameOver);
+            soundSys.playSound(soundSys.soundGameOver, soundSys.isGameOver);
             SM_.AddState(std::make_unique<FVEng::gameOverState>(SM_.getWindow(), SM_), true);
+            //soundSys.stopSound(soundSys.soundGameOver, soundSys.isGameOver);
         }
 
 
@@ -211,5 +234,6 @@ namespace FVEng{
         sf::Clock clock;
         sf::Clock updateClock;
         double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
+        bool cambialvl = true;
     };
 }

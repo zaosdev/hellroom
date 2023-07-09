@@ -1,12 +1,13 @@
 #pragma once
 
 #include "../man/GameManager.hpp"
+#include "../sys/soundSys.hpp"
 
 namespace game
 {
     struct LeverSys
     {
-        LeverSys(FVeng::GameManager& gameMan);
+        LeverSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys);
         ~LeverSys();
 
         LeverSys (const LeverSys&) = delete;
@@ -21,6 +22,7 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            game::SoundSys&     soundSys_;
             //game::RenderSys renSys{gMan_};
     };
 }

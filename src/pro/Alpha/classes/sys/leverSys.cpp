@@ -2,8 +2,8 @@
 
 namespace game
 {
-    LeverSys::LeverSys(FVeng::GameManager& gameMan)
-    : gMan_(gameMan)
+    LeverSys::LeverSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys)
+    : gMan_(gameMan), soundSys_(soundSys)
     {
     }
 
@@ -24,6 +24,8 @@ namespace game
 
                 if(e.lever->pressed && (gMan_.getPlayer().physics->pos.x < posxmax) && (gMan_.getPlayer().physics->pos.x > posxmin) && (gMan_.getPlayer().physics->pos.y < posymax) && (gMan_.getPlayer().physics->pos.y > posymin))
                 {
+                    soundSys_.setLoop(false, soundSys_.soundLever);
+                    soundSys_.playSound(soundSys_.soundLever, soundSys_.isLever);
 
                     gMan_.initEntityRender(e, {0,0},SFMLeng::SpriteManager::rect_i_type(6*gMan_.getMapManager().getTileSize().x,12*gMan_.getMapManager().getTileSize().y,16,16));
 
@@ -35,8 +37,14 @@ namespace game
                         }
                     }
                 }
+                else{
+                    soundSys_.stopSound(soundSys_.soundLever, soundSys_.isLever);
+                }
 
                 e.lever->pressed=false;
+
+
+
             }
         } 
     } 

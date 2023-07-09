@@ -16,7 +16,9 @@ namespace FVEng{
         : window_ {window}, SM_ {SM}
         {
             Init();
+
         }
+
 
         void Init() override {
             
@@ -122,10 +124,16 @@ namespace FVEng{
             //act to registered key events
             if(upPressed_)
             {
+                
+                //colocar sonido
+                // soundSys_.setLoop(false, soundSys_.soundMdown);
+                // soundSys_.playSound(soundSys_.soundMdown, soundSys_.isMdown);
                 moveDown();
+                
             }
             if(downPressed_)
             {
+                //colocar sonido
                 moveUp();
             }
 
@@ -137,6 +145,7 @@ namespace FVEng{
 
             if(enterPressed_)
             {
+                //colocar sonido
                 changeStateAccordingToSelectedIndex();
             }
             
@@ -149,11 +158,13 @@ namespace FVEng{
         {
             if(selectedItemIndex == 0) //Play option
             {
+                //colocar sonido
                 std::cout << "Entering game mode..." << std::endl;
                 SM_.AddState(std::make_unique<FVEng::gameState>(SM_.getWindow(), SM_), true);
             }
             if(selectedItemIndex == 1) //Options option
             {   
+                //colocar sonido
                 std::cout << "Entering store..." << std::endl;
                 SM_.AddState(std::make_unique<FVEng::storeState>(SM_.getWindow(), SM_), false);
             }
@@ -217,5 +228,6 @@ namespace FVEng{
         bool enterPressed_ = false;
 
         FVEng::StateMachine& SM_;
+        
     };
 }

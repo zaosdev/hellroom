@@ -5,6 +5,7 @@
 #include "../man/SpriteManager.hpp"
 #include "../sys/renderSys.hpp"
 #include "../utils/math.hpp"
+#include "../sys/soundSys.hpp"
 
 
 
@@ -19,7 +20,7 @@ namespace game
 
     struct CollisionSys
     {
-        CollisionSys(FVeng::GameManager& gameMan/*, SFMLeng::SpriteManager& spriteMan*/);
+        CollisionSys(FVeng::GameManager& gameMan, game::SoundSys& soundSys /*, SFMLeng::SpriteManager& spriteMan*/);
         ~CollisionSys();
 
         CollisionSys (const CollisionSys&) = delete;
@@ -55,6 +56,9 @@ namespace game
 
         private:
             FVeng::GameManager& gMan_;
+            game::SoundSys&     soundSys_;
+
+            bool heart;
             //tXMLeng::mapManager::TileMap map_{};
            // SFMLeng::SpriteManager& spriteMan_; 
             
