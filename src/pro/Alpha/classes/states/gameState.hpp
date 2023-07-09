@@ -99,10 +99,26 @@ namespace FVEng{
 
         void changeLevel()
         {
-            std::cout << "change level" << std::endl;
-            spwnSys.SpawnPlayer();
-            GameMan.change_level=false;
-            renSys.startOnPlayer();
+            
+            if(cambialvl == true){//este if es solo por el soundsys
+                //colocar sonido
+                soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.playSound(soundSys.soundLevel, soundSys.isChangeLvl);
+
+                std::cout << "change level" << std::endl;
+                spwnSys.SpawnPlayer();
+                GameMan.change_level=false;
+                renSys.startOnPlayer();
+
+                cambialvl = false;
+            }
+            else{
+               // soundSys.setLoop(false, soundSys.soundLevel);
+                soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
+                cambialvl = true;
+            }
+
+
         }
 
         void executeState() override
@@ -115,15 +131,10 @@ namespace FVEng{
                 GameMan.getEntityManager().update();
                 if(GameMan.change_level)
                 {
-                    //colocar sonido
-                    soundSys.setLoop(true, soundSys.soundLevel);
-                    soundSys.playSound(soundSys.soundLevel, soundSys.isChangeLvl);
+                    
                     changeLevel();
                 }
-                else{
-                    soundSys.setLoop(false, soundSys.soundLevel);
-                    soundSys.stopSound(soundSys.soundLevel, soundSys.isChangeLvl);
-                }
+               
 
                 if(updateClock.getElapsedTime().asMilliseconds() > UPDATE_TICK_TIME)
                 {
@@ -220,5 +231,6 @@ namespace FVEng{
         sf::Clock clock;
         sf::Clock updateClock;
         double UPDATE_TICK_TIME = 1000 / 15; //15fps for the systems, 60 fps por the renders
+        bool cambialvl = true;
     };
 }

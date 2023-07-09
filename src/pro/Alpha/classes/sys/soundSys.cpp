@@ -92,8 +92,10 @@ namespace game{
         //soundLevel.setVolume(75);
         soundLevel.setBuffer(sBchangeLevel); // comprobar por que no suena
 
+        soundCofre.setVolume(75);
         soundCofre.setBuffer(sBcofre);
         soundLever.setBuffer(sBlever);
+        soundHeart.setVolume(75);
         soundHeart.setBuffer(sBHeart);
 
 
