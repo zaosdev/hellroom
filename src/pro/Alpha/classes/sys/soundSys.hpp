@@ -87,18 +87,18 @@ namespace game{
             // sf::Sound soundBP;
             // sf::Sound soundBF;
             sf::Music music;
-            bool isPlayingStep, isPlayingDash, isPlayingPB, isPHit;
-            bool musicPlaying, initMusic;
+            bool isPlayingStep{false}, isPlayingDash{false}, isPlayingPB{false}, isPHit{false};
+            bool musicPlaying{false}, initMusic{false};
 
-            bool isGameOver;
+            bool isGameOver{false};
 
-            bool isMdown, isMup; //main menu 
+            bool isMdown{false}, isMup{false}; //main menu 
 
-            bool isEHit, isEShoot;
+            bool isEHit{false}, isEShoot{false};
 
-            bool isChangeLvl;
+            bool isChangeLvl{false};
 
-            bool isCofre, isLever, isHeart;
+            bool isCofre{false}, isLever{false}, isHeart{false};
 
 
             

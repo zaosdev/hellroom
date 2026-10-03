@@ -41,9 +41,9 @@ namespace FVEng{
             std::stack<StateRef> states_;
             StateRef newState_;
 
-            bool isRemoving_          ;
-            bool isAdding_            ; 
-            bool isReplacing_         ;
+            bool isRemoving_ {false};
+            bool isAdding_ {false}; 
+            bool isReplacing_ {false};
             sf::RenderWindow window_{}; //samewindow for all states
     };
 

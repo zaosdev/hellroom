@@ -70,7 +70,7 @@ namespace FVEng{
 
             this->states_.pop();
 
-            if(this->states_.empty()){
+            if(!this->states_.empty()){
 
                 this->states_.top()->Resume();
             }

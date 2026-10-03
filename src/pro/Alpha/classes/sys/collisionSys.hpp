@@ -58,7 +58,7 @@ namespace game
             FVeng::GameManager& gMan_;
             game::SoundSys&     soundSys_;
 
-            bool heart;
+            bool heart{false};
             //tXMLeng::mapManager::TileMap map_{};
            // SFMLeng::SpriteManager& spriteMan_; 
             

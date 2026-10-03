@@ -389,7 +389,7 @@ namespace FVEng{
         sf::Sprite coin_sp_;
         sf::Text pets_cost_[MAX_NUMBER_OF_ITEMS];
 
-        bool upPressed_, downPressed_, scapePressed_;
+        bool upPressed_{false}, downPressed_{false}, scapePressed_{false};
         bool enterPressed_ = false;
         
         std::vector<bool> boughtPets_;

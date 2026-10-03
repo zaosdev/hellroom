@@ -220,7 +220,7 @@ namespace FVEng{
         static constexpr int MAX_NUMBER_OF_ITEMS = 4;
         sf::Text menu_[MAX_NUMBER_OF_ITEMS];
         std::vector<std::string> menu_values_ {"Resume", "Store", "Controls", "Go to desktop"};
-        bool upPressed_, downPressed_;
+        bool upPressed_{false}, downPressed_{false};
         bool enterPressed_ = false;
 
         FVEng::StateMachine& SM_;
