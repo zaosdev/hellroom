@@ -1,0 +1,14 @@
+# Build output (configure with: cmake -S src/pro/Alpha -B src/pro/Alpha/build)
+build/
+build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+*.o
+*.a
+*.exe
+src/pro/Alpha/MiJuego
+
+# Editor / tooling caches
+.cache/
