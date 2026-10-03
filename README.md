@@ -17,6 +17,10 @@
   <img src="screenshots/gameplay.gif" width="720" alt="Gameplay: clearing a corridor of enemies, picking up the hearts they drop and moving into the next room"/>
 </p>
 
+<p align="center">
+  <a href="https://snakeleyenda.itch.io/hellroom"><b>▶ Play it on itch.io</b></a> (Windows) &nbsp;·&nbsp; or build it from source below
+</p>
+
 ## About
 
 *Escape before time runs out, and feed on the souls of your enemies to survive.*
